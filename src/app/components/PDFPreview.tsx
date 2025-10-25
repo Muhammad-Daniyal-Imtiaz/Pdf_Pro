@@ -133,9 +133,9 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Error generating PDF:', error)
-      setError(error instanceof Error ? error.message : 'Failed to generate PDF. Please try again.')
+    } catch (err) {
+      console.error('Error generating PDF:', err)
+      setError(err instanceof Error ? err.message : 'Failed to generate PDF. Please try again.')
     } finally {
       setIsGenerating(false)
     }
@@ -251,7 +251,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
       color: block.styles.color,
       lineHeight: block.styles.lineHeight,
       fontWeight: block.styles.fontWeight,
-      textAlign: block.styles.textAlign as any,
+      textAlign: block.styles.textAlign as CanvasTextAlign,
       marginBottom: '16px',
     }
 
@@ -372,7 +372,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
             ) : (
               <div className="text-gray-400 text-center h-full flex items-center justify-center">
                 <div>
-                  <div className="text-6xl mb-4">📄</div>
+                  <div className="text-6xl mb-4" role="img" aria-label="Document icon">📄</div>
                   <p>Add some content to see the preview</p>
                 </div>
               </div>
@@ -401,7 +401,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
           disabled={contentBlocks.length === 0}
           className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
         >
-          <Image className="w-4 h-4" />
+          <Image className="w-4 h-4"  />
           Save as Image
         </button>
       </div>

@@ -18,7 +18,7 @@ interface StyleControlsProps {
 }
 
 export default function StyleControls({ styles, onStylesChange }: StyleControlsProps) {
-  const updateStyle = (key: keyof Styles, value: any) => {
+  const updateStyle = (key: keyof Styles, value: string | number) => {
     onStylesChange({ ...styles, [key]: value })
   }
 

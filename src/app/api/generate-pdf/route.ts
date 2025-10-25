@@ -12,19 +12,6 @@ interface Styles {
   backgroundColor?: string
 }
 
-interface Layout {
-  pageSize: string
-  orientation: string
-  columns: number
-}
-
-interface ContentBlock {
-  id: string
-  type: 'heading' | 'paragraph' | 'container' | 'custom'
-  content: string
-  styles: Styles
-}
-
 export async function POST(request: NextRequest) {
   try {
     const { contentBlocks, styles, layout, template } = await request.json()
@@ -114,7 +101,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Smart text wrapping function with character cleaning
-    const wrapText = (text: string, fontType: any, fontSize: number, maxWidth: number): string[] => {
+    const wrapText = (text: string, fontType: unknown, fontSize: number, maxWidth: number): string[] => {
       const cleanedText = cleanText(text)
       if (!cleanedText) {
         return ['']
@@ -129,7 +116,7 @@ export async function POST(request: NextRequest) {
         const testLine = currentLine + ' ' + word
         
         try {
-          const textWidth = fontType.widthOfTextAtSize(testLine, fontSize)
+          const textWidth = (fontType as { widthOfTextAtSize: (text: string, size: number) => number }).widthOfTextAtSize(testLine, fontSize)
           
           if (textWidth <= maxWidth) {
             currentLine = testLine
@@ -137,7 +124,7 @@ export async function POST(request: NextRequest) {
             lines.push(currentLine)
             currentLine = word
           }
-        } catch (err) {
+        } catch {
           // If there's an error with this line, push current line and continue
           lines.push(currentLine)
           currentLine = word
@@ -186,8 +173,8 @@ export async function POST(request: NextRequest) {
             color: rgb(0.2, 0.2, 0.2),
           })
           yPosition -= 25
-        } catch (err) {
-          console.warn('Failed to draw title line:', line, err)
+        } catch {
+          console.warn('Failed to draw title line:', line)
           yPosition -= 25 // Still move position even if drawing fails
         }
       })
@@ -248,8 +235,8 @@ export async function POST(request: NextRequest) {
             font: blockFont,
             color: rgb(r, g, b),
           })
-        } catch (err) {
-          console.warn('Failed to draw text line:', line, err)
+        } catch {
+          console.warn('Failed to draw text line:', line)
           // Fallback: draw a simple version without width calculation
           try {
             page.drawText(cleanText(line), {
@@ -259,8 +246,8 @@ export async function POST(request: NextRequest) {
               font: blockFont,
               color: rgb(r, g, b),
             })
-          } catch (fallbackErr) {
-            console.error('Fallback drawing also failed:', fallbackErr)
+          } catch {
+            console.error('Fallback drawing also failed')
           }
         }
 
@@ -294,8 +281,8 @@ export async function POST(request: NextRequest) {
             font: font,
             color: rgb(0.5, 0.5, 0.5),
           })
-        } catch (err) {
-          console.warn('Failed to draw footer:', err)
+        } catch {
+          console.warn('Failed to draw footer')
         }
       }
     }
@@ -316,8 +303,8 @@ export async function POST(request: NextRequest) {
       },
     })
 
-  } catch (err) {
-    console.error('PDF generation error:', err)
+  } catch {
+    console.error('PDF generation error')
     return NextResponse.json(
       { error: 'Failed to generate PDF due to content formatting issues. Please check your text content.' },
       { status: 500 }
