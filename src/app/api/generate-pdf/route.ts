@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Smart text wrapping function with character cleaning
-    const wrapText = (text: string, font: any, fontSize: number, maxWidth: number): string[] => {
+    const wrapText = (text: string, fontType: any, fontSize: number, maxWidth: number): string[] => {
       const cleanedText = cleanText(text)
       if (!cleanedText) {
         return ['']
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
         const testLine = currentLine + ' ' + word
         
         try {
-          const textWidth = font.widthOfTextAtSize(testLine, fontSize)
+          const textWidth = fontType.widthOfTextAtSize(testLine, fontSize)
           
           if (textWidth <= maxWidth) {
             currentLine = testLine
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
             lines.push(currentLine)
             currentLine = word
           }
-        } catch (error) {
+        } catch (err) {
           // If there's an error with this line, push current line and continue
           lines.push(currentLine)
           currentLine = word
@@ -186,8 +186,8 @@ export async function POST(request: NextRequest) {
             color: rgb(0.2, 0.2, 0.2),
           })
           yPosition -= 25
-        } catch (error) {
-          console.warn('Failed to draw title line:', line, error)
+        } catch (err) {
+          console.warn('Failed to draw title line:', line, err)
           yPosition -= 25 // Still move position even if drawing fails
         }
       })
@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
       const [r, g, b] = hexToRgb(block.styles?.color || '#000000')
       
       // Choose appropriate font based on styles
-      let blockFont = block.styles?.fontWeight === 'bold' ? fontBold : font
+      const blockFont = block.styles?.fontWeight === 'bold' ? fontBold : font
 
       // Calculate dynamic font size based on block type
       let fontSize = Math.max(block.styles?.fontSize || 12, 8)
@@ -248,8 +248,8 @@ export async function POST(request: NextRequest) {
             font: blockFont,
             color: rgb(r, g, b),
           })
-        } catch (error) {
-          console.warn('Failed to draw text line:', line, error)
+        } catch (err) {
+          console.warn('Failed to draw text line:', line, err)
           // Fallback: draw a simple version without width calculation
           try {
             page.drawText(cleanText(line), {
@@ -259,8 +259,8 @@ export async function POST(request: NextRequest) {
               font: blockFont,
               color: rgb(r, g, b),
             })
-          } catch (fallbackError) {
-            console.error('Fallback drawing also failed:', fallbackError)
+          } catch (fallbackErr) {
+            console.error('Fallback drawing also failed:', fallbackErr)
           }
         }
 
@@ -294,8 +294,8 @@ export async function POST(request: NextRequest) {
             font: font,
             color: rgb(0.5, 0.5, 0.5),
           })
-        } catch (error) {
-          console.warn('Failed to draw footer:', error)
+        } catch (err) {
+          console.warn('Failed to draw footer:', err)
         }
       }
     }
@@ -316,8 +316,8 @@ export async function POST(request: NextRequest) {
       },
     })
 
-  } catch (error) {
-    console.error('PDF generation error:', error)
+  } catch (err) {
+    console.error('PDF generation error:', err)
     return NextResponse.json(
       { error: 'Failed to generate PDF due to content formatting issues. Please check your text content.' },
       { status: 500 }

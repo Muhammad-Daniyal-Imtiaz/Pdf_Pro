@@ -98,7 +98,7 @@ const DraggableBlock = ({
         color: styles.color,
         lineHeight: styles.lineHeight,
         fontWeight: styles.fontWeight,
-        textAlign: styles.textAlign as any,
+        textAlign: styles.textAlign as CanvasTextAlign,
         backgroundColor: styles.backgroundColor,
       }}
     >
@@ -161,7 +161,7 @@ const DraggableBlock = ({
           color: styles.color,
           fontWeight: styles.fontWeight,
           lineHeight: styles.lineHeight,
-          textAlign: styles.textAlign as any,
+          textAlign: styles.textAlign as CanvasTextAlign,
         }}
       />
     </div>
@@ -407,9 +407,9 @@ export default function PDFEditor({
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
 
-    } catch (error) {
-      console.error('Error generating PDF:', error)
-      setError(error instanceof Error ? error.message : 'Failed to generate PDF. Please try again.')
+    } catch (err) {
+      console.error('Error generating PDF:', err)
+      setError(err instanceof Error ? err.message : 'Failed to generate PDF. Please try again.')
     } finally {
       setIsGenerating(false)
     }

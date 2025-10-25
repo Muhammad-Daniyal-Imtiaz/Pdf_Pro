@@ -1,6 +1,5 @@
 'use client'
 
-// Define types within the component
 interface Layout {
   pageSize: string
   orientation: string
@@ -13,7 +12,7 @@ interface LayoutControlsProps {
 }
 
 export default function LayoutControls({ layout, onLayoutChange }: LayoutControlsProps) {
-  const updateLayout = (key: keyof Layout, value: any) => {
+  const updateLayout = (key: keyof Layout, value: string | number) => {
     onLayoutChange({ ...layout, [key]: value })
   }
 
