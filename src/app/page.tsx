@@ -8,6 +8,10 @@ import TextInput from './components/TextInput'
 import StyleControls from './components/StyleControls'
 import LayoutControls from './components/LayoutControls'
 import PDFPreview from './components/PDFPreview'
+import CVPreview from './components/CVPreview'
+import CVEditor from './components/CVEditor'
+import CVTemplatesGallery from './components/CVTemplatesGallery'
+import { CVTemplate, cvTemplates } from './lib/cv-templates'
 
 interface Styles {
   fontSize: number
@@ -49,6 +53,11 @@ export default function Home() {
     columns: 1
   })
   const [template, setTemplate] = useState('modern')
+  
+  // CV State
+  const [activeTab, setActiveTab] = useState<'document' | 'cv'>('document')
+  const [selectedCVTemplate, setSelectedCVTemplate] = useState<CVTemplate>(cvTemplates[0])
+  const [cvTemplate, setCVTemplate] = useState<CVTemplate>(cvTemplates[0])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -59,52 +68,103 @@ export default function Home() {
               PDF Craft Pro
             </h1>
             <p className="text-xl text-gray-600 mb-2">
-              Advanced PDF Editor with Drag & Drop Controls
+              Advanced PDF & CV Editor with Professional Templates
             </p>
-            <p className="text-gray-500">
-              Create any type of PDF document with complete flexibility
-            </p>
+            
+            {/* Tab Navigation */}
+            <div className="flex justify-center mb-8">
+              <div className="bg-white rounded-lg p-1 shadow-inner">
+                <button
+                  onClick={() => setActiveTab('document')}
+                  className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+                    activeTab === 'document'
+                      ? 'bg-blue-500 text-white shadow-md'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  📄 Document Editor
+                </button>
+                <button
+                  onClick={() => setActiveTab('cv')}
+                  className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
+                    activeTab === 'cv'
+                      ? 'bg-blue-500 text-white shadow-md'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  👔 CV Builder
+                </button>
+              </div>
+            </div>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Sidebar - Input & Controls */}
-            <div className="lg:col-span-1 space-y-6">
-              <TextInput 
-                content={content} 
-                onContentChange={setContent} 
-              />
-              
-              <StyleControls 
-                styles={styles} 
-                onStylesChange={setStyles} 
-              />
-              
-              <LayoutControls 
-                layout={layout} 
-                onLayoutChange={setLayout} 
-              />
-            </div>
+          {activeTab === 'document' ? (
+            /* Document Editor Layout */
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Left Sidebar - Input & Controls */}
+              <div className="lg:col-span-1 space-y-6">
+                <TextInput 
+                  content={content} 
+                  onContentChange={setContent} 
+                />
+                
+                <StyleControls 
+                  styles={styles} 
+                  onStylesChange={setStyles} 
+                />
+                
+                <LayoutControls 
+                  layout={layout} 
+                  onLayoutChange={setLayout} 
+                />
+              </div>
 
-            {/* Main Editor Area */}
-            <div className="lg:col-span-2 space-y-6">
-              <PDFEditor
-                content={content}
-                styles={styles}
-                layout={layout}
-                template={template}
-                onTemplateChange={setTemplate}
-                contentBlocks={contentBlocks}
-                onContentBlocksChange={setContentBlocks}
-              />
-              
-              <PDFPreview
-                contentBlocks={contentBlocks}
-                styles={styles}
-                layout={layout}
-                template={template}
-              />
+              {/* Main Editor Area */}
+              <div className="lg:col-span-2 space-y-6">
+                <PDFEditor
+                  content={content}
+                  styles={styles}
+                  layout={layout}
+                  template={template}
+                  onTemplateChange={setTemplate}
+                  contentBlocks={contentBlocks}
+                  onContentBlocksChange={setContentBlocks}
+                />
+                
+                <PDFPreview
+                  contentBlocks={contentBlocks}
+                  styles={styles}
+                  layout={layout}
+                  template={template}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            /* CV Builder Layout */
+            <div className="space-y-8">
+              {/* CV Templates Gallery */}
+              <CVTemplatesGallery
+                onTemplateSelect={(template) => {
+                  setSelectedCVTemplate(template)
+                  setCVTemplate(JSON.parse(JSON.stringify(template))) // Deep clone
+                }}
+                selectedTemplate={selectedCVTemplate}
+              />
+
+              {/* CV Editor and Preview */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <CVEditor
+                    template={cvTemplate}
+                    onTemplateUpdate={setCVTemplate}
+                  />
+                </div>
+                <div>
+                  <CVPreview template={cvTemplate} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </DndProvider>
