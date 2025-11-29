@@ -1,9 +1,10 @@
 export const AI_CONFIG = {
   apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY ?? '',
-  modelName: 'gemini-pro',        // free tier
+  modelName: 'gemini-2.0-flash',  // Updated from gemini-pro
   maxTokens: 2048,
   temperature: 0.7,
 }
+
 export const AI_PROMPTS = {
   cvContent: (role: string, experience: string) => `
     Generate professional CV content for a ${role} with ${experience} years of experience.
