@@ -25,7 +25,6 @@ interface ContentBlock {
   styles: Styles
 }
 
-// CV Types
 interface CVTemplate {
   id: string
   name: string
@@ -113,12 +112,11 @@ export async function POST(request: NextRequest) {
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
     const fontItalic = await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
-    const fontBoldItalic = await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique)
 
     // Helper function to convert hex color to RGB
     const hexToRgb = (hex: string): [number, number, number] => {
       if (!hex || typeof hex !== 'string') {
-        return [0, 0, 0] // Default to black if invalid
+        return [0, 0, 0]
       }
       
       hex = hex.replace(/^#/, '')
@@ -139,22 +137,21 @@ export async function POST(request: NextRequest) {
       return [r, g, b]
     }
 
-    // Clean text - remove or replace problematic characters
+    // Clean text
     const cleanText = (text: string): string => {
       if (!text || typeof text !== 'string') {
         return ''
       }
       
-      // Replace problematic characters with spaces or remove them
       return text
-        .replace(/\n/g, ' ') // Replace newlines with spaces
-        .replace(/\r/g, ' ') // Replace carriage returns with spaces
-        .replace(/\t/g, ' ') // Replace tabs with spaces
-        .replace(/[^\x20-\x7E]/g, '') // Remove non-printable ASCII characters
+        .replace(/\n/g, ' ')
+        .replace(/\r/g, ' ')
+        .replace(/\t/g, ' ')
+        .replace(/[^\x20-\x7E]/g, '')
         .trim()
     }
 
-    // Smart text wrapping function with character cleaning
+    // Smart text wrapping function
     const wrapText = (text: string, fontType: any, fontSize: number, maxWidth: number): string[] => {
       const cleanedText = cleanText(text)
       if (!cleanedText) {
@@ -179,7 +176,6 @@ export async function POST(request: NextRequest) {
             currentLine = word
           }
         } catch {
-          // If there's an error with this line, push current line and continue
           lines.push(currentLine)
           currentLine = word
         }
@@ -192,10 +188,17 @@ export async function POST(request: NextRequest) {
       return lines.filter(line => line.trim().length > 0)
     }
 
-    // Dynamic margin calculation
-    const margin = Math.max((styles?.margin || 20) * 0.75, 20)
-    const maxWidth = width - (margin * 2)
-    let yPosition = height - margin
+    // MULTI-COLUMN LAYOUT SUPPORT
+    const margin = 40
+    const totalWidth = width - (margin * 2)
+    const numColumns = layout.columns || 1
+    const columnWidth = totalWidth / numColumns
+    const columnGap = 20
+    const actualColumnWidth = columnWidth - columnGap
+
+    // Initialize column Y positions
+    let columnYPositions: number[] = Array(numColumns).fill(height - margin)
+    let currentColumnIndex = 0
 
     // Add template header if content exists
     if (contentBlocks.length > 0) {
@@ -210,108 +213,97 @@ export async function POST(request: NextRequest) {
 
       const title = templateTitles[template] || 'Generated Document'
       
-      // Add title
-      const titleLines = wrapText(title, fontBold, 20, maxWidth)
-      titleLines.forEach(line => {
-        if (yPosition < margin + 30) {
+      // Add title (spans all columns)
+      const titleLines = wrapText(title, fontBold, 20, totalWidth)
+      for (const line of titleLines) {
+        if (columnYPositions[0] < margin + 30) {
           page = pdfDoc.addPage([width, height])
-          yPosition = height - margin
+          columnYPositions = Array(numColumns).fill(height - margin)
+          currentColumnIndex = 0
         }
         
         try {
           page.drawText(line, {
             x: margin,
-            y: yPosition,
+            y: columnYPositions[0],
             size: 20,
             font: fontBold,
             color: rgb(0.2, 0.2, 0.2),
           })
-          yPosition -= 25
-        } catch {
+          columnYPositions[0] -= 25
+        } catch (error) {
           console.warn('Failed to draw title line:', line)
-          yPosition -= 25 // Still move position even if drawing fails
+          columnYPositions[0] -= 25
         }
-      })
+      }
       
-      yPosition -= 20
+      // Reset for content and drop all columns equally
+      for (let i = 0; i < numColumns; i++) {
+        columnYPositions[i] = columnYPositions[0] - 20
+      }
+      currentColumnIndex = 0
     }
 
-    // Add content blocks dynamically
+    // Add content blocks with COLUMN SUPPORT
     for (const block of contentBlocks) {
       const [r, g, b] = hexToRgb(block.styles?.color || '#000000')
       
-      // Choose appropriate font based on styles
       let blockFont = font
       if (block.styles?.fontWeight === 'bold') {
         blockFont = fontBold
       }
 
-      // Calculate dynamic font size based on block type
       let fontSize = Math.max(block.styles?.fontSize || 12, 8)
       if (block.type === 'heading') {
         fontSize = Math.max(fontSize, 18)
       }
 
       const lineHeight = fontSize * (block.styles?.lineHeight || 1.5)
+      const lines = wrapText(block.content || '', blockFont, fontSize, actualColumnWidth)
 
-      // Wrap text for the block
-      const lines = wrapText(block.content || '', blockFont, fontSize, maxWidth)
-
-      // Draw each line with proper positioning
+      // Draw each line
       for (const line of lines) {
-        // Skip empty lines
         if (!line.trim()) {
-          yPosition -= lineHeight
+          columnYPositions[currentColumnIndex] -= lineHeight
           continue
         }
 
-        // Check if we need a new page
-        if (yPosition < margin + fontSize) {
-          page = pdfDoc.addPage([width, height])
-          yPosition = height - margin
+        // Find column with lowest Y position (most space)
+        let lowestY = columnYPositions[0]
+        currentColumnIndex = 0
+        for (let i = 1; i < numColumns; i++) {
+          if (columnYPositions[i] > lowestY) {
+            lowestY = columnYPositions[i]
+            currentColumnIndex = i
+          }
         }
 
-        // Handle text alignment dynamically
-        let xPosition = margin
-        
-        try {
-          const textWidth = blockFont.widthOfTextAtSize(line, fontSize)
-          const textAlign = block.styles?.textAlign || 'left'
-          
-          if (textAlign === 'center') {
-            xPosition = (width - textWidth) / 2
-          } else if (textAlign === 'right') {
-            xPosition = width - margin - textWidth
-          }
+        // Check if we need a new page (all columns full)
+        if (columnYPositions[currentColumnIndex] < margin + fontSize) {
+          page = pdfDoc.addPage([width, height])
+          columnYPositions = Array(numColumns).fill(height - margin)
+          currentColumnIndex = 0
+        }
 
-          // Draw the text line with error handling
+        // Calculate X position based on column
+        const xPosition = margin + (currentColumnIndex * columnWidth) + 10
+
+        try {
           page.drawText(line, {
             x: xPosition,
-            y: yPosition,
+            y: columnYPositions[currentColumnIndex],
             size: fontSize,
             font: blockFont,
             color: rgb(r, g, b),
           })
-        } catch {
+        } catch (error) {
           console.warn('Failed to draw text line:', line)
-          // Fallback: draw a simple version without width calculation
-          try {
-            page.drawText(cleanText(line), {
-              x: margin,
-              y: yPosition,
-              size: fontSize,
-              font: blockFont,
-              color: rgb(r, g, b),
-            })
-          } catch {
-            console.error('Fallback drawing also failed')
-          }
         }
 
-        yPosition -= lineHeight
+        columnYPositions[currentColumnIndex] -= lineHeight
       }
 
-      // Add dynamic spacing after block based on block type
+      // Add dynamic spacing after block
       const spacingMap: Record<string, number> = {
         'heading': 15,
         'container': 20,
@@ -320,25 +312,24 @@ export async function POST(request: NextRequest) {
       }
       
       const spacing = spacingMap[block.type] || 10
-      yPosition -= spacing
+      columnYPositions[currentColumnIndex] -= spacing
     }
 
     // Add footer if there's content
     if (contentBlocks.length > 0) {
       const footerText = `Generated on ${new Date().toLocaleDateString()} • PDF Craft Pro`
       const cleanedFooter = cleanText(footerText)
-      const footerY = 30
       
       if (cleanedFooter) {
         try {
           page.drawText(cleanedFooter, {
             x: margin,
-            y: footerY,
+            y: 30,
             size: 10,
             font: font,
             color: rgb(0.5, 0.5, 0.5),
           })
-        } catch {
+        } catch (error) {
           console.warn('Failed to draw footer')
         }
       }
@@ -346,11 +337,8 @@ export async function POST(request: NextRequest) {
 
     // Serialize the PDF to bytes
     const pdfBytes = await pdfDoc.save()
-
-    // Convert to Buffer
     const pdfBuffer = Buffer.from(pdfBytes)
 
-    // Return the PDF as a response
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
@@ -403,7 +391,7 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
     const [primaryR, primaryG, primaryB] = hexToRgb(cvTemplate.styles.primaryColor)
     const [secondaryR, secondaryG, secondaryB] = hexToRgb(cvTemplate.styles.secondaryColor)
 
-    let yPosition = 800 // Start from top
+    let yPosition = 800
 
     // Get personal information
     const personalSection = cvTemplate.structure.find(s => s.type === 'personal')
@@ -453,13 +441,11 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
 
     // Draw sections
     for (const section of cvTemplate.structure.filter(s => s.type !== 'personal')) {
-      // Check if we need a new page
       if (yPosition < 100) {
         pdfDoc.addPage([595.28, 841.89])
         yPosition = 800
       }
 
-      // Section title
       page.drawText(section.title, {
         x: 50,
         y: yPosition,
@@ -469,7 +455,6 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
       })
       yPosition -= 25
 
-      // Section content
       if (section.content) {
         const lines = section.content.split('\n').filter(line => line.trim())
         for (const line of lines) {
@@ -505,7 +490,7 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
         }
       }
 
-      yPosition -= 20 // Space between sections
+      yPosition -= 20
     }
 
     // Add footer
@@ -537,7 +522,6 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
   }
 }
 
-// Optional: Separate endpoint for CV generation
 export async function GET(request: NextRequest) {
   return NextResponse.json({ message: 'PDF Generation API' })
 }

@@ -14,6 +14,54 @@ export default function CVPreview({ template }: CVPreviewProps) {
   const [error, setError] = useState<string | null>(null)
   const [scale, setScale] = useState<number>(0.8)
 
+  const getTemplateColors = (): Record<string, { primary: string; secondary: string; bg: string; accent: string }> => {
+    const colorSchemes: Record<string, { primary: string; secondary: string; bg: string; accent: string }> = {
+      modern: {
+        primary: '#1F2937',
+        secondary: '#3B82F6',
+        bg: '#FFFFFF',
+        accent: '#3B82F6'
+      },
+      classic: {
+        primary: '#374151',
+        secondary: '#92400E',
+        bg: '#FFFBEB',
+        accent: '#D97706'
+      },
+      business: {
+        primary: '#111827',
+        secondary: '#1E40AF',
+        bg: '#F3F4F6',
+        accent: '#1E40AF'
+      },
+      creative: {
+        primary: '#4B5563',
+        secondary: '#BE185D',
+        bg: '#FDF2F8',
+        accent: '#EC4899'
+      },
+      minimal: {
+        primary: '#000000',
+        secondary: '#666666',
+        bg: '#FFFFFF',
+        accent: '#000000'
+      },
+      technical: {
+        primary: '#1F2937',
+        secondary: '#0369A1',
+        bg: '#F0F4F8',
+        accent: '#0369A1'
+      }
+    }
+    return colorSchemes
+  }
+
+  const getSchemeForTemplate = () => {
+    const schemes = getTemplateColors()
+    const templateName = template.styles.layout || 'modern'
+    return schemes[templateName] || schemes.modern
+  }
+
   const getPersonalInfo = () => {
     const personalSection = template.structure.find(s => s.type === 'personal')
     if (!personalSection?.fields) return null
@@ -38,27 +86,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
 
   const personalInfo = getPersonalInfo()
   const contactInfo = getContactInfo()
-
-  const getTemplateStyles = () => {
-    const baseStyles = {
-      fontFamily: template.styles.fontFamily,
-      color: template.styles.primaryColor,
-      backgroundColor: '#FFFFFF'
-    }
-
-    switch (template.styles.layout) {
-      case 'modern':
-        return { ...baseStyles, backgroundColor: '#F8FAFC' }
-      case 'classic':
-        return { ...baseStyles, backgroundColor: '#FEFCE8' }
-      case 'creative':
-        return { ...baseStyles, backgroundColor: '#FDF4FF' }
-      case 'minimal':
-        return { ...baseStyles, backgroundColor: '#FFFFFF' }
-      default:
-        return baseStyles
-    }
-  }
+  const colorScheme = getSchemeForTemplate()
 
   const generatePDF = async () => {
     if (!template) {
@@ -82,7 +110,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
       })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
         throw new Error(errorData.error || `Server error: ${response.status}`)
       }
 
@@ -116,97 +144,102 @@ export default function CVPreview({ template }: CVPreviewProps) {
     }
 
     const printWindow = window.open('', '_blank')
-    if (printWindow) {
-      const templateStyles = getTemplateStyles()
+    if (printWindow && personalInfo) {
+      const scheme = colorScheme
       
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
           <head>
-            <title>${personalInfo?.name || 'CV'} - PDF Craft Pro</title>
+            <title>${personalInfo.name} - CV</title>
             <style>
               @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
               
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              
               body {
                 font-family: '${template.styles.fontFamily}', sans-serif;
-                color: ${template.styles.primaryColor};
-                background-color: ${templateStyles.backgroundColor};
-                margin: 0;
-                padding: 40px;
+                color: ${scheme.primary};
+                background-color: ${scheme.bg};
                 line-height: ${template.styles.spacing};
-                max-width: 210mm;
-                margin: 0 auto;
               }
               
               .cv-container {
-                background: white;
+                max-width: 210mm;
+                height: 297mm;
+                margin: 0 auto;
                 padding: 40px;
+                background: white;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                min-height: 297mm;
               }
               
               .header {
                 text-align: center;
                 margin-bottom: 30px;
-                border-bottom: 2px solid ${template.styles.secondaryColor};
+                border-bottom: 3px solid ${scheme.accent};
                 padding-bottom: 20px;
               }
               
               .name {
-                font-size: 28px;
+                font-size: 32px;
                 font-weight: bold;
                 margin-bottom: 8px;
-                color: ${template.styles.primaryColor};
+                color: ${scheme.primary};
+                letter-spacing: 0.5px;
               }
               
               .title {
                 font-size: 18px;
-                color: ${template.styles.secondaryColor};
+                color: ${scheme.accent};
                 margin-bottom: 12px;
+                font-weight: 500;
               }
               
               .contact-info {
-                font-size: 14px;
-                color: #666;
+                font-size: 13px;
+                color: ${scheme.secondary};
                 display: flex;
                 justify-content: center;
                 flex-wrap: wrap;
-                gap: 15px;
+                gap: 20px;
               }
               
               .section {
-                margin-bottom: 25px;
+                margin-bottom: 24px;
               }
               
               .section-title {
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: bold;
-                color: ${template.styles.primaryColor};
-                border-bottom: 1px solid ${template.styles.secondaryColor};
-                padding-bottom: 5px;
-                margin-bottom: 15px;
+                color: ${scheme.primary};
+                border-bottom: 2px solid ${scheme.accent};
+                padding-bottom: 8px;
+                margin-bottom: 12px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
               }
               
               .section-content {
-                font-size: 14px;
+                font-size: 13px;
                 color: #333;
                 line-height: 1.6;
               }
               
-              .experience-item, .education-item {
-                margin-bottom: 15px;
+              .item {
+                margin-bottom: 12px;
               }
               
               .item-header {
-                font-weight: 600;
-                color: ${template.styles.primaryColor};
-                margin-bottom: 5px;
+                font-weight: 700;
+                color: ${scheme.primary};
+                margin-bottom: 4px;
               }
               
               .item-subheader {
-                color: ${template.styles.secondaryColor};
+                color: ${scheme.accent};
                 font-style: italic;
-                margin-bottom: 8px;
+                font-size: 12px;
+                margin-bottom: 6px;
               }
               
               .skills-container {
@@ -216,73 +249,43 @@ export default function CVPreview({ template }: CVPreviewProps) {
               }
               
               .skill-tag {
-                background-color: ${template.styles.secondaryColor}20;
-                color: ${template.styles.secondaryColor};
-                padding: 4px 12px;
+                background-color: ${scheme.accent}20;
+                color: ${scheme.accent};
+                padding: 5px 12px;
                 border-radius: 20px;
-                font-size: 12px;
-                font-weight: 500;
+                font-size: 11px;
+                font-weight: 600;
               }
               
-              .bullet-list {
-                padding-left: 20px;
-              }
-              
-              .bullet-list li {
-                margin-bottom: 4px;
-              }
+              ul { padding-left: 18px; }
+              li { margin-bottom: 4px; }
               
               @media print {
-                body { 
-                  margin: 0; 
-                  padding: 0; 
-                  background: white;
-                }
-                .cv-container { 
-                  box-shadow: none; 
-                  padding: 20px;
-                  min-height: auto;
-                }
-                .no-print { display: none; }
+                body { margin: 0; padding: 0; background: white; }
+                .cv-container { box-shadow: none; padding: 20px; }
               }
             </style>
           </head>
           <body>
             <div class="cv-container">
-              <!-- Header -->
               <div class="header">
-                ${personalInfo?.name ? `<div class="name">${personalInfo.name}</div>` : ''}
-                ${personalInfo?.title ? `<div class="title">${personalInfo.title}</div>` : ''}
-                ${contactInfo.length > 0 ? `
-                  <div class="contact-info">
-                    ${contactInfo.map(info => `<span>${info}</span>`).join('')}
-                  </div>
-                ` : ''}
+                ${personalInfo.name ? `<div class="name">${personalInfo.name}</div>` : ''}
+                ${personalInfo.title ? `<div class="title">${personalInfo.title}</div>` : ''}
+                ${contactInfo.length > 0 ? `<div class="contact-info">${contactInfo.map(info => `<span>${info}</span>`).join('')}</div>` : ''}
               </div>
               
-              <!-- Sections -->
               ${template.structure
                 .filter(section => section.type !== 'personal')
                 .map(section => `
                   <div class="section">
                     <div class="section-title">${section.title}</div>
-                    <div class="section-content">
-                      ${renderSectionContent(section)}
-                    </div>
+                    <div class="section-content">${renderContent(section)}</div>
                   </div>
                 `).join('')}
-              
-              <!-- Footer -->
-              <div class="no-print" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #999; font-size: 12px;">
-                Generated with PDF Craft Pro • ${new Date().toLocaleDateString()}
-              </div>
             </div>
             
             <script>
-              window.onload = function() {
-                window.print();
-                setTimeout(() => window.close(), 1000);
-              }
+              window.onload = function() { window.print(); setTimeout(() => window.close(), 1000); }
             </script>
           </body>
         </html>
@@ -291,242 +294,26 @@ export default function CVPreview({ template }: CVPreviewProps) {
     }
   }
 
-  const renderSectionContent = (section: any) => {
-    switch (section.type) {
-      case 'summary':
-        return `<p style="text-align: justify;">${section.content || 'Professional summary will appear here...'}</p>`
-      
-      case 'skills':
-        const skills = section.content.split(',').map((skill: string) => skill.trim()).filter((skill: string) => skill)
-        if (skills.length > 0) {
-          return `
-            <div class="skills-container">
-              ${skills.map((skill: string) => `
-                <div class="skill-tag">${skill}</div>
-              `).join('')}
-            </div>
-          `
-        }
-        return '<p>Skills will appear here...</p>'
-      
-      case 'experience':
-      case 'education':
-        if (section.content) {
-          return section.content.split('\\n\\n').map((item: string) => {
-            const lines = item.split('\\n')
-            const header = lines[0] || ''
-            const details = lines.slice(1)
-            
-            return `
-              <div class="${section.type}-item">
-                <div class="item-header">${header}</div>
-                ${details.length > 0 ? `
-                  <ul class="bullet-list">
-                    ${details.map((detail: string) => `
-                      <li>${detail.replace(/^•\\s*/, '')}</li>
-                    `).join('')}
-                  </ul>
-                ` : ''}
-              </div>
-            `
-          }).join('')
-        }
-        return `<p>${section.title} details will appear here...</p>`
-      
-      case 'projects':
-        if (section.content) {
-          return section.content.split('\\n\\n').map((project: string) => {
-            const lines = project.split('\\n')
-            const title = lines[0] || ''
-            const description = lines.slice(1).join('<br>')
-            
-            return `
-              <div class="experience-item">
-                <div class="item-header">${title}</div>
-                ${description ? `<div class="item-subheader">${description}</div>` : ''}
-              </div>
-            `
-          }).join('')
-        }
-        return '<p>Projects will appear here...</p>'
-      
-      default:
-        if (section.content) {
-          return `<p>${section.content.replace(/\\n/g, '<br>')}</p>`
-        }
-        if (section.fields && section.fields.length > 0) {
-          return section.fields.map((field: any) => `
-            <div style="margin-bottom: 8px;">
-              <strong>${field.label}:</strong> ${field.value || 'Not specified'}
-            </div>
-          `).join('')
-        }
-        return `<p>${section.title} content will appear here...</p>`
-    }
-  }
-
-  const saveAsImage = async () => {
-    if (!template) {
-      setError('Please select a CV template first')
-      return
-    }
-
-    try {
-      // For now, we'll use a simple approach since html2canvas requires additional setup
-      alert('To save as image: Use the print preview and choose "Save as PDF" or use a screenshot tool. Advanced image export requires additional libraries.')
-    } catch (err) {
-      console.error('Error saving as image:', err)
-      setError('Image export requires additional setup. Use print preview for now.')
-    }
+  const renderContent = (section: any): string => {
+    if (!section.content) return '<p>No content</p>'
+    return section.content
   }
 
   const refreshPreview = () => {
-    setScale(0.8) // Reset scale
-    // Force re-render of preview
+    setScale(0.8)
   }
 
-  const templateStyles = getTemplateStyles()
-
-  const getBlockStyle = (section: any) => {
-    const baseStyle = {
-      fontSize: '14px',
-      fontFamily: template.styles.fontFamily,
-      color: '#333',
-      lineHeight: template.styles.spacing.toString(),
-      marginBottom: '20px',
-    }
-
-    switch (section.type) {
-      case 'summary':
-        return {
-          ...baseStyle,
-          textAlign: 'justify' as const,
-          fontSize: '14px'
-        }
-      case 'skills':
-        return baseStyle
-      default:
-        return baseStyle
-    }
-  }
-
-  const renderPreviewSectionContent = (section: any) => {
-    switch (section.type) {
-      case 'summary':
-        return (
-          <p className="text-justify">
-            {section.content || 'Professional summary will appear here...'}
-          </p>
-        )
-      
-      case 'skills':
-        const skills = section.content.split(',').map((skill: string) => skill.trim()).filter((skill: string) => skill)
-        if (skills.length > 0) {
-          return (
-            <div className="flex flex-wrap gap-2">
-              {skills.map((skill: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 rounded-full text-sm font-medium"
-                  style={{
-                    backgroundColor: `${template.styles.secondaryColor}20`,
-                    color: template.styles.secondaryColor
-                  }}
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          )
-        }
-        return <p className="text-gray-400 italic">Skills will appear here...</p>
-      
-      case 'experience':
-      case 'education':
-        if (section.content) {
-          return section.content.split('\n\n').map((item: string, index: number) => {
-            const lines = item.split('\n')
-            const header = lines[0] || ''
-            const details = lines.slice(1)
-            
-            return (
-              <div key={index} className="mb-4">
-                <div 
-                  className="font-semibold mb-1"
-                  style={{ color: template.styles.primaryColor }}
-                >
-                  {header}
-                </div>
-                {details.length > 0 && (
-                  <ul className="list-disc list-inside space-y-1 text-sm">
-                    {details.map((detail: string, detailIndex: number) => (
-                      <li key={detailIndex}>{detail.replace(/^•\s*/, '')}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )
-          })
-        }
-        return <p className="text-gray-400 italic">{section.title} details will appear here...</p>
-      
-      case 'projects':
-        if (section.content) {
-          return section.content.split('\n\n').map((project: string, index: number) => {
-            const lines = project.split('\n')
-            const title = lines[0] || ''
-            const description = lines.slice(1).join(' • ')
-            
-            return (
-              <div key={index} className="mb-3">
-                <div 
-                  className="font-semibold"
-                  style={{ color: template.styles.primaryColor }}
-                >
-                  {title}
-                </div>
-                {description && (
-                  <div 
-                    className="text-sm mt-1"
-                    style={{ color: template.styles.secondaryColor }}
-                  >
-                    {description}
-                  </div>
-                )}
-              </div>
-            )
-          })
-        }
-        return <p className="text-gray-400 italic">Projects will appear here...</p>
-      
-      default:
-        if (section.content) {
-          return (
-            <div className="whitespace-pre-wrap">
-              {section.content}
-            </div>
-          )
-        }
-        if (section.fields && section.fields.length > 0) {
-          return section.fields.map((field: any) => (
-            <div key={field.id} className="mb-2">
-              <span className="font-semibold">{field.label}:</span>{' '}
-              <span>{field.value || 'Not specified'}</span>
-            </div>
-          ))
-        }
-        return <p className="text-gray-400 italic">{section.title} content will appear here...</p>
-    }
+  const saveAsImage = () => {
+    alert('Image export requires: Use print preview to save as PDF')
   }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-800">
-          CV Preview
+          CV Preview - {template.name}
         </h2>
         <div className="flex items-center space-x-3">
-          {/* Scale Controls */}
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setScale(Math.max(0.5, scale - 0.1))}
@@ -549,8 +336,8 @@ export default function CVPreview({ template }: CVPreviewProps) {
           
           <button
             onClick={refreshPreview}
-            className="p-2 text-gray-600 hover:text-gray-800 transition-colors"
-            title="Refresh Preview"
+            className="p-2 text-gray-600 hover:text-gray-800"
+            title="Refresh"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -562,7 +349,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
           >
             {isGenerating ? (
               <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 <span>Generating...</span>
               </>
             ) : (
@@ -577,142 +364,93 @@ export default function CVPreview({ template }: CVPreviewProps) {
 
       {error && (
         <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <div className="flex items-center">
-            <div className="text-red-500 mr-2">⚠️</div>
-            <p className="text-red-700 text-sm">{error}</p>
-            <button
-              onClick={() => setError(null)}
-              className="ml-auto text-red-500 hover:text-red-700"
-            >
-              ×
-            </button>
-          </div>
+          <p className="text-red-700 text-sm">{error}</p>
         </div>
       )}
       
       <div className="flex justify-center mb-4">
         <div 
           ref={previewRef}
-          className="border-2 border-gray-300 bg-white shadow-lg overflow-hidden"
+          className="border-2 border-gray-300 bg-white shadow-lg"
           style={{
             width: '210mm',
             height: '297mm',
             transform: `scale(${scale})`,
             transformOrigin: 'top center',
-            backgroundColor: templateStyles.backgroundColor
+            backgroundColor: colorScheme.bg
           }}
         >
           <div 
             className="h-full p-8"
             style={{
               fontFamily: template.styles.fontFamily,
-              color: template.styles.primaryColor,
+              color: colorScheme.primary,
             }}
           >
-            {/* Header */}
-            <div className="text-center mb-8 border-b-2 pb-6" style={{ borderColor: template.styles.secondaryColor }}>
-              {personalInfo?.name && (
-                <h1 
-                  className="text-3xl font-bold mb-3"
-                  style={{ color: template.styles.primaryColor }}
-                >
+            {personalInfo && (
+              <div className="text-center mb-8 border-b-4 pb-6" style={{ borderColor: colorScheme.accent }}>
+                <h1 className="text-4xl font-bold mb-3" style={{ color: colorScheme.primary }}>
                   {personalInfo.name}
                 </h1>
-              )}
-              {personalInfo?.title && (
-                <h2 
-                  className="text-xl mb-4"
-                  style={{ color: template.styles.secondaryColor }}
-                >
+                <h2 className="text-2xl mb-4 font-semibold" style={{ color: colorScheme.accent }}>
                   {personalInfo.title}
                 </h2>
-              )}
-              {contactInfo.length > 0 && (
-                <div 
-                  className="flex justify-center flex-wrap gap-4 text-sm"
-                  style={{ color: template.styles.secondaryColor }}
-                >
-                  {contactInfo.map((info, index) => (
-                    <span key={index}>{info}</span>
-                  ))}
-                </div>
-              )}
-            </div>
+                {contactInfo.length > 0 && (
+                  <div className="flex justify-center flex-wrap gap-4 text-sm" style={{ color: colorScheme.secondary }}>
+                    {contactInfo.map((info, i) => <span key={i}>{info}</span>)}
+                  </div>
+                )}
+              </div>
+            )}
 
-            {/* Sections */}
             <div className="space-y-6">
               {template.structure
-                .filter(section => section.type !== 'personal')
+                .filter(s => s.type !== 'personal')
                 .map((section) => (
                   <div key={section.id}>
                     <h3 
-                      className="text-lg font-semibold mb-4 pb-2 border-b"
-                      style={{ 
-                        borderColor: template.styles.secondaryColor, 
-                        color: template.styles.primaryColor 
-                      }}
+                      className="text-lg font-bold mb-4 pb-2 border-b-2 uppercase tracking-wide"
+                      style={{ borderColor: colorScheme.accent, color: colorScheme.primary }}
                     >
                       {section.title}
                     </h3>
-                    
-                    <div style={getBlockStyle(section)}>
-                      {renderPreviewSectionContent(section)}
+                    <div className="text-sm" style={{ color: '#333' }}>
+                      {section.content ? (
+                        <div dangerouslySetInnerHTML={{ __html: section.content.replace(/\n/g, '<br>') }} />
+                      ) : (
+                        <p className="text-gray-400 italic">Add content to this section...</p>
+                      )}
                     </div>
                   </div>
                 ))}
             </div>
 
-            {/* Footer */}
             <div className="mt-8 pt-4 border-t border-gray-200 text-center text-xs text-gray-500">
-              Generated with PDF Craft Pro • {new Date().toLocaleDateString()}
+              Generated with PDF Craft Pro
             </div>
           </div>
         </div>
       </div>
 
       <div className="mt-4 text-center text-sm text-gray-500">
-        Preview: {template.name} • {template.styles.layout} layout • A4 Size
-        <br />
-        <span className="text-xs">Scaled to {Math.round(scale * 100)}% for display</span>
+        {template.name} • {template.styles.layout} layout • A4 Size
       </div>
 
       <div className="mt-6 flex justify-center space-x-4">
         <button 
           onClick={printPreview}
-          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
         >
           <Printer className="w-4 h-4" />
           Print Preview
         </button>
         <button 
           onClick={saveAsImage}
-          className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
         >
           <Image className="w-4 h-4" />
           Save as Image
         </button>
-      </div>
-
-      {template.structure.filter(s => s.type !== 'personal').length === 0 && (
-        <div className="mt-4 text-center text-amber-600 text-sm">
-          Add content sections in the editor to see the preview
-        </div>
-      )}
-
-      {/* Quick Stats */}
-      <div className="mt-6 grid grid-cols-3 gap-4 text-center text-xs text-gray-600">
-        <div className="bg-gray-50 p-3 rounded">
-          <div className="font-semibold">Sections</div>
-          <div>{template.structure.filter(s => s.type !== 'personal').length}</div>
-        </div>
-        <div className="bg-gray-50 p-3 rounded">
-          <div className="font-semibold">Fields</div>
-          <div>{template.structure.reduce((acc, section) => acc + (section.fields?.length || 0), 0)}</div>
-        </div>
-        <div className="bg-gray-50 p-3 rounded">
-          <div className="font-semibold">Content</div>
-          <div>{template.structure.reduce((acc, section) => acc + section.content.length, 0)} chars</div>
-        </div>
       </div>
     </div>
   )

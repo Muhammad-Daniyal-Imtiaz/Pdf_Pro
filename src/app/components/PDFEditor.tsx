@@ -1,7 +1,11 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
-import { useDrag, useDrop } from 'react-dnd'
+import { useState, useCallback } from 'react'
+import LayoutControls from './LayoutControls'
+import StyleControls from './StyleControls'
+import TextInput from './TextInput'
+import PDFPreview from './PDFPreview'
+import AIContentGenerator from './AIContentGenerator'
 
 interface Layout {
   pageSize: string
@@ -27,145 +31,9 @@ interface ContentBlock {
   styles: Styles
 }
 
-interface DraggableItem {
-  id: string
-  type: string
-  content: string
-  styles?: Styles
-}
-
 interface PDFEditorProps {
-  content: string
-  styles: Styles
-  layout: Layout
-  template: string
-  onTemplateChange: (template: string) => void
-  contentBlocks: ContentBlock[]
-  onContentBlocksChange: (blocks: ContentBlock[]) => void
-}
-
-const DraggableBlock = ({ 
-  id, 
-  content, 
-  type, 
-  styles, 
-  onMove, 
-  onStyleChange,
-  onContentChange
-}: { 
-  id: string
-  content: string
-  type: string
-  styles: Styles
-  onMove: (dragId: string, hoverId: string) => void
-  onStyleChange: (id: string, styles: Styles) => void
-  onContentChange: (id: string, content: string) => void
-}) => {
-  const ref = useRef<HTMLDivElement>(null)
-  
-  const [{ isDragging }, drag] = useDrag({
-    type: 'block',
-    item: { id, type, content, styles },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  })
-
-  const [, drop] = useDrop({
-    accept: 'block',
-    hover: (item: DraggableItem) => {
-      if (item.id !== id) {
-        onMove(item.id, id)
-      }
-    },
-  })
-
-  drag(drop(ref))
-
-  return (
-    <div
-      ref={ref}
-      className={`p-4 mb-4 border-2 border-dashed rounded-lg cursor-move transition-all ${
-        isDragging ? 'opacity-50 scale-95' : 'opacity-100 scale-100'
-      } ${
-        type === 'heading' ? 'border-blue-400 bg-blue-50' :
-        type === 'container' ? 'border-purple-400 bg-purple-50' :
-        'border-gray-300 bg-white'
-      }`}
-      style={{
-        fontSize: `${styles.fontSize}px`,
-        fontFamily: styles.fontFamily,
-        color: styles.color,
-        lineHeight: styles.lineHeight,
-        fontWeight: styles.fontWeight,
-        textAlign: styles.textAlign as CanvasTextAlign,
-        backgroundColor: styles.backgroundColor,
-      }}
-    >
-      <div className="flex justify-between items-center mb-2">
-        <span className={`text-xs font-medium uppercase px-2 py-1 rounded ${
-          type === 'heading' ? 'bg-blue-200 text-blue-800' :
-          type === 'container' ? 'bg-purple-200 text-purple-800' :
-          'bg-gray-200 text-gray-800'
-        }`}>
-          {type}
-        </span>
-        <div className="flex space-x-1">
-          <button
-            onClick={() => onStyleChange(id, { ...styles, fontSize: Math.min(72, styles.fontSize + 2) })}
-            className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded transition-colors"
-            title="Increase font size"
-          >
-            A+
-          </button>
-          <button
-            onClick={() => onStyleChange(id, { ...styles, fontSize: Math.max(8, styles.fontSize - 2) })}
-            className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded transition-colors"
-            title="Decrease font size"
-          >
-            A-
-          </button>
-          <button
-            onClick={() => onStyleChange(id, { ...styles, fontWeight: styles.fontWeight === 'bold' ? 'normal' : 'bold' })}
-            className={`text-xs px-2 py-1 rounded transition-colors ${
-              styles.fontWeight === 'bold' 
-                ? 'bg-green-600 text-white' 
-                : 'bg-green-500 text-white hover:bg-green-600'
-            }`}
-            title="Toggle bold"
-          >
-            B
-          </button>
-          <button
-            onClick={() => onStyleChange(id, { ...styles, textAlign: styles.textAlign === 'center' ? 'left' : 'center' })}
-            className={`text-xs px-2 py-1 rounded transition-colors ${
-              styles.textAlign === 'center' 
-                ? 'bg-orange-600 text-white' 
-                : 'bg-orange-500 text-white hover:bg-orange-600'
-            }`}
-            title="Toggle center align"
-          >
-            ≡
-          </button>
-        </div>
-      </div>
-      <textarea
-        value={content}
-        onChange={(e) => onContentChange(id, e.target.value)}
-        className="w-full p-3 border border-gray-200 rounded resize-none focus:ring-2 focus:ring-blue-500 bg-transparent transition-all"
-        rows={type === 'heading' ? 2 : 4}
-        placeholder={`Enter ${type} content...`}
-        style={{
-          fontSize: `${styles.fontSize}px`,
-          fontFamily: styles.fontFamily,
-          color: styles.color,
-          fontWeight: styles.fontWeight,
-          lineHeight: styles.lineHeight,
-          textAlign: styles.textAlign as CanvasTextAlign,
-        }}
-      />
-    </div>
-  )
+  initialContent?: string
+  initialTemplate?: string
 }
 
 const TEMPLATES = {
@@ -179,370 +47,235 @@ const TEMPLATES = {
 
 type TemplateType = typeof TEMPLATES[keyof typeof TEMPLATES]
 
-export default function PDFEditor({ 
-  content, 
-  styles, 
-  layout, 
-  template, 
-  onTemplateChange,
-  contentBlocks,
-  onContentBlocksChange 
-}: PDFEditorProps) {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export default function PDFEditor({ initialContent = '', initialTemplate = 'modern' }: PDFEditorProps) {
+  // Layout state - THIS IS CRUCIAL
+  const [layout, setLayout] = useState<Layout>({
+    pageSize: 'A4',
+    orientation: 'portrait',
+    columns: 1
+  })
 
-  useEffect(() => {
-    if (content && contentBlocks.length === 0) {
-      const blocks = content.split('\n\n').filter(block => block.trim()).map((block, index) => ({
-        id: `block-${Date.now()}-${index}`,
-        type: (block.length < 100 ? 'heading' : 'paragraph') as 'heading' | 'paragraph',
-        content: block,
-        styles: {
-          fontSize: block.length < 100 ? 24 : 14,
-          fontFamily: styles.fontFamily,
-          color: styles.color,
-          lineHeight: styles.lineHeight,
-          margin: styles.margin,
-          fontWeight: block.length < 100 ? 'bold' : 'normal',
-          textAlign: block.length < 100 ? 'center' : 'left'
-        }
-      }))
-      onContentBlocksChange(blocks)
-    }
-  }, [content, styles, contentBlocks.length, onContentBlocksChange])
-
-  const handleMoveBlock = (dragId: string, hoverId: string) => {
-    const dragIndex = contentBlocks.findIndex(block => block.id === dragId)
-    const hoverIndex = contentBlocks.findIndex(block => block.id === hoverId)
-    
-    if (dragIndex === -1 || hoverIndex === -1) return
-
-    const newBlocks = [...contentBlocks]
-    const [movedBlock] = newBlocks.splice(dragIndex, 1)
-    newBlocks.splice(hoverIndex, 0, movedBlock)
-    
-    onContentBlocksChange(newBlocks)
-  }
-
-  const handleStyleChange = (blockId: string, newStyles: Styles) => {
-    const newBlocks = contentBlocks.map(block => 
-      block.id === blockId ? { ...block, styles: { ...block.styles, ...newStyles } } : block
-    )
-    onContentBlocksChange(newBlocks)
-  }
-
-  const handleContentChange = (blockId: string, newContent: string) => {
-    const newBlocks = contentBlocks.map(block => 
-      block.id === blockId ? { ...block, content: newContent } : block
-    )
-    onContentBlocksChange(newBlocks)
-  }
-
-  const addHeading = () => {
-    const newBlock: ContentBlock = {
-      id: `block-${Date.now()}`,
-      type: 'heading',
-      content: 'New Heading',
+  // Content and styling state
+  const [contentBlocks, setContentBlocks] = useState<ContentBlock[]>([
+    {
+      id: '1',
+      type: 'paragraph',
+      content: initialContent || 'Start typing your content here...',
       styles: {
-        fontSize: 24,
-        fontFamily: styles.fontFamily,
-        color: styles.color,
-        lineHeight: 1.2,
-        margin: 10,
-        fontWeight: 'bold',
-        textAlign: 'center'
+        fontSize: 12,
+        fontFamily: 'Arial, sans-serif',
+        color: '#000000',
+        lineHeight: 1.5,
+        margin: 10
       }
     }
-    onContentBlocksChange([...contentBlocks, newBlock])
-  }
+  ])
 
-  const addParagraph = () => {
+  const [styles, setStyles] = useState<Styles>({
+    fontSize: 12,
+    fontFamily: 'Arial, sans-serif',
+    color: '#000000',
+    lineHeight: 1.5,
+    margin: 10
+  })
+
+  const [template, setTemplate] = useState<TemplateType>(initialTemplate as TemplateType)
+
+  // Handle layout changes
+  const handleColumnsChange = useCallback((newColumns: number) => {
+    console.log('Changing columns to:', newColumns)
+    setLayout(prev => ({
+      ...prev,
+      columns: newColumns
+    }))
+  }, [])
+
+  const handlePageSizeChange = useCallback((pageSize: string) => {
+    setLayout(prev => ({
+      ...prev,
+      pageSize
+    }))
+  }, [])
+
+  const handleOrientationChange = useCallback((orientation: string) => {
+    setLayout(prev => ({
+      ...prev,
+      orientation
+    }))
+  }, [])
+
+  // Handle content changes
+  const handleContentChange = useCallback((newContent: string) => {
+    setContentBlocks(prev => [
+      {
+        ...prev[0],
+        content: newContent
+      }
+    ])
+  }, [])
+
+  // Handle style changes
+  const handleStylesChange = useCallback((newStyles: Styles) => {
+    setStyles(newStyles)
+    // Apply styles to all blocks
+    setContentBlocks(prev =>
+      prev.map(block => ({
+        ...block,
+        styles: newStyles
+      }))
+    )
+  }, [])
+
+  // Add content block
+  const addContentBlock = useCallback(() => {
     const newBlock: ContentBlock = {
       id: `block-${Date.now()}`,
       type: 'paragraph',
-      content: 'Start typing your paragraph content here...',
-      styles: {
-        fontSize: 14,
-        fontFamily: styles.fontFamily,
-        color: styles.color,
-        lineHeight: 1.6,
-        margin: 10,
-        fontWeight: 'normal',
-        textAlign: 'left'
-      }
+      content: 'New content block',
+      styles
     }
-    onContentBlocksChange([...contentBlocks, newBlock])
-  }
+    setContentBlocks(prev => [...prev, newBlock])
+  }, [styles])
 
-  const addContainer = () => {
-    const newBlock: ContentBlock = {
-      id: `block-${Date.now()}`,
-      type: 'container',
-      content: 'Container content... You can add any structured content here.',
-      styles: {
-        fontSize: 14,
-        fontFamily: styles.fontFamily,
-        color: styles.color,
-        lineHeight: 1.6,
-        margin: 15,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        backgroundColor: '#F3F4F6'
-      }
-    }
-    onContentBlocksChange([...contentBlocks, newBlock])
-  }
+  // Update content block
+  const updateContentBlock = useCallback((id: string, updates: Partial<ContentBlock>) => {
+    setContentBlocks(prev =>
+      prev.map(block =>
+        block.id === id ? { ...block, ...updates } : block
+      )
+    )
+  }, [])
 
-  const addCustomBlock = () => {
-    const newBlock: ContentBlock = {
-      id: `block-${Date.now()}`,
-      type: 'custom',
-      content: 'Custom block content... Design this however you want!',
-      styles: {
-        fontSize: 16,
-        fontFamily: styles.fontFamily,
-        color: styles.color,
-        lineHeight: 1.5,
-        margin: 12,
-        fontWeight: 'normal',
-        textAlign: 'left',
-        backgroundColor: '#EFF6FF'
-      }
-    }
-    onContentBlocksChange([...contentBlocks, newBlock])
-  }
-
-  const deleteBlock = (blockId: string) => {
-    const newBlocks = contentBlocks.filter(block => block.id !== blockId)
-    onContentBlocksChange(newBlocks)
-  }
-
-  const clearAllBlocks = () => {
-    if (confirm('Are you sure you want to clear all content blocks?')) {
-      onContentBlocksChange([])
-    }
-  }
-
-  const applyTemplate = (templateType: TemplateType) => {
-    onTemplateChange(templateType)
-    setError(null)
-    
-    const templateStyles: {[key in TemplateType]: Partial<Styles>} = {
-      [TEMPLATES.MODERN]: {
-        fontFamily: 'Arial, sans-serif',
-        color: '#1F2937',
-      },
-      [TEMPLATES.CLASSIC]: {
-        fontFamily: 'Times New Roman, serif',
-        color: '#374151',
-      },
-      [TEMPLATES.BUSINESS]: {
-        fontFamily: 'Helvetica, Arial, sans-serif',
-        color: '#111827',
-      },
-      [TEMPLATES.CREATIVE]: {
-        fontFamily: 'Georgia, serif',
-        color: '#4B5563',
-      },
-      [TEMPLATES.MINIMAL]: {
-        fontFamily: 'Arial, sans-serif',
-        color: '#000000',
-      },
-      [TEMPLATES.TECHNICAL]: {
-        fontFamily: 'Courier New, monospace',
-        color: '#1F2937',
-      }
-    }
-
-    const newStyles = templateStyles[templateType]
-    if (newStyles) {
-      const newBlocks = contentBlocks.map(block => ({
-        ...block,
-        styles: { ...block.styles, ...newStyles }
-      }))
-      onContentBlocksChange(newBlocks)
-    }
-  }
-
-  const generatePDF = async () => {
-    if (contentBlocks.length === 0) {
-      setError('Please add some content before generating PDF')
-      return
-    }
-
-    setIsGenerating(true)
-    setError(null)
-
-    try {
-      const response = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contentBlocks,
-          styles,
-          layout,
-          template
-        }),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || `Server error: ${response.status}`)
-      }
-
-      const blob = await response.blob()
-      
-      if (blob.size === 0) {
-        throw new Error('Generated PDF is empty')
-      }
-
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `pdf-document-${new Date().getTime()}.pdf`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
-
-    } catch (err) {
-      console.error('Error generating PDF:', err)
-      setError(err instanceof Error ? err.message : 'Failed to generate PDF. Please try again.')
-    } finally {
-      setIsGenerating(false)
-    }
-  }
+  // Delete content block
+  const deleteContentBlock = useCallback((id: string) => {
+    setContentBlocks(prev => prev.filter(block => block.id !== id))
+  }, [])
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">
-          PDF Editor
-        </h2>
-        <div className="flex space-x-2">
-          <button
-            onClick={clearAllBlocks}
-            disabled={contentBlocks.length === 0}
-            className="bg-red-500 hover:bg-red-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-          >
-            Clear All
-          </button>
-          <button
-            onClick={generatePDF}
-            disabled={isGenerating || contentBlocks.length === 0}
-            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold transition-colors flex items-center space-x-2"
-          >
-            {isGenerating ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Generating...</span>
-              </>
-            ) : (
-              <span>Download PDF</span>
-            )}
-          </button>
+    <div className="space-y-6">
+      {/* Title */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">📄 PDF Document Generator</h1>
+        <p className="text-gray-600">Create professional PDFs with customizable layouts and templates</p>
+      </div>
+
+      {/* Layout Controls */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <LayoutControls 
+            columns={layout.columns} 
+            onColumnsChange={handleColumnsChange}
+          />
+        </div>
+
+        {/* Page Size and Orientation */}
+        <div className="bg-white rounded-lg shadow p-4">
+          <h3 className="text-lg font-semibold mb-3">📋 Page Settings</h3>
+          <div className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Page Size</label>
+              <select
+                value={layout.pageSize}
+                onChange={(e) => handlePageSizeChange(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="A4">A4</option>
+                <option value="A3">A3</option>
+                <option value="Letter">Letter</option>
+                <option value="Legal">Legal</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Orientation</label>
+              <select
+                value={layout.orientation}
+                onChange={(e) => handleOrientationChange(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
-      {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <div className="flex items-center">
-            <div className="text-red-500 mr-2">⚠️</div>
-            <p className="text-red-700 text-sm">{error}</p>
-          </div>
-        </div>
-      )}
-
       {/* Template Selection */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">
-          Choose Template
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {Object.entries(TEMPLATES).map(([key, value]) => (
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold mb-4">🎨 Template</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {Object.values(TEMPLATES).map((t) => (
             <button
-              key={value}
-              onClick={() => applyTemplate(value)}
-              className={`p-3 border-2 rounded-lg text-sm font-medium transition-all ${
-                template === value
-                  ? 'bg-blue-500 text-white border-blue-500 shadow-md'
-                  : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+              key={t}
+              onClick={() => setTemplate(t)}
+              className={`p-3 rounded-lg font-medium transition-all capitalize ${
+                template === t
+                  ? 'bg-blue-500 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              {key.charAt(0) + key.slice(1).toLowerCase()}
+              {t}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Add Content Buttons */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
-        <button
-          onClick={addHeading}
-          className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-        >
-          <span>📝</span>
-          <span>Heading</span>
-        </button>
-        <button
-          onClick={addParagraph}
-          className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-        >
-          <span>📄</span>
-          <span>Paragraph</span>
-        </button>
-        <button
-          onClick={addContainer}
-          className="bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-        >
-          <span>📦</span>
-          <span>Container</span>
-        </button>
-        <button
-          onClick={addCustomBlock}
-          className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2"
-        >
-          <span>✨</span>
-          <span>Custom</span>
-        </button>
-      </div>
+      {/* AI Content Generator */}
+      <AIContentGenerator
+        type="document"
+        onContentGenerated={handleContentChange}
+      />
 
-      {/* Content Blocks */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 min-h-[400px] max-h-[600px] overflow-y-auto bg-gray-50">
-        {contentBlocks.length > 0 ? (
-          contentBlocks.map((block) => (
-            <div key={block.id} className="relative group">
-              <DraggableBlock
-                id={block.id}
-                content={block.content}
-                type={block.type}
-                styles={block.styles}
-                onMove={handleMoveBlock}
-                onStyleChange={handleStyleChange}
-                onContentChange={handleContentChange}
-              />
+      {/* Text Input */}
+      <TextInput
+        content={contentBlocks[0]?.content || ''}
+        onContentChange={handleContentChange}
+      />
+
+      {/* Style Controls */}
+      <StyleControls
+        styles={styles}
+        onStylesChange={handleStylesChange}
+      />
+
+      {/* Content Blocks Manager */}
+      <div className="bg-white rounded-lg shadow p-6">
+        <h3 className="text-lg font-semibold mb-4">📝 Content Blocks</h3>
+        <div className="space-y-3">
+          {contentBlocks.map((block) => (
+            <div key={block.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-700">{block.type}</p>
+                <p className="text-xs text-gray-600 truncate">{block.content}</p>
+              </div>
               <button
-                onClick={() => deleteBlock(block.id)}
-                className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs shadow-lg"
-                title="Delete block"
+                onClick={() => deleteContentBlock(block.id)}
+                className="ml-4 px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
               >
-                ×
+                Delete
               </button>
             </div>
-          ))
-        ) : (
-          <div className="text-gray-400 text-center py-12">
-            <div className="text-6xl mb-4">📄</div>
-            <p className="text-lg mb-2">No content blocks yet</p>
-            <p className="text-sm">Use the buttons above to add headings, paragraphs, or containers</p>
-          </div>
-        )}
+          ))}
+          <button
+            onClick={addContentBlock}
+            className="w-full py-2 border-2 border-dashed border-blue-400 rounded-lg text-blue-600 font-medium hover:bg-blue-50"
+          >
+            + Add Content Block
+          </button>
+        </div>
       </div>
 
-      <div className="mt-4 text-sm text-gray-500 text-center">
-        {contentBlocks.length} block{contentBlocks.length !== 1 ? 's' : ''} • Drag to reorder
+      {/* PDF Preview */}
+      <PDFPreview
+        contentBlocks={contentBlocks}
+        styles={styles}
+        layout={layout}
+        template={template}
+      />
+
+      {/* Debug Info */}
+      <div className="bg-gray-100 rounded-lg p-4 text-xs text-gray-600">
+        <p>📊 Current Layout: {layout.columns} column(s) • {layout.pageSize} • {layout.orientation}</p>
       </div>
     </div>
   )

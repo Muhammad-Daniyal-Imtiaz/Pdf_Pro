@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react'
 import { Download, Printer, Image } from 'lucide-react'
 
-// Use the same type definitions as other components
 interface Styles {
   fontSize: number
   fontFamily: string
@@ -64,28 +63,46 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
   }
 
   const getTemplateStyles = () => {
-    const baseStyles = {
-      fontFamily: styles.fontFamily,
-      color: styles.color,
-      backgroundColor: '#FFFFFF'
+    const templates: Record<string, { fontFamily: string; color: string; backgroundColor: string; accentColor: string }> = {
+      modern: {
+        fontFamily: 'Arial, sans-serif',
+        color: '#1F2937',
+        backgroundColor: '#FFFFFF',
+        accentColor: '#3B82F6'
+      },
+      classic: {
+        fontFamily: 'Times New Roman, serif',
+        color: '#374151',
+        backgroundColor: '#FFFBEB',
+        accentColor: '#92400E'
+      },
+      business: {
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        color: '#111827',
+        backgroundColor: '#F3F4F6',
+        accentColor: '#1E40AF'
+      },
+      creative: {
+        fontFamily: 'Georgia, serif',
+        color: '#4B5563',
+        backgroundColor: '#FDF2F8',
+        accentColor: '#BE185D'
+      },
+      minimal: {
+        fontFamily: 'Arial, sans-serif',
+        color: '#000000',
+        backgroundColor: '#FFFFFF',
+        accentColor: '#000000'
+      },
+      technical: {
+        fontFamily: 'Courier New, monospace',
+        color: '#1F2937',
+        backgroundColor: '#F0F4F8',
+        accentColor: '#0369A1'
+      }
     }
 
-    switch (template) {
-      case 'modern':
-        return { ...baseStyles, fontFamily: 'Arial' }
-      case 'classic':
-        return { ...baseStyles, backgroundColor: '#F7FAFC', fontFamily: 'Times New Roman' }
-      case 'business':
-        return { ...baseStyles, fontFamily: 'Helvetica' }
-      case 'creative':
-        return { ...baseStyles, backgroundColor: '#FFF5F5', fontFamily: 'Georgia' }
-      case 'minimal':
-        return { ...baseStyles, fontFamily: 'Arial' }
-      case 'technical':
-        return { ...baseStyles, backgroundColor: '#F7FAFC', fontFamily: 'Courier New' }
-      default:
-        return baseStyles
-    }
+    return templates[template] || templates.modern
   }
 
   const generatePDF = async () => {
@@ -106,7 +123,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
         body: JSON.stringify({
           contentBlocks: contentBlocks.map(block => ({
             ...block,
-            content: block.content.replace(/\n/g, ' ') // Clean newlines before sending
+            content: block.content.replace(/\n/g, ' ')
           })),
           styles,
           layout,
@@ -115,7 +132,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
       })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
         throw new Error(errorData.error || `Server error: ${response.status}`)
       }
 
@@ -150,6 +167,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
     const printWindow = window.open('', '_blank')
     if (printWindow) {
       const templateStyles = getTemplateStyles()
+      const pageDims = getPageDimensions()
       
       printWindow.document.write(`
         <!DOCTYPE html>
@@ -160,69 +178,76 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
               body {
                 font-family: ${templateStyles.fontFamily};
                 color: ${templateStyles.color};
-                background-color: ${templateStyles.backgroundColor};
+                background-color: #E5E7EB;
                 margin: 0;
                 padding: 20px;
                 line-height: ${styles.lineHeight};
               }
               .page {
-                width: ${getPageDimensions().width};
-                height: ${getPageDimensions().height};
-                margin: 0 auto;
+                width: ${pageDims.width};
+                height: ${pageDims.height};
+                margin: 20px auto;
                 padding: 40px;
-                background: white;
-                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                background: ${templateStyles.backgroundColor};
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
                 box-sizing: border-box;
+                display: grid;
+                grid-template-columns: repeat(${layout.columns}, 1fr);
+                gap: 20px;
+              }
+              .block {
+                break-inside: avoid;
               }
               .heading {
                 font-size: 24px;
                 font-weight: bold;
                 margin-bottom: 20px;
                 text-align: center;
+                color: ${templateStyles.accentColor};
+                grid-column: 1 / -1;
               }
               .paragraph {
                 font-size: 14px;
                 margin-bottom: 15px;
                 text-align: left;
+                line-height: ${styles.lineHeight};
               }
               .container {
                 font-size: 14px;
                 margin-bottom: 15px;
                 padding: 15px;
-                background: #F3F4F6;
+                background: ${templateStyles.accentColor}15;
                 border-radius: 5px;
-                border-left: 4px solid #8B5CF6;
+                border-left: 4px solid ${templateStyles.accentColor};
               }
               .custom {
                 font-size: 14px;
                 margin-bottom: 15px;
                 padding: 15px;
-                background: #EFF6FF;
+                background: ${templateStyles.accentColor}10;
                 border-radius: 5px;
-                border-left: 4px solid #3B82F6;
+                border-left: 4px solid ${templateStyles.accentColor};
               }
               @media print {
-                body { margin: 0; padding: 0; }
-                .page { box-shadow: none; margin: 0; }
+                body { margin: 0; padding: 0; background: white; }
+                .page { box-shadow: none; margin: 0; page-break-after: always; }
               }
             </style>
           </head>
           <body>
             <div class="page">
               ${contentBlocks.map(block => `
-                <div class="${block.type}" style="
+                <div class="block ${block.type}" style="
                   font-size: ${block.styles.fontSize}px;
                   font-family: ${block.styles.fontFamily};
                   color: ${block.styles.color};
                   line-height: ${block.styles.lineHeight};
                   font-weight: ${block.styles.fontWeight || 'normal'};
                   text-align: ${block.styles.textAlign || 'left'};
-                  ${block.styles.backgroundColor ? `background-color: ${block.styles.backgroundColor};` : ''}
                 ">
                   ${block.content.replace(/\n/g, '<br>')}
                 </div>
               `).join('')}
-              ${contentBlocks.length === 0 ? '<p>No content to display</p>' : ''}
             </div>
           </body>
         </html>
@@ -233,25 +258,21 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
     }
   }
 
-  const saveAsImage = async () => {
-    if (contentBlocks.length === 0) {
-      setError('Please add some content before saving as image')
-      return
-    }
+  const saveAsImage = () => {
     alert('Image export feature requires additional setup. Use print preview for now.')
   }
 
   const pageDimensions = getPageDimensions()
   const templateStyles = getTemplateStyles()
 
-  const getBlockStyle = (block: ContentBlock) => {
-    const baseStyle = {
+  const getBlockStyle = (block: ContentBlock): React.CSSProperties => {
+    const baseStyle: React.CSSProperties = {
       fontSize: `${block.styles.fontSize}px`,
       fontFamily: block.styles.fontFamily,
       color: block.styles.color,
       lineHeight: block.styles.lineHeight,
-      fontWeight: block.styles.fontWeight,
-      textAlign: block.styles.textAlign as CanvasTextAlign,
+      fontWeight: block.styles.fontWeight as React.CSSProperties['fontWeight'],
+      textAlign: block.styles.textAlign as React.CSSProperties['textAlign'],
       marginBottom: '16px',
     }
 
@@ -264,25 +285,27 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
           borderLeft: 'none',
           borderRadius: '0',
           fontSize: `${Math.max(block.styles.fontSize, 18)}px`,
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          color: templateStyles.accentColor,
+          gridColumn: '1 / -1'
         }
       case 'container':
         return {
           ...baseStyle,
           padding: '12px',
-          backgroundColor: block.styles.backgroundColor || '#F3F4F6',
-          borderLeft: '4px solid #8B5CF6',
+          backgroundColor: `${templateStyles.accentColor}15`,
+          borderLeft: `4px solid ${templateStyles.accentColor}`,
           borderRadius: '4px'
         }
       case 'custom':
         return {
           ...baseStyle,
           padding: '12px',
-          backgroundColor: block.styles.backgroundColor || '#EFF6FF',
-          borderLeft: '4px solid #3B82F6',
+          backgroundColor: `${templateStyles.accentColor}10`,
+          borderLeft: `4px solid ${templateStyles.accentColor}`,
           borderRadius: '4px'
         }
-      default: // paragraph
+      default:
         return {
           ...baseStyle,
           padding: '0',
@@ -297,7 +320,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
     <div className="bg-white rounded-lg shadow-lg p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-gray-800">
-          PDF Preview
+          PDF Preview - {layout.columns} Column{layout.columns !== 1 ? 's' : ''}
         </h2>
         <button
           onClick={generatePDF}
@@ -306,7 +329,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
         >
           {isGenerating ? (
             <>
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               <span>Generating...</span>
             </>
           ) : (
@@ -333,16 +356,15 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
         </div>
       )}
       
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-4 overflow-auto">
         <div 
           ref={previewRef}
-          className="border-2 border-gray-300 bg-white shadow-lg overflow-hidden"
+          className="border-2 border-gray-300 bg-gray-100 shadow-lg"
           style={{
             width: pageDimensions.width,
             height: pageDimensions.height,
-            transform: 'scale(0.7)',
+            transform: 'scale(0.6)',
             transformOrigin: 'top center',
-            backgroundColor: templateStyles.backgroundColor
           }}
         >
           <div 
@@ -350,29 +372,31 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
             style={{
               fontFamily: templateStyles.fontFamily,
               color: templateStyles.color,
-              columnCount: layout.columns,
-              columnGap: '24px'
+              backgroundColor: templateStyles.backgroundColor,
+              display: 'grid',
+              gridTemplateColumns: `repeat(${layout.columns}, 1fr)`,
+              gap: '20px',
+              overflow: 'auto'
             }}
           >
             {contentBlocks.length > 0 ? (
               contentBlocks.map((block) => (
                 <div
                   key={block.id}
-                  className="mb-4 break-inside-avoid"
+                  className="break-inside-avoid"
                   style={getBlockStyle(block)}
                 >
                   {block.content.split('\n').map((line, index) => (
                     <div key={index}>
                       {line}
-                      {index < block.content.split('\n').length - 1 && <br />}
                     </div>
                   ))}
                 </div>
               ))
             ) : (
-              <div className="text-gray-400 text-center h-full flex items-center justify-center">
+              <div className="text-gray-400 text-center h-full flex items-center justify-center col-span-full">
                 <div>
-                  <div className="text-6xl mb-4" role="img" aria-label="Document icon">📄</div>
+                  <div className="text-6xl mb-4">📄</div>
                   <p>Add some content to see the preview</p>
                 </div>
               </div>
@@ -384,7 +408,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
       <div className="mt-4 text-center text-sm text-gray-500">
         Preview: {layout.pageSize} {layout.orientation} • {layout.columns} column(s) • {template} template
         <br />
-        <span className="text-xs">Scaled to 70% for display</span>
+        <span className="text-xs">Scaled to 60% for display</span>
       </div>
 
       <div className="mt-6 flex justify-center space-x-4">
@@ -401,7 +425,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
           disabled={contentBlocks.length === 0}
           className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
         >
-          <Image className="w-4 h-4"  />
+          <Image className="w-4 h-4" />
           Save as Image
         </button>
       </div>
