@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { Download, Printer, Image, RefreshCw } from 'lucide-react'
-import { CVTemplate } from '../lib/cv-templates'
+import { CVTemplate, CVSection } from '../lib/cv-templates'
 
 interface CVPreviewProps {
   template: CVTemplate
@@ -14,61 +14,23 @@ export default function CVPreview({ template }: CVPreviewProps) {
   const [error, setError] = useState<string | null>(null)
   const [scale, setScale] = useState<number>(0.8)
 
-  const getTemplateColors = (): Record<string, { primary: string; secondary: string; bg: string; accent: string }> => {
-    const colorSchemes: Record<string, { primary: string; secondary: string; bg: string; accent: string }> = {
-      modern: {
-        primary: '#1F2937',
-        secondary: '#3B82F6',
-        bg: '#FFFFFF',
-        accent: '#3B82F6'
-      },
-      classic: {
-        primary: '#374151',
-        secondary: '#92400E',
-        bg: '#FFFBEB',
-        accent: '#D97706'
-      },
-      business: {
-        primary: '#111827',
-        secondary: '#1E40AF',
-        bg: '#F3F4F6',
-        accent: '#1E40AF'
-      },
-      creative: {
-        primary: '#4B5563',
-        secondary: '#BE185D',
-        bg: '#FDF2F8',
-        accent: '#EC4899'
-      },
-      minimal: {
-        primary: '#000000',
-        secondary: '#666666',
-        bg: '#FFFFFF',
-        accent: '#000000'
-      },
-      technical: {
-        primary: '#1F2937',
-        secondary: '#0369A1',
-        bg: '#F0F4F8',
-        accent: '#0369A1'
-      }
+  const getTemplateColors = () => {
+    // Fallback colors if not defined in template
+    return {
+      primary: template.styles.primaryColor || '#1F2937',
+      secondary: template.styles.secondaryColor || '#3B82F6',
+      bg: '#FFFFFF',
+      accent: template.styles.accentColor || '#3B82F6'
     }
-    return colorSchemes
-  }
-
-  const getSchemeForTemplate = () => {
-    const schemes = getTemplateColors()
-    const templateName = template.styles.layout || 'modern'
-    return schemes[templateName] || schemes.modern
   }
 
   const getPersonalInfo = () => {
     const personalSection = template.structure.find(s => s.type === 'personal')
     if (!personalSection?.fields) return null
-    
+
     const nameField = personalSection.fields.find(f => f.id === 'name')
     const titleField = personalSection.fields.find(f => f.id === 'title')
-    
+
     return {
       name: nameField?.value || 'Your Name',
       title: titleField?.value || 'Professional Title'
@@ -78,7 +40,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
   const getContactInfo = () => {
     const personalSection = template.structure.find(s => s.type === 'personal')
     if (!personalSection?.fields) return []
-    
+
     return personalSection.fields
       .filter(f => f.id !== 'name' && f.id !== 'title' && f.value)
       .map(field => field.value)
@@ -86,7 +48,137 @@ export default function CVPreview({ template }: CVPreviewProps) {
 
   const personalInfo = getPersonalInfo()
   const contactInfo = getContactInfo()
-  const colorScheme = getSchemeForTemplate()
+  const colorScheme = getTemplateColors()
+
+  // Helper to render section content
+  const renderSectionContent = (section: CVSection) => {
+    if (!section.content) return <p className="text-gray-400 italic">Add content...</p>
+    return <div dangerouslySetInnerHTML={{ __html: section.content.replace(/\n/g, '<br>') }} />
+  }
+
+  // Helper to render a full section block
+  const renderSection = (section: CVSection) => (
+    <div key={section.id} className="mb-6">
+      <h3
+        className="text-lg font-bold mb-3 pb-1 border-b-2 uppercase tracking-wide"
+        style={{ borderColor: colorScheme.accent, color: colorScheme.primary }}
+      >
+        {section.title}
+      </h3>
+      <div className="text-sm leading-relaxed" style={{ color: '#333' }}>
+        {renderSectionContent(section)}
+      </div>
+    </div>
+  )
+
+  // Layout Renderers
+  const renderLayout = () => {
+    const sections = template.structure.filter(s => s.type !== 'personal')
+    const layoutType = template.styles.layout || 'classic'
+
+    // 1. Two Column Layout
+    if (layoutType === 'twocolumn' || layoutType === 'sidebar') {
+      const sidebarSections = sections.filter(s => ['skills', 'education', 'languages', 'certifications', 'contact'].includes(s.type))
+      const mainSections = sections.filter(s => !['skills', 'education', 'languages', 'certifications', 'contact'].includes(s.type))
+
+      return (
+        <div className="grid grid-cols-12 gap-8 h-full">
+          {/* Sidebar */}
+          <div className="col-span-4 pr-4 border-r border-gray-100">
+            {/* Personal Info in Sidebar for some layouts, or just skills */}
+            {layoutType === 'sidebar' && personalInfo && (
+              <div className="mb-8">
+                <h1 className="text-2xl font-bold mb-2" style={{ color: colorScheme.primary }}>{personalInfo.name}</h1>
+                <p className="text-sm font-medium mb-4" style={{ color: colorScheme.accent }}>{personalInfo.title}</p>
+                <div className="text-xs space-y-1 text-gray-600">
+                  {contactInfo.map((info, i) => <div key={i}>{info}</div>)}
+                </div>
+              </div>
+            )}
+
+            {sidebarSections.map(renderSection)}
+          </div>
+
+          {/* Main Content */}
+          <div className="col-span-8">
+            {layoutType !== 'sidebar' && personalInfo && (
+              <div className="mb-8 border-b-2 pb-4" style={{ borderColor: colorScheme.accent }}>
+                <h1 className="text-4xl font-bold mb-2" style={{ color: colorScheme.primary }}>{personalInfo.name}</h1>
+                <h2 className="text-xl font-medium mb-3" style={{ color: colorScheme.secondary }}>{personalInfo.title}</h2>
+                <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+                  {contactInfo.map((info, i) => <span key={i} className="bg-gray-50 px-2 py-1 rounded">{info}</span>)}
+                </div>
+              </div>
+            )}
+            {mainSections.map(renderSection)}
+          </div>
+        </div>
+      )
+    }
+
+    // 2. Three Column Layout
+    if (layoutType === 'threecolumn') {
+      const leftSections = sections.filter(s => ['skills', 'languages'].includes(s.type))
+      const rightSections = sections.filter(s => ['education', 'certifications'].includes(s.type))
+      const centerSections = sections.filter(s => !['skills', 'languages', 'education', 'certifications'].includes(s.type))
+
+      return (
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          {personalInfo && (
+            <div className="text-center mb-8 bg-gray-50 p-6 rounded-lg">
+              <h1 className="text-3xl font-bold mb-2" style={{ color: colorScheme.primary }}>{personalInfo.name}</h1>
+              <p className="text-lg font-medium mb-3" style={{ color: colorScheme.accent }}>{personalInfo.title}</p>
+              <div className="flex justify-center gap-4 text-sm text-gray-600">
+                {contactInfo.map((info, i) => <span key={i}>{info}</span>)}
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-12 gap-6 flex-grow">
+            {/* Left Column */}
+            <div className="col-span-3 text-sm">
+              {leftSections.map(renderSection)}
+            </div>
+
+            {/* Center Column */}
+            <div className="col-span-6 border-l border-r border-gray-100 px-6">
+              {centerSections.map(renderSection)}
+            </div>
+
+            {/* Right Column */}
+            <div className="col-span-3 text-sm">
+              {rightSections.map(renderSection)}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    // 3. Default / Classic / Modern Layout
+    return (
+      <div className="h-full">
+        {personalInfo && (
+          <div className="mb-8 border-b-4 pb-6" style={{ borderColor: colorScheme.accent }}>
+            <h1 className="text-4xl font-bold mb-3" style={{ color: colorScheme.primary }}>
+              {personalInfo.name}
+            </h1>
+            <h2 className="text-2xl mb-4 font-semibold" style={{ color: colorScheme.accent }}>
+              {personalInfo.title}
+            </h2>
+            {contactInfo.length > 0 && (
+              <div className="flex flex-wrap gap-4 text-sm" style={{ color: colorScheme.secondary }}>
+                {contactInfo.map((info, i) => <span key={i}>{info}</span>)}
+              </div>
+            )}
+          </div>
+        )}
+        <div className="space-y-6">
+          {sections.map(renderSection)}
+        </div>
+      </div>
+    )
+  }
 
   const generatePDF = async () => {
     if (!template) {
@@ -115,7 +207,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
       }
 
       const blob = await response.blob()
-      
+
       if (blob.size === 0) {
         throw new Error('Generated PDF is empty')
       }
@@ -143,10 +235,30 @@ export default function CVPreview({ template }: CVPreviewProps) {
       return
     }
 
+    // We need to construct the HTML for the print window.
+    // This is a simplified version of what we render in React, but using raw HTML/CSS strings.
+    // For a robust solution, we should ideally share the CSS logic.
+
+    // For now, we will use a basic print stylesheet that mimics the React layout logic using CSS Grid.
+
     const printWindow = window.open('', '_blank')
     if (printWindow && personalInfo) {
       const scheme = colorScheme
-      
+      const layoutType = template.styles.layout || 'classic'
+
+      let layoutCSS = ''
+      if (layoutType === 'twocolumn' || layoutType === 'sidebar') {
+        layoutCSS = `
+          .grid-container { display: grid; grid-template-columns: 30% 70%; gap: 2rem; }
+          .sidebar { border-right: 1px solid #eee; padding-right: 1rem; }
+        `
+      } else if (layoutType === 'threecolumn') {
+        layoutCSS = `
+          .grid-container { display: grid; grid-template-columns: 25% 50% 25%; gap: 1.5rem; }
+          .center-col { border-left: 1px solid #eee; border-right: 1px solid #eee; padding: 0 1.5rem; }
+        `
+      }
+
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
@@ -154,136 +266,61 @@ export default function CVPreview({ template }: CVPreviewProps) {
             <title>${personalInfo.name} - CV</title>
             <style>
               @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+              @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+              @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap');
+              @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap');
               
               * { margin: 0; padding: 0; box-sizing: border-box; }
               
               body {
                 font-family: '${template.styles.fontFamily}', sans-serif;
                 color: ${scheme.primary};
-                background-color: ${scheme.bg};
+                background-color: white;
                 line-height: ${template.styles.spacing};
+                -webkit-print-color-adjust: exact;
               }
               
               .cv-container {
                 max-width: 210mm;
-                height: 297mm;
                 margin: 0 auto;
                 padding: 40px;
                 background: white;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
               }
               
               .header {
-                text-align: center;
                 margin-bottom: 30px;
-                border-bottom: 3px solid ${scheme.accent};
                 padding-bottom: 20px;
+                border-bottom: 3px solid ${scheme.accent};
               }
               
-              .name {
-                font-size: 32px;
-                font-weight: bold;
-                margin-bottom: 8px;
+              .name { font-size: 32px; font-weight: bold; color: ${scheme.primary}; margin-bottom: 5px; }
+              .title { font-size: 18px; color: ${scheme.accent}; margin-bottom: 10px; }
+              .contact { font-size: 12px; color: ${scheme.secondary}; display: flex; gap: 15px; flex-wrap: wrap; }
+              
+              .section { margin-bottom: 20px; break-inside: avoid; }
+              .section-title { 
+                font-size: 14px; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                border-bottom: 2px solid ${scheme.accent}; 
+                margin-bottom: 10px;
+                padding-bottom: 5px;
                 color: ${scheme.primary};
-                letter-spacing: 0.5px;
               }
+              .section-content { font-size: 12px; color: #333; }
               
-              .title {
-                font-size: 18px;
-                color: ${scheme.accent};
-                margin-bottom: 12px;
-                font-weight: 500;
-              }
-              
-              .contact-info {
-                font-size: 13px;
-                color: ${scheme.secondary};
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 20px;
-              }
-              
-              .section {
-                margin-bottom: 24px;
-              }
-              
-              .section-title {
-                font-size: 16px;
-                font-weight: bold;
-                color: ${scheme.primary};
-                border-bottom: 2px solid ${scheme.accent};
-                padding-bottom: 8px;
-                margin-bottom: 12px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-              }
-              
-              .section-content {
-                font-size: 13px;
-                color: #333;
-                line-height: 1.6;
-              }
-              
-              .item {
-                margin-bottom: 12px;
-              }
-              
-              .item-header {
-                font-weight: 700;
-                color: ${scheme.primary};
-                margin-bottom: 4px;
-              }
-              
-              .item-subheader {
-                color: ${scheme.accent};
-                font-style: italic;
-                font-size: 12px;
-                margin-bottom: 6px;
-              }
-              
-              .skills-container {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 8px;
-              }
-              
-              .skill-tag {
-                background-color: ${scheme.accent}20;
-                color: ${scheme.accent};
-                padding: 5px 12px;
-                border-radius: 20px;
-                font-size: 11px;
-                font-weight: 600;
-              }
-              
-              ul { padding-left: 18px; }
-              li { margin-bottom: 4px; }
+              ${layoutCSS}
               
               @media print {
-                body { margin: 0; padding: 0; background: white; }
-                .cv-container { box-shadow: none; padding: 20px; }
+                body { margin: 0; padding: 0; }
+                .cv-container { width: 100%; max-width: none; padding: 20px; }
               }
             </style>
           </head>
           <body>
             <div class="cv-container">
-              <div class="header">
-                ${personalInfo.name ? `<div class="name">${personalInfo.name}</div>` : ''}
-                ${personalInfo.title ? `<div class="title">${personalInfo.title}</div>` : ''}
-                ${contactInfo.length > 0 ? `<div class="contact-info">${contactInfo.map(info => `<span>${info}</span>`).join('')}</div>` : ''}
-              </div>
-              
-              ${template.structure
-                .filter(section => section.type !== 'personal')
-                .map(section => `
-                  <div class="section">
-                    <div class="section-title">${section.title}</div>
-                    <div class="section-content">${renderContent(section)}</div>
-                  </div>
-                `).join('')}
+              ${renderPrintHTML(layoutType)}
             </div>
-            
             <script>
               window.onload = function() { window.print(); setTimeout(() => window.close(), 1000); }
             </script>
@@ -294,9 +331,69 @@ export default function CVPreview({ template }: CVPreviewProps) {
     }
   }
 
-  const renderContent = (section: any): string => {
-    if (!section.content) return '<p>No content</p>'
-    return section.content
+  // Helper to generate HTML string for print window based on layout
+  const renderPrintHTML = (layoutType: string) => {
+    const sections = template.structure.filter(s => s.type !== 'personal')
+    const personal = getPersonalInfo()
+    const contact = getContactInfo()
+
+    const renderSec = (s: CVSection) => `
+      <div class="section">
+        <div class="section-title">${s.title}</div>
+        <div class="section-content">${s.content ? s.content.replace(/\n/g, '<br>') : ''}</div>
+      </div>
+    `
+
+    const headerHTML = `
+      <div class="header" style="${layoutType === 'threecolumn' ? 'text-align: center;' : ''}">
+        <div class="name">${personal?.name}</div>
+        <div class="title">${personal?.title}</div>
+        <div class="contact" style="${layoutType === 'threecolumn' ? 'justify-content: center;' : ''}">
+          ${contact.map(c => `<span>${c}</span>`).join('')}
+        </div>
+      </div>
+    `
+
+    if (layoutType === 'twocolumn' || layoutType === 'sidebar') {
+      const sidebarSecs = sections.filter(s => ['skills', 'education', 'languages', 'certifications', 'contact'].includes(s.type))
+      const mainSecs = sections.filter(s => !['skills', 'education', 'languages', 'certifications', 'contact'].includes(s.type))
+
+      return `
+        ${layoutType !== 'sidebar' ? headerHTML : ''}
+        <div class="grid-container">
+          <div class="sidebar">
+            ${layoutType === 'sidebar' ? headerHTML : ''}
+            ${sidebarSecs.map(renderSec).join('')}
+          </div>
+          <div class="main">
+            ${mainSecs.map(renderSec).join('')}
+          </div>
+        </div>
+      `
+    }
+
+    if (layoutType === 'threecolumn') {
+      const leftSecs = sections.filter(s => ['skills', 'languages'].includes(s.type))
+      const rightSecs = sections.filter(s => ['education', 'certifications'].includes(s.type))
+      const centerSecs = sections.filter(s => !['skills', 'languages', 'education', 'certifications'].includes(s.type))
+
+      return `
+        ${headerHTML}
+        <div class="grid-container">
+          <div class="left-col">${leftSecs.map(renderSec).join('')}</div>
+          <div class="center-col">${centerSecs.map(renderSec).join('')}</div>
+          <div class="right-col">${rightSecs.map(renderSec).join('')}</div>
+        </div>
+      `
+    }
+
+    // Default
+    return `
+      ${headerHTML}
+      <div>
+        ${sections.map(renderSec).join('')}
+      </div>
+    `
   }
 
   const refreshPreview = () => {
@@ -333,7 +430,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
               +
             </button>
           </div>
-          
+
           <button
             onClick={refreshPreview}
             className="p-2 text-gray-600 hover:text-gray-800"
@@ -341,7 +438,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
           >
             <RefreshCw className="w-4 h-4" />
           </button>
-          
+
           <button
             onClick={generatePDF}
             disabled={isGenerating}
@@ -367,67 +464,27 @@ export default function CVPreview({ template }: CVPreviewProps) {
           <p className="text-red-700 text-sm">{error}</p>
         </div>
       )}
-      
-      <div className="flex justify-center mb-4">
-        <div 
+
+      <div className="flex justify-center mb-4 overflow-auto bg-gray-100 p-8 rounded-lg">
+        <div
           ref={previewRef}
-          className="border-2 border-gray-300 bg-white shadow-lg"
+          className="bg-white shadow-2xl transition-transform duration-200 ease-in-out"
           style={{
             width: '210mm',
-            height: '297mm',
+            minHeight: '297mm',
             transform: `scale(${scale})`,
             transformOrigin: 'top center',
             backgroundColor: colorScheme.bg
           }}
         >
-          <div 
-            className="h-full p-8"
+          <div
+            className="h-full p-10"
             style={{
               fontFamily: template.styles.fontFamily,
               color: colorScheme.primary,
             }}
           >
-            {personalInfo && (
-              <div className="text-center mb-8 border-b-4 pb-6" style={{ borderColor: colorScheme.accent }}>
-                <h1 className="text-4xl font-bold mb-3" style={{ color: colorScheme.primary }}>
-                  {personalInfo.name}
-                </h1>
-                <h2 className="text-2xl mb-4 font-semibold" style={{ color: colorScheme.accent }}>
-                  {personalInfo.title}
-                </h2>
-                {contactInfo.length > 0 && (
-                  <div className="flex justify-center flex-wrap gap-4 text-sm" style={{ color: colorScheme.secondary }}>
-                    {contactInfo.map((info, i) => <span key={i}>{info}</span>)}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="space-y-6">
-              {template.structure
-                .filter(s => s.type !== 'personal')
-                .map((section) => (
-                  <div key={section.id}>
-                    <h3 
-                      className="text-lg font-bold mb-4 pb-2 border-b-2 uppercase tracking-wide"
-                      style={{ borderColor: colorScheme.accent, color: colorScheme.primary }}
-                    >
-                      {section.title}
-                    </h3>
-                    <div className="text-sm" style={{ color: '#333' }}>
-                      {section.content ? (
-                        <div dangerouslySetInnerHTML={{ __html: section.content.replace(/\n/g, '<br>') }} />
-                      ) : (
-                        <p className="text-gray-400 italic">Add content to this section...</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-            </div>
-
-            <div className="mt-8 pt-4 border-t border-gray-200 text-center text-xs text-gray-500">
-              Generated with PDF Craft Pro
-            </div>
+            {renderLayout()}
           </div>
         </div>
       </div>
@@ -437,19 +494,12 @@ export default function CVPreview({ template }: CVPreviewProps) {
       </div>
 
       <div className="mt-6 flex justify-center space-x-4">
-        <button 
+        <button
           onClick={printPreview}
           className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
         >
           <Printer className="w-4 h-4" />
           Print Preview
-        </button>
-        <button 
-          onClick={saveAsImage}
-          className="flex items-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
-        >
-          <Image className="w-4 h-4" />
-          Save as Image
         </button>
       </div>
     </div>

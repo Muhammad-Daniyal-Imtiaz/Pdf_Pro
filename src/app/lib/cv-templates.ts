@@ -15,14 +15,18 @@ export interface CVSection {
   fields?: CVField[]
 }
 
+export type CVLayoutType = 'classic' | 'modern' | 'creative' | 'minimal' | 'executive' | 'twocolumn' | 'threecolumn' | 'sidebar' | 'gradient'
+
 export interface CVStyles {
   fontFamily: string
   primaryColor: string
   secondaryColor: string
   accentColor: string
-  layout: 'classic' | 'modern' | 'creative' | 'minimal' | 'executive' | 'startup' | 'twocolumn' | 'threecolumn' | 'sidebar' | 'gradient'
+  layout: CVLayoutType
   spacing: number
   borderRadius: number
+  columnGap?: number
+  sidebarWidth?: string
 }
 
 export interface CVTemplate {
@@ -95,7 +99,8 @@ export const cvTemplates: CVTemplate[] = [
       accentColor: '#06b6d4',
       layout: 'twocolumn',
       spacing: 1.6,
-      borderRadius: 12
+      borderRadius: 12,
+      sidebarWidth: '35%'
     },
     rating: 4.9,
     downloads: 18500,
@@ -157,7 +162,8 @@ export const cvTemplates: CVTemplate[] = [
       accentColor: '#0f766e',
       layout: 'threecolumn',
       spacing: 1.7,
-      borderRadius: 8
+      borderRadius: 8,
+      columnGap: 20
     },
     rating: 4.8,
     downloads: 16200,
@@ -212,7 +218,8 @@ export const cvTemplates: CVTemplate[] = [
       accentColor: '#666666',
       layout: 'sidebar',
       spacing: 1.5,
-      borderRadius: 0
+      borderRadius: 0,
+      sidebarWidth: '30%'
     },
     rating: 4.7,
     downloads: 12800,
@@ -618,7 +625,7 @@ export const cvTemplates: CVTemplate[] = [
         id: 'education',
         type: 'education',
         title: 'Education',
-        content: '• PhD Computer Science - Carnegie Mellon University (2010)\nDissertation: Advanced Algorithms for Complex Systems\n\n• MS Computer Science - UC Berkeley (2008)\n• BS Computer Science - University of Washington (2006)'
+        content: '• PhD Computer Science - Carnegie Mellon University (2010)\n• Dissertation: Advanced Algorithms for Complex Systems\n\n• MS Computer Science - UC Berkeley (2008)\n• BS Computer Science - University of Washington (2006)'
       }
     ],
     styles: {
@@ -690,8 +697,6 @@ export const cvTemplates: CVTemplate[] = [
     downloads: 13500,
     tags: ['Sales', 'Executive', 'Performance', 'Revenue']
   }
-
-  // Additional 9 more templates can be added following similar patterns
 ]
 
 export default cvTemplates
