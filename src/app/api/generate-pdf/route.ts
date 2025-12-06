@@ -54,8 +54,12 @@ interface CVStyles {
   fontFamily: string
   primaryColor: string
   secondaryColor: string
-  layout: 'classic' | 'modern' | 'creative' | 'minimal'
+  accentColor: string
+  layout: 'classic' | 'modern' | 'creative' | 'minimal' | 'twocolumn' | 'threecolumn' | 'sidebar' | 'gradient'
   spacing: number
+  borderRadius: number
+  columnGap?: number
+  sidebarWidth?: string
 }
 
 export async function POST(request: NextRequest) {
@@ -82,23 +86,23 @@ export async function POST(request: NextRequest) {
     const getPageDimensions = () => {
       const pointsPerInch = 72
       const mmToPoints = (mm: number) => (mm * pointsPerInch) / 25.4
-      
+
       switch (layout.pageSize) {
         case 'A4':
-          return layout.orientation === 'portrait' 
-            ? [mmToPoints(210), mmToPoints(297)] 
+          return layout.orientation === 'portrait'
+            ? [mmToPoints(210), mmToPoints(297)]
             : [mmToPoints(297), mmToPoints(210)]
         case 'A3':
-          return layout.orientation === 'portrait' 
-            ? [mmToPoints(297), mmToPoints(420)] 
+          return layout.orientation === 'portrait'
+            ? [mmToPoints(297), mmToPoints(420)]
             : [mmToPoints(420), mmToPoints(297)]
         case 'Letter':
-          return layout.orientation === 'portrait' 
-            ? [mmToPoints(216), mmToPoints(279)] 
+          return layout.orientation === 'portrait'
+            ? [mmToPoints(216), mmToPoints(279)]
             : [mmToPoints(279), mmToPoints(216)]
         case 'Legal':
-          return layout.orientation === 'portrait' 
-            ? [mmToPoints(216), mmToPoints(356)] 
+          return layout.orientation === 'portrait'
+            ? [mmToPoints(216), mmToPoints(356)]
             : [mmToPoints(356), mmToPoints(216)]
         default:
           return [mmToPoints(210), mmToPoints(297)]
@@ -118,9 +122,9 @@ export async function POST(request: NextRequest) {
       if (!hex || typeof hex !== 'string') {
         return [0, 0, 0]
       }
-      
+
       hex = hex.replace(/^#/, '')
-      
+
       let r, g, b
       if (hex.length === 3) {
         r = parseInt(hex[0] + hex[0], 16) / 255
@@ -133,7 +137,7 @@ export async function POST(request: NextRequest) {
       } else {
         return [0, 0, 0]
       }
-      
+
       return [r, g, b]
     }
 
@@ -142,7 +146,7 @@ export async function POST(request: NextRequest) {
       if (!text || typeof text !== 'string') {
         return ''
       }
-      
+
       return text
         .replace(/\n/g, ' ')
         .replace(/\r/g, ' ')
@@ -157,7 +161,7 @@ export async function POST(request: NextRequest) {
       if (!cleanedText) {
         return ['']
       }
-      
+
       const words = cleanedText.split(' ')
       const lines: string[] = []
       let currentLine = words[0] || ''
@@ -165,10 +169,10 @@ export async function POST(request: NextRequest) {
       for (let i = 1; i < words.length; i++) {
         const word = words[i]
         const testLine = currentLine + ' ' + word
-        
+
         try {
           const textWidth = fontType.widthOfTextAtSize(testLine, fontSize)
-          
+
           if (textWidth <= maxWidth) {
             currentLine = testLine
           } else {
@@ -180,11 +184,11 @@ export async function POST(request: NextRequest) {
           currentLine = word
         }
       }
-      
+
       if (currentLine) {
         lines.push(currentLine)
       }
-      
+
       return lines.filter(line => line.trim().length > 0)
     }
 
@@ -212,7 +216,7 @@ export async function POST(request: NextRequest) {
       }
 
       const title = templateTitles[template] || 'Generated Document'
-      
+
       // Add title (spans all columns)
       const titleLines = wrapText(title, fontBold, 20, totalWidth)
       for (const line of titleLines) {
@@ -221,7 +225,7 @@ export async function POST(request: NextRequest) {
           columnYPositions = Array(numColumns).fill(height - margin)
           currentColumnIndex = 0
         }
-        
+
         try {
           page.drawText(line, {
             x: margin,
@@ -236,7 +240,7 @@ export async function POST(request: NextRequest) {
           columnYPositions[0] -= 25
         }
       }
-      
+
       // Reset for content and drop all columns equally
       for (let i = 0; i < numColumns; i++) {
         columnYPositions[i] = columnYPositions[0] - 20
@@ -247,7 +251,7 @@ export async function POST(request: NextRequest) {
     // Add content blocks with COLUMN SUPPORT
     for (const block of contentBlocks) {
       const [r, g, b] = hexToRgb(block.styles?.color || '#000000')
-      
+
       let blockFont = font
       if (block.styles?.fontWeight === 'bold') {
         blockFont = fontBold
@@ -310,7 +314,7 @@ export async function POST(request: NextRequest) {
         'custom': 18,
         'paragraph': 10
       }
-      
+
       const spacing = spacingMap[block.type] || 10
       columnYPositions[currentColumnIndex] -= spacing
     }
@@ -319,7 +323,7 @@ export async function POST(request: NextRequest) {
     if (contentBlocks.length > 0) {
       const footerText = `Generated on ${new Date().toLocaleDateString()} • PDF Craft Pro`
       const cleanedFooter = cleanText(footerText)
-      
+
       if (cleanedFooter) {
         try {
           page.drawText(cleanedFooter, {
@@ -357,16 +361,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// CV PDF Generation Function
+// Enhanced CV PDF Generation Function
 async function generateCVPDF(cvTemplate: CVTemplate) {
   try {
     const pdfDoc = await PDFDocument.create()
     const page = pdfDoc.addPage([595.28, 841.89]) // A4 in points
-    
+
     // Embed fonts
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
-    
+
     // Helper function to convert hex color to RGB
     const hexToRgb = (hex: string): [number, number, number] => {
       if (!hex || typeof hex !== 'string') {
@@ -390,6 +394,7 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
 
     const [primaryR, primaryG, primaryB] = hexToRgb(cvTemplate.styles.primaryColor)
     const [secondaryR, secondaryG, secondaryB] = hexToRgb(cvTemplate.styles.secondaryColor)
+    const [accentR, accentG, accentB] = hexToRgb(cvTemplate.styles.accentColor || cvTemplate.styles.primaryColor)
 
     let yPosition = 800
 
@@ -423,10 +428,10 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
     }
 
     // Draw contact information
-    const contactFields = personalSection?.fields?.filter(f => 
+    const contactFields = personalSection?.fields?.filter(f =>
       f.id !== 'name' && f.id !== 'title' && f.value
     ) || []
-    
+
     const contactText = contactFields.map(f => f.value).join(' • ')
     if (contactText) {
       page.drawText(contactText, {
@@ -439,19 +444,20 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
       yPosition -= 40
     }
 
-    // Draw sections
+    // Draw sections with enhanced layout
     for (const section of cvTemplate.structure.filter(s => s.type !== 'personal')) {
       if (yPosition < 100) {
         pdfDoc.addPage([595.28, 841.89])
         yPosition = 800
       }
 
+      // Draw section title with accent color
       page.drawText(section.title, {
         x: 50,
         y: yPosition,
         size: 16,
         font: fontBold,
-        color: rgb(primaryR, primaryG, primaryB),
+        color: rgb(accentR, accentG, accentB),
       })
       yPosition -= 25
 
@@ -462,7 +468,7 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
             pdfDoc.addPage([595.28, 841.89])
             yPosition = 800
           }
-          
+
           page.drawText(line.trim(), {
             x: 50,
             y: yPosition,
@@ -478,7 +484,7 @@ async function generateCVPDF(cvTemplate: CVTemplate) {
             pdfDoc.addPage([595.28, 841.89])
             yPosition = 800
           }
-          
+
           page.drawText(`${field.label}: ${field.value}`, {
             x: 50,
             y: yPosition,

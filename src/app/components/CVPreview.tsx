@@ -3,6 +3,8 @@
 import { useRef, useState } from 'react'
 import { Download, Printer, Image, RefreshCw } from 'lucide-react'
 import { CVTemplate, CVSection } from '../lib/cv-templates'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
 
 interface CVPreviewProps {
   template: CVTemplate
@@ -15,7 +17,6 @@ export default function CVPreview({ template }: CVPreviewProps) {
   const [scale, setScale] = useState<number>(0.8)
 
   const getTemplateColors = () => {
-    // Fallback colors if not defined in template
     return {
       primary: template.styles.primaryColor || '#1F2937',
       secondary: template.styles.secondaryColor || '#3B82F6',
@@ -180,6 +181,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
     )
   }
 
+  // Enhanced PDF Generation with proper layout support
   const generatePDF = async () => {
     if (!template) {
       setError('Please select a CV template first')
@@ -190,39 +192,60 @@ export default function CVPreview({ template }: CVPreviewProps) {
     setError(null)
 
     try {
-      const response = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          documentType: 'cv',
-          cvTemplate: template
-        }),
+      // Use the same rendering logic as print preview
+      const element = previewRef.current
+      if (!element) {
+        throw new Error('Preview element not found')
+      }
+
+      // Create canvas with high quality
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        scrollX: 0,
+        scrollY: 0
       })
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
-        throw new Error(errorData.error || `Server error: ${response.status}`)
-      }
+      // Calculate PDF dimensions
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      })
 
-      const blob = await response.blob()
+      // Calculate scaling to fit A4
+      const pdfWidth = pdf.internal.pageSize.getWidth()
+      const pdfHeight = pdf.internal.pageSize.getHeight()
+      const imgWidth = canvas.width
+      const imgHeight = canvas.height
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
 
-      if (blob.size === 0) {
-        throw new Error('Generated PDF is empty')
-      }
+      const imgX = (pdfWidth - imgWidth * ratio) / 2
+      const imgY = 0
 
-      const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `cv-${template.name.toLowerCase().replace(/\s+/g, '-')}-${new Date().getTime()}.pdf`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(url)
+      // Add image to PDF
+      pdf.addImage(
+        imgData,
+        'PNG',
+        imgX,
+        imgY,
+        imgWidth * ratio,
+        imgHeight * ratio,
+        undefined,
+        'FAST'
+      )
+
+      // Save the PDF
+      pdf.save(`cv-${template.name.toLowerCase().replace(/\s+/g, '-')}-${new Date().getTime()}.pdf`)
 
     } catch (err) {
-      console.error('Error generating CV PDF:', err)
+      console.error('CV PDF Generation Error:', err)
       setError(err instanceof Error ? err.message : 'Failed to generate CV PDF. Please try again.')
     } finally {
       setIsGenerating(false)
