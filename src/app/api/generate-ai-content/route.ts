@@ -1,35 +1,73 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+const userRequests = new Map<string, { count: number; timestamp: number }>()
+
 export async function POST(request: NextRequest) {
   try {
-    const { type, role, experience, topic, documentType, prompt } = await request.json()
+    const body = await request.json()
+    const { type, role, experience, topic, documentType, prompt } = body
 
-    // Import AI service dynamically
-    const { aiService } = await import('../../lib/ai-service')
+    const ip = request.headers.get('x-forwarded-for') || 'unknown'
+    const now = Date.now()
+    const userData = userRequests.get(ip) || { count: 0, timestamp: now }
 
-    let generatedContent = ''
-    
-    if (type === 'cv') {
-      generatedContent = await aiService.generateCVContent(role, experience)
-    } else {
-      generatedContent = await aiService.generateDocumentContent(topic, documentType)
+    // Reset per minute
+    if (now - userData.timestamp > 60000) {
+      userData.count = 0
+      userData.timestamp = now
     }
 
-    // Post-process the content
-    if (type === 'cv') {
-      // Format CV content properly
-      generatedContent = generatedContent
-        .replace(/\n\n/g, '\n\n')
-        .replace(/•/g, '\n•')
-        .trim()
+    if (userData.count >= 10) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Try again in 1 minute.' },
+        { status: 429 }
+      )
     }
 
-    return NextResponse.json({ content: generatedContent })
-  } catch (error) {
-    console.error('AI Content Generation Error:', error)
+    userData.count++
+    userRequests.set(ip, userData)
+
+    const { aiService } = await import('@/app/lib/ai-service')
+
+    let result = ''
+
+    if (type === 'cv') {
+      result = await aiService.generateCVContent(role, experience)
+    }
+
+    else if (type === 'contract') {
+      result = await aiService.generateContractContent(prompt)
+      try {
+        result = JSON.stringify(JSON.parse(result), null, 2)
+      } catch { }
+    }
+
+    else {
+      result = await aiService.generateDocumentContent(topic, documentType)
+    }
+
+    return NextResponse.json({
+      success: true,
+      content: result,
+      timestamp: new Date().toISOString(),
+    })
+  } catch (err: any) {
     return NextResponse.json(
-      { error: 'Failed to generate content with AI' },
+      {
+        error: 'AI service unavailable.',
+        details: err.message,
+      },
       { status: 500 }
     )
   }
 }
+
+// Cleanup every hour
+setInterval(() => {
+  const now = Date.now()
+  for (const [ip, data] of userRequests.entries()) {
+    if (now - data.timestamp > 3600000) {
+      userRequests.delete(ip)
+    }
+  }
+}, 3600000)

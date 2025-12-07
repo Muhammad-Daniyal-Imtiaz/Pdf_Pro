@@ -13,6 +13,7 @@ import CVEditor from './components/CVEditor'
 import CVTemplatesGallery from './components/CVTemplatesGallery'
 import AIContentGenerator from './components/AIContentGenerator'
 import { CVTemplate, cvTemplates } from './lib/cv-templates'
+import ContractDashboard from './components/contracts/ContractDashboard'
 
 interface Styles {
   fontSize: number
@@ -56,7 +57,7 @@ export default function Home() {
   const [template, setTemplate] = useState('modern')
 
   // CV State
-  const [activeTab, setActiveTab] = useState<'document' | 'cv'>('document')
+  const [activeTab, setActiveTab] = useState<'document' | 'cv' | 'contracts'>('document')
   const [selectedCVTemplate, setSelectedCVTemplate] = useState<CVTemplate>(cvTemplates[0])
   const [cvTemplate, setCVTemplate] = useState<CVTemplate>(cvTemplates[0])
 
@@ -99,28 +100,34 @@ export default function Home() {
               Advanced PDF & CV Editor with Professional Templates & AI
             </p>
 
-            {/* Tab Navigation */}
             <div className="flex justify-center mb-8">
-              <div className="bg-white rounded-lg p-1 shadow-inner">
+              <div className="bg-white rounded-lg p-1 shadow-inner flex">
                 <button
                   onClick={() => setActiveTab('document')}
-                  className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-                    activeTab === 'document'
+                  className={`px-6 py-3 rounded-lg font-semibold transition-colors ${activeTab === 'document'
                       ? 'bg-blue-500 text-white shadow-md'
                       : 'text-gray-600 hover:text-gray-800'
-                  }`}
+                    }`}
                 >
                   📄 Document Editor
                 </button>
                 <button
                   onClick={() => setActiveTab('cv')}
-                  className={`px-6 py-3 rounded-lg font-semibold transition-colors ${
-                    activeTab === 'cv'
+                  className={`px-6 py-3 rounded-lg font-semibold transition-colors ${activeTab === 'cv'
                       ? 'bg-blue-500 text-white shadow-md'
                       : 'text-gray-600 hover:text-gray-800'
-                  }`}
+                    }`}
                 >
                   👔 CV Builder
+                </button>
+                <button
+                  onClick={() => setActiveTab('contracts')}
+                  className={`px-6 py-3 rounded-lg font-semibold transition-colors ${activeTab === 'contracts'
+                      ? 'bg-blue-500 text-white shadow-md'
+                      : 'text-gray-600 hover:text-gray-800'
+                    }`}
+                >
+                  📜 Contracts
                 </button>
               </div>
             </div>
@@ -136,21 +143,19 @@ export default function Home() {
                   <div className="flex bg-gray-100 rounded-lg p-1">
                     <button
                       onClick={() => setAiMode('manual')}
-                      className={`px-4 py-2 rounded-md transition-colors ${
-                        aiMode === 'manual'
+                      className={`px-4 py-2 rounded-md transition-colors ${aiMode === 'manual'
                           ? 'bg-blue-500 text-white'
                           : 'text-gray-600 hover:text-gray-800'
-                      }`}
+                        }`}
                     >
                       ✏️ Manual
                     </button>
                     <button
                       onClick={() => setAiMode('ai')}
-                      className={`px-4 py-2 rounded-md transition-colors ${
-                        aiMode === 'ai'
+                      className={`px-4 py-2 rounded-md transition-colors ${aiMode === 'ai'
                           ? 'bg-purple-500 text-white'
                           : 'text-gray-600 hover:text-gray-800'
-                      }`}
+                        }`}
                     >
                       🤖 AI Generate
                     </button>
@@ -197,7 +202,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          ) : (
+          ) : activeTab === 'cv' ? (
             /* CV Builder Layout */
             <div className="space-y-8">
               {/* CV Mode Toggle */}
@@ -207,21 +212,19 @@ export default function Home() {
                   <div className="flex bg-gray-100 rounded-lg p-1">
                     <button
                       onClick={() => setAiMode('manual')}
-                      className={`px-4 py-2 rounded-md transition-colors ${
-                        aiMode === 'manual'
+                      className={`px-4 py-2 rounded-md transition-colors ${aiMode === 'manual'
                           ? 'bg-blue-500 text-white'
                           : 'text-gray-600 hover:text-gray-800'
-                      }`}
+                        }`}
                     >
                       ✏️ Manual
                     </button>
                     <button
                       onClick={() => setAiMode('ai')}
-                      className={`px-4 py-2 rounded-md transition-colors ${
-                        aiMode === 'ai'
+                      className={`px-4 py-2 rounded-md transition-colors ${aiMode === 'ai'
                           ? 'bg-purple-500 text-white'
                           : 'text-gray-600 hover:text-gray-800'
-                      }`}
+                        }`}
                     >
                       🤖 AI Generate
                     </button>
@@ -270,6 +273,8 @@ export default function Home() {
                 <CVPreview template={cvTemplate} />
               </div>
             </div>
+          ) : (
+            <ContractDashboard />
           )}
         </div>
       </div>
