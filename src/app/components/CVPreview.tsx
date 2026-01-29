@@ -1,18 +1,17 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Download, Printer, Image, RefreshCw } from 'lucide-react'
+import { Download, Printer, RefreshCw } from 'lucide-react'
+import { useCV } from '../lib/CVContext'
 import { CVTemplate, CVSection } from '../lib/cv-templates'
-import html2canvas from 'html2canvas'
-import jsPDF from 'jspdf'
+import { pdf } from '@react-pdf/renderer'
+import { CVPdfDocument } from './CVPdfDocument'
 
-interface CVPreviewProps {
-  template: CVTemplate
-}
+export default function CVPreview() {
+  const { activeTemplate, isGenerating, setIsGenerating } = useCV()
+  const template = activeTemplate
 
-export default function CVPreview({ template }: CVPreviewProps) {
   const previewRef = useRef<HTMLDivElement>(null)
-  const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [scale, setScale] = useState<number>(0.8)
 
@@ -51,13 +50,13 @@ export default function CVPreview({ template }: CVPreviewProps) {
   const contactInfo = getContactInfo()
   const colorScheme = getTemplateColors()
 
-  // Helper to render section content
+  // Helper to render section content (for Preview HTML)
   const renderSectionContent = (section: CVSection) => {
     if (!section.content) return <p className="text-gray-400 italic">Add content...</p>
     return <div dangerouslySetInnerHTML={{ __html: section.content.replace(/\n/g, '<br>') }} />
   }
 
-  // Helper to render a full section block
+  // Helper to render a full section block (for Preview HTML)
   const renderSection = (section: CVSection) => (
     <div key={section.id} className="mb-6">
       <h3
@@ -72,7 +71,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
     </div>
   )
 
-  // Layout Renderers
+  // Layout Renderers (Mirror of PDF layout but in HTML flex/grid)
   const renderLayout = () => {
     const sections = template.structure.filter(s => s.type !== 'personal')
     const layoutType = template.styles.layout || 'classic'
@@ -86,7 +85,6 @@ export default function CVPreview({ template }: CVPreviewProps) {
         <div className="grid grid-cols-12 gap-8 h-full">
           {/* Sidebar */}
           <div className="col-span-4 pr-4 border-r border-gray-100">
-            {/* Personal Info in Sidebar for some layouts, or just skills */}
             {layoutType === 'sidebar' && personalInfo && (
               <div className="mb-8">
                 <h1 className="text-2xl font-bold mb-2" style={{ color: colorScheme.primary }}>{personalInfo.name}</h1>
@@ -156,7 +154,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
       )
     }
 
-    // 3. Default / Classic / Modern Layout
+    // 3. Default
     return (
       <div className="h-full">
         {personalInfo && (
@@ -181,7 +179,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
     )
   }
 
-  // Enhanced PDF Generation with proper layout support
+  // React-PDF Generation
   const generatePDF = async () => {
     if (!template) {
       setError('Please select a CV template first')
@@ -192,57 +190,18 @@ export default function CVPreview({ template }: CVPreviewProps) {
     setError(null)
 
     try {
-      // Use the same rendering logic as print preview
-      const element = previewRef.current
-      if (!element) {
-        throw new Error('Preview element not found')
-      }
+      // Create PDF Blob
+      const blob = await pdf(<CVPdfDocument template={template} />).toBlob()
 
-      // Create canvas with high quality
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        width: element.offsetWidth,
-        height: element.offsetHeight,
-        scrollX: 0,
-        scrollY: 0
-      })
-
-      // Calculate PDF dimensions
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-        compress: true
-      })
-
-      // Calculate scaling to fit A4
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = pdf.internal.pageSize.getHeight()
-      const imgWidth = canvas.width
-      const imgHeight = canvas.height
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight)
-
-      const imgX = (pdfWidth - imgWidth * ratio) / 2
-      const imgY = 0
-
-      // Add image to PDF
-      pdf.addImage(
-        imgData,
-        'PNG',
-        imgX,
-        imgY,
-        imgWidth * ratio,
-        imgHeight * ratio,
-        undefined,
-        'FAST'
-      )
-
-      // Save the PDF
-      pdf.save(`cv-${template.name.toLowerCase().replace(/\s+/g, '-')}-${new Date().getTime()}.pdf`)
+      // Save
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `cv-${template.name.toLowerCase().replace(/\s+/g, '-')}-${new Date().getTime()}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
 
     } catch (err) {
       console.error('CV PDF Generation Error:', err)
@@ -253,178 +212,13 @@ export default function CVPreview({ template }: CVPreviewProps) {
   }
 
   const printPreview = () => {
-    if (!template) {
-      setError('Please select a CV template first')
-      return
-    }
-
-    // We need to construct the HTML for the print window.
-    // This is a simplified version of what we render in React, but using raw HTML/CSS strings.
-    // For a robust solution, we should ideally share the CSS logic.
-
-    // For now, we will use a basic print stylesheet that mimics the React layout logic using CSS Grid.
-
-    const printWindow = window.open('', '_blank')
-    if (printWindow && personalInfo) {
-      const scheme = colorScheme
-      const layoutType = template.styles.layout || 'classic'
-
-      let layoutCSS = ''
-      if (layoutType === 'twocolumn' || layoutType === 'sidebar') {
-        layoutCSS = `
-          .grid-container { display: grid; grid-template-columns: 30% 70%; gap: 2rem; }
-          .sidebar { border-right: 1px solid #eee; padding-right: 1rem; }
-        `
-      } else if (layoutType === 'threecolumn') {
-        layoutCSS = `
-          .grid-container { display: grid; grid-template-columns: 25% 50% 25%; gap: 1.5rem; }
-          .center-col { border-left: 1px solid #eee; border-right: 1px solid #eee; padding: 0 1.5rem; }
-        `
-      }
-
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>${personalInfo.name} - CV</title>
-            <style>
-              @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-              @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
-              @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap');
-              @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap');
-              
-              * { margin: 0; padding: 0; box-sizing: border-box; }
-              
-              body {
-                font-family: '${template.styles.fontFamily}', sans-serif;
-                color: ${scheme.primary};
-                background-color: white;
-                line-height: ${template.styles.spacing};
-                -webkit-print-color-adjust: exact;
-              }
-              
-              .cv-container {
-                max-width: 210mm;
-                margin: 0 auto;
-                padding: 40px;
-                background: white;
-              }
-              
-              .header {
-                margin-bottom: 30px;
-                padding-bottom: 20px;
-                border-bottom: 3px solid ${scheme.accent};
-              }
-              
-              .name { font-size: 32px; font-weight: bold; color: ${scheme.primary}; margin-bottom: 5px; }
-              .title { font-size: 18px; color: ${scheme.accent}; margin-bottom: 10px; }
-              .contact { font-size: 12px; color: ${scheme.secondary}; display: flex; gap: 15px; flex-wrap: wrap; }
-              
-              .section { margin-bottom: 20px; break-inside: avoid; }
-              .section-title { 
-                font-size: 14px; 
-                font-weight: bold; 
-                text-transform: uppercase; 
-                border-bottom: 2px solid ${scheme.accent}; 
-                margin-bottom: 10px;
-                padding-bottom: 5px;
-                color: ${scheme.primary};
-              }
-              .section-content { font-size: 12px; color: #333; }
-              
-              ${layoutCSS}
-              
-              @media print {
-                body { margin: 0; padding: 0; }
-                .cv-container { width: 100%; max-width: none; padding: 20px; }
-              }
-            </style>
-          </head>
-          <body>
-            <div class="cv-container">
-              ${renderPrintHTML(layoutType)}
-            </div>
-            <script>
-              window.onload = function() { window.print(); setTimeout(() => window.close(), 1000); }
-            </script>
-          </body>
-        </html>
-      `)
-      printWindow.document.close()
-    }
-  }
-
-  // Helper to generate HTML string for print window based on layout
-  const renderPrintHTML = (layoutType: string) => {
-    const sections = template.structure.filter(s => s.type !== 'personal')
-    const personal = getPersonalInfo()
-    const contact = getContactInfo()
-
-    const renderSec = (s: CVSection) => `
-      <div class="section">
-        <div class="section-title">${s.title}</div>
-        <div class="section-content">${s.content ? s.content.replace(/\n/g, '<br>') : ''}</div>
-      </div>
-    `
-
-    const headerHTML = `
-      <div class="header" style="${layoutType === 'threecolumn' ? 'text-align: center;' : ''}">
-        <div class="name">${personal?.name}</div>
-        <div class="title">${personal?.title}</div>
-        <div class="contact" style="${layoutType === 'threecolumn' ? 'justify-content: center;' : ''}">
-          ${contact.map(c => `<span>${c}</span>`).join('')}
-        </div>
-      </div>
-    `
-
-    if (layoutType === 'twocolumn' || layoutType === 'sidebar') {
-      const sidebarSecs = sections.filter(s => ['skills', 'education', 'languages', 'certifications', 'contact'].includes(s.type))
-      const mainSecs = sections.filter(s => !['skills', 'education', 'languages', 'certifications', 'contact'].includes(s.type))
-
-      return `
-        ${layoutType !== 'sidebar' ? headerHTML : ''}
-        <div class="grid-container">
-          <div class="sidebar">
-            ${layoutType === 'sidebar' ? headerHTML : ''}
-            ${sidebarSecs.map(renderSec).join('')}
-          </div>
-          <div class="main">
-            ${mainSecs.map(renderSec).join('')}
-          </div>
-        </div>
-      `
-    }
-
-    if (layoutType === 'threecolumn') {
-      const leftSecs = sections.filter(s => ['skills', 'languages'].includes(s.type))
-      const rightSecs = sections.filter(s => ['education', 'certifications'].includes(s.type))
-      const centerSecs = sections.filter(s => !['skills', 'languages', 'education', 'certifications'].includes(s.type))
-
-      return `
-        ${headerHTML}
-        <div class="grid-container">
-          <div class="left-col">${leftSecs.map(renderSec).join('')}</div>
-          <div class="center-col">${centerSecs.map(renderSec).join('')}</div>
-          <div class="right-col">${rightSecs.map(renderSec).join('')}</div>
-        </div>
-      `
-    }
-
-    // Default
-    return `
-      ${headerHTML}
-      <div>
-        ${sections.map(renderSec).join('')}
-      </div>
-    `
+    // Keep legacy print preview for now, but really this should maybe just open the generated PDF blob in new tab?
+    // Let's keep it as "Browser Print" fallback.
+    window.print()
   }
 
   const refreshPreview = () => {
     setScale(0.8)
-  }
-
-  const saveAsImage = () => {
-    alert('Image export requires: Use print preview to save as PDF')
   }
 
   return (
@@ -475,7 +269,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
             ) : (
               <>
                 <Download className="w-4 h-4" />
-                <span>Download CV</span>
+                <span>Download PDF</span>
               </>
             )}
           </button>
@@ -488,10 +282,10 @@ export default function CVPreview({ template }: CVPreviewProps) {
         </div>
       )}
 
-      <div className="flex justify-center mb-4 overflow-auto bg-gray-100 p-8 rounded-lg">
+      <div className="flex justify-center mb-4 overflow-auto bg-gray-100 p-8 rounded-lg print:p-0 print:bg-white">
         <div
           ref={previewRef}
-          className="bg-white shadow-2xl transition-transform duration-200 ease-in-out"
+          className="bg-white shadow-2xl transition-transform duration-200 ease-in-out print:shadow-none print:transform-none"
           style={{
             width: '210mm',
             minHeight: '297mm',
@@ -522,7 +316,7 @@ export default function CVPreview({ template }: CVPreviewProps) {
           className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
         >
           <Printer className="w-4 h-4" />
-          Print Preview
+          Browser Print
         </button>
       </div>
     </div>

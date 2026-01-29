@@ -1,65 +1,128 @@
+import { nanoid } from 'nanoid'
 
 export interface Contract {
     id: string
-    type: 'full-time' | 'contract' | 'internship' | 'consulting' | 'nda'
-    status: 'draft' | 'generated' | 'verified'
-    createdAt: string
-    hash?: string
-
-    // Parties
-    companyName: string
-    companyAddress: string
-    companyContact: string
-
-    employeeName: string
-    employeeEmail: string
-    employeePosition: string
-
-    // Terms
-    salary: string
-    currency: string
-    startDate: string
-    endDate?: string
-
-    // Content
-    clauses: ContractClause[]
-    fullText?: string
-}
-
-export interface ContractClause {
-    id: string
     title: string
+    clientName: string
+    status: 'draft' | 'pending' | 'signed'
+    createdAt: string
     content: string
-    type: 'standard' | 'custom' | 'special'
+    signatures?: {
+        client?: string
+        provider?: string
+    }
 }
 
 export interface ContractTemplate {
     id: string
     name: string
-    category: 'Employment' | 'Freelance' | 'Legal' | 'Service'
-    type: Contract['type']
-    description: string
-    image?: string // For thumbnail
-    defaultClauses: ContractClause[]
+    content: string
+    category: string
 }
 
-// Mock Database Service using LocalStorage
-const STORAGE_KEY = 'pdf-saas-contracts'
+export const contractTemplates: ContractTemplate[] = [
+    {
+        id: 'freelance-web',
+        name: 'Freelance Web Development',
+        category: 'Development',
+        content: `CONTRACT FOR WEB DEVELOPMENT SERVICES...`
+    },
+    {
+        id: 'nda-generic',
+        name: 'Non-Disclosure Agreement',
+        category: 'Legal',
+        content: `NON-DISCLOSURE AGREEMENT...`
+    },
+    {
+        id: 'consulting',
+        name: 'Consulting Agreement',
+        category: 'Business',
+        content: `CONSULTING AGREEMENT...`
+    }
+]
+
+const STORAGE_KEY = 'contracts_data_enc'
+const IV_LENGTH = 12
+const SALT_LENGTH = 16
+
+// Encryption Utilities
+async function getKey(salt: Uint8Array): Promise<CryptoKey> {
+    const enc = new TextEncoder()
+    const keyMaterial = await window.crypto.subtle.importKey(
+        'raw',
+        enc.encode('user-secret-key-placeholder'), // In a real app, this should be a user-derived secret or fetched securely
+        { name: 'PBKDF2' },
+        false,
+        ['deriveKey']
+    )
+    return window.crypto.subtle.deriveKey(
+        {
+            name: 'PBKDF2',
+            salt,
+            iterations: 100000,
+            hash: 'SHA-256'
+        },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+    )
+}
+
+async function encryptData(data: any): Promise<string> {
+    const salt = window.crypto.getRandomValues(new Uint8Array(SALT_LENGTH))
+    const iv = window.crypto.getRandomValues(new Uint8Array(IV_LENGTH))
+    const key = await getKey(salt)
+    const encoded = new TextEncoder().encode(JSON.stringify(data))
+
+    const encrypted = await window.crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        encoded
+    )
+
+    const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength)
+    combined.set(salt)
+    combined.set(iv, salt.length)
+    combined.set(new Uint8Array(encrypted), salt.length + iv.length)
+
+    return btoa(String.fromCharCode(...combined))
+}
+
+async function decryptData<T>(encryptedString: string): Promise<T | null> {
+    try {
+        const combined = new Uint8Array(
+            atob(encryptedString).split('').map(c => c.charCodeAt(0))
+        )
+
+        const salt = combined.slice(0, SALT_LENGTH)
+        const iv = combined.slice(SALT_LENGTH, SALT_LENGTH + IV_LENGTH)
+        const data = combined.slice(SALT_LENGTH + IV_LENGTH)
+
+        const key = await getKey(salt)
+        const decrypted = await window.crypto.subtle.decrypt(
+            { name: 'AES-GCM', iv },
+            key,
+            data
+        )
+
+        return JSON.parse(new TextDecoder().decode(decrypted))
+    } catch (e) {
+        console.error('Failed to decrypt data', e)
+        return null
+    }
+}
 
 export class ContractService {
-    static getContracts(): Contract[] {
+    static async getContracts(): Promise<Contract[]> {
         if (typeof window === 'undefined') return []
         const stored = localStorage.getItem(STORAGE_KEY)
-        return stored ? JSON.parse(stored) : []
+        if (!stored) return []
+        return (await decryptData<Contract[]>(stored)) || []
     }
 
-    static getContract(id: string): Contract | null {
-        const contracts = this.getContracts()
-        return contracts.find(c => c.id === id) || null
-    }
-
-    static saveContract(contract: Contract): void {
-        const contracts = this.getContracts()
+    static async saveContract(contract: Contract): Promise<void> {
+        const contracts = await this.getContracts()
         const index = contracts.findIndex(c => c.id === contract.id)
 
         if (index >= 0) {
@@ -69,108 +132,40 @@ export class ContractService {
         }
 
         if (typeof window !== 'undefined') {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(contracts))
+            const encrypted = await encryptData(contracts)
+            localStorage.setItem(STORAGE_KEY, encrypted)
         }
     }
 
-    static verifyContract(hash: string): Contract | null {
-        const contracts = this.getContracts()
-        return contracts.find(c => c.hash === hash) || null
+    static async createContract(templateId: string, clientName: string): Promise<Contract> {
+        const template = contractTemplates.find(t => t.id === templateId)
+        if (!template) throw new Error('Template not found')
+
+        const newContract: Contract = {
+            id: nanoid(),
+            title: `${template.name} - ${clientName}`,
+            clientName,
+            status: 'draft',
+            createdAt: new Date().toISOString(),
+            content: template.content
+        }
+
+        await this.saveContract(newContract)
+        return newContract
+    }
+
+    static async deleteContract(id: string): Promise<void> {
+        const contracts = await this.getContracts()
+        const filtered = contracts.filter(c => c.id !== id)
+
+        if (typeof window !== 'undefined') {
+            const encrypted = await encryptData(filtered)
+            localStorage.setItem(STORAGE_KEY, encrypted)
+        }
+    }
+
+    static async getContract(id: string): Promise<Contract | undefined> {
+        const contracts = await this.getContracts()
+        return contracts.find(c => c.id === id)
     }
 }
-
-export const CONTRACT_TEMPLATES: ContractTemplate[] = [
-    {
-        id: 'tpl-full-time-std',
-        name: 'Standard Full-Time Agreement',
-        category: 'Employment',
-        type: 'full-time',
-        description: 'Comprehensive employment contract for permanent staff.',
-        defaultClauses: [
-            {
-                id: 'c1',
-                title: '1. Position and Duties',
-                content: 'The Company agrees to employ the Employee as {{employeePosition}}. The Employee agrees to perform the duties of this position faithfully and to the best of their ability.',
-                type: 'standard'
-            },
-            {
-                id: 'c2',
-                title: '2. Compensation',
-                content: 'As compensation for services, the Company shall pay the Employee an annual salary of {{currency}} {{salary}}, payable in accordance with the Company\'s standard payroll schedule.',
-                type: 'standard'
-            },
-            {
-                id: 'c3',
-                title: '3. Employment Period',
-                content: 'Employment shall commence on {{startDate}} and shall continue until terminated by either party in accordance with the terms of this Agreement.',
-                type: 'standard'
-            },
-            {
-                id: 'c4',
-                title: '4. Confidentiality',
-                content: 'The Employee acknowledges that they may have access to confidential information regarding the Company. The Employee agrees not to disclose such information to any third party.',
-                type: 'standard'
-            }
-        ]
-    },
-    {
-        id: 'tpl-contractor-fix',
-        name: 'Freelance / Contractor Agreement',
-        category: 'Freelance',
-        type: 'contract',
-        description: 'Agreement for independent contractors or freelancers.',
-        defaultClauses: [
-            {
-                id: 'c1',
-                title: '1. Engagement',
-                content: 'The Company hereby engages the Contractor to provide services as {{employeePosition}}.',
-                type: 'standard'
-            },
-            {
-                id: 'c2',
-                title: '2. Independent Contractor Status',
-                content: 'The Contractor is an independent contractor, not an employee. The Contractor is responsible for all taxes and insurance.',
-                type: 'standard'
-            },
-            {
-                id: 'c3',
-                title: '3. Payment',
-                content: 'The Company shall pay the Contractor {{currency}} {{salary}} for the services rendered.',
-                type: 'standard'
-            }
-        ]
-    },
-    {
-        id: 'tpl-internship',
-        name: 'Internship Agreement',
-        category: 'Employment',
-        type: 'internship',
-        description: 'Educational internship agreement.',
-        defaultClauses: [
-            { id: 'c1', title: '1. Internship Program', content: 'The Intern will participate in the Company\'s internship program as {{employeePosition}}.', type: 'standard' },
-            { id: 'c2', title: '2. Stipend', content: 'The Intern will receive a stipend of {{currency}} {{salary}}.', type: 'standard' }
-        ]
-    },
-    {
-        id: 'tpl-consulting',
-        name: 'Consulting Services Agreement',
-        category: 'Service',
-        type: 'consulting',
-        description: 'Professional consulting services contract.',
-        defaultClauses: [
-            { id: 'c1', title: '1. Services', content: 'Consultant shall provide expertise in the area of {{employeePosition}}.', type: 'standard' },
-            { id: 'c2', title: '2. Fees', content: 'Client shall pay Consultant {{currency}} {{salary}}.', type: 'standard' }
-        ]
-    },
-    {
-        id: 'tpl-nda',
-        name: 'Non-Disclosure Agreement',
-        category: 'Legal',
-        type: 'nda',
-        description: 'Standard Unilateral NDA.',
-        defaultClauses: [
-            { id: 'c1', title: '1. Confidential Information', content: 'Confidential Information shall include all data, materials, products, technology, computer programs, specifications, manuals, business plans, software, marketing plans, business plans, financial information, and other information disclosed or submitted, orally, in writing, or by any other media, to Recipient by Disclosing Party.', type: 'standard' },
-            { id: 'c2', title: '2. Obligations', content: 'Recipient agrees that it shall not use any Confidential Information for any purpose except for the Purpose.', type: 'standard' }
-        ]
-    }
-]

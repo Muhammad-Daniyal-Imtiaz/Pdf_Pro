@@ -1,47 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { CVTemplate, CVSection, CVField } from '../lib/cv-templates'
+import { useCV } from '../lib/CVContext'
+import { CVSection } from '../lib/cv-templates'
 import {
   User, Briefcase, GraduationCap, Wrench, Globe,
   Award, FileText, Plus, Trash2, ChevronRight, Settings
 } from 'lucide-react'
 
-interface CVEditorProps {
-  template: CVTemplate
-  onTemplateUpdate: (template: CVTemplate) => void
-}
-
-export default function CVEditor({ template, onTemplateUpdate }: CVEditorProps) {
-  const [activeTemplate, setActiveTemplate] = useState<CVTemplate>(template)
-  const [activeSection, setActiveSection] = useState<string>('personal')
-
-  useEffect(() => {
-    setActiveTemplate(template)
-  }, [template])
-
-  const updateField = (sectionId: string, fieldId: string, value: string) => {
-    const updatedTemplate = { ...activeTemplate }
-    const section = updatedTemplate.structure.find(s => s.id === sectionId)
-    if (section && section.fields) {
-      const field = section.fields.find(f => f.id === fieldId)
-      if (field) {
-        field.value = value
-        setActiveTemplate(updatedTemplate)
-        onTemplateUpdate(updatedTemplate)
-      }
-    }
-  }
-
-  const updateSectionContent = (sectionId: string, content: string) => {
-    const updatedTemplate = { ...activeTemplate }
-    const section = updatedTemplate.structure.find(s => s.id === sectionId)
-    if (section) {
-      section.content = content
-      setActiveTemplate(updatedTemplate)
-      onTemplateUpdate(updatedTemplate)
-    }
-  }
+export default function CVEditor() {
+  const {
+    activeTemplate,
+    activeSection,
+    setActiveSection,
+    setActiveTemplate,
+    updateTemplateField,
+    updateSectionContent
+  } = useCV()
 
   const addNewSection = (type: string) => {
     const newSection: CVSection = {
@@ -58,7 +32,6 @@ export default function CVEditor({ template, onTemplateUpdate }: CVEditorProps) 
     }
 
     setActiveTemplate(updatedTemplate)
-    onTemplateUpdate(updatedTemplate)
     setActiveSection(newSection.id)
   }
 
@@ -69,7 +42,6 @@ export default function CVEditor({ template, onTemplateUpdate }: CVEditorProps) 
         structure: activeTemplate.structure.filter(s => s.id !== sectionId)
       }
       setActiveTemplate(updatedTemplate)
-      onTemplateUpdate(updatedTemplate)
       if (activeSection === sectionId) {
         setActiveSection(updatedTemplate.structure[0]?.id || '')
       }
@@ -118,8 +90,8 @@ export default function CVEditor({ template, onTemplateUpdate }: CVEditorProps) 
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}
                 className={`w-full flex items-center justify-between p-3 rounded-lg transition-all group ${activeSection === section.id
-                    ? 'bg-white shadow-md text-blue-600 border border-blue-100'
-                    : 'text-gray-600 hover:bg-white hover:shadow-sm'
+                  ? 'bg-white shadow-md text-blue-600 border border-blue-100'
+                  : 'text-gray-600 hover:bg-white hover:shadow-sm'
                   }`}
               >
                 <div className="flex items-center gap-3">
@@ -197,7 +169,7 @@ export default function CVEditor({ template, onTemplateUpdate }: CVEditorProps) 
                         {field.type === 'textarea' ? (
                           <textarea
                             value={field.value}
-                            onChange={(e) => updateField(section.id, field.id, e.target.value)}
+                            onChange={(e) => updateTemplateField(section.id, field.id, e.target.value)}
                             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 focus:bg-white transition-all"
                             rows={4}
                             placeholder={`Enter ${field.label.toLowerCase()}...`}
@@ -206,7 +178,7 @@ export default function CVEditor({ template, onTemplateUpdate }: CVEditorProps) 
                           <input
                             type={field.type}
                             value={field.value}
-                            onChange={(e) => updateField(section.id, field.id, e.target.value)}
+                            onChange={(e) => updateTemplateField(section.id, field.id, e.target.value)}
                             className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 focus:bg-white transition-all"
                             placeholder={`Enter ${field.label.toLowerCase()}...`}
                           />

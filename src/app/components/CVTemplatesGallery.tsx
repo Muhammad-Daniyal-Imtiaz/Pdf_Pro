@@ -1,14 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { CVTemplate, cvTemplates } from '../lib/cv-templates'
+import { useCV } from '../lib/CVContext'
+import { cvTemplates } from '../lib/cv-templates'
 
-interface CVTemplatesGalleryProps {
-  onTemplateSelect: (template: CVTemplate) => void
-  selectedTemplate?: CVTemplate
-}
-
-export default function CVTemplatesGallery({ onTemplateSelect, selectedTemplate }: CVTemplatesGalleryProps) {
+export default function CVTemplatesGallery() {
+  const { activeTemplate, setActiveTemplate } = useCV()
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
 
@@ -16,7 +13,7 @@ export default function CVTemplatesGallery({ onTemplateSelect, selectedTemplate 
 
   const filteredTemplates = cvTemplates.filter(template => {
     const matchesSearch = template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         template.description.toLowerCase().includes(searchTerm.toLowerCase())
+      template.description.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'All' || template.category === selectedCategory
     return matchesSearch && matchesCategory
   })
@@ -61,12 +58,11 @@ export default function CVTemplatesGallery({ onTemplateSelect, selectedTemplate 
         {filteredTemplates.map((template) => (
           <div
             key={template.id}
-            onClick={() => onTemplateSelect(template)}
-            className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
-              selectedTemplate?.id === template.id
+            onClick={() => setActiveTemplate(template)}
+            className={`border-2 rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${activeTemplate?.id === template.id
                 ? 'border-blue-500 bg-blue-50 scale-105'
                 : 'border-gray-200 bg-white hover:border-gray-300'
-            }`}
+              }`}
           >
             <div className="text-4xl text-center mb-3">{template.thumbnail}</div>
             <h3 className="font-semibold text-gray-800 text-center mb-2">

@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -25,17 +24,15 @@ export default function ContractVerification({ onBack }: ContractVerificationPro
         try {
             // Logic: In a real app, we would parse the PDF to find the embedded ID,
             // or hash the entire file if we stored that. 
-            // For this demo, we will simulate verification delay and result.
-
-            // We can also compute the hash of the file if we were storing file hashes.
+            // For this demo, we will simulate verification delay and result, but Fetch existing contracts async.
 
             await new Promise(r => setTimeout(r, 2000))
 
-            // SIMULATION: Randomly verify or fail for demo, or checks against mock DB
-            // We'll actually check if any contract exists in our mock DB.
-            const existing = ContractService.getContracts()
+            // Fetch current contracts SECURELY (decrypted)
+            const existing = await ContractService.getContracts()
 
             // For demonstration, if we have contracts, we show the first one as a match
+            // In a real app, we'd match based on ID or hash found in the uploaded file header
             if (existing.length > 0) {
                 setVerifiedContract(existing[0])
                 setResult('success')
@@ -44,6 +41,7 @@ export default function ContractVerification({ onBack }: ContractVerificationPro
             }
 
         } catch (err) {
+            console.error(err)
             setResult('failure')
         } finally {
             setIsVerifying(false)
@@ -105,11 +103,11 @@ export default function ContractVerification({ onBack }: ContractVerificationPro
                                         </div>
                                         <div>
                                             <span className="text-gray-500 block">Parties</span>
-                                            <span className="font-medium">{verifiedContract.companyName} & {verifiedContract.employeeName}</span>
+                                            <span className="font-medium">{verifiedContract.clientName}</span>
                                         </div>
                                         <div>
-                                            <span className="text-gray-500 block">Integrity Hash</span>
-                                            <span className="font-mono text-xs text-gray-600 truncate block max-w-[150px]">{verifiedContract.hash}</span>
+                                            <span className="text-gray-500 block">Status</span>
+                                            <span className="font-mono text-xs text-gray-600 truncate block max-w-[150px] capitalize">{verifiedContract.status}</span>
                                         </div>
                                     </div>
                                 </div>

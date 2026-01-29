@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -10,11 +9,26 @@ import ContractVerification from './ContractVerification'
 export default function ContractDashboard() {
     const [view, setView] = useState<'list' | 'create' | 'verify'>('list')
     const [contracts, setContracts] = useState<Contract[]>([])
+    const [isLoading, setIsLoading] = useState(true)
 
+    // Load contracts when view is 'list'
     useEffect(() => {
-        // Load contracts from local storage
-        setContracts(ContractService.getContracts())
-    }, [view]) // Refresh when view changes (e.g. after creation)
+        if (view === 'list') {
+            loadContracts()
+        }
+    }, [view])
+
+    const loadContracts = async () => {
+        setIsLoading(true)
+        try {
+            const data = await ContractService.getContracts()
+            setContracts(data)
+        } catch (error) {
+            console.error('Failed to load contracts:', error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const handleCreateComplete = () => {
         setView('list')
@@ -70,7 +84,12 @@ export default function ContractDashboard() {
                     </div>
                 </div>
 
-                {contracts.length === 0 ? (
+                {isLoading ? (
+                    <div className="p-12 text-center text-gray-500">
+                        <div className="animate-spin w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+                        <p>Loading secure contracts...</p>
+                    </div>
+                ) : contracts.length === 0 ? (
                     <div className="p-12 text-center text-gray-500">
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <FileText className="w-8 h-8 text-gray-400" />
@@ -110,7 +129,7 @@ export default function ContractDashboard() {
                                         </td>
                                         <td className="p-4">
                                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize">
-                                                {contract.type.replace('-', ' ')}
+                                                {contract.status === 'signed' ? 'Signed' : contract.status}
                                             </span>
                                         </td>
                                         <td className="p-4">
@@ -119,7 +138,7 @@ export default function ContractDashboard() {
                                         </td>
                                         <td className="p-4">
                                             <div className="flex items-center gap-1.5">
-                                                {contract.status === 'verified' && <CheckCircle className="w-4 h-4 text-green-500" />}
+                                                {contract.status === 'signed' && <CheckCircle className="w-4 h-4 text-green-500" />}
                                                 {contract.status === 'generated' && <CheckCircle className="w-4 h-4 text-green-500" />}
                                                 {contract.status === 'draft' && <Clock className="w-4 h-4 text-yellow-500" />}
                                                 <span className="capitalize text-sm text-gray-600">{contract.status}</span>
