@@ -11,12 +11,12 @@ export interface EditorStyle {
     textAlign: 'left' | 'center' | 'right' | 'justify'
     lineHeight: number
     letterSpacing?: number
-    
+
     // Colors
     color: string
     backgroundColor?: string
     borderColor?: string
-    
+
     // Spacing (in pixels)
     padding: number
     paddingTop?: number
@@ -28,7 +28,7 @@ export interface EditorStyle {
     marginRight?: number
     marginBottom?: number
     marginLeft?: number
-    
+
     // Layout (absolute positioning - in pixels)
     width: number // Always pixels now
     height: number // Always pixels now
@@ -36,11 +36,11 @@ export interface EditorStyle {
     maxWidth?: number
     minHeight?: number
     maxHeight?: number
-    
+
     // Borders
     borderRadius?: number
     borderWidth?: number
-    
+
     // Transform
     rotation?: number
     opacity?: number
@@ -73,11 +73,12 @@ interface EditorState {
     // Document Settings
     docTitle: string
     showTitle: boolean
-    
+
     // Canvas Settings
     snapToGrid: boolean
     gridSize: number
     showGuides: boolean
+    showPreview: boolean
     zoom: number
 
     // Actions
@@ -85,25 +86,26 @@ interface EditorState {
     setEditMode: (mode: 'manual' | 'ai') => void
     setDocTitle: (title: string) => void
     toggleShowTitle: () => void
-    
+
     // Canvas Actions
     setSnapToGrid: (snap: boolean) => void
     setGridSize: (size: number) => void
     setShowGuides: (show: boolean) => void
+    setShowPreview: (show: boolean) => void
     setZoom: (zoom: number) => void
 
     addElement: (type: EditorElement['type']) => void
     updateElement: (id: string, updates: Partial<EditorElement>) => void
     updateElementStyle: (id: string, styleUpdates: Partial<EditorStyle>) => void
-    
+
     // Position & Dimension Methods
     moveElement: (id: string, x: number, y: number) => void
     resizeElement: (id: string, width: number, height: number) => void
-    
+
     removeElement: (id: string) => void
     selectElement: (id: string | null) => void
     reorderElements: (newOrder: EditorElement[]) => void
-    
+
     // Layer operations
     raiseElement: (id: string) => void
     lowerElement: (id: string) => void
@@ -124,27 +126,27 @@ const DEFAULT_STYLE: EditorStyle = {
     textAlign: 'left',
     lineHeight: 1.5,
     letterSpacing: 0,
-    
+
     // Colors
     color: '#000000',
     backgroundColor: 'transparent',
     borderColor: '#cccccc',
-    
+
     // Spacing (pixels)
     padding: 12,
     margin: 8,
-    
+
     // Layout (pixels)
     width: 400,
     height: 80,
     minWidth: 100,
     maxWidth: 600,
     minHeight: 30,
-    
+
     // Borders
     borderRadius: 0,
     borderWidth: 0,
-    
+
     // Transform
     rotation: 0,
     opacity: 1,
@@ -169,19 +171,21 @@ export const useEditorStore = create<EditorState>((set) => ({
     future: [],
     docTitle: 'Untitled Document',
     showTitle: true,
-    snapToGrid: false,
+    snapToGrid: true,
     gridSize: 8,
-    showGuides: false,
+    showGuides: true,
+    showPreview: true,
     zoom: 100,
 
     setTab: (tab: 'document' | 'cv' | 'contracts') => set({ activeTab: tab }),
     setEditMode: (mode: 'manual' | 'ai') => set({ editMode: mode }),
     setDocTitle: (title: string) => set({ docTitle: title }),
     toggleShowTitle: () => set((state) => ({ showTitle: !state.showTitle })),
-    
+
     setSnapToGrid: (snap: boolean) => set({ snapToGrid: snap }),
     setGridSize: (size: number) => set({ gridSize: size }),
     setShowGuides: (show: boolean) => set({ showGuides: show }),
+    setShowPreview: (show: boolean) => set({ showPreview: show }),
     setZoom: (zoom: number) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
 
     addElement: (type: EditorElement['type']) => set((state: EditorState) => {
@@ -232,33 +236,35 @@ export const useEditorStore = create<EditorState>((set) => ({
 
     resizeElement: (id: string, width: number, height: number) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
+        const snap = (v: number) => state.snapToGrid ? Math.round(v / state.gridSize) * state.gridSize : v
         return {
             elements: state.elements.map(el =>
                 el.id === id ? {
                     ...el,
-                    style: { ...el.style, width, height }
+                    style: { ...el.style, width: snap(width), height: snap(height) }
                 } : el
             ),
             past: newPast,
             future: []
         }
     }),
-    
+
     moveElement: (id: string, x: number, y: number) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
+        const snap = (v: number) => state.snapToGrid ? Math.round(v / state.gridSize) * state.gridSize : v
         return {
             elements: state.elements.map(el =>
                 el.id === id ? {
                     ...el,
-                    x: Math.max(0, x),
-                    y: Math.max(0, y)
+                    x: Math.max(0, snap(x)),
+                    y: Math.max(0, snap(y))
                 } : el
             ),
             past: newPast,
             future: []
         }
     }),
-    
+
     raiseElement: (id: string) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
         const newElements = [...state.elements]
@@ -268,7 +274,7 @@ export const useEditorStore = create<EditorState>((set) => ({
         }
         return { elements: newElements, past: newPast, future: [] }
     }),
-    
+
     lowerElement: (id: string) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
         const newElements = [...state.elements]
@@ -278,14 +284,14 @@ export const useEditorStore = create<EditorState>((set) => ({
         }
         return { elements: newElements, past: newPast, future: [] }
     }),
-    
+
     sendToBack: (id: string) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
         const newElements = state.elements.filter(el => el.id !== id)
         const element = state.elements.find(el => el.id === id)
         return { elements: element ? [element, ...newElements] : newElements, past: newPast, future: [] }
     }),
-    
+
     bringToFront: (id: string) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
         const newElements = state.elements.filter(el => el.id !== id)

@@ -30,20 +30,39 @@ export async function generatePDFFromCanvas(
     } = options
 
     try {
-        // Capture the canvas with exact dimensions
+        // Capture the canvas
         const canvas = await html2canvas(canvasElement, {
-            scale: scale, // Higher scale = better quality
+            scale: 2.0, // Stable scale for all DPIs
             useCORS: true,
             allowTaint: true,
             backgroundColor: '#ffffff',
             logging: debug,
-            letterRendering: true,
-            width: 794, // A4 width in pixels
-            height: 1123, // A4 height in pixels
+            scrollX: 0,
+            scrollY: 0,
+            onclone: (doc) => {
+                // Add a style block to cloned document to prevent modern CSS parsing issues
+                const style = doc.createElement('style')
+                style.innerHTML = `
+                    * {
+                        /* Prevent html2canvas from choking on modern colors if they leak in */
+                        color-scheme: light !important;
+                        box-sizing: border-box !important;
+                    }
+                    /* Hide UI elements from final PDF */
+                    .resize-handle, 
+                    .SelectionRing,
+                    .HoverIndicator,
+                    .MeasurementTooltip,
+                    .SelectionLabel { 
+                        display: none !important; 
+                    }
+                `
+                doc.head.appendChild(style)
+            }
         })
 
         // Get canvas dimensions
-        const imgData = canvas.toDataURL('image/png', quality / 10)
+        const imgData = canvas.toDataURL('image/jpeg', 0.95)
         const imgWidth = 210 // A4 width in mm
         const imgHeight = 297 // A4 height in mm
 
@@ -52,13 +71,11 @@ export async function generatePDFFromCanvas(
             orientation: 'portrait',
             unit: 'mm',
             format: 'a4',
-            compress: true,
-            precision: 16,
-            userUnit: 1
+            compress: true
         })
 
         // Add image to PDF (full page)
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight)
+        pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight, undefined, 'FAST')
 
         // Generate blob
         const pdfBlob = pdf.output('blob')
@@ -101,14 +118,32 @@ export async function generatePDFPreview(
 ): Promise<string> {
     try {
         const canvas = await html2canvas(canvasElement, {
-            scale: 1,
+            scale: 2.0,
             useCORS: true,
             allowTaint: true,
             backgroundColor: '#ffffff',
-            width: 794,
-            height: 1123,
+            scrollX: 0,
+            scrollY: 0,
+            onclone: (doc) => {
+                const style = doc.createElement('style')
+                style.innerHTML = `
+                    * { 
+                        color-scheme: light !important; 
+                        box-sizing: border-box !important;
+                    }
+                    /* Hide UI elements from result */
+                    .resize-handle, 
+                    .SelectionRing,
+                    .HoverIndicator,
+                    .MeasurementTooltip,
+                    .SelectionLabel { 
+                        display: none !important; 
+                    }
+                `
+                doc.head.appendChild(style)
+            }
         })
-        return canvas.toDataURL('image/png')
+        return canvas.toDataURL('image/jpeg', 0.8)
     } catch (error) {
         console.error('Preview generation error:', error)
         throw error

@@ -6,7 +6,7 @@ import { useEditorStore } from '../../store/useEditorStore'
 import { FileText, FileSpreadsheet, Scale, Download, Loader2, RotateCcw, RotateCw } from 'lucide-react'
 
 export default function EditorHeader() {
-    const { activeTab, setTab, docTitle, setDocTitle, showTitle, toggleShowTitle, undo, redo } = useEditorStore()
+    const { activeTab, setTab, docTitle, setDocTitle, showTitle, toggleShowTitle, undo, redo, showPreview, setShowPreview } = useEditorStore()
     const [isGenerating, setIsGenerating] = useState(false)
 
     // PDF generation now handled by EditorMain using html2canvas
@@ -81,12 +81,14 @@ export default function EditorHeader() {
 
             <div className="flex items-center gap-4">
                 <button
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-all shadow-md active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
-                    onClick={handleDownload}
-                    disabled={isGenerating}
+                    onClick={() => setShowPreview(!showPreview)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md active:scale-95 ${showPreview
+                            ? 'bg-purple-600 text-white hover:bg-purple-700'
+                            : 'bg-white text-purple-600 border border-purple-200 hover:bg-purple-50'
+                        }`}
                 >
-                    {isGenerating ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
-                    {isGenerating ? 'Generating...' : 'Download PDF'}
+                    <Scale size={16} />
+                    {showPreview ? 'Hide Preview' : 'Show Preview'}
                 </button>
             </div>
         </header>

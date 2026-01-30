@@ -11,7 +11,7 @@ interface ResizableElementProps {
     onResize: (id: string, width: number, height: number) => void
     onChange: (id: string, content: string) => void
     onBlur?: (id: string) => void
-    isEditing?: boolean
+    isEditing?: string | null
     setIsEditing?: (id: string | null) => void
 }
 
@@ -200,68 +200,96 @@ export default function ResizableElement({
         <div
             ref={elementRef}
             style={style}
-            className={`group relative transition-all ${
-                isSelected
-                    ? 'border-2 border-blue-500 shadow-md'
-                    : 'border-2 border-transparent hover:border-gray-300'
-            }`}
+            className="group absolute outline-none"
             onMouseDown={handleMouseDown}
-            onMouseEnter={() => (isDragging || isResizing) && setShowMeasurement(true)}
-            onMouseLeave={() => setShowMeasurement(false)}
-            onClick={() => {
+            onClick={(e) => {
+                e.stopPropagation()
                 onSelect(el.id)
+            }}
+            onDoubleClick={(e) => {
+                e.stopPropagation()
                 if (el.type !== 'divider' && setIsEditing) {
                     setIsEditing(el.id)
                 }
             }}
         >
+            {/* Selection Ring */}
+            {isSelected && (
+                <div
+                    className="SelectionRing absolute inset-[-2px] pointer-events-none z-50 shadow-lg"
+                    style={{ border: '2px solid #3b82f6', borderRadius: `${(el.style.borderRadius as number || 0) + 2}px` }}
+                />
+            )}
+
+            {/* Hover Indicator */}
+            {!isSelected && (
+                <div
+                    className="HoverIndicator absolute inset-0 pointer-events-none group-hover:border"
+                    style={{ borderColor: '#d1d5db' }}
+                />
+            )}
             {/* Measurement Tooltip */}
             {(isDragging || isResizing) && showMeasurement && (
-                <div className="absolute -top-8 left-0 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
+                <div
+                    className="MeasurementTooltip absolute -top-10 left-1/2 -translate-x-1/2 text-white text-[10px] px-2 py-0.5 rounded shadow-lg whitespace-nowrap z-[100] font-mono border"
+                    style={{ backgroundColor: '#2563eb', borderColor: '#60a5fa' }}
+                >
                     {Math.round(el.style.width)} × {Math.round(el.style.height)}px
+                    <div
+                        className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px]"
+                        style={{ borderTopColor: '#2563eb' }}
+                    />
                 </div>
             )}
 
-            {/* Resize Handles - only show when selected */}
+            {/* Selection Labels */}
+            {isSelected && !isDragging && !isResizing && (
+                <div
+                    className="SelectionLabel absolute -top-6 left-0 text-white text-[9px] px-1.5 py-0.5 rounded-t font-medium tracking-wider uppercase"
+                    style={{ backgroundColor: '#3b82f6' }}
+                >
+                    {el.type}
+                </div>
+            )}
+
+            {/* Resize Handles */}
             {isSelected &&
                 RESIZE_HANDLES.map((handle) => (
                     <div
                         key={handle}
-                        className="resize-handle absolute w-4 h-4 bg-blue-500 border border-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                        className={`resize-handle absolute w-3 h-3 bg-white border-2 rounded-full z-[60] shadow-sm hover:scale-125 transition-transform ${isResizing === handle ? 'scale-150' : ''}`}
                         style={{
                             ...getHandlePosition(handle),
-                            pointerEvents: 'auto'
+                            borderColor: '#3b82f6'
                         }}
-                        onMouseDown={(e) => {
-                            handleResizeStart(handle, e)
-                            setShowMeasurement(true)
-                        }}
+                        onMouseDown={(e) => handleResizeStart(handle, e)}
                     />
                 ))}
 
             {/* Element Content */}
-            {el.type === 'divider' ? (
-                <div className="w-full h-full border-t border-gray-400" />
-            ) : (
-                <div
-                    ref={contentEditableRef}
-                    contentEditable={isEditing === el.id}
-                    suppressContentEditableWarning
-                    onInput={(e) => handleContentChange(e.currentTarget.textContent || '')}
-                    onKeyDown={handleKeyDown}
-                    onBlur={() => {
-                        setIsEditing?.(null)
-                        onBlur?.(el.id)
-                    }}
-                    className={`w-full h-full outline-none ${isEditing === el.id ? 'bg-blue-50' : ''}`}
-                    style={{
-                        whiteSpace: 'pre-wrap',
-                        wordBreak: 'break-word'
-                    }}
-                >
-                    {el.content}
-                </div>
-            )}
+            <div className="w-full h-full relative overflow-hidden">
+                {el.type === 'divider' ? (
+                    <div
+                        className="w-full h-0 border-t absolute top-1/2 -translate-y-1/2"
+                        style={{ borderColor: '#9ca3af' }}
+                    />
+                ) : (
+                    <div
+                        ref={contentEditableRef}
+                        contentEditable={isEditing === el.id}
+                        suppressContentEditableWarning
+                        onInput={(e) => handleContentChange(e.currentTarget.textContent || '')}
+                        onKeyDown={handleKeyDown}
+                        onBlur={() => {
+                            setIsEditing?.(null)
+                            onBlur?.(el.id)
+                        }}
+                        className={`w-full h-full outline-none break-words whitespace-pre-wrap ${isEditing === el.id ? 'cursor-text' : 'cursor-inherit'}`}
+                    >
+                        {el.content}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
