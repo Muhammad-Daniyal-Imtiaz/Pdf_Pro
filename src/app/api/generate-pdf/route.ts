@@ -64,7 +64,7 @@ interface CVStyles {
 
 export async function POST(request: NextRequest) {
   try {
-    const { contentBlocks, styles, layout, template, cvTemplate, documentType } = await request.json()
+    const { contentBlocks, styles, layout, template, cvTemplate, documentType, docTitle, showTitle } = await request.json()
 
     // Handle CV Generation
     if (documentType === 'cv' && cvTemplate) {
@@ -201,24 +201,14 @@ export async function POST(request: NextRequest) {
     const actualColumnWidth = columnWidth - columnGap
 
     // Initialize column Y positions
+    // Initialize column Y positions
     let columnYPositions: number[] = Array(numColumns).fill(height - margin)
     let currentColumnIndex = 0
 
-    // Add template header if content exists
-    if (contentBlocks.length > 0) {
-      const templateTitles: Record<string, string> = {
-        modern: 'Modern Document',
-        classic: 'Classic Report',
-        business: 'Business Document',
-        creative: 'Creative Portfolio',
-        minimal: 'Minimal Design',
-        technical: 'Technical Specification'
-      }
-
-      const title = templateTitles[template] || 'Generated Document'
-
+    // Add Document Title (if enabled)
+    if (showTitle && docTitle) {
       // Add title (spans all columns)
-      const titleLines = wrapText(title, fontBold, 20, totalWidth)
+      const titleLines = wrapText(docTitle, fontBold, 24, totalWidth)
       for (const line of titleLines) {
         if (columnYPositions[0] < margin + 30) {
           page = pdfDoc.addPage([width, height])
@@ -230,14 +220,14 @@ export async function POST(request: NextRequest) {
           page.drawText(line, {
             x: margin,
             y: columnYPositions[0],
-            size: 20,
+            size: 24,
             font: fontBold,
-            color: rgb(0.2, 0.2, 0.2),
+            color: rgb(0.1, 0.1, 0.1),
           })
-          columnYPositions[0] -= 25
+          columnYPositions[0] -= 35 // More spacing for title
         } catch (error) {
           console.warn('Failed to draw title line:', line)
-          columnYPositions[0] -= 25
+          columnYPositions[0] -= 35
         }
       }
 
