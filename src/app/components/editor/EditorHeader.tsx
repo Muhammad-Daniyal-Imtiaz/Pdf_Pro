@@ -6,69 +6,11 @@ import { useEditorStore } from '../../store/useEditorStore'
 import { FileText, FileSpreadsheet, Scale, Download, Loader2, RotateCcw, RotateCw } from 'lucide-react'
 
 export default function EditorHeader() {
-    const { activeTab, setTab, elements, docTitle, setDocTitle, showTitle, toggleShowTitle, undo, redo } = useEditorStore()
+    const { activeTab, setTab, docTitle, setDocTitle, showTitle, toggleShowTitle, undo, redo } = useEditorStore()
     const [isGenerating, setIsGenerating] = useState(false)
 
-    const handleDownload = async () => {
-        setIsGenerating(true)
-        try {
-            // Map store elements to API format - with absolute positioning
-            const contentBlocks = elements.map(el => ({
-                id: el.id,
-                type: el.type,
-                content: el.content,
-                x: el.x,
-                y: el.y,
-                style: {
-                    fontFamily: el.style.fontFamily,
-                    fontSize: el.style.fontSize,
-                    fontWeight: el.style.fontWeight,
-                    fontStyle: el.style.fontStyle,
-                    textDecoration: el.style.textDecoration,
-                    textAlign: el.style.textAlign,
-                    color: el.style.color,
-                    backgroundColor: el.style.backgroundColor,
-                    lineHeight: el.style.lineHeight,
-                    padding: el.style.padding,
-                    margin: el.style.margin,
-                    width: el.style.width,
-                    height: el.style.height,
-                    borderRadius: el.style.borderRadius,
-                    borderWidth: el.style.borderWidth,
-                    borderColor: el.style.borderColor,
-                    opacity: el.style.opacity
-                }
-            }))
-
-            const response = await fetch('/api/generate-pdf', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contentBlocks,
-                    docTitle,
-                    showTitle,
-                    documentType: 'document'
-                })
-            })
-
-            if (!response.ok) throw new Error('Failed to generate PDF')
-
-            const blob = await response.blob()
-            const url = window.URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `${docTitle.replace(/\s+/g, '-').toLowerCase() || 'document'}.pdf`
-            document.body.appendChild(a)
-            a.click()
-            window.URL.revokeObjectURL(url)
-            document.body.removeChild(a)
-        } catch (error) {
-            console.error('Download failed:', error)
-            alert('Failed to generate PDF. Please try again.')
-        } finally {
-            setIsGenerating(false)
-        }
-    }
+    // PDF generation now handled by EditorMain using html2canvas
+    // Header just provides title and navigation
 
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10 sticky top-0 shadow-sm">

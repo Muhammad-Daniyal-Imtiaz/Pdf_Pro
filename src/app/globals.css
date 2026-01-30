@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
+/* WYSIWYG Print and PDF Styles */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+}
+
+/* Ensure consistent rendering */
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -43,6 +65,33 @@ input[type="range"]::-webkit-slider-thumb {
   width: 20px;
   border-radius: 50%;
   cursor: pointer;
+}
+
+/* Editor Canvas - WYSIWYG Perfect Rendering */
+.editor-canvas {
+  /* Ensure exact rendering */
+  box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  
+  /* Font rendering */
+  font-kerning: auto;
+  font-feature-settings: normal;
+}
+
+.editor-canvas * {
+  box-sizing: border-box;
+}
+
+/* Elements within canvas */
+.editor-element {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  
+  /* Precise text rendering */
+  line-height: inherit;
+  word-spacing: normal;
+  letter-spacing: normal;
 }
 
 /* Template specific styles */

@@ -35,7 +35,13 @@ export default function ResizableElement({
     const [isResizing, setIsResizing] = useState<ResizeHandle | null>(null)
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
     const [initialSize, setInitialSize] = useState({ width: 0, height: 0 })
+    const [showMeasurement, setShowMeasurement] = useState(false)
     const contentEditableRef = useRef<HTMLDivElement>(null)
+
+    // Snap to grid helper
+    const snapToGrid = (value: number, gridSize: number = 8): number => {
+        return Math.round(value / gridSize) * gridSize
+    }
 
     const handleMouseDown = (e: React.MouseEvent) => {
         if (isEditing) return
@@ -200,6 +206,8 @@ export default function ResizableElement({
                     : 'border-2 border-transparent hover:border-gray-300'
             }`}
             onMouseDown={handleMouseDown}
+            onMouseEnter={() => (isDragging || isResizing) && setShowMeasurement(true)}
+            onMouseLeave={() => setShowMeasurement(false)}
             onClick={() => {
                 onSelect(el.id)
                 if (el.type !== 'divider' && setIsEditing) {
@@ -207,17 +215,27 @@ export default function ResizableElement({
                 }
             }}
         >
+            {/* Measurement Tooltip */}
+            {(isDragging || isResizing) && showMeasurement && (
+                <div className="absolute -top-8 left-0 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none">
+                    {Math.round(el.style.width)} × {Math.round(el.style.height)}px
+                </div>
+            )}
+
             {/* Resize Handles - only show when selected */}
             {isSelected &&
                 RESIZE_HANDLES.map((handle) => (
                     <div
                         key={handle}
-                        className="resize-handle absolute w-4 h-4 bg-blue-500 border border-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="resize-handle absolute w-4 h-4 bg-blue-500 border border-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                         style={{
                             ...getHandlePosition(handle),
                             pointerEvents: 'auto'
                         }}
-                        onMouseDown={(e) => handleResizeStart(handle, e)}
+                        onMouseDown={(e) => {
+                            handleResizeStart(handle, e)
+                            setShowMeasurement(true)
+                        }}
                     />
                 ))}
 

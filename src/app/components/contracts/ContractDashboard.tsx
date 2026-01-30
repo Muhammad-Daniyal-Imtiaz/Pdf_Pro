@@ -121,7 +121,7 @@ export default function ContractDashboard() {
                                     <tr key={contract.id} className="hover:bg-blue-50/30 transition-colors group">
                                         <td className="p-4">
                                             <div className="font-medium text-gray-800 group-hover:text-blue-600">
-                                                {contract.companyName}
+                                                {contract.title}
                                             </div>
                                             <div className="text-xs text-gray-400 font-mono mt-1">
                                                 #{contract.id.slice(0, 8)}...
@@ -133,8 +133,8 @@ export default function ContractDashboard() {
                                             </span>
                                         </td>
                                         <td className="p-4">
-                                            <div className="text-gray-800 font-medium">{contract.employeeName}</div>
-                                            <div className="text-xs text-gray-500">{contract.employeePosition}</div>
+                                            <div className="text-gray-800 font-medium">{contract.clientName}</div>
+                                            <div className="text-xs text-gray-500">Client</div>
                                         </td>
                                         <td className="p-4">
                                             <div className="flex items-center gap-1.5">
