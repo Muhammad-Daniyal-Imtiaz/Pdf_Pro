@@ -1,14 +1,21 @@
-
 'use client'
 
-import { useEditorStore, EditorElement } from '../../store/useEditorStore'
-import { Type, Heading, List, Image as ImageIcon, Minus, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, Sparkles } from 'lucide-react'
+import { useEditorStore, EditorElement } from '@/app/store/useEditorStore'
+import { Type, Heading, List, Image as ImageIcon, Minus, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, AlignJustify, Sparkles, Trash2, Copy, Layers } from 'lucide-react'
 
 export default function EditorSidebar() {
     const {
-        editMode, setEditMode,
+        editMode,
+        setEditMode,
         addElement,
-        selectedId, elements, updateElementStyle
+        selectedId,
+        elements,
+        updateElementStyle,
+        removeElement,
+        raiseElement,
+        lowerElement,
+        sendToBack,
+        bringToFront
     } = useEditorStore()
 
     const selectedElement = elements.find((el: EditorElement) => el.id === selectedId)
@@ -19,9 +26,13 @@ export default function EditorSidebar() {
         e.dataTransfer.effectAllowed = 'copy'
     }
 
+    const updateStyle = (key: keyof typeof selectedElement.style, value: any) => {
+        if (!selectedId) return
+        updateElementStyle(selectedId, { [key]: value })
+    }
+
     return (
         <aside className="w-80 bg-white border-r border-gray-200 h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar flex flex-col">
-
             {/* 1. Edit Mode Toggle */}
             <div className="p-6 border-b border-gray-100">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Edit Mode</h3>
@@ -74,140 +85,198 @@ export default function EditorSidebar() {
                             <button
                                 draggable
                                 onDragStart={(e) => handleDragStart(e, 'heading')}
-                                onClick={() => addElement('heading')}
-                                className="p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all flex flex-col items-center gap-2 text-gray-600"
+                                className="flex items-center justify-center gap-2 p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors"
                             >
-                                <Heading size={20} />
-                                <span className="text-xs font-medium">Heading</span>
+                                <Heading size={16} className="text-blue-600" />
+                                <span className="text-xs font-medium text-blue-700">Heading</span>
                             </button>
+
                             <button
                                 draggable
                                 onDragStart={(e) => handleDragStart(e, 'paragraph')}
-                                onClick={() => addElement('paragraph')}
-                                className="p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all flex flex-col items-center gap-2 text-gray-600"
+                                className="flex items-center justify-center gap-2 p-3 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors"
                             >
-                                <Type size={20} />
-                                <span className="text-xs font-medium">Paragraph</span>
+                                <Type size={16} className="text-green-600" />
+                                <span className="text-xs font-medium text-green-700">Text</span>
                             </button>
+
                             <button
                                 draggable
                                 onDragStart={(e) => handleDragStart(e, 'list')}
-                                onClick={() => addElement('list')}
-                                className="p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all flex flex-col items-center gap-2 text-gray-600"
+                                className="flex items-center justify-center gap-2 p-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-colors"
                             >
-                                <List size={20} />
-                                <span className="text-xs font-medium">List</span>
+                                <List size={16} className="text-purple-600" />
+                                <span className="text-xs font-medium text-purple-700">List</span>
                             </button>
-                            <button
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, 'image')}
-                                onClick={() => addElement('image')}
-                                className="p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all flex flex-col items-center gap-2 text-gray-600"
-                            >
-                                <ImageIcon size={20} />
-                                <span className="text-xs font-medium">Image</span>
-                            </button>
+
                             <button
                                 draggable
                                 onDragStart={(e) => handleDragStart(e, 'divider')}
-                                onClick={() => addElement('divider')}
-                                className="col-span-2 p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600 transition-all flex flex-col items-center gap-2 text-gray-600"
+                                className="flex items-center justify-center gap-2 p-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
                             >
-                                <Minus size={20} />
-                                <span className="text-xs font-medium">Divider</span>
+                                <Minus size={16} className="text-gray-600" />
+                                <span className="text-xs font-medium text-gray-700">Divider</span>
                             </button>
                         </div>
                     </div>
 
-                    {/* 3. Style Controls */}
+                    {/* 3. Style & Layer Controls */}
                     {selectedElement && (
-                        <div className="p-6 bg-gray-50 flex-1">
-                            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Style Controls</h3>
+                        <div className="p-6 bg-gray-50 flex-1 space-y-6">
+                            {/* Element Info */}
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-700 mb-3">Element Properties</h4>
+                                <div className="space-y-2 text-xs">
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-600">Position:</span>
+                                        <span className="text-gray-900 font-mono">{Math.round(selectedElement.x)}, {Math.round(selectedElement.y)}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-gray-600">Size:</span>
+                                        <span className="text-gray-900 font-mono">{Math.round(selectedElement.style.width)} × {Math.round(selectedElement.style.height)}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div className="space-y-4">
+                            {/* Typography Controls */}
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                    <Type size={16} />
+                                    Typography
+                                </h4>
+
                                 {/* Font Family */}
-                                <div>
-                                    <label className="text-xs font-medium text-gray-500 mb-1 block">Font</label>
+                                <div className="mb-3">
+                                    <label className="block text-xs font-medium text-gray-600 mb-2">Font Family</label>
                                     <select
                                         value={selectedElement.style.fontFamily}
-                                        onChange={(e) => updateElementStyle(selectedElement.id, { fontFamily: e.target.value })}
-                                        className="w-full p-2 border border-gray-200 rounded-lg text-sm"
+                                        onChange={(e) => updateStyle('fontFamily', e.target.value)}
+                                        className="w-full p-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                                     >
-                                        <option value="Arial">Arial</option>
-                                        <option value="Georgia">Georgia</option>
-                                        <option value="Times New Roman">Times New Roman</option>
-                                        <option value="Inter">Inter</option>
+                                        <option value="Inter, sans-serif">Inter</option>
+                                        <option value="Roboto, sans-serif">Roboto</option>
+                                        <option value="Georgia, serif">Georgia</option>
+                                        <option value="'Courier New', monospace">Courier New</option>
+                                        <option value="Arial, sans-serif">Arial</option>
+                                        <option value="Times New Roman, serif">Times New Roman</option>
                                     </select>
                                 </div>
 
-                                {/* Font Size & Weight */}
-                                <div className="flex gap-3">
-                                    <div className="flex-1">
-                                        <label className="text-xs font-medium text-gray-500 mb-1 block">Size ({selectedElement.style.fontSize}px)</label>
-                                        <input
-                                            type="range" min="8" max="72"
-                                            value={selectedElement.style.fontSize}
-                                            onChange={(e) => updateElementStyle(selectedElement.id, { fontSize: Number(e.target.value) })}
-                                            className="w-full accent-blue-600"
-                                        />
-                                    </div>
+                                {/* Font Size */}
+                                <div className="mb-3">
+                                    <label className="block text-xs font-medium text-gray-600 mb-2">
+                                        Font Size: {selectedElement.style.fontSize}px
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="8"
+                                        max="72"
+                                        value={selectedElement.style.fontSize}
+                                        onChange={(e) => updateStyle('fontSize', parseInt(e.target.value))}
+                                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                    />
+                                </div>
+
+                                {/* Font Weight */}
+                                <div className="flex gap-2 mb-3">
+                                    <button
+                                        onClick={() => updateStyle('fontWeight', selectedElement.style.fontWeight === '700' ? '400' : '700')}
+                                        className={`flex-1 p-2 rounded text-sm font-bold transition-all ${
+                                            selectedElement.style.fontWeight === '700'
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                        }`}
+                                    >
+                                        <Bold size={14} className="mx-auto" />
+                                    </button>
+                                    <button
+                                        onClick={() => updateStyle('fontStyle', selectedElement.style.fontStyle === 'italic' ? 'normal' : 'italic')}
+                                        className={`flex-1 p-2 rounded text-sm font-italic transition-all ${
+                                            selectedElement.style.fontStyle === 'italic'
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                        }`}
+                                    >
+                                        <Italic size={14} className="mx-auto" />
+                                    </button>
+                                </div>
+
+                                {/* Text Alignment */}
+                                <div className="flex gap-2 mb-3">
+                                    {(['left', 'center', 'right'] as const).map((align) => (
+                                        <button
+                                            key={align}
+                                            onClick={() => updateStyle('textAlign', align)}
+                                            className={`flex-1 p-2 rounded text-sm transition-all ${
+                                                selectedElement.style.textAlign === align
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                            }`}
+                                        >
+                                            {align === 'left' && <AlignLeft size={14} className="mx-auto" />}
+                                            {align === 'center' && <AlignCenter size={14} className="mx-auto" />}
+                                            {align === 'right' && <AlignRight size={14} className="mx-auto" />}
+                                        </button>
+                                    ))}
                                 </div>
 
                                 {/* Color */}
-                                <div>
-                                    <label className="text-xs font-medium text-gray-500 mb-1 block">Color</label>
-                                    <div className="flex gap-2 items-center">
+                                <div className="mb-3">
+                                    <label className="block text-xs font-medium text-gray-600 mb-2">Text Color</label>
+                                    <div className="flex items-center gap-2">
                                         <input
                                             type="color"
                                             value={selectedElement.style.color}
-                                            onChange={(e) => updateElementStyle(selectedElement.id, { color: e.target.value })}
-                                            className="w-8 h-8 rounded border-0 cursor-pointer"
+                                            onChange={(e) => updateStyle('color', e.target.value)}
+                                            className="w-12 h-10 rounded cursor-pointer border border-gray-300"
                                         />
-                                        <span className="text-xs text-gray-600 font-mono bg-white px-2 py-1 rounded border border-gray-200">{selectedElement.style.color}</span>
+                                        <span className="text-xs font-mono text-gray-600">{selectedElement.style.color}</span>
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Formatting Buttons */}
-                                <div className="flex gap-1 bg-white p-1 rounded-lg border border-gray-200 shadow-sm">
+                            {/* Layer Controls */}
+                            <div>
+                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                    <Layers size={16} />
+                                    Layers
+                                </h4>
+                                <div className="flex gap-2">
                                     <button
-                                        onClick={() => updateElementStyle(selectedElement.id, { fontWeight: selectedElement.style.fontWeight === 'bold' ? 'normal' : 'bold' })}
-                                        className={`p-2 rounded hover:bg-gray-100 ${selectedElement.style.fontWeight === 'bold' ? 'bg-blue-50 text-blue-600' : 'text-gray-600'}`}
+                                        onClick={() => bringToFront(selectedId!)}
+                                        className="flex-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-xs font-medium transition-colors"
                                     >
-                                        <Bold size={16} />
+                                        Front
                                     </button>
                                     <button
-                                        onClick={() => updateElementStyle(selectedElement.id, { fontStyle: selectedElement.style.fontStyle === 'italic' ? 'normal' : 'italic' })}
-                                        className={`p-2 rounded hover:bg-gray-100 ${selectedElement.style.fontStyle === 'italic' ? 'bg-blue-50 text-blue-600' : 'text-gray-600'}`}
+                                        onClick={() => raiseElement(selectedId!)}
+                                        className="flex-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-xs font-medium transition-colors"
                                     >
-                                        <Italic size={16} />
+                                        Raise
                                     </button>
                                     <button
-                                        onClick={() => updateElementStyle(selectedElement.id, { textDecoration: selectedElement.style.textDecoration === 'underline' ? 'none' : 'underline' })}
-                                        className={`p-2 rounded hover:bg-gray-100 ${selectedElement.style.textDecoration === 'underline' ? 'bg-blue-50 text-blue-600' : 'text-gray-600'}`}
+                                        onClick={() => lowerElement(selectedId!)}
+                                        className="flex-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-xs font-medium transition-colors"
                                     >
-                                        <Underline size={16} />
-                                    </button>
-                                    <div className="w-[1px] bg-gray-200 mx-1" />
-                                    <button
-                                        onClick={() => updateElementStyle(selectedElement.id, { textAlign: 'left' })}
-                                        className={`p-2 rounded hover:bg-gray-100 ${selectedElement.style.textAlign === 'left' ? 'bg-blue-50 text-blue-600' : 'text-gray-600'}`}
-                                    >
-                                        <AlignLeft size={16} />
+                                        Lower
                                     </button>
                                     <button
-                                        onClick={() => updateElementStyle(selectedElement.id, { textAlign: 'center' })}
-                                        className={`p-2 rounded hover:bg-gray-100 ${selectedElement.style.textAlign === 'center' ? 'bg-blue-50 text-blue-600' : 'text-gray-600'}`}
+                                        onClick={() => sendToBack(selectedId!)}
+                                        className="flex-1 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded text-xs font-medium transition-colors"
                                     >
-                                        <AlignCenter size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => updateElementStyle(selectedElement.id, { textAlign: 'right' })}
-                                        className={`p-2 rounded hover:bg-gray-100 ${selectedElement.style.textAlign === 'right' ? 'bg-blue-50 text-blue-600' : 'text-gray-600'}`}
-                                    >
-                                        <AlignRight size={16} />
+                                        Back
                                     </button>
                                 </div>
                             </div>
+
+                            {/* Delete Button */}
+                            <button
+                                onClick={() => removeElement(selectedId!)}
+                                className="w-full py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+                            >
+                                <Trash2 size={16} />
+                                Delete Element
+                            </button>
                         </div>
                     )}
                 </>

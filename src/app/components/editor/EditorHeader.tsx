@@ -12,19 +12,31 @@ export default function EditorHeader() {
     const handleDownload = async () => {
         setIsGenerating(true)
         try {
-            // Map store elements to API format
+            // Map store elements to API format - with absolute positioning
             const contentBlocks = elements.map(el => ({
                 id: el.id,
-                type: el.type === 'list' ? 'paragraph' : el.type,
+                type: el.type,
                 content: el.content,
-                styles: {
-                    fontSize: el.style.fontSize,
+                x: el.x,
+                y: el.y,
+                style: {
                     fontFamily: el.style.fontFamily,
-                    color: el.style.color,
+                    fontSize: el.style.fontSize,
                     fontWeight: el.style.fontWeight,
+                    fontStyle: el.style.fontStyle,
+                    textDecoration: el.style.textDecoration,
+                    textAlign: el.style.textAlign,
+                    color: el.style.color,
+                    backgroundColor: el.style.backgroundColor,
                     lineHeight: el.style.lineHeight,
+                    padding: el.style.padding,
                     margin: el.style.margin,
-                    textAlign: el.style.textAlign
+                    width: el.style.width,
+                    height: el.style.height,
+                    borderRadius: el.style.borderRadius,
+                    borderWidth: el.style.borderWidth,
+                    borderColor: el.style.borderColor,
+                    opacity: el.style.opacity
                 }
             }))
 
@@ -32,13 +44,10 @@ export default function EditorHeader() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    documentType: 'document',
                     contentBlocks,
-                    docTitle, // Send actual title
-                    showTitle, // Send visibility flag
-                    layout: { pageSize: 'A4', orientation: 'portrait', columns: 1 },
-                    styles: { fontFamily: 'Helvetica', fontSize: 12 },
-                    template: 'modern'
+                    docTitle,
+                    showTitle,
+                    documentType: 'document'
                 })
             })
 

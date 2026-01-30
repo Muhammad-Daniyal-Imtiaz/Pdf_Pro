@@ -1,523 +1,275 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 
-interface Styles {
-  fontSize: number
-  fontFamily: string
-  color: string
-  lineHeight: number
-  margin: number
-  fontWeight?: string
-  textAlign?: string
-  backgroundColor?: string
+// Enhanced type definitions matching the new store
+interface EditorStyle {
+    fontFamily: string
+    fontSize: number
+    fontWeight: string
+    fontStyle: 'normal' | 'italic'
+    textDecoration: 'none' | 'underline'
+    textAlign: 'left' | 'center' | 'right' | 'justify'
+    color: string
+    backgroundColor?: string
+    lineHeight: number
+    padding: number
+    margin: number
+    width: number
+    height: number
+    borderRadius?: number
+    borderWidth?: number
+    borderColor?: string
+    opacity?: number
 }
 
-interface Layout {
-  pageSize: string
-  orientation: string
-  columns: number
+interface EditorElement {
+    id: string
+    type: 'heading' | 'paragraph' | 'list' | 'image' | 'divider'
+    content: string
+    x: number
+    y: number
+    style: EditorStyle
 }
 
-interface ContentBlock {
-  id: string
-  type: 'heading' | 'paragraph' | 'container' | 'custom'
-  content: string
-  styles: Styles
+interface RequestBody {
+    contentBlocks: EditorElement[]
+    docTitle?: string
+    showTitle?: boolean
+    documentType?: string
+    cvTemplate?: any
 }
 
-interface CVTemplate {
-  id: string
-  name: string
-  category: string
-  description: string
-  thumbnail: string
-  structure: CVSection[]
-  styles: CVStyles
-}
-
-interface CVSection {
-  id: string
-  type: 'personal' | 'summary' | 'experience' | 'education' | 'skills' | 'projects' | 'languages' | 'certifications'
-  title: string
-  content: string
-  fields?: CVField[]
-}
-
-interface CVField {
-  id: string
-  label: string
-  value: string
-  type: 'text' | 'textarea' | 'date' | 'select'
-}
-
-interface CVStyles {
-  fontFamily: string
-  primaryColor: string
-  secondaryColor: string
-  accentColor: string
-  layout: 'classic' | 'modern' | 'creative' | 'minimal' | 'twocolumn' | 'threecolumn' | 'sidebar' | 'gradient'
-  spacing: number
-  borderRadius: number
-  columnGap?: number
-  sidebarWidth?: string
-}
+// PDF page dimensions in points
+const A4_WIDTH = 595.28
+const A4_HEIGHT = 841.89
+const MM_TO_POINTS = 2.834645669
 
 export async function POST(request: NextRequest) {
-  try {
-    const { contentBlocks, styles, layout, template, cvTemplate, documentType, docTitle, showTitle } = await request.json()
+    try {
+        const body: RequestBody = await request.json()
+        const { contentBlocks, docTitle = '', showTitle = true } = body
 
-    // Handle CV Generation
-    if (documentType === 'cv' && cvTemplate) {
-      return await generateCVPDF(cvTemplate)
-    }
-
-    // Handle Regular Document Generation
-    if (!contentBlocks || !Array.isArray(contentBlocks)) {
-      return NextResponse.json(
-        { error: 'Invalid content blocks' },
-        { status: 400 }
-      )
-    }
-
-    // Create a new PDF document
-    const pdfDoc = await PDFDocument.create()
-
-    // Get page dimensions based on layout
-    const getPageDimensions = () => {
-      const pointsPerInch = 72
-      const mmToPoints = (mm: number) => (mm * pointsPerInch) / 25.4
-
-      switch (layout.pageSize) {
-        case 'A4':
-          return layout.orientation === 'portrait'
-            ? [mmToPoints(210), mmToPoints(297)]
-            : [mmToPoints(297), mmToPoints(210)]
-        case 'A3':
-          return layout.orientation === 'portrait'
-            ? [mmToPoints(297), mmToPoints(420)]
-            : [mmToPoints(420), mmToPoints(297)]
-        case 'Letter':
-          return layout.orientation === 'portrait'
-            ? [mmToPoints(216), mmToPoints(279)]
-            : [mmToPoints(279), mmToPoints(216)]
-        case 'Legal':
-          return layout.orientation === 'portrait'
-            ? [mmToPoints(216), mmToPoints(356)]
-            : [mmToPoints(356), mmToPoints(216)]
-        default:
-          return [mmToPoints(210), mmToPoints(297)]
-      }
-    }
-
-    const [width, height] = getPageDimensions()
-    let page = pdfDoc.addPage([width, height])
-
-    // Embed fonts
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
-    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
-    const fontItalic = await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
-
-    // Helper function to convert hex color to RGB
-    const hexToRgb = (hex: string): [number, number, number] => {
-      if (!hex || typeof hex !== 'string') {
-        return [0, 0, 0]
-      }
-
-      hex = hex.replace(/^#/, '')
-
-      let r, g, b
-      if (hex.length === 3) {
-        r = parseInt(hex[0] + hex[0], 16) / 255
-        g = parseInt(hex[1] + hex[1], 16) / 255
-        b = parseInt(hex[2] + hex[2], 16) / 255
-      } else if (hex.length === 6) {
-        r = parseInt(hex.slice(0, 2), 16) / 255
-        g = parseInt(hex.slice(2, 4), 16) / 255
-        b = parseInt(hex.slice(4, 6), 16) / 255
-      } else {
-        return [0, 0, 0]
-      }
-
-      return [r, g, b]
-    }
-
-    // Clean text
-    const cleanText = (text: string): string => {
-      if (!text || typeof text !== 'string') {
-        return ''
-      }
-
-      return text
-        .replace(/\n/g, ' ')
-        .replace(/\r/g, ' ')
-        .replace(/\t/g, ' ')
-        .replace(/[^\x20-\x7E]/g, '')
-        .trim()
-    }
-
-    // Smart text wrapping function
-    const wrapText = (text: string, fontType: any, fontSize: number, maxWidth: number): string[] => {
-      const cleanedText = cleanText(text)
-      if (!cleanedText) {
-        return ['']
-      }
-
-      const words = cleanedText.split(' ')
-      const lines: string[] = []
-      let currentLine = words[0] || ''
-
-      for (let i = 1; i < words.length; i++) {
-        const word = words[i]
-        const testLine = currentLine + ' ' + word
-
-        try {
-          const textWidth = fontType.widthOfTextAtSize(testLine, fontSize)
-
-          if (textWidth <= maxWidth) {
-            currentLine = testLine
-          } else {
-            lines.push(currentLine)
-            currentLine = word
-          }
-        } catch {
-          lines.push(currentLine)
-          currentLine = word
-        }
-      }
-
-      if (currentLine) {
-        lines.push(currentLine)
-      }
-
-      return lines.filter(line => line.trim().length > 0)
-    }
-
-    // MULTI-COLUMN LAYOUT SUPPORT
-    const margin = 40
-    const totalWidth = width - (margin * 2)
-    const numColumns = layout.columns || 1
-    const columnWidth = totalWidth / numColumns
-    const columnGap = 20
-    const actualColumnWidth = columnWidth - columnGap
-
-    // Initialize column Y positions
-    // Initialize column Y positions
-    let columnYPositions: number[] = Array(numColumns).fill(height - margin)
-    let currentColumnIndex = 0
-
-    // Add Document Title (if enabled)
-    if (showTitle && docTitle) {
-      // Add title (spans all columns)
-      const titleLines = wrapText(docTitle, fontBold, 24, totalWidth)
-      for (const line of titleLines) {
-        if (columnYPositions[0] < margin + 30) {
-          page = pdfDoc.addPage([width, height])
-          columnYPositions = Array(numColumns).fill(height - margin)
-          currentColumnIndex = 0
+        if (!Array.isArray(contentBlocks)) {
+            return NextResponse.json(
+                { error: 'Invalid content blocks' },
+                { status: 400 }
+            )
         }
 
-        try {
-          page.drawText(line, {
-            x: margin,
-            y: columnYPositions[0],
-            size: 24,
-            font: fontBold,
-            color: rgb(0.1, 0.1, 0.1),
-          })
-          columnYPositions[0] -= 35 // More spacing for title
-        } catch (error) {
-          console.warn('Failed to draw title line:', line)
-          columnYPositions[0] -= 35
-        }
-      }
+        const pdfDoc = await PDFDocument.create()
+        const page = pdfDoc.addPage([A4_WIDTH, A4_HEIGHT])
 
-      // Reset for content and drop all columns equally
-      for (let i = 0; i < numColumns; i++) {
-        columnYPositions[i] = columnYPositions[0] - 20
-      }
-      currentColumnIndex = 0
-    }
+        // Embed standard fonts
+        const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
+        const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+        const helveticaOblique = await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
+        const courier = await pdfDoc.embedFont(StandardFonts.Courier)
 
-    // Add content blocks with COLUMN SUPPORT
-    for (const block of contentBlocks) {
-      const [r, g, b] = hexToRgb(block.styles?.color || '#000000')
+        // Helper to convert hex to RGB (0-1 scale)
+        const hexToRgb = (hex: string): [number, number, number] => {
+            if (!hex || typeof hex !== 'string') return [0, 0, 0]
+            hex = hex.replace(/^#/, '')
 
-      let blockFont = font
-      if (block.styles?.fontWeight === 'bold') {
-        blockFont = fontBold
-      }
+            let r, g, b
+            if (hex.length === 3) {
+                r = parseInt(hex[0] + hex[0], 16) / 255
+                g = parseInt(hex[1] + hex[1], 16) / 255
+                b = parseInt(hex[2] + hex[2], 16) / 255
+            } else if (hex.length === 6) {
+                r = parseInt(hex.slice(0, 2), 16) / 255
+                g = parseInt(hex.slice(2, 4), 16) / 255
+                b = parseInt(hex.slice(4, 6), 16) / 255
+            } else {
+                return [0, 0, 0]
+            }
 
-      let fontSize = Math.max(block.styles?.fontSize || 12, 8)
-      if (block.type === 'heading') {
-        fontSize = Math.max(fontSize, 18)
-      }
-
-      const lineHeight = fontSize * (block.styles?.lineHeight || 1.5)
-      const lines = wrapText(block.content || '', blockFont, fontSize, actualColumnWidth)
-
-      // Draw each line
-      for (const line of lines) {
-        if (!line.trim()) {
-          columnYPositions[currentColumnIndex] -= lineHeight
-          continue
+            return [r, g, b]
         }
 
-        // Find column with lowest Y position (most space)
-        let lowestY = columnYPositions[0]
-        currentColumnIndex = 0
-        for (let i = 1; i < numColumns; i++) {
-          if (columnYPositions[i] > lowestY) {
-            lowestY = columnYPositions[i]
-            currentColumnIndex = i
-          }
+        // Helper to wrap text
+        const wrapText = (text: string, font: any, fontSize: number, maxWidth: number): string[] => {
+            if (!text) return []
+            const words = text.split(' ')
+            const lines: string[] = []
+            let currentLine = ''
+
+            for (const word of words) {
+                const testLine = currentLine ? `${currentLine} ${word}` : word
+                const textWidth = font.widthOfTextAtSize(testLine, fontSize)
+
+                if (textWidth > maxWidth && currentLine) {
+                    lines.push(currentLine)
+                    currentLine = word
+                } else {
+                    currentLine = testLine
+                }
+            }
+
+            if (currentLine) lines.push(currentLine)
+            return lines
         }
 
-        // Check if we need a new page (all columns full)
-        if (columnYPositions[currentColumnIndex] < margin + fontSize) {
-          page = pdfDoc.addPage([width, height])
-          columnYPositions = Array(numColumns).fill(height - margin)
-          currentColumnIndex = 0
+        // Select appropriate font
+        const getFontForStyle = (style: EditorStyle) => {
+            const isBold = style.fontWeight === '700' || style.fontWeight === 'bold'
+            const isItalic = style.fontStyle === 'italic'
+
+            if (style.fontFamily?.toLowerCase().includes('courier') || style.fontFamily?.toLowerCase().includes('mono')) {
+                return courier
+            }
+
+            if (isBold) return helveticaBold
+            if (isItalic) return helveticaOblique
+            return helvetica
         }
 
-        // Calculate X position based on column
-        const xPosition = margin + (currentColumnIndex * columnWidth) + 10
+        // Draw title if enabled
+        if (showTitle && docTitle) {
+            const [r, g, b] = hexToRgb('#1f2937')
+            const maxWidth = A4_WIDTH - 40
+            const titleLines = wrapText(docTitle, helveticaBold, 28, maxWidth)
 
-        try {
-          page.drawText(line, {
-            x: xPosition,
-            y: columnYPositions[currentColumnIndex],
-            size: fontSize,
-            font: blockFont,
-            color: rgb(r, g, b),
-          })
-        } catch (error) {
-          console.warn('Failed to draw text line:', line)
+            let yPos = A4_HEIGHT - 40
+            for (const line of titleLines) {
+                try {
+                    page.drawText(line, {
+                        x: 40,
+                        y: yPos,
+                        size: 28,
+                        font: helveticaBold,
+                        color: rgb(r, g, b),
+                    })
+                    yPos -= 40
+                } catch (e) {
+                    console.error('Error drawing title:', e)
+                }
+            }
+
+            // Add separator line
+            page.drawLine({
+                start: { x: 40, y: yPos + 10 },
+                end: { x: A4_WIDTH - 40, y: yPos + 10 },
+                thickness: 1,
+                color: rgb(0.8, 0.8, 0.8),
+            })
         }
 
-        columnYPositions[currentColumnIndex] -= lineHeight
-      }
+        // Draw elements - using absolute positioning from the editor
+        // Scale factor: editor uses pixels, PDF uses points (1px ≈ 0.75 points)
+        const SCALE = 0.75
 
-      // Add dynamic spacing after block
-      const spacingMap: Record<string, number> = {
-        'heading': 15,
-        'container': 20,
-        'custom': 18,
-        'paragraph': 10
-      }
+        for (const element of contentBlocks) {
+            const xPos = element.x * SCALE + 40 // Add page margin
+            const yPos = (A4_HEIGHT - (element.y * SCALE) - 40) // Flip Y-axis for PDF
+            const font = getFontForStyle(element.style)
+            const [r, g, b] = hexToRgb(element.style.color || '#000000')
 
-      const spacing = spacingMap[block.type] || 10
-      columnYPositions[currentColumnIndex] -= spacing
-    }
+            try {
+                switch (element.type) {
+                    case 'heading':
+                    case 'paragraph': {
+                        const maxWidth = (element.style.width * SCALE) - (element.style.padding * SCALE * 2)
+                        const fontSize = element.style.fontSize * SCALE
+                        const lines = wrapText(element.content, font, fontSize, maxWidth)
 
-    // Add footer if there's content
-    if (contentBlocks.length > 0) {
-      const footerText = `Generated on ${new Date().toLocaleDateString()} • PDF Craft Pro`
-      const cleanedFooter = cleanText(footerText)
+                        let currentY = yPos
+                        for (const line of lines) {
+                            if (currentY < 40) break // Don't write below margin
 
-      if (cleanedFooter) {
-        try {
-          page.drawText(cleanedFooter, {
-            x: margin,
-            y: 30,
-            size: 10,
-            font: font,
-            color: rgb(0.5, 0.5, 0.5),
-          })
-        } catch (error) {
-          console.warn('Failed to draw footer')
+                            page.drawText(line, {
+                                x: xPos + (element.style.padding * SCALE),
+                                y: currentY,
+                                size: fontSize,
+                                font,
+                                color: rgb(r, g, b),
+                            })
+                            currentY -= (fontSize * element.style.lineHeight)
+                        }
+                        break
+                    }
+
+                    case 'list': {
+                        const lines = element.content.split('\n').filter(l => l.trim())
+                        const fontSize = element.style.fontSize * SCALE
+                        const maxWidth = (element.style.width * SCALE) - (element.style.padding * SCALE * 2) - 15
+
+                        let currentY = yPos
+                        for (const line of lines) {
+                            if (currentY < 40) break
+
+                            // Draw bullet
+                            page.drawText('•', {
+                                x: xPos + (element.style.padding * SCALE),
+                                y: currentY,
+                                size: fontSize,
+                                font,
+                                color: rgb(r, g, b),
+                            })
+
+                            // Wrap and draw text
+                            const text = line.replace(/^[•\-\*]\s*/, '')
+                            const wrappedLines = wrapText(text, font, fontSize, maxWidth)
+                            for (let i = 0; i < wrappedLines.length; i++) {
+                                if (currentY < 40) break
+
+                                page.drawText(wrappedLines[i], {
+                                    x: xPos + (element.style.padding * SCALE) + 15,
+                                    y: currentY,
+                                    size: fontSize,
+                                    font,
+                                    color: rgb(r, g, b),
+                                })
+                                currentY -= (fontSize * element.style.lineHeight)
+                            }
+                        }
+                        break
+                    }
+
+                    case 'divider': {
+                        const dividerY = yPos - (element.style.height * SCALE) / 2
+                        page.drawLine({
+                            start: { x: xPos, y: dividerY },
+                            end: { x: xPos + (element.style.width * SCALE), y: dividerY },
+                            thickness: 1,
+                            color: rgb(r, g, b),
+                        })
+                        break
+                    }
+
+                    case 'image':
+                        // Image support would require additional handling
+                        console.warn(`Image elements not yet supported: ${element.id}`)
+                        break
+                }
+            } catch (error) {
+                console.error(`Error drawing element ${element.id}:`, error)
+            }
         }
-      }
+
+        // Generate PDF
+        const pdfBytes = await pdfDoc.save()
+        const pdfBuffer = Buffer.from(pdfBytes)
+
+        return new NextResponse(pdfBuffer, {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'attachment; filename="document.pdf"',
+                'Content-Length': pdfBuffer.length.toString(),
+            },
+        })
+    } catch (error) {
+        console.error('PDF generation error:', error)
+        return NextResponse.json(
+            {
+                error: 'Failed to generate PDF',
+                details: error instanceof Error ? error.message : 'Unknown error',
+            },
+            { status: 500 }
+        )
     }
-
-    // Serialize the PDF to bytes
-    const pdfBytes = await pdfDoc.save()
-    const pdfBuffer = Buffer.from(pdfBytes)
-
-    return new NextResponse(pdfBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="document.pdf"',
-        'Content-Length': pdfBuffer.length.toString(),
-      },
-    })
-
-  } catch (error) {
-    console.error('PDF generation error:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate PDF due to content formatting issues. Please check your text content.' },
-      { status: 500 }
-    )
-  }
-}
-
-// Enhanced CV PDF Generation Function
-async function generateCVPDF(cvTemplate: CVTemplate) {
-  try {
-    const pdfDoc = await PDFDocument.create()
-    const page = pdfDoc.addPage([595.28, 841.89]) // A4 in points
-
-    // Embed fonts
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
-    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
-
-    // Helper function to convert hex color to RGB
-    const hexToRgb = (hex: string): [number, number, number] => {
-      if (!hex || typeof hex !== 'string') {
-        return [0, 0, 0]
-      }
-      hex = hex.replace(/^#/, '')
-      let r, g, b
-      if (hex.length === 3) {
-        r = parseInt(hex[0] + hex[0], 16) / 255
-        g = parseInt(hex[1] + hex[1], 16) / 255
-        b = parseInt(hex[2] + hex[2], 16) / 255
-      } else if (hex.length === 6) {
-        r = parseInt(hex.slice(0, 2), 16) / 255
-        g = parseInt(hex.slice(2, 4), 16) / 255
-        b = parseInt(hex.slice(4, 6), 16) / 255
-      } else {
-        return [0, 0, 0]
-      }
-      return [r, g, b]
-    }
-
-    const [primaryR, primaryG, primaryB] = hexToRgb(cvTemplate.styles.primaryColor)
-    const [secondaryR, secondaryG, secondaryB] = hexToRgb(cvTemplate.styles.secondaryColor)
-    const [accentR, accentG, accentB] = hexToRgb(cvTemplate.styles.accentColor || cvTemplate.styles.primaryColor)
-
-    let yPosition = 800
-
-    // Get personal information
-    const personalSection = cvTemplate.structure.find(s => s.type === 'personal')
-    const nameField = personalSection?.fields?.find(f => f.id === 'name')
-    const titleField = personalSection?.fields?.find(f => f.id === 'title')
-
-    // Draw Name
-    if (nameField?.value) {
-      page.drawText(nameField.value, {
-        x: 50,
-        y: yPosition,
-        size: 24,
-        font: fontBold,
-        color: rgb(primaryR, primaryG, primaryB),
-      })
-      yPosition -= 40
-    }
-
-    // Draw Title
-    if (titleField?.value) {
-      page.drawText(titleField.value, {
-        x: 50,
-        y: yPosition,
-        size: 16,
-        font: font,
-        color: rgb(secondaryR, secondaryG, secondaryB),
-      })
-      yPosition -= 30
-    }
-
-    // Draw contact information
-    const contactFields = personalSection?.fields?.filter(f =>
-      f.id !== 'name' && f.id !== 'title' && f.value
-    ) || []
-
-    const contactText = contactFields.map(f => f.value).join(' • ')
-    if (contactText) {
-      page.drawText(contactText, {
-        x: 50,
-        y: yPosition,
-        size: 10,
-        font: font,
-        color: rgb(0.4, 0.4, 0.4),
-      })
-      yPosition -= 40
-    }
-
-    // Draw sections with enhanced layout
-    for (const section of cvTemplate.structure.filter(s => s.type !== 'personal')) {
-      if (yPosition < 100) {
-        pdfDoc.addPage([595.28, 841.89])
-        yPosition = 800
-      }
-
-      // Draw section title with accent color
-      page.drawText(section.title, {
-        x: 50,
-        y: yPosition,
-        size: 16,
-        font: fontBold,
-        color: rgb(accentR, accentG, accentB),
-      })
-      yPosition -= 25
-
-      if (section.content) {
-        const lines = section.content.split('\n').filter(line => line.trim())
-        for (const line of lines) {
-          if (yPosition < 50) {
-            pdfDoc.addPage([595.28, 841.89])
-            yPosition = 800
-          }
-
-          page.drawText(line.trim(), {
-            x: 50,
-            y: yPosition,
-            size: 11,
-            font: font,
-            color: rgb(0.2, 0.2, 0.2),
-          })
-          yPosition -= 15
-        }
-      } else if (section.fields) {
-        for (const field of section.fields.filter(f => f.value)) {
-          if (yPosition < 50) {
-            pdfDoc.addPage([595.28, 841.89])
-            yPosition = 800
-          }
-
-          page.drawText(`${field.label}: ${field.value}`, {
-            x: 50,
-            y: yPosition,
-            size: 11,
-            font: font,
-            color: rgb(0.2, 0.2, 0.2),
-          })
-          yPosition -= 15
-        }
-      }
-
-      yPosition -= 20
-    }
-
-    // Add footer
-    page.drawText(`Generated on ${new Date().toLocaleDateString()} • PDF Craft Pro CV Builder`, {
-      x: 50,
-      y: 30,
-      size: 8,
-      font: font,
-      color: rgb(0.5, 0.5, 0.5),
-    })
-
-    const pdfBytes = await pdfDoc.save()
-    const pdfBuffer = Buffer.from(pdfBytes)
-
-    return new NextResponse(pdfBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="cv.pdf"',
-        'Content-Length': pdfBuffer.length.toString(),
-      },
-    })
-  } catch (error) {
-    console.error('CV PDF generation error:', error)
-    return NextResponse.json(
-      { error: 'Failed to generate CV PDF. Please try again.' },
-      { status: 500 }
-    )
-  }
 }
 
 export async function GET(request: NextRequest) {
-  return NextResponse.json({ message: 'PDF Generation API' })
+    return NextResponse.json({ message: 'PDF Generation API - POST required' })
 }

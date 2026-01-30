@@ -2,17 +2,49 @@
 import { create } from 'zustand'
 
 export interface EditorStyle {
+    // Typography
     fontFamily: string
     fontSize: number
-    color: string
-    fontWeight: 'normal' | 'bold'
+    fontWeight: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
     fontStyle: 'normal' | 'italic'
-    textDecoration: 'none' | 'underline'
-    textAlign: 'left' | 'center' | 'right'
+    textDecoration: 'none' | 'underline' | 'line-through'
+    textAlign: 'left' | 'center' | 'right' | 'justify'
     lineHeight: number
+    letterSpacing?: number
+    
+    // Colors
+    color: string
+    backgroundColor?: string
+    borderColor?: string
+    
+    // Spacing (in pixels)
+    padding: number
+    paddingTop?: number
+    paddingRight?: number
+    paddingBottom?: number
+    paddingLeft?: number
     margin: number
-    width?: string
-    height?: string
+    marginTop?: number
+    marginRight?: number
+    marginBottom?: number
+    marginLeft?: number
+    
+    // Layout (absolute positioning - in pixels)
+    width: number // Always pixels now
+    height: number // Always pixels now
+    minWidth?: number
+    maxWidth?: number
+    minHeight?: number
+    maxHeight?: number
+    
+    // Borders
+    borderRadius?: number
+    borderWidth?: number
+    
+    // Transform
+    rotation?: number
+    opacity?: number
+    zIndex?: number
 }
 
 export interface EditorElement {
@@ -20,6 +52,9 @@ export interface EditorElement {
     type: 'heading' | 'paragraph' | 'list' | 'image' | 'divider'
     content: string
     style: EditorStyle
+    // Absolute positioning (in pixels)
+    x: number
+    y: number
 }
 
 interface EditorState {
@@ -38,36 +73,82 @@ interface EditorState {
     // Document Settings
     docTitle: string
     showTitle: boolean
+    
+    // Canvas Settings
+    snapToGrid: boolean
+    gridSize: number
+    showGuides: boolean
+    zoom: number
 
     // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
     setEditMode: (mode: 'manual' | 'ai') => void
     setDocTitle: (title: string) => void
     toggleShowTitle: () => void
+    
+    // Canvas Actions
+    setSnapToGrid: (snap: boolean) => void
+    setGridSize: (size: number) => void
+    setShowGuides: (show: boolean) => void
+    setZoom: (zoom: number) => void
 
     addElement: (type: EditorElement['type']) => void
     updateElement: (id: string, updates: Partial<EditorElement>) => void
     updateElementStyle: (id: string, styleUpdates: Partial<EditorStyle>) => void
+    
+    // Position & Dimension Methods
+    moveElement: (id: string, x: number, y: number) => void
+    resizeElement: (id: string, width: number, height: number) => void
+    
     removeElement: (id: string) => void
     selectElement: (id: string | null) => void
     reorderElements: (newOrder: EditorElement[]) => void
+    
+    // Layer operations
+    raiseElement: (id: string) => void
+    lowerElement: (id: string) => void
+    sendToBack: (id: string) => void
+    bringToFront: (id: string) => void
 
     undo: () => void
     redo: () => void
 }
 
 const DEFAULT_STYLE: EditorStyle = {
-    fontFamily: 'Arial',
+    // Typography
+    fontFamily: 'Inter, sans-serif',
     fontSize: 14,
-    color: '#000000',
-    fontWeight: 'normal',
+    fontWeight: '400',
     fontStyle: 'normal',
     textDecoration: 'none',
     textAlign: 'left',
     lineHeight: 1.5,
-    margin: 10,
-    width: '100%',
-    height: 'auto'
+    letterSpacing: 0,
+    
+    // Colors
+    color: '#000000',
+    backgroundColor: 'transparent',
+    borderColor: '#cccccc',
+    
+    // Spacing (pixels)
+    padding: 12,
+    margin: 8,
+    
+    // Layout (pixels)
+    width: 400,
+    height: 80,
+    minWidth: 100,
+    maxWidth: 600,
+    minHeight: 30,
+    
+    // Borders
+    borderRadius: 0,
+    borderWidth: 0,
+    
+    // Transform
+    rotation: 0,
+    opacity: 1,
+    zIndex: 0
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -78,7 +159,9 @@ export const useEditorStore = create<EditorState>((set) => ({
             id: 'default-1',
             type: 'heading',
             content: 'Introduction',
-            style: { ...DEFAULT_STYLE, fontSize: 24, fontWeight: 'bold' }
+            x: 40,
+            y: 40,
+            style: { ...DEFAULT_STYLE, fontSize: 28, fontWeight: '700', width: 500, height: 60 }
         }
     ],
     selectedId: null,
@@ -86,22 +169,37 @@ export const useEditorStore = create<EditorState>((set) => ({
     future: [],
     docTitle: 'Untitled Document',
     showTitle: true,
+    snapToGrid: false,
+    gridSize: 8,
+    showGuides: false,
+    zoom: 100,
 
     setTab: (tab: 'document' | 'cv' | 'contracts') => set({ activeTab: tab }),
     setEditMode: (mode: 'manual' | 'ai') => set({ editMode: mode }),
     setDocTitle: (title: string) => set({ docTitle: title }),
     toggleShowTitle: () => set((state) => ({ showTitle: !state.showTitle })),
+    
+    setSnapToGrid: (snap: boolean) => set({ snapToGrid: snap }),
+    setGridSize: (size: number) => set({ gridSize: size }),
+    setShowGuides: (show: boolean) => set({ showGuides: show }),
+    setZoom: (zoom: number) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
 
     addElement: (type: EditorElement['type']) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
+        const baseX = 60
+        const baseY = 120 + (state.elements.length * 30)
         const newElement: EditorElement = {
             id: `el-${Date.now()}`,
             type,
             content: type === 'heading' ? 'New Heading' : type === 'paragraph' ? 'Start typing...' : type === 'list' ? '• List item' : '',
+            x: baseX,
+            y: baseY,
             style: {
                 ...DEFAULT_STYLE,
-                fontSize: type === 'heading' ? 20 : 14,
-                fontWeight: type === 'heading' ? 'bold' : 'normal'
+                fontSize: type === 'heading' ? 22 : 14,
+                fontWeight: type === 'heading' ? '700' : '400',
+                width: type === 'heading' ? 500 : 450,
+                height: type === 'heading' ? 50 : 60
             }
         }
         return {
@@ -130,6 +228,69 @@ export const useEditorStore = create<EditorState>((set) => ({
             past: newPast,
             future: []
         }
+    }),
+
+    resizeElement: (id: string, width: number, height: number) => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        return {
+            elements: state.elements.map(el =>
+                el.id === id ? {
+                    ...el,
+                    style: { ...el.style, width, height }
+                } : el
+            ),
+            past: newPast,
+            future: []
+        }
+    }),
+    
+    moveElement: (id: string, x: number, y: number) => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        return {
+            elements: state.elements.map(el =>
+                el.id === id ? {
+                    ...el,
+                    x: Math.max(0, x),
+                    y: Math.max(0, y)
+                } : el
+            ),
+            past: newPast,
+            future: []
+        }
+    }),
+    
+    raiseElement: (id: string) => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        const newElements = [...state.elements]
+        const idx = newElements.findIndex(el => el.id === id)
+        if (idx < newElements.length - 1) {
+            [newElements[idx], newElements[idx + 1]] = [newElements[idx + 1], newElements[idx]]
+        }
+        return { elements: newElements, past: newPast, future: [] }
+    }),
+    
+    lowerElement: (id: string) => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        const newElements = [...state.elements]
+        const idx = newElements.findIndex(el => el.id === id)
+        if (idx > 0) {
+            [newElements[idx], newElements[idx - 1]] = [newElements[idx - 1], newElements[idx]]
+        }
+        return { elements: newElements, past: newPast, future: [] }
+    }),
+    
+    sendToBack: (id: string) => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        const newElements = state.elements.filter(el => el.id !== id)
+        const element = state.elements.find(el => el.id === id)
+        return { elements: element ? [element, ...newElements] : newElements, past: newPast, future: [] }
+    }),
+    
+    bringToFront: (id: string) => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        const newElements = state.elements.filter(el => el.id !== id)
+        const element = state.elements.find(el => el.id === id)
+        return { elements: element ? [...newElements, element] : newElements, past: newPast, future: [] }
     }),
 
     removeElement: (id: string) => set((state: EditorState) => {
