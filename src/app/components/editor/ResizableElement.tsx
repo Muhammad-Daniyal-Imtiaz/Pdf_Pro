@@ -128,16 +128,28 @@ export default function ResizableElement({
         setInitialSize({ width: el.style.width, height: el.style.height })
     }
 
+    // Auto-resize to fit text
     React.useEffect(() => {
-        if (isDragging || isResizing) {
-            window.addEventListener('mousemove', handleMouseMove)
-            window.addEventListener('mouseup', handleMouseUp)
-            return () => {
-                window.removeEventListener('mousemove', handleMouseMove)
-                window.removeEventListener('mouseup', handleMouseUp)
+        if (!contentEditableRef.current || isResizing || el.type === 'image' || el.type === 'divider') return
+
+        const checkHeight = () => {
+            const scrollHeight = contentEditableRef.current?.scrollHeight || 0
+            const currentHeight = el.style.height
+            // If content is larger than container, or significantly smaller (optional, but requested "fit")
+            // The prompt specifically says "If element length is too short -> print only half. If text doesn't fit -> expand".
+            // So primary goal is EXPANSION.
+
+            if (scrollHeight > currentHeight) {
+                // Add a small buffer to prevent jumping
+                onResize(el.id, el.style.width, scrollHeight + 4)
             }
         }
-    }, [isDragging, isResizing, dragStart, initialSize, el])
+
+        // Check immediately and after a tick to allow render
+        checkHeight()
+        const timer = setTimeout(checkHeight, 0)
+        return () => clearTimeout(timer)
+    }, [el.content, el.style.fontSize, el.style.width, el.style.lineHeight, el.style.padding, isResizing, onResize, el.id, el.style.height, el.type])
 
     const handleContentChange = (newContent: string) => {
         onChange(el.id, newContent)
@@ -187,13 +199,14 @@ export default function ResizableElement({
         borderWidth: el.style.borderWidth,
         borderRadius: el.style.borderRadius,
         opacity: el.style.opacity,
-        overflow: 'hidden',
+        // overflow: 'hidden', // Disabled to allow measurement/overflow visibility if needed temporarily
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: el.style.textAlign === 'center' ? 'center' : 'flex-start',
+        alignItems: 'flex-start', // specific fix for text alignment vertical
+        justifyContent: 'flex-start', // Let text-align handle inside
         cursor: isEditing ? 'text' : isDragging ? 'grabbing' : 'grab',
         userSelect: 'none' as any,
-        transition: isResizing ? 'none' : 'border-color 0.2s'
+        transition: isResizing ? 'none' : 'border-color 0.2s',
+        direction: 'ltr', // Fix text rendering direction
     }
 
     return (
@@ -213,25 +226,28 @@ export default function ResizableElement({
                 }
             }}
         >
-            {/* Selection Ring */}
+            {/* Selection Ring - Fixed Style */}
             {isSelected && (
                 <div
-                    className="SelectionRing absolute inset-[-2px] pointer-events-none z-50 shadow-lg"
-                    style={{ border: '2px solid #3b82f6', borderRadius: `${(el.style.borderRadius as number || 0) + 2}px` }}
+                    className="absolute inset-[-2px] pointer-events-none z-50 shadow-sm"
+                    style={{
+                        border: '2px solid #3B82F6', // Solid Blue
+                        borderRadius: `${(el.style.borderRadius as number || 0) + 2}px`
+                    }}
                 />
             )}
 
             {/* Hover Indicator */}
             {!isSelected && (
                 <div
-                    className="HoverIndicator absolute inset-0 pointer-events-none group-hover:border"
+                    className="absolute inset-0 pointer-events-none group-hover:border"
                     style={{ borderColor: '#d1d5db' }}
                 />
             )}
             {/* Measurement Tooltip */}
             {(isDragging || isResizing) && showMeasurement && (
                 <div
-                    className="MeasurementTooltip absolute -top-10 left-1/2 -translate-x-1/2 text-white text-[10px] px-2 py-0.5 rounded shadow-lg whitespace-nowrap z-[100] font-mono border"
+                    className="absolute -top-10 left-1/2 -translate-x-1/2 text-white text-[10px] px-2 py-0.5 rounded shadow-lg whitespace-nowrap z-[100] font-mono border"
                     style={{ backgroundColor: '#2563eb', borderColor: '#60a5fa' }}
                 >
                     {Math.round(el.style.width)} × {Math.round(el.style.height)}px
@@ -245,7 +261,7 @@ export default function ResizableElement({
             {/* Selection Labels */}
             {isSelected && !isDragging && !isResizing && (
                 <div
-                    className="SelectionLabel absolute -top-6 left-0 text-white text-[9px] px-1.5 py-0.5 rounded-t font-medium tracking-wider uppercase"
+                    className="absolute -top-6 left-0 text-white text-[9px] px-1.5 py-0.5 rounded-t font-medium tracking-wider uppercase"
                     style={{ backgroundColor: '#3b82f6' }}
                 >
                     {el.type}
@@ -267,7 +283,7 @@ export default function ResizableElement({
                 ))}
 
             {/* Element Content */}
-            <div className="w-full h-full relative overflow-hidden">
+            <div className="w-full h-full relative" style={{ direction: 'ltr' }}>
                 {el.type === 'divider' ? (
                     <div
                         className="w-full h-0 border-t absolute top-1/2 -translate-y-1/2"
@@ -284,7 +300,12 @@ export default function ResizableElement({
                             setIsEditing?.(null)
                             onBlur?.(el.id)
                         }}
-                        className={`w-full h-full outline-none break-words whitespace-pre-wrap ${isEditing === el.id ? 'cursor-text' : 'cursor-inherit'}`}
+                        className={`w-full outline-none break-words whitespace-pre-wrap ${isEditing === el.id ? 'cursor-text' : 'cursor-inherit'}`}
+                        style={{
+                            textAlign: el.style.textAlign as any,
+                            minHeight: '100%',
+                            display: 'block'
+                        }}
                     >
                         {el.content}
                     </div>
