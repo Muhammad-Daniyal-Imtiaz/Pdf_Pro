@@ -162,19 +162,27 @@ export const useEditorStore = create<EditorState>((set) => ({
     editMode: 'manual',
     elements: [
         {
-            id: 'default-1',
+            id: 'title-1',
             type: 'heading',
-            content: 'Introduction',
+            content: 'Untitled Document',
             x: 40,
             y: 40,
-            style: { ...DEFAULT_STYLE, fontSize: 28, fontWeight: '700', width: 500, height: 60 }
+            style: { ...DEFAULT_STYLE, fontSize: 36, fontWeight: '700', width: 600, height: 60 }
+        },
+        {
+            id: 'default-1',
+            type: 'paragraph',
+            content: 'Start typing here...',
+            x: 40,
+            y: 120,
+            style: { ...DEFAULT_STYLE, fontSize: 12, width: 500, height: 30 }
         }
     ],
     selectedId: null,
     past: [],
     future: [],
     docTitle: 'Untitled Document',
-    showTitle: true,
+    showTitle: false,
     snapToGrid: true,
     gridSize: 8,
     showGuides: true,

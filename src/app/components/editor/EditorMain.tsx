@@ -248,31 +248,6 @@ export default function EditorMain() {
                                 />
                             )}
 
-                            {/* Document Title */}
-                            {showTitle && (
-                                <div
-                                    className="absolute text-4xl font-bold border-b-2 pb-3 z-10 hover:border-blue-200 transition-colors"
-                                    style={{
-                                        left: `${PAGE_MARGIN}px`,
-                                        top: `${PAGE_MARGIN}px`,
-                                        width: `${A4_WIDTH - PAGE_MARGIN * 2}px`,
-                                        minHeight: '60px',
-                                        color: '#111827',
-                                        borderColor: '#e5e7eb'
-                                    }}
-                                >
-                                    <input
-                                        type="text"
-                                        value={docTitle}
-                                        onChange={(e) => setDocTitle(e.target.value)}
-                                        className="w-full text-4xl font-bold bg-transparent outline-none border-none placeholder-gray-300"
-                                        style={{ color: '#111827' }}
-                                        placeholder="Untitled Document"
-                                        onClick={(e) => e.stopPropagation()}
-                                    />
-                                </div>
-                            )}
-
                             {/* Empty State */}
                             {elements.length === 0 && (
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">

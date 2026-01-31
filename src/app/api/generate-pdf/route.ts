@@ -115,39 +115,6 @@ export async function POST(request: NextRequest) {
             return lines
         }
 
-        // --- Render Title ---
-        if (showTitle && docTitle) {
-            const titleSize = 28 * PX_TO_PT // Editor uses 28px, convert to pt? 
-            // Actually, usually font sizes in web (px) and PDF (pt) are treated 1:1 visually or close enough, 
-            // but strict 0.75 scaling is safer for layout match.
-            // Let's stick to strict scaling for EVERYTHING: Positions, Sizes, Fonts.
-
-            const fontSize = 28 * PX_TO_PT
-            const x = EDITOR_PAGE_MARGIN_PX * PX_TO_PT
-            // Y is from Bottom. Editor Y is top-down.
-            // Editor: y = 40. PDF Y = Height - (40 * 0.75) - heightOfText approx
-            // Better to use CapHeight for precise top alignment.
-
-            const y = A4_HEIGHT_PTS - (EDITOR_PAGE_MARGIN_PX * PX_TO_PT) - fontSize
-
-            page.drawText(docTitle, {
-                x,
-                y,
-                size: fontSize,
-                font: fontMap.Bold,
-                color: hexToRgb('#111827'),
-            })
-
-            // Line under title
-            const lineY = y - 10
-            page.drawLine({
-                start: { x, y: lineY },
-                end: { x: A4_WIDTH_PTS - (EDITOR_PAGE_MARGIN_PX * PX_TO_PT), y: lineY },
-                thickness: 1,
-                color: hexToRgb('#E5E7EB'),
-            })
-        }
-
         // --- Render Elements ---
         for (const el of contentBlocks) {
             const { style, content, x, y } = el

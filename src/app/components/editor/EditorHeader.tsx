@@ -31,14 +31,8 @@ export default function EditorHeader() {
                         onChange={(e) => setDocTitle(e.target.value)}
                         className="text-sm font-medium text-gray-700 bg-transparent border border-transparent hover:border-gray-200 focus:border-blue-500 rounded px-2 py-1 outline-none transition-all w-48"
                         placeholder="Untitled Document"
+                        title="Document Name (Filename)"
                     />
-                    <button
-                        onClick={toggleShowTitle}
-                        className={`text-xs px-2 py-1 rounded border transition-all ${showTitle ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-gray-50 text-gray-400 border-gray-200'}`}
-                        title="Toggle Title in PDF"
-                    >
-                        {showTitle ? 'Title: ON' : 'Title: OFF'}
-                    </button>
 
                     {/* Undo/Redo Controls */}
                     <div className="flex items-center gap-1 ml-2 border-l border-gray-300 pl-3">
