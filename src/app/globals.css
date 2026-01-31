@@ -81,21 +81,18 @@ input[type="range"]::-webkit-slider-thumb {
   /* Ensure LTR text direction */
   direction: ltr !important;
   text-align: left;
-  unicode-bidi: bidi-override !important;
 }
 
 .editor-canvas * {
   box-sizing: border-box;
-  direction: ltr !important;
-  unicode-bidi: bidi-override !important;
 }
 
 /* ContentEditable text direction fix */
 .editor-canvas [contenteditable] {
   direction: ltr !important;
-  unicode-bidi: bidi-override !important;
   text-align: inherit;
   writing-mode: horizontal-tb !important;
+  unicode-bidi: plaintext;
 }
 
 /* Elements within canvas */
