@@ -77,10 +77,25 @@ input[type="range"]::-webkit-slider-thumb {
   /* Font rendering */
   font-kerning: auto;
   font-feature-settings: normal;
+  
+  /* Ensure LTR text direction */
+  direction: ltr !important;
+  text-align: left;
+  unicode-bidi: bidi-override !important;
 }
 
 .editor-canvas * {
   box-sizing: border-box;
+  direction: ltr !important;
+  unicode-bidi: bidi-override !important;
+}
+
+/* ContentEditable text direction fix */
+.editor-canvas [contenteditable] {
+  direction: ltr !important;
+  unicode-bidi: bidi-override !important;
+  text-align: inherit;
+  writing-mode: horizontal-tb !important;
 }
 
 /* Elements within canvas */

@@ -48,12 +48,19 @@ export async function generatePDFFromCanvas(
                         color-scheme: light !important;
                         box-sizing: border-box !important;
                     }
+                    /* Ensure correct text direction */
+                    .editor-canvas, .editor-canvas * {
+                        direction: ltr !important;
+                        unicode-bidi: bidi-override !important;
+                        text-align: inherit !important;
+                    }
                     /* Hide UI elements from final PDF */
                     .resize-handle, 
                     .SelectionRing,
                     .HoverIndicator,
                     .MeasurementTooltip,
-                    .SelectionLabel { 
+                    .SelectionLabel,
+                    [data-html2canvas-ignore="true"] { 
                         display: none !important; 
                     }
                 `
@@ -131,12 +138,19 @@ export async function generatePDFPreview(
                         color-scheme: light !important; 
                         box-sizing: border-box !important;
                     }
+                    /* Ensure correct text direction */
+                    .editor-canvas, .editor-canvas * {
+                        direction: ltr !important;
+                        unicode-bidi: bidi-override !important;
+                        text-align: inherit !important;
+                    }
                     /* Hide UI elements from result */
                     .resize-handle, 
                     .SelectionRing,
                     .HoverIndicator,
                     .MeasurementTooltip,
-                    .SelectionLabel { 
+                    .SelectionLabel,
+                    [data-html2canvas-ignore="true"] { 
                         display: none !important; 
                     }
                 `

@@ -119,6 +119,13 @@ export default function EditorMain() {
     const handleDownloadPDF = async () => {
         if (!canvasRef.current) return
 
+        // Deselect element to ensure no UI artifacts (selection rings/blue lines) are captured
+        selectElement(null)
+        setEditingId(null)
+
+        // Short delay to allow React to render the deselected state
+        await new Promise(resolve => setTimeout(resolve, 50))
+
         setIsGeneratingPDF(true)
         try {
             await downloadPDF(
@@ -227,7 +234,9 @@ export default function EditorMain() {
                                 width: `${A4_WIDTH}px`,
                                 height: `${A4_HEIGHT}px`,
                                 padding: `${PAGE_MARGIN}px`,
-                                boxSizing: 'border-box'
+                                boxSizing: 'border-box',
+                                direction: 'ltr',
+                                textAlign: 'left'
                             }}
                             onDrop={handleCanvasDrop}
                             onDragOver={(e) => e.preventDefault()}

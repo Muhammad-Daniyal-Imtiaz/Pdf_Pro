@@ -140,28 +140,27 @@ export default function ResizableElement({
         setInitialSize({ width: el.style.width, height: el.style.height })
     }
 
-    // Auto-resize to fit text
+    // Manual DOM sync to handle checking height and preserving cursor
     React.useEffect(() => {
-        if (!contentEditableRef.current || isResizing || el.type === 'image' || el.type === 'divider') return
+        if (!contentEditableRef.current) return
 
-        const checkHeight = () => {
-            const scrollHeight = contentEditableRef.current?.scrollHeight || 0
-            const currentHeight = el.style.height
-            // If content is larger than container, or significantly smaller (optional, but requested "fit")
-            // The prompt specifically says "If element length is too short -> print only half. If text doesn't fit -> expand".
-            // So primary goal is EXPANSION.
-
-            if (scrollHeight > currentHeight) {
-                // Add a small buffer to prevent jumping
-                onResize(el.id, el.style.width, scrollHeight + 4)
-            }
+        // Sync content if different (handle undo/redo/external updates)
+        // But skip if we are the active element (active typing) and content largely matches 
+        // (This prevents cursor jumps)
+        if (contentEditableRef.current.innerText !== el.content) {
+            // Only update if not strictly equal, to avoid cursor reset on matching updates
+            contentEditableRef.current.innerText = el.content
         }
 
-        // Check immediately and after a tick to allow render
-        checkHeight()
-        const timer = setTimeout(checkHeight, 0)
-        return () => clearTimeout(timer)
-    }, [el.content, el.style.fontSize, el.style.width, el.style.lineHeight, el.style.padding, isResizing, onResize, el.id, el.style.height, el.type])
+        // Auto-resize logic
+        if (isResizing || el.type === 'image' || el.type === 'divider') return
+        const scrollHeight = contentEditableRef.current.scrollHeight
+        const currentHeight = el.style.height || 0
+        if (scrollHeight > currentHeight) {
+            onResize(el.id, el.style.width, scrollHeight + 4)
+        }
+
+    }, [el.content, el.id, el.style.width, onResize, isResizing, el.type, el.style.height]) // Depend on content
 
     const handleContentChange = (newContent: string) => {
         onChange(el.id, newContent)
@@ -211,15 +210,14 @@ export default function ResizableElement({
         borderWidth: el.style.borderWidth,
         borderRadius: el.style.borderRadius,
         opacity: el.style.opacity,
-        overflow: 'visible',
+        // overflow: 'hidden', // Disabled to allow measurement/overflow visibility if needed temporarily
         display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        alignItems: 'flex-start', // specific fix for text alignment vertical
+        justifyContent: 'flex-start', // Let text-align handle inside
         cursor: isEditing ? 'text' : isDragging ? 'grabbing' : 'grab',
         userSelect: 'none' as any,
         transition: isResizing ? 'none' : 'border-color 0.2s',
-        direction: 'ltr',
-        textDirection: 'ltr'
+        direction: 'ltr', // Fix text rendering direction
     }
 
     return (
@@ -312,25 +310,22 @@ export default function ResizableElement({
                         ref={contentEditableRef}
                         contentEditable={isEditing === el.id}
                         suppressContentEditableWarning
-                        onInput={(e) => handleContentChange(e.currentTarget.textContent || '')}
+                        onInput={(e) => handleContentChange(e.currentTarget.innerText || '')}
                         onKeyDown={handleKeyDown}
                         onBlur={() => {
                             setIsEditing?.(null)
                             onBlur?.(el.id)
                         }}
+                        spellCheck={false}
                         className={`w-full outline-none break-words whitespace-pre-wrap ${isEditing === el.id ? 'cursor-text' : 'cursor-inherit'}`}
                         style={{
                             textAlign: el.style.textAlign as any,
                             minHeight: '100%',
                             display: 'block',
-                            direction: 'ltr',
-                            unicodeBidi: 'bidi-override',
-                            textOrientation: 'mixed',
-                            wordWrap: 'break-word',
-                            overflowWrap: 'break-word'
+                            direction: 'ltr'
                         }}
                     >
-                        {el.content}
+                        {/* NO CHILDREN RENDERED HERE - Managed by useEffect */}
                     </div>
                 )}
             </div>
