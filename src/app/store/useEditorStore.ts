@@ -81,6 +81,10 @@ interface EditorState {
     showPreview: boolean
     zoom: number
 
+    // Interface State
+    isSidebarCollapsed: boolean
+    toggleSidebar: () => void
+
     // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
     setEditMode: (mode: 'manual' | 'ai') => void
@@ -187,6 +191,10 @@ export const useEditorStore = create<EditorState>((set) => ({
     setShowGuides: (show: boolean) => set({ showGuides: show }),
     setShowPreview: (show: boolean) => set({ showPreview: show }),
     setZoom: (zoom: number) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
+
+    // Interface State
+    isSidebarCollapsed: false,
+    toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
 
     addElement: (type: EditorElement['type']) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
+import { PDFDocument, rgb, StandardFonts, PDFFont } from 'pdf-lib'
 
-// Enhanced type definitions matching the new store
+// Type definitions matching the store
 interface EditorStyle {
     fontFamily: string
     fontSize: number
     fontWeight: string
     fontStyle: 'normal' | 'italic'
-    textDecoration: 'none' | 'underline'
+    textDecoration: 'none' | 'underline' | 'line-through'
     textAlign: 'left' | 'center' | 'right' | 'justify'
     color: string
     backgroundColor?: string
@@ -36,13 +36,17 @@ interface RequestBody {
     docTitle?: string
     showTitle?: boolean
     documentType?: string
-    cvTemplate?: any
 }
 
-// PDF page dimensions in points
-const A4_WIDTH = 595.28
-const A4_HEIGHT = 841.89
-const MM_TO_POINTS = 2.834645669
+// PDF Dimensions
+const A4_WIDTH_PTS = 595.28
+const A4_HEIGHT_PTS = 841.89
+
+// Conversion: 1 px (at 96 DPI) = 0.75 pts (at 72 DPI)
+const PX_TO_PT = 0.75
+
+// Editor assumptions
+const EDITOR_PAGE_MARGIN_PX = 40
 
 export async function POST(request: NextRequest) {
     try {
@@ -50,226 +54,246 @@ export async function POST(request: NextRequest) {
         const { contentBlocks, docTitle = '', showTitle = true } = body
 
         if (!Array.isArray(contentBlocks)) {
-            return NextResponse.json(
-                { error: 'Invalid content blocks' },
-                { status: 400 }
-            )
+            return NextResponse.json({ error: 'Invalid content blocks' }, { status: 400 })
         }
 
         const pdfDoc = await PDFDocument.create()
-        const page = pdfDoc.addPage([A4_WIDTH, A4_HEIGHT])
+        const page = pdfDoc.addPage([A4_WIDTH_PTS, A4_HEIGHT_PTS])
 
-        // Embed standard fonts
-        const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
-        const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
-        const helveticaOblique = await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
-        const courier = await pdfDoc.embedFont(StandardFonts.Courier)
-
-        // Helper to convert hex to RGB (0-1 scale)
-        const hexToRgb = (hex: string): [number, number, number] => {
-            if (!hex || typeof hex !== 'string') return [0, 0, 0]
-            hex = hex.replace(/^#/, '')
-
-            let r, g, b
-            if (hex.length === 3) {
-                r = parseInt(hex[0] + hex[0], 16) / 255
-                g = parseInt(hex[1] + hex[1], 16) / 255
-                b = parseInt(hex[2] + hex[2], 16) / 255
-            } else if (hex.length === 6) {
-                r = parseInt(hex.slice(0, 2), 16) / 255
-                g = parseInt(hex.slice(2, 4), 16) / 255
-                b = parseInt(hex.slice(4, 6), 16) / 255
-            } else {
-                return [0, 0, 0]
-            }
-
-            return [r, g, b]
+        // Embed Standard Fonts
+        const fontMap = {
+            Regular: await pdfDoc.embedFont(StandardFonts.Helvetica),
+            Bold: await pdfDoc.embedFont(StandardFonts.HelveticaBold),
+            Italic: await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
+            BoldItalic: await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique),
+            Courier: await pdfDoc.embedFont(StandardFonts.Courier),
+            Times: await pdfDoc.embedFont(StandardFonts.TimesRoman),
         }
 
-        // Helper to wrap text
-        const wrapText = (text: string, font: any, fontSize: number, maxWidth: number): string[] => {
-            if (!text) return []
+        // Helper: Hex to RGB
+        const hexToRgb = (hex: string) => {
+            const cleanHex = hex.replace('#', '')
+            const r = parseInt(cleanHex.substring(0, 2), 16) / 255
+            const g = parseInt(cleanHex.substring(2, 4), 16) / 255
+            const b = parseInt(cleanHex.substring(4, 6), 16) / 255
+            return rgb(isNaN(r) ? 0 : r, isNaN(g) ? 0 : g, isNaN(b) ? 0 : b)
+        }
+
+        // Helper: Get Font based on style
+        const getFont = (style: EditorStyle): PDFFont => {
+            const family = style.fontFamily?.toLowerCase() || ''
+            const isBold = style.fontWeight === 'bold' || style.fontWeight === '700'
+            const isItalic = style.fontStyle === 'italic'
+
+            if (family.includes('courier') || family.includes('mono')) return fontMap.Courier
+            if (family.includes('times') || family.includes('serif')) return fontMap.Times
+
+            // Default to Helvetica (Inter/Roboto replacement)
+            if (isBold && isItalic) return fontMap.BoldItalic
+            if (isBold) return fontMap.Bold
+            if (isItalic) return fontMap.Italic
+            return fontMap.Regular
+        }
+
+        // Helper: Text Wrapping with Font Metrics
+        const wrapText = (text: string, font: PDFFont, size: number, maxWidth: number) => {
             const words = text.split(' ')
             const lines: string[] = []
-            let currentLine = ''
+            let currentLine = words[0]
 
-            for (const word of words) {
-                const testLine = currentLine ? `${currentLine} ${word}` : word
-                const textWidth = font.widthOfTextAtSize(testLine, fontSize)
-
-                if (textWidth > maxWidth && currentLine) {
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i]
+                const width = font.widthOfTextAtSize(`${currentLine} ${word}`, size)
+                if (width < maxWidth) {
+                    currentLine += ` ${word}`
+                } else {
                     lines.push(currentLine)
                     currentLine = word
-                } else {
-                    currentLine = testLine
                 }
             }
-
             if (currentLine) lines.push(currentLine)
             return lines
         }
 
-        // Select appropriate font
-        const getFontForStyle = (style: EditorStyle) => {
-            const isBold = style.fontWeight === '700' || style.fontWeight === 'bold'
-            const isItalic = style.fontStyle === 'italic'
-
-            if (style.fontFamily?.toLowerCase().includes('courier') || style.fontFamily?.toLowerCase().includes('mono')) {
-                return courier
-            }
-
-            if (isBold) return helveticaBold
-            if (isItalic) return helveticaOblique
-            return helvetica
-        }
-
-        // Draw title if enabled
+        // --- Render Title ---
         if (showTitle && docTitle) {
-            const [r, g, b] = hexToRgb('#1f2937')
-            const maxWidth = A4_WIDTH - 40
-            const titleLines = wrapText(docTitle, helveticaBold, 28, maxWidth)
+            const titleSize = 28 * PX_TO_PT // Editor uses 28px, convert to pt? 
+            // Actually, usually font sizes in web (px) and PDF (pt) are treated 1:1 visually or close enough, 
+            // but strict 0.75 scaling is safer for layout match.
+            // Let's stick to strict scaling for EVERYTHING: Positions, Sizes, Fonts.
 
-            let yPos = A4_HEIGHT - 40
-            for (const line of titleLines) {
-                try {
-                    page.drawText(line, {
-                        x: 40,
-                        y: yPos,
-                        size: 28,
-                        font: helveticaBold,
-                        color: rgb(r, g, b),
-                    })
-                    yPos -= 40
-                } catch (e) {
-                    console.error('Error drawing title:', e)
-                }
-            }
+            const fontSize = 28 * PX_TO_PT
+            const x = EDITOR_PAGE_MARGIN_PX * PX_TO_PT
+            // Y is from Bottom. Editor Y is top-down.
+            // Editor: y = 40. PDF Y = Height - (40 * 0.75) - heightOfText approx
+            // Better to use CapHeight for precise top alignment.
 
-            // Add separator line
+            const y = A4_HEIGHT_PTS - (EDITOR_PAGE_MARGIN_PX * PX_TO_PT) - fontSize
+
+            page.drawText(docTitle, {
+                x,
+                y,
+                size: fontSize,
+                font: fontMap.Bold,
+                color: hexToRgb('#111827'),
+            })
+
+            // Line under title
+            const lineY = y - 10
             page.drawLine({
-                start: { x: 40, y: yPos + 10 },
-                end: { x: A4_WIDTH - 40, y: yPos + 10 },
+                start: { x, y: lineY },
+                end: { x: A4_WIDTH_PTS - (EDITOR_PAGE_MARGIN_PX * PX_TO_PT), y: lineY },
                 thickness: 1,
-                color: rgb(0.8, 0.8, 0.8),
+                color: hexToRgb('#E5E7EB'),
             })
         }
 
-        // Draw elements - using absolute positioning from the editor
-        // Scale factor: editor uses pixels, PDF uses points (1px ≈ 0.75 points)
-        const SCALE = 0.75
+        // --- Render Elements ---
+        for (const el of contentBlocks) {
+            const { style, content, x, y } = el
 
-        for (const element of contentBlocks) {
-            const xPos = element.x * SCALE + 40 // Add page margin
-            const yPos = (A4_HEIGHT - (element.y * SCALE) - 40) // Flip Y-axis for PDF
-            const font = getFontForStyle(element.style)
-            const [r, g, b] = hexToRgb(element.style.color || '#000000')
+            // 1. Calculate base PDF coordinates
+            // Editor X/Y include margins relative to the container (which has padding).
+            // But wait, the Store stores "x" and "y" relative to the Canvas Top-Left (0,0).
+            // And the Canvas has padding of PAGE_MARGIN (40px).
+            // In EditorMain, ResizableElement is absolute positioned inside the canvas div.
+            // So el.x = 40 means 40px from left edge of canvas.
+            // This maps strictly to: pdfX = el.x * 0.75
+
+            const pdfX = x * PX_TO_PT
+            const pdfY = A4_HEIGHT_PTS - (y * PX_TO_PT)
+
+            const fontSize = style.fontSize * PX_TO_PT
+            const font = getFont(style)
+            const color = hexToRgb(style.color)
+            const lineHeight = (style.lineHeight || 1.5) * fontSize
+
+            // Width available for text inside the element's box
+            // Element width includes padding. Text width = width - padding*2
+            const innerWidth = (style.width - (style.padding * 2)) * PX_TO_PT
+
+            // Start writing text. 
+            // In PDF, text is drawn from Baseline. In HTML/CSS, top-left.
+            // We need to shift Y down by the font's ascent or approx line height to match "top" alignment.
+            let currentY = pdfY - fontSize // Approximate top anchor
+            const startX = pdfX + (style.padding * PX_TO_PT)
 
             try {
-                switch (element.type) {
-                    case 'heading':
-                    case 'paragraph': {
-                        const maxWidth = (element.style.width * SCALE) - (element.style.padding * SCALE * 2)
-                        const fontSize = element.style.fontSize * SCALE
-                        const lines = wrapText(element.content, font, fontSize, maxWidth)
-
-                        let currentY = yPos
-                        for (const line of lines) {
-                            if (currentY < 40) break // Don't write below margin
-
-                            page.drawText(line, {
-                                x: xPos + (element.style.padding * SCALE),
-                                y: currentY,
-                                size: fontSize,
-                                font,
-                                color: rgb(r, g, b),
-                            })
-                            currentY -= (fontSize * element.style.lineHeight)
-                        }
-                        break
-                    }
-
-                    case 'list': {
-                        const lines = element.content.split('\n').filter(l => l.trim())
-                        const fontSize = element.style.fontSize * SCALE
-                        const maxWidth = (element.style.width * SCALE) - (element.style.padding * SCALE * 2) - 15
-
-                        let currentY = yPos
-                        for (const line of lines) {
-                            if (currentY < 40) break
-
-                            // Draw bullet
-                            page.drawText('•', {
-                                x: xPos + (element.style.padding * SCALE),
-                                y: currentY,
-                                size: fontSize,
-                                font,
-                                color: rgb(r, g, b),
-                            })
-
-                            // Wrap and draw text
-                            const text = line.replace(/^[•\-\*]\s*/, '')
-                            const wrappedLines = wrapText(text, font, fontSize, maxWidth)
-                            for (let i = 0; i < wrappedLines.length; i++) {
-                                if (currentY < 40) break
-
-                                page.drawText(wrappedLines[i], {
-                                    x: xPos + (element.style.padding * SCALE) + 15,
-                                    y: currentY,
-                                    size: fontSize,
-                                    font,
-                                    color: rgb(r, g, b),
-                                })
-                                currentY -= (fontSize * element.style.lineHeight)
-                            }
-                        }
-                        break
-                    }
-
-                    case 'divider': {
-                        const dividerY = yPos - (element.style.height * SCALE) / 2
-                        page.drawLine({
-                            start: { x: xPos, y: dividerY },
-                            end: { x: xPos + (element.style.width * SCALE), y: dividerY },
-                            thickness: 1,
-                            color: rgb(r, g, b),
-                        })
-                        break
-                    }
-
-                    case 'image':
-                        // Image support would require additional handling
-                        console.warn(`Image elements not yet supported: ${element.id}`)
-                        break
+                if (el.type === 'image') {
+                    // Placeholder for image
+                    page.drawRectangle({
+                        x: pdfX,
+                        y: pdfY - (style.height * PX_TO_PT),
+                        width: style.width * PX_TO_PT,
+                        height: style.height * PX_TO_PT,
+                        color: rgb(0.9, 0.9, 0.9)
+                    })
+                    continue
                 }
-            } catch (error) {
-                console.error(`Error drawing element ${element.id}:`, error)
+
+                if (el.type === 'divider') {
+                    const midY = pdfY - ((style.height * PX_TO_PT) / 2)
+                    page.drawLine({
+                        start: { x: pdfX, y: midY },
+                        end: { x: pdfX + (style.width * PX_TO_PT), y: midY },
+                        thickness: 1,
+                        color: color
+                    })
+                    continue
+                }
+
+                // Text Elements (Heading, Paragraph, List)
+                const textLines = el.type === 'list'
+                    ? content.split('\n')
+                    : wrapText(content, font, fontSize, innerWidth)
+
+                for (const line of textLines) {
+                    if (el.type === 'list') {
+                        // Handle list (simple bullet logic)
+                        page.drawText('•', {
+                            x: startX,
+                            y: currentY,
+                            size: fontSize,
+                            font,
+                            color
+                        })
+                        const stripped = line.replace(/^[•\-\*]\s*/, '')
+                        const wrappedListLines = wrapText(stripped, font, fontSize, innerWidth - 15) // Indent
+
+                        let listY = currentY
+                        for (const listLine of wrappedListLines) {
+                            page.drawText(listLine, {
+                                x: startX + 15, // Indent
+                                y: listY,
+                                size: fontSize,
+                                font,
+                                color
+                            })
+                            listY -= lineHeight
+                        }
+                        currentY = listY // update for next item? List usually has gaps. 
+                        // Simplified: just move down by number of lines
+                        // currentY -= (lineHeight * wrappedListLines.length) 
+                        // But we already did that loop.
+                    } else {
+                        page.drawText(line, {
+                            x: startX,
+                            y: currentY,
+                            size: fontSize,
+                            font,
+                            color
+                        })
+
+                        // Draw underline if needed
+                        if (style.textDecoration === 'underline') {
+                            const lineWidth = font.widthOfTextAtSize(line, fontSize)
+                            page.drawLine({
+                                start: { x: startX, y: currentY - 2 },
+                                end: { x: startX + lineWidth, y: currentY - 2 },
+                                thickness: 1,
+                                color
+                            })
+                        }
+
+                        // Draw strikethrough if needed
+                        if (style.textDecoration === 'line-through') {
+                            const lineWidth = font.widthOfTextAtSize(line, fontSize)
+                            page.drawLine({
+                                start: { x: startX, y: currentY + (fontSize / 3) },
+                                end: { x: startX + lineWidth, y: currentY + (fontSize / 3) },
+                                thickness: 1,
+                                color
+                            })
+                        }
+
+                        currentY -= lineHeight
+                    }
+                }
+
+            } catch (err) {
+                console.error('Error drawing element:', el.id, err)
             }
         }
 
         // Generate PDF
         const pdfBytes = await pdfDoc.save()
+        // Create a Buffer from the Uint8Array to ensure compatibility
         const pdfBuffer = Buffer.from(pdfBytes)
 
-        return new NextResponse(pdfBuffer, {
+        return new NextResponse(pdfBuffer as any, {
             status: 200,
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': 'attachment; filename="document.pdf"',
-                'Content-Length': pdfBuffer.length.toString(),
-            },
+                'Content-Disposition': `attachment; filename="${(docTitle || 'document').replace(/\s/g, '_')}.pdf"`,
+            }
         })
+
     } catch (error) {
-        console.error('PDF generation error:', error)
-        return NextResponse.json(
-            {
-                error: 'Failed to generate PDF',
-                details: error instanceof Error ? error.message : 'Unknown error',
-            },
-            { status: 500 }
-        )
+        console.error('PDF Gen Error:', error)
+        return NextResponse.json({ error: 'Failed' }, { status: 500 })
     }
 }
 
-export async function GET(request: NextRequest) {
-    return NextResponse.json({ message: 'PDF Generation API - POST required' })
+export async function GET() {
+    return NextResponse.json({ status: 'Ready' })
 }

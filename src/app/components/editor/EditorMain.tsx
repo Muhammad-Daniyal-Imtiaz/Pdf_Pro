@@ -1,9 +1,10 @@
 'use client'
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useEditorStore } from '@/app/store/useEditorStore'
 import ResizableElement from './ResizableElement'
 import { downloadPDF } from '@/app/lib/pdf-service'
 import LivePDFPreview from './LivePDFPreview'
+import { Loader2, MousePointer2, Move, Maximize, Grid, ArrowDownToLine, LayoutTemplate, FileText } from 'lucide-react'
 
 export default function EditorMain() {
     const {
@@ -19,13 +20,16 @@ export default function EditorMain() {
         resizeElement,
         removeElement,
         showPreview,
-        setShowPreview
+        setShowPreview,
+        isSidebarCollapsed
     } = useEditorStore()
 
     const [editingId, setEditingId] = React.useState<string | null>(null)
     const [showGrid, setShowGrid] = useState(true)
     const [showRulers, setShowRulers] = useState(true)
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
     const canvasRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
@@ -34,8 +38,10 @@ export default function EditorMain() {
     const A4_HEIGHT = 1123
     const PAGE_MARGIN = 40
 
+    const selectedElement = elements.find(el => el.id === selectedId)
+
     // Keyboard shortcuts
-    React.useEffect(() => {
+    useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             // Ctrl+G or Cmd+G - toggle grid
             if ((e.ctrlKey || e.metaKey) && e.key === 'g') {
@@ -73,7 +79,7 @@ export default function EditorMain() {
     }, [selectedId, removeElement, selectElement])
 
     // Auto-save logic
-    React.useEffect(() => {
+    useEffect(() => {
         const timeoutId = setTimeout(() => {
             const data = JSON.stringify({ elements, docTitle })
             localStorage.setItem('pdf-craft-pro-draft', data)
@@ -97,6 +103,16 @@ export default function EditorMain() {
 
     const handleElementChange = (id: string, content: string) => {
         updateElement(id, { content })
+    }
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (canvasRef.current) {
+            const rect = canvasRef.current.getBoundingClientRect()
+            setMousePos({
+                x: Math.round(e.clientX - rect.left),
+                y: Math.round(e.clientY - rect.top)
+            })
+        }
     }
 
     // Download PDF using html2canvas for perfect WYSIWYG
@@ -123,54 +139,65 @@ export default function EditorMain() {
     }
 
     return (
-        <main className="flex-1 bg-gray-100 overflow-auto h-[calc(100vh-64px)] p-8 flex flex-col">
+        <main className="flex-1 bg-gray-100/50 overflow-hidden h-[calc(100vh-64px)] flex flex-col relative">
             {/* Toolbar */}
-            <div className="mb-4 flex items-center gap-2 bg-white rounded-lg p-3 shadow-sm">
-                <button
-                    onClick={() => setShowGrid(!showGrid)}
-                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${showGrid
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                    title="Toggle grid (Ctrl+G)"
-                >
-                    Grid
-                </button>
-                <button
-                    onClick={() => setShowRulers(!showRulers)}
-                    className={`px-3 py-1 rounded text-sm font-medium transition-colors ${showRulers
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                    title="Toggle rulers"
-                >
-                    Rulers
-                </button>
-                <div className="flex-1" />
+            <div className="h-12 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setShowGrid(!showGrid)}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${showGrid
+                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                            : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                            }`}
+                        title="Toggle grid (Ctrl+G)"
+                    >
+                        <Grid size={14} />
+                        Grid
+                    </button>
+                    <button
+                        onClick={() => setShowRulers(!showRulers)}
+                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${showRulers
+                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                            : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                            }`}
+                        title="Toggle rulers"
+                    >
+                        <LayoutTemplate size={14} />
+                        Rulers
+                    </button>
+                </div>
+
                 <button
                     onClick={handleDownloadPDF}
                     disabled={isGeneratingPDF}
-                    className="px-4 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded font-medium text-sm transition-colors"
+                    className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-md font-medium text-xs transition-all shadow-sm active:scale-95"
                     title="Download PDF (Ctrl+D)"
                 >
+                    {isGeneratingPDF ? <Loader2 size={14} className="animate-spin" /> : <ArrowDownToLine size={14} />}
                     {isGeneratingPDF ? 'Generating...' : 'Download PDF'}
                 </button>
             </div>
 
             {/* Workspace Container */}
-            <div className="flex-1 flex overflow-hidden bg-gray-200">
+            <div className="flex-1 flex overflow-hidden bg-[#E5E7EB] relative">
                 {/* Editor Section */}
-                <div ref={containerRef} className={`flex-1 flex justify-center items-start overflow-auto p-12 transition-all duration-300 ${showPreview ? 'w-1/2' : 'w-full'}`}>
-                    <div className="relative">
+                <div
+                    ref={containerRef}
+                    className={`
+                        flex-1 flex justify-center items-start overflow-auto p-8 lg:p-12 
+                        transition-all duration-300 ease-in-out scroll-smooth
+                        ${showPreview ? 'mr-[450px]' : 'mr-0'}
+                    `}
+                >
+                    <div className="relative shadow-2xl transition-transform duration-200">
                         {/* Vertical Ruler */}
                         {showRulers && (
                             <div
-                                className="absolute -left-12 top-0 w-10 h-[1123px] border-r text-xs select-none pointer-events-none"
-                                style={{ backgroundColor: '#e5e7eb', borderColor: '#d1d5db', color: '#4b5563' }}
+                                className="absolute -left-10 top-0 w-10 h-[1123px] bg-white border-r border-gray-200 text-[10px] select-none pointer-events-none font-mono text-gray-400"
                             >
                                 {Array.from({ length: 30 }).map((_, i) => (
-                                    <div key={i} className="h-[37.4px] border-b flex items-center justify-end pr-1" style={{ borderColor: '#d1d5db' }}>
-                                        {i % 5 === 0 && `${i}`}
+                                    <div key={i} className="h-[37.4px] border-b border-gray-100 flex items-center justify-end pr-1 relative">
+                                        {i % 2 === 0 && <span className="absolute right-1 top-[-6px]">{i * 10}</span>}
                                     </div>
                                 ))}
                             </div>
@@ -179,16 +206,14 @@ export default function EditorMain() {
                         {/* Horizontal Ruler */}
                         {showRulers && (
                             <div
-                                className="absolute -top-12 left-0 w-[794px] h-10 border-b text-xs select-none pointer-events-none flex"
-                                style={{ backgroundColor: '#e5e7eb', borderColor: '#d1d5db', color: '#4b5563' }}
+                                className="absolute -top-10 left-0 w-[794px] h-10 bg-white border-b border-gray-200 text-[10px] select-none pointer-events-none flex font-mono text-gray-400"
                             >
                                 {Array.from({ length: 21 }).map((_, i) => (
                                     <div
                                         key={i}
-                                        className="flex-1 border-r flex items-end justify-center pb-1"
-                                        style={{ borderColor: '#d1d5db' }}
+                                        className="flex-1 border-r border-gray-100 flex items-end justify-center pb-1 relative"
                                     >
-                                        {i % 5 === 0 && `${i}`}
+                                        {i % 2 === 0 && <span className="absolute bottom-1 left-[-4px]">{i * 10}</span>}
                                     </div>
                                 ))}
                             </div>
@@ -197,7 +222,7 @@ export default function EditorMain() {
                         {/* Canvas */}
                         <div
                             ref={canvasRef}
-                            className="editor-canvas relative bg-white shadow-xl"
+                            className="editor-canvas relative bg-white cursor-crosshair print:shadow-none"
                             style={{
                                 width: `${A4_WIDTH}px`,
                                 height: `${A4_HEIGHT}px`,
@@ -207,14 +232,18 @@ export default function EditorMain() {
                             onDrop={handleCanvasDrop}
                             onDragOver={(e) => e.preventDefault()}
                             onClick={handleCanvasClick}
+                            onMouseMove={handleMouseMove}
                         >
                             {/* Grid Background */}
                             {showGrid && (
                                 <div
-                                    className="absolute inset-0 pointer-events-none opacity-10"
+                                    className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
                                     style={{
-                                        backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(0,0,0,.1) 25%, rgba(0,0,0,.1) 26%, transparent 27%, transparent 74%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0,0,0,.1) 25%, rgba(0,0,0,.1) 26%, transparent 27%, transparent 74%, rgba(0,0,0,.1) 75%, rgba(0,0,0,.1) 76%, transparent 77%, transparent)',
-                                        backgroundSize: '40px 40px'
+                                        backgroundImage: `
+                                            linear-gradient(#000 1px, transparent 1px),
+                                            linear-gradient(90deg, #000 1px, transparent 1px)
+                                        `,
+                                        backgroundSize: '20px 20px'
                                     }}
                                 />
                             )}
@@ -222,7 +251,7 @@ export default function EditorMain() {
                             {/* Document Title */}
                             {showTitle && (
                                 <div
-                                    className="absolute text-4xl font-bold border-b-2 pb-3"
+                                    className="absolute text-4xl font-bold border-b-2 pb-3 z-10 hover:border-blue-200 transition-colors"
                                     style={{
                                         left: `${PAGE_MARGIN}px`,
                                         top: `${PAGE_MARGIN}px`,
@@ -236,7 +265,7 @@ export default function EditorMain() {
                                         type="text"
                                         value={docTitle}
                                         onChange={(e) => setDocTitle(e.target.value)}
-                                        className="w-full text-4xl font-bold bg-transparent outline-none border-none"
+                                        className="w-full text-4xl font-bold bg-transparent outline-none border-none placeholder-gray-300"
                                         style={{ color: '#111827' }}
                                         placeholder="Untitled Document"
                                         onClick={(e) => e.stopPropagation()}
@@ -246,10 +275,11 @@ export default function EditorMain() {
 
                             {/* Empty State */}
                             {elements.length === 0 && (
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ color: '#d1d5db' }}>
-                                    <div className="text-center">
-                                        <p className="text-xl font-medium mb-2">Drag items from the sidebar</p>
-                                        <p className="text-sm">or use the elements panel to get started</p>
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+                                    <div className="text-center text-gray-300">
+                                        <FileText size={48} className="mx-auto mb-4 opacity-50" />
+                                        <p className="text-xl font-medium mb-2">Build your document</p>
+                                        <p className="text-sm">Drag elements from the sidebar</p>
                                     </div>
                                 </div>
                             )}
@@ -272,33 +302,74 @@ export default function EditorMain() {
                     </div>
                 </div>
 
-                {/* Preview Section */}
-                {showPreview && (
-                    <div className="w-[450px] border-l border-gray-300 bg-gray-100 flex flex-col shadow-inner">
-                        <div className="p-4 border-b border-gray-300 bg-white flex items-center justify-between">
-                            <h3 className="font-bold text-gray-700 flex items-center gap-2">
-                                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                Live PDF Preview
+                {/* Preview Drawer - Slide In */}
+                <div
+                    className={`
+                        fixed right-0 top-[64px] bottom-0 w-[450px]
+                        bg-white border-l border-gray-200 shadow-2xl z-20 
+                        transform transition-transform duration-300 ease-in-out flex flex-col
+                        ${showPreview ? 'translate-x-0' : 'translate-x-full'}
+                    `}
+                >
+                    <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                        <div>
+                            <h3 className="font-bold text-gray-800 flex items-center gap-2 text-sm">
+                                <span className="flex h-2 w-2 relative">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                </span>
+                                Live Preview
                             </h3>
+                            <p className="text-[10px] text-gray-500 mt-0.5 ml-4">100% Scale Match</p>
                         </div>
-                        <div className="flex-1 overflow-auto p-4 flex flex-col items-center bg-gray-300 shadow-inner">
-                            <div className="relative bg-white shadow-2xl"
-                                style={{ width: '794px', height: '1123px' }}>
-                                <LivePDFPreview canvasRef={canvasRef} isVisible={true} onClose={() => { }} inline={true} />
-                            </div>
-                            <div className="mt-8 mb-12 text-[12px] text-gray-600 font-medium bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm">
-                                <p>100% Actual Scale • Pixel-Perfect Mirror</p>
-                            </div>
+                        <button
+                            onClick={() => setShowPreview(false)}
+                            className="p-1 hover:bg-gray-200 rounded text-gray-500 transition-colors"
+                        >
+                            <Maximize size={16} className="rotate-45" />
+                        </button>
+                    </div>
+
+                    <div className="flex-1 overflow-auto p-6 bg-gray-100/50 flex flex-col items-center">
+                        <div className="relative shadow-xl origin-top transition-transform duration-200 scale-[0.5] sm:scale-[0.55]"
+                            style={{ width: '794px', height: '1123px', marginTop: '-25%' }}>
+                            <LivePDFPreview canvasRef={canvasRef} isVisible={showPreview} onClose={() => { }} inline={true} />
                         </div>
                     </div>
-                )}
+                </div>
             </div>
 
-            {/* Status Bar */}
-            <div className="mt-4 h-8 bg-white border-t border-gray-200 flex items-center px-4 text-xs text-gray-600">
-                <span>A4 Page • {A4_WIDTH}×{A4_HEIGHT}px • {elements.length} elements</span>
-                <div className="flex-1" />
-                <span>Ctrl+G: Grid • Ctrl+D: Download PDF</span>
+            {/* Enhanced Status Bar */}
+            <div className="h-7 bg-white border-t border-gray-200 flex items-center px-4 text-[10px] font-medium text-gray-500 select-none z-30 justify-between">
+                <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1.5">
+                        <FileText size={10} />
+                        A4 ({A4_WIDTH}×{A4_HEIGHT}px)
+                    </span>
+                    <span className="flex items-center gap-1.5 text-gray-400">|</span>
+                    <span className="flex items-center gap-1.5">
+                        <LayoutTemplate size={10} />
+                        Elements: {elements.length}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-gray-400">|</span>
+                    <span className="flex items-center gap-1.5 w-24 font-mono">
+                        <MousePointer2 size={10} />
+                        X: {mousePos.x} Y: {mousePos.y}
+                    </span>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    {selectedElement && (
+                        <>
+                            <span className="flex items-center gap-1.5 text-blue-600">
+                                <Move size={10} />
+                                Selected: {Math.round(selectedElement.x)}, {Math.round(selectedElement.y)}
+                            </span>
+                            <span className="flex items-center gap-1.5 text-gray-400">|</span>
+                        </>
+                    )}
+                    <span className="opacity-75">Auto-saved</span>
+                </div>
             </div>
         </main>
     )

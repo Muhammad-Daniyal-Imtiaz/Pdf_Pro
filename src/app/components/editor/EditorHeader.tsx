@@ -82,12 +82,11 @@ export default function EditorHeader() {
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => setShowPreview(!showPreview)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md active:scale-95 ${showPreview
-                            ? 'bg-purple-600 text-white hover:bg-purple-700'
-                            : 'bg-white text-purple-600 border border-purple-200 hover:bg-purple-50'
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-sm active:scale-95 ${showPreview
+                        ? 'bg-blue-600 text-white hover:bg-blue-700'
+                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
                         }`}
                 >
-                    <Scale size={16} />
                     {showPreview ? 'Hide Preview' : 'Show Preview'}
                 </button>
             </div>
