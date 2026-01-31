@@ -1,7 +1,7 @@
 'use client'
 
 import { useEditorStore, EditorElement } from '@/app/store/useEditorStore'
-import { Type, Heading, List, Image as ImageIcon, Minus, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, AlignJustify, Sparkles, Trash2, Copy, Layers } from 'lucide-react'
+import { Type, Heading, List, Image as ImageIcon, Minus, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, AlignJustify, Sparkles, Trash2, Copy, Layers, Maximize2 } from 'lucide-react'
 
 export default function EditorSidebar() {
     const {
@@ -26,8 +26,8 @@ export default function EditorSidebar() {
         e.dataTransfer.effectAllowed = 'copy'
     }
 
-    const updateStyle = (key: keyof typeof selectedElement.style, value: any) => {
-        if (!selectedId) return
+    const updateStyle = (key: string, value: any) => {
+        if (!selectedId || !selectedElement) return
         updateElementStyle(selectedId, { [key]: value })
     }
 
@@ -123,18 +123,50 @@ export default function EditorSidebar() {
                     {/* 3. Style & Layer Controls */}
                     {selectedElement && (
                         <div className="p-6 bg-gray-50 flex-1 space-y-6">
-                            {/* Element Info */}
+                            {/* Dimensions & Rotation */}
                             <div>
-                                <h4 className="text-sm font-semibold text-gray-700 mb-3">Element Properties</h4>
-                                <div className="space-y-2 text-xs">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">Position:</span>
-                                        <span className="text-gray-900 font-mono">{Math.round(selectedElement.x)}, {Math.round(selectedElement.y)}</span>
+                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                    <Maximize2 size={16} className="text-blue-500" />
+                                    Transform
+                                </h4>
+                                <div className="grid grid-cols-2 gap-3 mb-3">
+                                    <div className="bg-white p-2 border border-gray-200 rounded-lg shadow-sm">
+                                        <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Rotation</label>
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="number"
+                                                value={selectedElement.style.rotate || 0}
+                                                onChange={(e) => updateStyle('rotate', parseInt(e.target.value))}
+                                                className="w-full text-xs font-mono outline-none"
+                                            />
+                                            <span className="text-[10px] text-gray-400">°</span>
+                                        </div>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-600">Size:</span>
-                                        <span className="text-gray-900 font-mono">{Math.round(selectedElement.style.width)} × {Math.round(selectedElement.style.height)}</span>
+                                    <div className="bg-white p-2 border border-gray-200 rounded-lg shadow-sm">
+                                        <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Opacity</label>
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                max="1"
+                                                step="0.1"
+                                                value={selectedElement.style.opacity || 1}
+                                                onChange={(e) => updateStyle('opacity', parseFloat(e.target.value))}
+                                                className="w-full text-xs font-mono outline-none"
+                                            />
+                                        </div>
                                     </div>
+                                </div>
+                                <div className="bg-white p-2 border border-gray-200 rounded-lg shadow-sm">
+                                    <label className="block text-[10px] uppercase font-bold text-gray-400 mb-1">Corner Radius</label>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={selectedElement.style.borderRadius || 0}
+                                        onChange={(e) => updateStyle('borderRadius', parseInt(e.target.value))}
+                                        className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                    />
                                 </div>
                             </div>
 
@@ -181,21 +213,19 @@ export default function EditorSidebar() {
                                 <div className="flex gap-2 mb-3">
                                     <button
                                         onClick={() => updateStyle('fontWeight', selectedElement.style.fontWeight === '700' ? '400' : '700')}
-                                        className={`flex-1 p-2 rounded text-sm font-bold transition-all ${
-                                            selectedElement.style.fontWeight === '700'
-                                                ? 'bg-blue-500 text-white'
-                                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                        }`}
+                                        className={`flex-1 p-2 rounded text-sm font-bold transition-all ${selectedElement.style.fontWeight === '700'
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                            }`}
                                     >
                                         <Bold size={14} className="mx-auto" />
                                     </button>
                                     <button
                                         onClick={() => updateStyle('fontStyle', selectedElement.style.fontStyle === 'italic' ? 'normal' : 'italic')}
-                                        className={`flex-1 p-2 rounded text-sm font-italic transition-all ${
-                                            selectedElement.style.fontStyle === 'italic'
-                                                ? 'bg-blue-500 text-white'
-                                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                        }`}
+                                        className={`flex-1 p-2 rounded text-sm font-italic transition-all ${selectedElement.style.fontStyle === 'italic'
+                                            ? 'bg-blue-500 text-white'
+                                            : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                            }`}
                                     >
                                         <Italic size={14} className="mx-auto" />
                                     </button>
@@ -207,11 +237,10 @@ export default function EditorSidebar() {
                                         <button
                                             key={align}
                                             onClick={() => updateStyle('textAlign', align)}
-                                            className={`flex-1 p-2 rounded text-sm transition-all ${
-                                                selectedElement.style.textAlign === align
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                            }`}
+                                            className={`flex-1 p-2 rounded text-sm transition-all ${selectedElement.style.textAlign === align
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                                }`}
                                         >
                                             {align === 'left' && <AlignLeft size={14} className="mx-auto" />}
                                             {align === 'center' && <AlignCenter size={14} className="mx-auto" />}
@@ -269,14 +298,16 @@ export default function EditorSidebar() {
                                 </div>
                             </div>
 
-                            {/* Delete Button */}
-                            <button
-                                onClick={() => removeElement(selectedId!)}
-                                className="w-full py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
-                            >
-                                <Trash2 size={16} />
-                                Delete Element
-                            </button>
+                            {/* Delete & Actions */}
+                            <div className="pt-4 space-y-3">
+                                <button
+                                    onClick={() => removeElement(selectedId!)}
+                                    className="w-full py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all border border-red-100 shadow-sm"
+                                >
+                                    <Trash2 size={16} />
+                                    Delete Element
+                                </button>
+                            </div>
                         </div>
                     )}
                 </>

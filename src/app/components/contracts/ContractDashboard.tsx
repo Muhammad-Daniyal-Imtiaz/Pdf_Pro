@@ -139,7 +139,7 @@ export default function ContractDashboard() {
                                         <td className="p-4">
                                             <div className="flex items-center gap-1.5">
                                                 {contract.status === 'signed' && <CheckCircle className="w-4 h-4 text-green-500" />}
-                                                {contract.status === 'generated' && <CheckCircle className="w-4 h-4 text-green-500" />}
+                                                {contract.status === 'pending' && <Clock className="w-4 h-4 text-yellow-500" />}
                                                 {contract.status === 'draft' && <Clock className="w-4 h-4 text-yellow-500" />}
                                                 <span className="capitalize text-sm text-gray-600">{contract.status}</span>
                                             </div>

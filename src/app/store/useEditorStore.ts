@@ -42,7 +42,7 @@ export interface EditorStyle {
     borderWidth?: number
 
     // Transform
-    rotation?: number
+    rotate?: number
     opacity?: number
     zIndex?: number
 }
@@ -112,6 +112,7 @@ interface EditorState {
     sendToBack: (id: string) => void
     bringToFront: (id: string) => void
 
+    duplicateElement: (id: string) => void
     undo: () => void
     redo: () => void
 }
@@ -148,7 +149,7 @@ const DEFAULT_STYLE: EditorStyle = {
     borderWidth: 0,
 
     // Transform
-    rotation: 0,
+    rotate: 0,
     opacity: 1,
     zIndex: 0
 }
@@ -292,6 +293,23 @@ export const useEditorStore = create<EditorState>((set) => ({
         return { elements: element ? [element, ...newElements] : newElements, past: newPast, future: [] }
     }),
 
+    duplicateElement: (id: string) => set((state: EditorState) => {
+        const sel = state.elements.find(el => el.id === id)
+        if (!sel) return state
+        const newPast = [...state.past, state.elements]
+        const newElement: EditorElement = {
+            ...sel,
+            id: `el-${Date.now()}`,
+            x: sel.x + 20,
+            y: sel.y + 20
+        }
+        return {
+            elements: [...state.elements, newElement],
+            selectedId: newElement.id,
+            past: newPast,
+            future: []
+        }
+    }),
     bringToFront: (id: string) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
         const newElements = state.elements.filter(el => el.id !== id)

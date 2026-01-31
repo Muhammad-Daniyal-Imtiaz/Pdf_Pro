@@ -32,28 +32,46 @@ export async function generatePDFFromCanvas(
     try {
         // Capture the canvas
         const canvas = await html2canvas(canvasElement, {
-            scale: 2.0, // Stable scale for all DPIs
+            scale: 3, // Higher scale for ultra-sharp text
             useCORS: true,
             allowTaint: true,
             backgroundColor: '#ffffff',
             logging: debug,
             scrollX: 0,
             scrollY: 0,
+            imageTimeout: 15000,
+            removeContainer: true,
             onclone: (doc) => {
+                // Find the canvas in the cloned doc
+                const clonedCanvas = doc.querySelector('.editor-canvas') as HTMLElement
+                if (clonedCanvas) {
+                    clonedCanvas.style.transform = 'none'
+                    clonedCanvas.style.boxShadow = 'none'
+                    clonedCanvas.style.margin = '0'
+                    clonedCanvas.style.border = 'none'
+                }
+
                 // Add a style block to cloned document to prevent modern CSS parsing issues
                 const style = doc.createElement('style')
                 style.innerHTML = `
                     * {
-                        /* Prevent html2canvas from choking on modern colors if they leak in */
+                        /* Force standard color space */
                         color-scheme: light !important;
                         box-sizing: border-box !important;
+                        -webkit-font-smoothing: antialiased !important;
+                        text-rendering: optimizeLegibility !important;
+                    }
+                    /* Ensure text is not truncated or hidden */
+                    .editor-canvas div {
+                        overflow: visible !important;
                     }
                     /* Hide UI elements from final PDF */
                     .resize-handle, 
                     .SelectionRing,
                     .HoverIndicator,
                     .MeasurementTooltip,
-                    .SelectionLabel { 
+                    .SelectionLabel,
+                    .absolute.-top-12.left-1\/2 { 
                         display: none !important; 
                     }
                 `

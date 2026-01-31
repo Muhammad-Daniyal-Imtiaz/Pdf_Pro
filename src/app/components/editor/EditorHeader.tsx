@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -6,11 +5,8 @@ import { useEditorStore } from '../../store/useEditorStore'
 import { FileText, FileSpreadsheet, Scale, Download, Loader2, RotateCcw, RotateCw } from 'lucide-react'
 
 export default function EditorHeader() {
-    const { activeTab, setTab, docTitle, setDocTitle, showTitle, toggleShowTitle, undo, redo, showPreview, setShowPreview } = useEditorStore()
+    const { activeTab, setTab, docTitle, setDocTitle, showTitle, toggleShowTitle, undo, redo } = useEditorStore()
     const [isGenerating, setIsGenerating] = useState(false)
-
-    // PDF generation now handled by EditorMain using html2canvas
-    // Header just provides title and navigation
 
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-10 sticky top-0 shadow-sm">
@@ -79,18 +75,7 @@ export default function EditorHeader() {
                 </button>
             </nav>
 
-            <div className="flex items-center gap-4">
-                <button
-                    onClick={() => setShowPreview(!showPreview)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md active:scale-95 ${showPreview
-                            ? 'bg-purple-600 text-white hover:bg-purple-700'
-                            : 'bg-white text-purple-600 border border-purple-200 hover:bg-purple-50'
-                        }`}
-                >
-                    <Scale size={16} />
-                    {showPreview ? 'Hide Preview' : 'Show Preview'}
-                </button>
-            </div>
+            {/* Remove preview toggle from here - it's now in the layout */}
         </header>
     )
 }
