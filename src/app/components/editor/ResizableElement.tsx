@@ -229,6 +229,7 @@ export default function ResizableElement({
             {/* Selection Ring - Fixed Style */}
             {isSelected && (
                 <div
+                    data-html2canvas-ignore="true"
                     className="absolute inset-[-2px] pointer-events-none z-50 shadow-sm"
                     style={{
                         border: '2px solid #3B82F6', // Solid Blue
@@ -240,6 +241,7 @@ export default function ResizableElement({
             {/* Hover Indicator */}
             {!isSelected && (
                 <div
+                    data-html2canvas-ignore="true"
                     className="absolute inset-0 pointer-events-none group-hover:border"
                     style={{ borderColor: '#d1d5db' }}
                 />
@@ -247,6 +249,7 @@ export default function ResizableElement({
             {/* Measurement Tooltip */}
             {(isDragging || isResizing) && showMeasurement && (
                 <div
+                    data-html2canvas-ignore="true"
                     className="absolute -top-10 left-1/2 -translate-x-1/2 text-white text-[10px] px-2 py-0.5 rounded shadow-lg whitespace-nowrap z-[100] font-mono border"
                     style={{ backgroundColor: '#2563eb', borderColor: '#60a5fa' }}
                 >
@@ -261,6 +264,7 @@ export default function ResizableElement({
             {/* Selection Labels */}
             {isSelected && !isDragging && !isResizing && (
                 <div
+                    data-html2canvas-ignore="true"
                     className="absolute -top-6 left-0 text-white text-[9px] px-1.5 py-0.5 rounded-t font-medium tracking-wider uppercase"
                     style={{ backgroundColor: '#3b82f6' }}
                 >
@@ -273,6 +277,7 @@ export default function ResizableElement({
                 RESIZE_HANDLES.map((handle) => (
                     <div
                         key={handle}
+                        data-html2canvas-ignore="true"
                         className={`resize-handle absolute w-3 h-3 bg-white border-2 rounded-full z-[60] shadow-sm hover:scale-125 transition-transform ${isResizing === handle ? 'scale-150' : ''}`}
                         style={{
                             ...getHandlePosition(handle),
@@ -304,7 +309,9 @@ export default function ResizableElement({
                         style={{
                             textAlign: el.style.textAlign as any,
                             minHeight: '100%',
-                            display: 'block'
+                            display: 'block',
+                            direction: 'ltr',
+                            unicodeBidi: 'plaintext'
                         }}
                     >
                         {el.content}
