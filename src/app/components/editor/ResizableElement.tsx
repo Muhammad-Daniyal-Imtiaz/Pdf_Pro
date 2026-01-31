@@ -54,7 +54,7 @@ export default function ResizableElement({
         setDragStart({ x: e.clientX - el.x, y: e.clientY - el.y })
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = React.useCallback((e: MouseEvent) => {
         if (isDragging && !isResizing) {
             const newX = e.clientX - dragStart.x
             const newY = e.clientY - dragStart.y
@@ -80,14 +80,14 @@ export default function ResizableElement({
                     newWidth = Math.max(minWidth, mouseX)
                     break
                 case 'w':
-                    newWidth = Math.max(minWidth, initialSize.width - (mouseX - dragStart.x))
+                    newWidth = Math.max(minWidth, initialSize.width - (e.clientX - dragStart.x))
                     onMove(el.id, el.x + (initialSize.width - newWidth), el.y)
                     break
                 case 's':
                     newHeight = Math.max(minHeight, mouseY)
                     break
                 case 'n':
-                    newHeight = Math.max(minHeight, initialSize.height - (mouseY - dragStart.y))
+                    newHeight = Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
                     onMove(el.id, el.x, el.y + (initialSize.height - newHeight))
                     break
                 case 'se':
@@ -95,30 +95,42 @@ export default function ResizableElement({
                     newHeight = Math.max(minHeight, mouseY)
                     break
                 case 'sw':
-                    newWidth = Math.max(minWidth, initialSize.width - (mouseX - dragStart.x))
+                    newWidth = Math.max(minWidth, initialSize.width - (e.clientX - dragStart.x))
                     newHeight = Math.max(minHeight, mouseY)
                     onMove(el.id, el.x + (initialSize.width - newWidth), el.y)
                     break
                 case 'ne':
                     newWidth = Math.max(minWidth, mouseX)
-                    newHeight = Math.max(minHeight, initialSize.height - (mouseY - dragStart.y))
+                    newHeight = Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
                     onMove(el.id, el.x, el.y + (initialSize.height - newHeight))
                     break
                 case 'nw':
-                    newWidth = Math.max(minWidth, initialSize.width - (mouseX - dragStart.x))
-                    newHeight = Math.max(minHeight, initialSize.height - (mouseY - dragStart.y))
+                    newWidth = Math.max(minWidth, initialSize.width - (e.clientX - dragStart.x))
+                    newHeight = Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
                     onMove(el.id, el.x + (initialSize.width - newWidth), el.y + (initialSize.height - newHeight))
                     break
             }
 
             onResize(el.id, newWidth, newHeight)
         }
-    }
+    }, [isDragging, isResizing, el, dragStart, initialSize, onMove, onResize])
 
-    const handleMouseUp = () => {
+    const handleMouseUp = React.useCallback(() => {
         setIsDragging(false)
         setIsResizing(null)
-    }
+    }, [])
+
+    // Attach global mouse event listeners
+    React.useEffect(() => {
+        if (isDragging || isResizing) {
+            document.addEventListener('mousemove', handleMouseMove)
+            document.addEventListener('mouseup', handleMouseUp)
+            return () => {
+                document.removeEventListener('mousemove', handleMouseMove)
+                document.removeEventListener('mouseup', handleMouseUp)
+            }
+        }
+    }, [isDragging, isResizing, handleMouseMove, handleMouseUp])
 
     const handleResizeStart = (handle: ResizeHandle, e: React.MouseEvent) => {
         e.preventDefault()
@@ -199,14 +211,15 @@ export default function ResizableElement({
         borderWidth: el.style.borderWidth,
         borderRadius: el.style.borderRadius,
         opacity: el.style.opacity,
-        // overflow: 'hidden', // Disabled to allow measurement/overflow visibility if needed temporarily
+        overflow: 'visible',
         display: 'flex',
-        alignItems: 'flex-start', // specific fix for text alignment vertical
-        justifyContent: 'flex-start', // Let text-align handle inside
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         cursor: isEditing ? 'text' : isDragging ? 'grabbing' : 'grab',
         userSelect: 'none' as any,
         transition: isResizing ? 'none' : 'border-color 0.2s',
-        direction: 'ltr', // Fix text rendering direction
+        direction: 'ltr',
+        textDirection: 'ltr'
     }
 
     return (
@@ -311,7 +324,10 @@ export default function ResizableElement({
                             minHeight: '100%',
                             display: 'block',
                             direction: 'ltr',
-                            unicodeBidi: 'plaintext'
+                            unicodeBidi: 'bidi-override',
+                            textOrientation: 'mixed',
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word'
                         }}
                     >
                         {el.content}
