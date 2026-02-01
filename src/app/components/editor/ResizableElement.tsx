@@ -2,6 +2,9 @@
 
 import React, { useRef, useState } from 'react'
 import { EditorElement } from '@/app/store/useEditorStore'
+import SocialIconElement from './SocialIconElement'
+import LinkElement from './LinkElement'
+import LineElement from './LineElement'
 
 interface ResizableElementProps {
     el: EditorElement
@@ -304,6 +307,54 @@ export default function ResizableElement({
                     <div
                         className="w-full h-0 border-t absolute top-1/2 -translate-y-1/2"
                         style={{ borderColor: '#9ca3af' }}
+                    />
+                ) : el.type === 'social-icon' ? (
+                    <SocialIconElement
+                        element={el}
+                        isSelected={isSelected}
+                        onSelect={() => onSelect(el.id)}
+                        onUpdate={(updates) => {
+                            // Handle updates for social icon
+                            Object.keys(updates).forEach(key => {
+                                if (key === 'style') {
+                                    Object.assign(el.style, updates.style)
+                                } else {
+                                    el[key] = updates[key]
+                                }
+                            })
+                        }}
+                    />
+                ) : el.type === 'link' ? (
+                    <LinkElement
+                        element={el}
+                        isSelected={isSelected}
+                        onSelect={() => onSelect(el.id)}
+                        onUpdate={(updates) => {
+                            // Handle updates for link
+                            Object.keys(updates).forEach(key => {
+                                if (key === 'style') {
+                                    Object.assign(el.style, updates.style)
+                                } else {
+                                    el[key] = updates[key]
+                                }
+                            })
+                        }}
+                    />
+                ) : el.type === 'line' ? (
+                    <LineElement
+                        element={el}
+                        isSelected={isSelected}
+                        onSelect={() => onSelect(el.id)}
+                        onUpdate={(updates) => {
+                            // Handle updates for line
+                            Object.keys(updates).forEach(key => {
+                                if (key === 'style') {
+                                    Object.assign(el.style, updates.style)
+                                } else {
+                                    el[key] = updates[key]
+                                }
+                            })
+                        }}
                     />
                 ) : (
                     <div

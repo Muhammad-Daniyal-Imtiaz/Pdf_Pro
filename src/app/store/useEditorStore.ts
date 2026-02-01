@@ -40,21 +40,33 @@ export interface EditorStyle {
     // Borders
     borderRadius?: number
     borderWidth?: number
+    borderStyle?: 'solid' | 'dashed' | 'dotted'
 
     // Transform
     rotation?: number
     opacity?: number
     zIndex?: number
+
+    // Link styling
+    linkColor?: string
+    linkDecoration?: 'none' | 'underline' | 'line-through'
 }
 
 export interface EditorElement {
     id: string
-    type: 'heading' | 'paragraph' | 'list' | 'image' | 'divider'
+    type: 'heading' | 'paragraph' | 'list' | 'image' | 'divider' | 'social-icon' | 'link' | 'line'
     content: string
     style: EditorStyle
     // Absolute positioning (in pixels)
     x: number
     y: number
+    // Additional properties for specific element types
+    iconType?: string // For social icons
+    url?: string // For links
+    phoneNumber?: string // For phone numbers
+    lineOrientation?: 'horizontal' | 'vertical' // For lines
+    lineStyle?: 'solid' | 'dashed' | 'dotted' // For lines
+    isClickable?: boolean // For links/phone numbers
 }
 
 interface EditorState {
@@ -81,6 +93,12 @@ interface EditorState {
     showPreview: boolean
     zoom: number
 
+    // Auto-save
+    lastSaved: Date | null
+    isAutoSaving: boolean
+    toggleAutoSave: () => void
+    saveDocument: () => Promise<void>
+
     // Interface State
     isSidebarCollapsed: boolean
     toggleSidebar: () => void
@@ -99,6 +117,8 @@ interface EditorState {
     setZoom: (zoom: number) => void
 
     addElement: (type: EditorElement['type']) => void
+    addSocialIcon: (iconType: string) => void
+    addLine: (orientation: 'horizontal' | 'vertical') => void
     updateElement: (id: string, updates: Partial<EditorElement>) => void
     updateElementStyle: (id: string, styleUpdates: Partial<EditorStyle>) => void
 
@@ -150,11 +170,16 @@ const DEFAULT_STYLE: EditorStyle = {
     // Borders
     borderRadius: 0,
     borderWidth: 0,
+    borderStyle: 'solid',
 
     // Transform
     rotation: 0,
     opacity: 1,
-    zIndex: 0
+    zIndex: 0,
+
+    // Link styling
+    linkColor: '#0066cc',
+    linkDecoration: 'underline'
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -188,6 +213,8 @@ export const useEditorStore = create<EditorState>((set) => ({
     showGuides: true,
     showPreview: true,
     zoom: 100,
+    lastSaved: null,
+    isAutoSaving: true,
 
     setTab: (tab: 'document' | 'cv' | 'contracts') => set({ activeTab: tab }),
     setEditMode: (mode: 'manual' | 'ai') => set({ editMode: mode }),
@@ -204,6 +231,14 @@ export const useEditorStore = create<EditorState>((set) => ({
     isSidebarCollapsed: false,
     toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
 
+    // Auto-save functionality
+    toggleAutoSave: () => set((state) => ({ isAutoSaving: !state.isAutoSaving })),
+    saveDocument: async () => {
+        // This would integrate with your backend API
+        console.log('Document saved')
+        set({ lastSaved: new Date() })
+    },
+
     addElement: (type: EditorElement['type']) => set((state: EditorState) => {
         const newPast = [...state.past, state.elements]
         const baseX = 60
@@ -211,7 +246,7 @@ export const useEditorStore = create<EditorState>((set) => ({
         const newElement: EditorElement = {
             id: `el-${Date.now()}`,
             type,
-            content: type === 'heading' ? 'New Heading' : type === 'paragraph' ? 'Start typing...' : type === 'list' ? '• List item' : '',
+            content: type === 'heading' ? 'New Heading' : type === 'paragraph' ? 'Start typing...' : type === 'list' ? '• List item' : type === 'link' ? 'https://example.com' : '',
             x: baseX,
             y: baseY,
             style: {
@@ -219,7 +254,61 @@ export const useEditorStore = create<EditorState>((set) => ({
                 fontSize: type === 'heading' ? 22 : 14,
                 fontWeight: type === 'heading' ? '700' : '400',
                 width: type === 'heading' ? 500 : 450,
-                height: type === 'heading' ? 50 : 60
+                height: type === 'heading' ? 50 : 60,
+                linkColor: type === 'link' ? '#0066cc' : DEFAULT_STYLE.linkColor,
+                linkDecoration: type === 'link' ? 'underline' : DEFAULT_STYLE.linkDecoration
+            },
+            isClickable: type === 'link'
+        }
+        return {
+            elements: [...state.elements, newElement],
+            selectedId: newElement.id,
+            past: newPast,
+            future: []
+        }
+    }),
+
+    addSocialIcon: (iconType: string) => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        const newElement: EditorElement = {
+            id: `icon-${Date.now()}`,
+            type: 'social-icon',
+            content: iconType,
+            iconType,
+            x: 100 + (state.elements.length * 30),
+            y: 100 + (state.elements.length * 30),
+            style: {
+                ...DEFAULT_STYLE,
+                width: 40,
+                height: 40,
+                fontSize: 24
+            }
+        }
+        return {
+            elements: [...state.elements, newElement],
+            selectedId: newElement.id,
+            past: newPast,
+            future: []
+        }
+    }),
+
+    addLine: (orientation: 'horizontal' | 'vertical') => set((state: EditorState) => {
+        const newPast = [...state.past, state.elements]
+        const newElement: EditorElement = {
+            id: `line-${Date.now()}`,
+            type: 'line',
+            content: '',
+            lineOrientation: orientation,
+            lineStyle: 'solid',
+            x: 100,
+            y: 200 + (state.elements.length * 20),
+            style: {
+                ...DEFAULT_STYLE,
+                width: orientation === 'horizontal' ? 200 : 2,
+                height: orientation === 'vertical' ? 100 : 2,
+                backgroundColor: '#000000',
+                borderWidth: orientation === 'horizontal' ? 2 : 0,
+                borderStyle: 'solid'
             }
         }
         return {

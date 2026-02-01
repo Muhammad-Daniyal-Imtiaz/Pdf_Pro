@@ -4,7 +4,10 @@ import { useEditorStore } from '@/app/store/useEditorStore'
 import ResizableElement from './ResizableElement'
 import { downloadPDF } from '@/app/lib/pdf-service'
 import LivePDFPreview from './LivePDFPreview'
-import { Loader2, MousePointer2, Move, Maximize, Grid, ArrowDownToLine, LayoutTemplate, FileText } from 'lucide-react'
+import { Loader2, MousePointer2, Move, Maximize, Grid, ArrowDownToLine, LayoutTemplate, FileText, Save, Clock } from 'lucide-react'
+import ErrorBoundary from '../ErrorBoundary'
+import { useAutoSave } from '@/app/hooks/useAutoSave'
+import LoadingSpinner from '../LoadingSpinner'
 
 export default function EditorMain() {
     const {
@@ -13,6 +16,8 @@ export default function EditorMain() {
         selectElement,
         updateElement,
         addElement,
+        addSocialIcon,
+        addLine,
         showTitle,
         docTitle,
         setDocTitle,
@@ -21,14 +26,19 @@ export default function EditorMain() {
         removeElement,
         showPreview,
         setShowPreview,
-        isSidebarCollapsed
+        isSidebarCollapsed,
+        isAutoSaving,
+        lastSaved
     } = useEditorStore()
+
+    const { lastSaved: autoSaveLastSaved } = useAutoSave(30000) // 30 seconds
 
     const [editingId, setEditingId] = React.useState<string | null>(null)
     const [showGrid, setShowGrid] = useState(true)
     const [showRulers, setShowRulers] = useState(true)
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+    const [isLoading, setIsLoading] = useState(false)
 
     const canvasRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
@@ -40,9 +50,44 @@ export default function EditorMain() {
 
     const selectedElement = elements.find(el => el.id === selectedId)
 
+    // Download PDF using html2canvas for perfect WYSIWYG
+    const handleDownloadPDF = async () => {
+        if (!canvasRef.current) return
+
+        // Deselect element to ensure no UI artifacts (selection rings/blue lines) are captured
+        selectElement(null)
+        setEditingId(null)
+
+        // Short delay to allow React to render the deselected state
+        await new Promise(resolve => setTimeout(resolve, 50))
+
+        setIsGeneratingPDF(true)
+        try {
+            await downloadPDF(
+                canvasRef.current,
+                `${docTitle.replace(/\s+/g, '-').toLowerCase() || 'document'}.pdf`,
+                {
+                    quality: 2,
+                    scale: 2,
+                    debug: false
+                }
+            )
+        } catch (error) {
+            console.error('Failed to generate PDF:', error)
+            alert('Failed to generate PDF. Please try again.')
+        } finally {
+            setIsGeneratingPDF(false)
+        }
+    }
+
     // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            // Prevent shortcuts when typing in input fields
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
+                return
+            }
+
             // Ctrl+G or Cmd+G - toggle grid
             if ((e.ctrlKey || e.metaKey) && e.key === 'g') {
                 e.preventDefault()
@@ -57,26 +102,111 @@ export default function EditorMain() {
                 return
             }
 
-            if (!selectedId) return
+            // Ctrl+S or Cmd+S - save document
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault()
+                // Trigger save
+                console.log('Save shortcut triggered')
+                return
+            }
 
-            // Delete Element
-            if (e.key === 'Delete') {
+            // Ctrl+Z or Cmd+Z - undo
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+                e.preventDefault()
+                // Undo functionality would go here
+                console.log('Undo shortcut triggered')
+                return
+            }
+
+            // Ctrl+Shift+Z or Cmd+Shift+Z - redo
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'z') {
+                e.preventDefault()
+                // Redo functionality would go here
+                console.log('Redo shortcut triggered')
+                return
+            }
+
+            // Ctrl+A or Cmd+A - select all
+            if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+                e.preventDefault()
+                // Select all functionality would go here
+                console.log('Select all shortcut triggered')
+                return
+            }
+
+            // Delete or Backspace - delete selected element
+            if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
+                e.preventDefault()
                 removeElement(selectedId)
                 selectElement(null)
                 return
             }
 
-            // Escape to deselect
+            // Escape - deselect
             if (e.key === 'Escape') {
                 selectElement(null)
                 setEditingId(null)
                 return
             }
+
+            // Arrow keys - move selected element
+            if (selectedId && selectedElement) {
+                const moveAmount = e.shiftKey ? 10 : 1 // Move faster with Shift
+                
+                switch(e.key) {
+                    case 'ArrowUp':
+                        e.preventDefault()
+                        moveElement(selectedId, selectedElement.x, selectedElement.y - moveAmount)
+                        break
+                    case 'ArrowDown':
+                        e.preventDefault()
+                        moveElement(selectedId, selectedElement.x, selectedElement.y + moveAmount)
+                        break
+                    case 'ArrowLeft':
+                        e.preventDefault()
+                        moveElement(selectedId, selectedElement.x - moveAmount, selectedElement.y)
+                        break
+                    case 'ArrowRight':
+                        e.preventDefault()
+                        moveElement(selectedId, selectedElement.x + moveAmount, selectedElement.y)
+                        break
+                }
+            }
+
+            // Number keys - quick add elements
+            if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+                switch(e.key) {
+                    case '1':
+                        e.preventDefault()
+                        addElement('heading')
+                        break
+                    case '2':
+                        e.preventDefault()
+                        addElement('paragraph')
+                        break
+                    case '3':
+                        e.preventDefault()
+                        addElement('list')
+                        break
+                    case '4':
+                        e.preventDefault()
+                        addElement('link')
+                        break
+                    case '5':
+                        e.preventDefault()
+                        addLine('horizontal')
+                        break
+                    case '6':
+                        e.preventDefault()
+                        addLine('vertical')
+                        break
+                }
+            }
         }
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [selectedId, removeElement, selectElement])
+    }, [selectedId, selectedElement, removeElement, selectElement, moveElement, addElement, addLine, showGrid, handleDownloadPDF])
 
     // Auto-save logic
     useEffect(() => {
@@ -115,38 +245,9 @@ export default function EditorMain() {
         }
     }
 
-    // Download PDF using html2canvas for perfect WYSIWYG
-    const handleDownloadPDF = async () => {
-        if (!canvasRef.current) return
-
-        // Deselect element to ensure no UI artifacts (selection rings/blue lines) are captured
-        selectElement(null)
-        setEditingId(null)
-
-        // Short delay to allow React to render the deselected state
-        await new Promise(resolve => setTimeout(resolve, 50))
-
-        setIsGeneratingPDF(true)
-        try {
-            await downloadPDF(
-                canvasRef.current,
-                `${docTitle.replace(/\s+/g, '-').toLowerCase() || 'document'}.pdf`,
-                {
-                    quality: 2,
-                    scale: 2,
-                    debug: false
-                }
-            )
-        } catch (error) {
-            console.error('Failed to generate PDF:', error)
-            alert('Failed to generate PDF. Please try again.')
-        } finally {
-            setIsGeneratingPDF(false)
-        }
-    }
-
     return (
-        <main className="flex-1 bg-gray-100/50 overflow-hidden h-[calc(100vh-64px)] flex flex-col relative">
+        <ErrorBoundary>
+            <main className="flex-1 bg-gray-100/50 overflow-hidden h-[calc(100vh-64px)] flex flex-col relative">
             {/* Toolbar */}
             <div className="h-12 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
                 <div className="flex items-center gap-2">
@@ -352,9 +453,22 @@ export default function EditorMain() {
                             <span className="flex items-center gap-1.5 text-gray-400">|</span>
                         </>
                     )}
-                    <span className="opacity-75">Auto-saved</span>
+                    {isAutoSaving && (
+                        <>
+                            <span className="flex items-center gap-1.5 text-green-600">
+                                <Clock size={10} />
+                                Auto-save: {autoSaveLastSaved ? autoSaveLastSaved.toLocaleTimeString() : 'Enabled'}
+                            </span>
+                            <span className="flex items-center gap-1.5 text-gray-400">|</span>
+                        </>
+                    )}
+                    <span className="opacity-75 flex items-center gap-1">
+                        <Save size={10} />
+                        Ready
+                    </span>
                 </div>
             </div>
-        </main>
+            </main>
+        </ErrorBoundary>
     )
 }

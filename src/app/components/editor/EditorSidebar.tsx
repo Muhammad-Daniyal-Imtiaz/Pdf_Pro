@@ -1,17 +1,23 @@
 'use client'
 
 import { useEditorStore, EditorElement } from '@/app/store/useEditorStore'
-import { Type, Heading, List, Image as ImageIcon, Minus, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, AlignJustify, Sparkles, Trash2, Copy, Layers, ChevronLeft, ChevronRight, Settings, Grid, Monitor } from 'lucide-react'
+import { Type, Heading, List, Image as ImageIcon, Minus, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, AlignJustify, Sparkles, Trash2, Copy, Layers, ChevronLeft, ChevronRight, Settings, Grid, Monitor, Link, Phone, Share2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import SocialIcons from './SocialIcons'
+import LineControls from './LineControls'
+import LinkControls from './LinkControls'
 
 export default function EditorSidebar() {
     const {
         editMode,
         setEditMode,
         addElement,
+        addSocialIcon,
+        addLine,
         selectedId,
         elements,
         updateElementStyle,
+        updateElement,
         removeElement,
         raiseElement,
         lowerElement,
@@ -193,7 +199,50 @@ export default function EditorSidebar() {
                                     <Minus size={16} className="text-gray-600" />
                                     {!isSidebarCollapsed && <span className="text-xs font-medium text-gray-700">Divider</span>}
                                 </button>
+
+                                <button
+                                    onClick={() => addElement('link')}
+                                    title="Link"
+                                    className={`
+                                        flex items-center gap-2 border rounded-lg transition-colors
+                                        ${isSidebarCollapsed ? 'justify-center p-2' : 'p-3 bg-cyan-50 hover:bg-cyan-100 border-cyan-200'}
+                                    `}
+                                >
+                                    <Link size={16} className="text-cyan-600" />
+                                    {!isSidebarCollapsed && <span className="text-xs font-medium text-cyan-700">Link</span>}
+                                </button>
+
+                                <button
+                                    onClick={() => addLine('horizontal')}
+                                    title="Horizontal Line"
+                                    className={`
+                                        flex items-center gap-2 border rounded-lg transition-colors
+                                        ${isSidebarCollapsed ? 'justify-center p-2' : 'p-3 bg-orange-50 hover:bg-orange-100 border-orange-200'}
+                                    `}
+                                >
+                                    <Minus size={16} className="text-orange-600" />
+                                    {!isSidebarCollapsed && <span className="text-xs font-medium text-orange-700">H-Line</span>}
+                                </button>
+
+                                <button
+                                    onClick={() => addLine('vertical')}
+                                    title="Vertical Line"
+                                    className={`
+                                        flex items-center gap-2 border rounded-lg transition-colors
+                                        ${isSidebarCollapsed ? 'justify-center p-2' : 'p-3 bg-pink-50 hover:bg-pink-100 border-pink-200'}
+                                    `}
+                                >
+                                    <div className="w-4 h-4 bg-pink-600 rounded-full" />
+                                    {!isSidebarCollapsed && <span className="text-xs font-medium text-pink-700">V-Line</span>}
+                                </button>
                             </div>
+                        </div>
+
+                        {/* Social Icons Section */}
+                        <div className="p-4 border-b border-gray-100">
+                            {!isSidebarCollapsed && (
+                                <SocialIcons onIconSelect={addSocialIcon} />
+                            )}
                         </div>
 
                         {/* 3. Style & Layer Controls */}
@@ -216,99 +265,167 @@ export default function EditorSidebar() {
                                             </div>
                                         </div>
 
-                                        {/* Typography Controls */}
-                                        <div>
-                                            <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                                <Type size={16} />
-                                                Typography
-                                            </h4>
+                                        {/* Element-specific Controls */}
+                                        {selectedElement.type === 'line' && (
+                                            <LineControls 
+                                                element={selectedElement} 
+                                                onUpdate={(updates) => updateElement(selectedId!, updates)} 
+                                            />
+                                        )}
+                                        
+                                        {selectedElement.type === 'link' && (
+                                            <LinkControls 
+                                                element={selectedElement} 
+                                                onUpdate={(updates) => updateElement(selectedId!, updates)} 
+                                            />
+                                        )}
 
-                                            {/* Font Family */}
-                                            <div className="mb-3">
-                                                <label className="block text-xs font-medium text-gray-600 mb-2">Font Family</label>
-                                                <select
-                                                    value={selectedElement.style.fontFamily}
-                                                    onChange={(e) => updateStyle('fontFamily', e.target.value)}
-                                                    className="w-full p-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-                                                >
-                                                    <option value="Inter, sans-serif">Inter</option>
-                                                    <option value="Roboto, sans-serif">Roboto</option>
-                                                    <option value="Georgia, serif">Georgia</option>
-                                                    <option value="'Courier New', monospace">Courier New</option>
-                                                    <option value="Arial, sans-serif">Arial</option>
-                                                    <option value="Times New Roman, serif">Times New Roman</option>
-                                                </select>
+                                        {selectedElement.type === 'social-icon' && (
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-3">Social Icon Properties</h4>
+                                                <div className="space-y-3">
+                                                    <div>
+                                                        <label className="block text-xs font-medium text-gray-600 mb-2">
+                                                            Icon Size: {selectedElement.style.fontSize}px
+                                                        </label>
+                                                        <input
+                                                            type="range"
+                                                            min="16"
+                                                            max="64"
+                                                            value={selectedElement.style.fontSize || 24}
+                                                            onChange={(e) => updateStyle('fontSize', parseInt(e.target.value))}
+                                                            className="w-full"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-medium text-gray-600 mb-2">
+                                                            Container Size: {selectedElement.style.width}px
+                                                        </label>
+                                                        <input
+                                                            type="range"
+                                                            min="30"
+                                                            max="100"
+                                                            value={selectedElement.style.width || 40}
+                                                            onChange={(e) => {
+                                                                const size = parseInt(e.target.value)
+                                                                updateStyle('width', size)
+                                                                updateStyle('height', size)
+                                                            }}
+                                                            className="w-full"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-medium text-gray-600 mb-2">
+                                                            Rotation: {selectedElement.style.rotation || 0}°
+                                                        </label>
+                                                        <input
+                                                            type="range"
+                                                            min="0"
+                                                            max="360"
+                                                            value={selectedElement.style.rotation || 0}
+                                                            onChange={(e) => updateStyle('rotation', parseInt(e.target.value))}
+                                                            className="w-full"
+                                                        />
+                                                    </div>
+                                                </div>
                                             </div>
+                                        )}
 
-                                            {/* Font Size */}
-                                            <div className="mb-3">
-                                                <label className="block text-xs font-medium text-gray-600 mb-2">
-                                                    Font Size: {selectedElement.style.fontSize}px
-                                                </label>
-                                                <input
-                                                    type="range"
-                                                    min="8"
-                                                    max="72"
-                                                    value={selectedElement.style.fontSize}
-                                                    onChange={(e) => updateStyle('fontSize', parseInt(e.target.value))}
-                                                    className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                                                />
-                                            </div>
+                                        {/* Typography Controls - Hide for non-text elements */}
+                                        {!['line', 'social-icon'].includes(selectedElement.type) && (
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                                    <Type size={16} />
+                                                    Typography
+                                                </h4>
 
-                                            {/* Font Weight */}
-                                            <div className="flex gap-2 mb-3">
-                                                <button
-                                                    onClick={() => updateStyle('fontWeight', selectedElement.style.fontWeight === '700' ? '400' : '700')}
-                                                    className={`flex-1 p-2 rounded text-sm font-bold transition-all ${selectedElement.style.fontWeight === '700'
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                                        }`}
-                                                >
-                                                    <Bold size={14} className="mx-auto" />
-                                                </button>
-                                                <button
-                                                    onClick={() => updateStyle('fontStyle', selectedElement.style.fontStyle === 'italic' ? 'normal' : 'italic')}
-                                                    className={`flex-1 p-2 rounded text-sm font-italic transition-all ${selectedElement.style.fontStyle === 'italic'
-                                                        ? 'bg-blue-500 text-white'
-                                                        : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                                        }`}
-                                                >
-                                                    <Italic size={14} className="mx-auto" />
-                                                </button>
-                                            </div>
+                                                {/* Font Family */}
+                                                <div className="mb-3">
+                                                    <label className="block text-xs font-medium text-gray-600 mb-2">Font Family</label>
+                                                    <select
+                                                        value={selectedElement.style.fontFamily}
+                                                        onChange={(e) => updateStyle('fontFamily', e.target.value)}
+                                                        className="w-full p-2 text-xs border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                                    >
+                                                        <option value="Inter, sans-serif">Inter</option>
+                                                        <option value="Roboto, sans-serif">Roboto</option>
+                                                        <option value="Georgia, serif">Georgia</option>
+                                                        <option value="'Courier New', monospace">Courier New</option>
+                                                        <option value="Arial, sans-serif">Arial</option>
+                                                        <option value="Times New Roman, serif">Times New Roman</option>
+                                                    </select>
+                                                </div>
 
-                                            {/* Text Alignment */}
-                                            <div className="flex gap-2 mb-3">
-                                                {(['left', 'center', 'right'] as const).map((align) => (
+                                                {/* Font Size */}
+                                                <div className="mb-3">
+                                                    <label className="block text-xs font-medium text-gray-600 mb-2">
+                                                        Font Size: {selectedElement.style.fontSize}px
+                                                    </label>
+                                                    <input
+                                                        type="range"
+                                                        min="8"
+                                                        max="72"
+                                                        value={selectedElement.style.fontSize}
+                                                        onChange={(e) => updateStyle('fontSize', parseInt(e.target.value))}
+                                                        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                                    />
+                                                </div>
+
+                                                {/* Font Weight */}
+                                                <div className="flex gap-2 mb-3">
                                                     <button
-                                                        key={align}
-                                                        onClick={() => updateStyle('textAlign', align)}
-                                                        className={`flex-1 p-2 rounded text-sm transition-all ${selectedElement.style.textAlign === align
+                                                        onClick={() => updateStyle('fontWeight', selectedElement.style.fontWeight === '700' ? '400' : '700')}
+                                                        className={`flex-1 p-2 rounded text-sm font-bold transition-all ${selectedElement.style.fontWeight === '700'
                                                             ? 'bg-blue-500 text-white'
                                                             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                                             }`}
                                                     >
-                                                        {align === 'left' && <AlignLeft size={14} className="mx-auto" />}
-                                                        {align === 'center' && <AlignCenter size={14} className="mx-auto" />}
-                                                        {align === 'right' && <AlignRight size={14} className="mx-auto" />}
+                                                        <Bold size={14} className="mx-auto" />
                                                     </button>
-                                                ))}
-                                            </div>
+                                                    <button
+                                                        onClick={() => updateStyle('fontStyle', selectedElement.style.fontStyle === 'italic' ? 'normal' : 'italic')}
+                                                        className={`flex-1 p-2 rounded text-sm font-italic transition-all ${selectedElement.style.fontStyle === 'italic'
+                                                            ? 'bg-blue-500 text-white'
+                                                            : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                                            }`}
+                                                    >
+                                                        <Italic size={14} className="mx-auto" />
+                                                    </button>
+                                                </div>
 
-                                            {/* Color */}
-                                            <div className="mb-3">
-                                                <label className="block text-xs font-medium text-gray-600 mb-2">Text Color</label>
-                                                <div className="flex items-center gap-2">
-                                                    <input
-                                                        type="color"
-                                                        value={selectedElement.style.color}
-                                                        onChange={(e) => updateStyle('color', e.target.value)}
-                                                        className="w-12 h-10 rounded cursor-pointer border border-gray-300"
-                                                    />
-                                                    <span className="text-xs font-mono text-gray-600">{selectedElement.style.color}</span>
+                                                {/* Text Alignment */}
+                                                <div className="flex gap-2 mb-3">
+                                                    {(['left', 'center', 'right'] as const).map((align) => (
+                                                        <button
+                                                            key={align}
+                                                            onClick={() => updateStyle('textAlign', align)}
+                                                            className={`flex-1 p-2 rounded text-sm transition-all ${selectedElement.style.textAlign === align
+                                                                ? 'bg-blue-500 text-white'
+                                                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                                                }`}
+                                                        >
+                                                            {align === 'left' && <AlignLeft size={14} className="mx-auto" />}
+                                                            {align === 'center' && <AlignCenter size={14} className="mx-auto" />}
+                                                            {align === 'right' && <AlignRight size={14} className="mx-auto" />}
+                                                        </button>
+                                                    ))}
+                                                </div>
+
+                                                {/* Color */}
+                                                <div className="mb-3">
+                                                    <label className="block text-xs font-medium text-gray-600 mb-2">Text Color</label>
+                                                    <div className="flex items-center gap-2">
+                                                        <input
+                                                            type="color"
+                                                            value={selectedElement.style.color}
+                                                            onChange={(e) => updateStyle('color', e.target.value)}
+                                                            className="w-12 h-10 rounded cursor-pointer border border-gray-300"
+                                                        />
+                                                        <span className="text-xs font-mono text-gray-600">{selectedElement.style.color}</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        )}
 
                                         {/* Layer Controls */}
                                         <div>

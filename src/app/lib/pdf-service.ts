@@ -63,6 +63,33 @@ export async function generatePDFFromCanvas(
                     [data-html2canvas-ignore="true"] { 
                         display: none !important; 
                     }
+                    /* Ensure social icons are properly rendered */
+                    .social-icon-element {
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                    }
+                    /* Ensure links are properly styled */
+                    .link-element {
+                        color: #0066cc !important;
+                        text-decoration: underline !important;
+                    }
+                    /* Ensure lines are properly rendered */
+                    .line-element {
+                        background-color: transparent !important;
+                    }
+                    .line-element.horizontal {
+                        border-top: 2px solid #000000 !important;
+                    }
+                    .line-element.vertical {
+                        border-left: 2px solid #000000 !important;
+                    }
+                    .line-element.dashed {
+                        border-style: dashed !important;
+                    }
+                    .line-element.dotted {
+                        border-style: dotted !important;
+                    }
                 `
                 doc.head.appendChild(style)
             }
@@ -152,6 +179,33 @@ export async function generatePDFPreview(
                     .SelectionLabel,
                     [data-html2canvas-ignore="true"] { 
                         display: none !important; 
+                    }
+                    /* Ensure social icons are properly rendered */
+                    .social-icon-element {
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                    }
+                    /* Ensure links are properly styled */
+                    .link-element {
+                        color: #0066cc !important;
+                        text-decoration: underline !important;
+                    }
+                    /* Ensure lines are properly rendered */
+                    .line-element {
+                        background-color: transparent !important;
+                    }
+                    .line-element.horizontal {
+                        border-top: 2px solid #000000 !important;
+                    }
+                    .line-element.vertical {
+                        border-left: 2px solid #000000 !important;
+                    }
+                    .line-element.dashed {
+                        border-style: dashed !important;
+                    }
+                    .line-element.dotted {
+                        border-style: dotted !important;
                     }
                 `
                 doc.head.appendChild(style)
