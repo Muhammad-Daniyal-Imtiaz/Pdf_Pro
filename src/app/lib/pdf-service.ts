@@ -47,12 +47,16 @@ export async function generatePDFFromCanvas(
                         /* Prevent html2canvas from choking on modern colors if they leak in */
                         color-scheme: light !important;
                         box-sizing: border-box !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                        text-rendering: geometricPrecision !important;
+                        -webkit-font-smoothing: antialiased !important;
                     }
-                    /* Ensure correct text direction */
+                    /* Ensure correct text direction and font parity */
                     .editor-canvas, .editor-canvas * {
                         direction: ltr !important;
                         unicode-bidi: bidi-override !important;
-                        text-align: inherit !important;
+                        font-variant-numeric: tabular-nums !important;
                     }
                     /* Hide UI elements from final PDF */
                     .resize-handle, 
@@ -60,35 +64,34 @@ export async function generatePDFFromCanvas(
                     .HoverIndicator,
                     .MeasurementTooltip,
                     .SelectionLabel,
+                    .absolute.-top-6.left-0, /* Selection labels */
                     [data-html2canvas-ignore="true"] { 
                         display: none !important; 
+                        visibility: hidden !important;
                     }
-                    /* Ensure social icons are properly rendered */
-                    .social-icon-element {
+                    /* Ensure flexbox children are captured correctly */
+                    .social-icon-element, .link-element {
                         display: flex !important;
-                        align-items: center !important;
-                        justify-content: center !important;
+                        visibility: visible !important;
                     }
-                    /* Ensure links are properly styled */
-                    .link-element {
-                        color: #0066cc !important;
-                        text-decoration: underline !important;
+                    /* Ensure icons within flex containers have proper sizing */
+                    .social-icon-element svg, .link-element svg {
+                        display: block !important;
+                        width: 100% !important;
+                        height: 100% !important;
                     }
-                    /* Ensure lines are properly rendered */
-                    .line-element {
-                        background-color: transparent !important;
+                    /* Force consistent SVG rendering across browsers */
+                    svg {
+                        shape-rendering: geometricPrecision !important;
+                        text-rendering: geometricPrecision !important;
                     }
-                    .line-element.horizontal {
-                        border-top: 2px solid #000000 !important;
+                    /* Prevent flex item collapse in html2canvas */
+                    .social-icon-element > *, .link-element > * {
+                        flex-shrink: 0 !important;
                     }
-                    .line-element.vertical {
-                        border-left: 2px solid #000000 !important;
-                    }
-                    .line-element.dashed {
-                        border-style: dashed !important;
-                    }
-                    .line-element.dotted {
-                        border-style: dotted !important;
+                    /* Ensure inline-flex elements maintain dimensions */
+                    [style*="inline-flex"] {
+                        display: inline-flex !important;
                     }
                 `
                 doc.head.appendChild(style)
@@ -164,12 +167,14 @@ export async function generatePDFPreview(
                     * { 
                         color-scheme: light !important; 
                         box-sizing: border-box !important;
+                        text-rendering: geometricPrecision !important;
+                        -webkit-font-smoothing: antialiased !important;
                     }
-                    /* Ensure correct text direction */
+                    /* Ensure correct text direction and font parity */
                     .editor-canvas, .editor-canvas * {
                         direction: ltr !important;
                         unicode-bidi: bidi-override !important;
-                        text-align: inherit !important;
+                        font-variant-numeric: tabular-nums !important;
                     }
                     /* Hide UI elements from result */
                     .resize-handle, 
@@ -177,35 +182,34 @@ export async function generatePDFPreview(
                     .HoverIndicator,
                     .MeasurementTooltip,
                     .SelectionLabel,
+                    .absolute.-top-6.left-0, /* Selection labels */
                     [data-html2canvas-ignore="true"] { 
                         display: none !important; 
+                        visibility: hidden !important;
                     }
-                    /* Ensure social icons are properly rendered */
-                    .social-icon-element {
+                    /* Ensure flexbox children are captured correctly */
+                    .social-icon-element, .link-element {
                         display: flex !important;
-                        align-items: center !important;
-                        justify-content: center !important;
+                        visibility: visible !important;
                     }
-                    /* Ensure links are properly styled */
-                    .link-element {
-                        color: #0066cc !important;
-                        text-decoration: underline !important;
+                    /* Ensure icons within flex containers have proper sizing */
+                    .social-icon-element svg, .link-element svg {
+                        display: block !important;
+                        width: 100% !important;
+                        height: 100% !important;
                     }
-                    /* Ensure lines are properly rendered */
-                    .line-element {
-                        background-color: transparent !important;
+                    /* Force consistent SVG rendering across browsers */
+                    svg {
+                        shape-rendering: geometricPrecision !important;
+                        text-rendering: geometricPrecision !important;
                     }
-                    .line-element.horizontal {
-                        border-top: 2px solid #000000 !important;
+                    /* Prevent flex item collapse in html2canvas */
+                    .social-icon-element > *, .link-element > * {
+                        flex-shrink: 0 !important;
                     }
-                    .line-element.vertical {
-                        border-left: 2px solid #000000 !important;
-                    }
-                    .line-element.dashed {
-                        border-style: dashed !important;
-                    }
-                    .line-element.dotted {
-                        border-style: dotted !important;
+                    /* Ensure inline-flex elements maintain dimensions */
+                    [style*="inline-flex"] {
+                        display: inline-flex !important;
                     }
                 `
                 doc.head.appendChild(style)

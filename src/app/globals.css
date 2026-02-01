@@ -136,3 +136,32 @@ input[type="range"]::-webkit-slider-thumb {
   font-family: 'Courier New', monospace;
   color: #2D3748;
 }
+
+/* Premium Animations & Transitions */
+.smooth-transition {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-icon-element:hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+.link-element:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Custom Checkbox Style for Switches */
+.custom-switch {
+  cursor: pointer;
+  border-radius: 999px;
+  transition: background-color 0.2s;
+}
+
+/* Glassmorphism for floating tooltips */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}

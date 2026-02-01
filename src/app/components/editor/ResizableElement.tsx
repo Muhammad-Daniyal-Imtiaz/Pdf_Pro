@@ -9,7 +9,9 @@ import LineElement from './LineElement'
 interface ResizableElementProps {
     el: EditorElement
     isSelected: boolean
+    isMultiSelected?: boolean
     onSelect: (id: string) => void
+    onToggleSelection?: (id: string) => void
     onMove: (id: string, x: number, y: number) => void
     onResize: (id: string, width: number, height: number) => void
     onChange: (id: string, content: string) => void
@@ -25,7 +27,9 @@ const RESIZE_HANDLES: ResizeHandle[] = ['nw', 'ne', 'sw', 'se', 'n', 's', 'e', '
 export default function ResizableElement({
     el,
     isSelected,
+    isMultiSelected = false,
     onSelect,
+    onToggleSelection,
     onMove,
     onResize,
     onChange,
@@ -51,6 +55,13 @@ export default function ResizableElement({
         if ((e.target as HTMLElement).classList.contains('resize-handle')) return
 
         e.stopPropagation()
+
+        // Handle Shift+click for multi-selection
+        if (e.shiftKey && onToggleSelection) {
+            onToggleSelection(el.id)
+            return
+        }
+
         onSelect(el.id)
 
         setIsDragging(true)
@@ -72,44 +83,55 @@ export default function ResizableElement({
 
             const mouseX = e.clientX - parentRect.left - el.x
             const mouseY = e.clientY - parentRect.top - el.y
-            const minWidth = 50
-            const minHeight = 30
+            const minWidth = 10
+            const minHeight = 10
 
             let newWidth = el.style.width
             let newHeight = el.style.height
+            const aspectRatio = initialSize.width / initialSize.height
+
+            const lock = el.style.lockAspectRatio
 
             switch (isResizing) {
                 case 'e':
                     newWidth = Math.max(minWidth, mouseX)
+                    if (lock) newHeight = newWidth / aspectRatio
                     break
                 case 'w':
                     newWidth = Math.max(minWidth, initialSize.width - (e.clientX - dragStart.x))
-                    onMove(el.id, el.x + (initialSize.width - newWidth), el.y)
+                    if (lock) newHeight = newWidth / aspectRatio
+                    onMove(el.id, el.x + (initialSize.width - newWidth), lock ? el.y + (initialSize.height - newHeight) / 2 : el.y)
                     break
                 case 's':
                     newHeight = Math.max(minHeight, mouseY)
+                    if (lock) newWidth = newHeight * aspectRatio
                     break
                 case 'n':
                     newHeight = Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
-                    onMove(el.id, el.x, el.y + (initialSize.height - newHeight))
+                    if (lock) newWidth = newHeight * aspectRatio
+                    onMove(el.id, lock ? el.x + (initialSize.width - newWidth) / 2 : el.x, el.y + (initialSize.height - newHeight))
                     break
                 case 'se':
                     newWidth = Math.max(minWidth, mouseX)
-                    newHeight = Math.max(minHeight, mouseY)
+                    newHeight = lock ? newWidth / aspectRatio : Math.max(minHeight, mouseY)
+                    if (lock && newHeight < minHeight) {
+                        newHeight = minHeight
+                        newWidth = newHeight * aspectRatio
+                    }
                     break
                 case 'sw':
                     newWidth = Math.max(minWidth, initialSize.width - (e.clientX - dragStart.x))
-                    newHeight = Math.max(minHeight, mouseY)
+                    newHeight = lock ? newWidth / aspectRatio : Math.max(minHeight, mouseY)
                     onMove(el.id, el.x + (initialSize.width - newWidth), el.y)
                     break
                 case 'ne':
                     newWidth = Math.max(minWidth, mouseX)
-                    newHeight = Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
+                    newHeight = lock ? newWidth / aspectRatio : Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
                     onMove(el.id, el.x, el.y + (initialSize.height - newHeight))
                     break
                 case 'nw':
                     newWidth = Math.max(minWidth, initialSize.width - (e.clientX - dragStart.x))
-                    newHeight = Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
+                    newHeight = lock ? newWidth / aspectRatio : Math.max(minHeight, initialSize.height - (e.clientY - dragStart.y))
                     onMove(el.id, el.x + (initialSize.width - newWidth), el.y + (initialSize.height - newHeight))
                     break
             }
@@ -241,19 +263,22 @@ export default function ResizableElement({
             }}
         >
             {/* Selection Ring - Fixed Style */}
-            {isSelected && (
+            {(isSelected || isMultiSelected) && (
                 <div
                     data-html2canvas-ignore="true"
-                    className="absolute inset-[-2px] pointer-events-none z-50 shadow-sm"
+                    className="absolute inset-[-2px] pointer-events-none z-50"
                     style={{
-                        border: '2px solid #3B82F6', // Solid Blue
-                        borderRadius: `${(el.style.borderRadius as number || 0) + 2}px`
+                        border: isMultiSelected && !isSelected
+                            ? '2px dashed #8B5CF6' // Purple dashed for multi-select
+                            : '2px solid #3B82F6', // Solid Blue for primary
+                        borderRadius: `${(el.style.borderRadius as number || 0) + 2}px`,
+                        boxShadow: isMultiSelected ? '0 0 0 2px rgba(139, 92, 246, 0.2)' : '0 0 0 2px rgba(59, 130, 246, 0.1)'
                     }}
                 />
             )}
 
             {/* Hover Indicator */}
-            {!isSelected && (
+            {!isSelected && !isMultiSelected && (
                 <div
                     data-html2canvas-ignore="true"
                     className="absolute inset-0 pointer-events-none group-hover:border"

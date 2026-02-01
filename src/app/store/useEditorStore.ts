@@ -47,6 +47,9 @@ export interface EditorStyle {
     opacity?: number
     zIndex?: number
 
+    // Layout locking
+    lockAspectRatio?: boolean
+
     // Link styling
     linkColor?: string
     linkDecoration?: 'none' | 'underline' | 'line-through'
@@ -67,6 +70,10 @@ export interface EditorElement {
     lineOrientation?: 'horizontal' | 'vertical' // For lines
     lineStyle?: 'solid' | 'dashed' | 'dotted' // For lines
     isClickable?: boolean // For links/phone numbers
+
+    // Labeling (for icons/links)
+    showLabel?: boolean
+    labelPosition?: 'right' | 'left' | 'top' | 'bottom'
 }
 
 interface EditorState {
@@ -77,6 +84,7 @@ interface EditorState {
     // Document State
     elements: EditorElement[]
     selectedId: string | null
+    selectedIds: string[] // Multi-selection support
 
     // History State
     past: EditorElement[][]
@@ -135,6 +143,15 @@ interface EditorState {
     lowerElement: (id: string) => void
     sendToBack: (id: string) => void
     bringToFront: (id: string) => void
+
+    // Multi-selection
+    toggleSelection: (id: string) => void
+    selectMultiple: (ids: string[]) => void
+    clearSelection: () => void
+
+    // Alignment actions
+    alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => void
+    distributeElements: (axis: 'horizontal' | 'vertical') => void
 
     undo: () => void
     redo: () => void
@@ -204,6 +221,7 @@ export const useEditorStore = create<EditorState>((set) => ({
         }
     ],
     selectedId: null,
+    selectedIds: [],
     past: [],
     future: [],
     docTitle: 'Untitled Document',
@@ -273,7 +291,7 @@ export const useEditorStore = create<EditorState>((set) => ({
         const newElement: EditorElement = {
             id: `icon-${Date.now()}`,
             type: 'social-icon',
-            content: iconType,
+            content: '',
             iconType,
             x: 100 + (state.elements.length * 30),
             y: 100 + (state.elements.length * 30),
@@ -281,8 +299,11 @@ export const useEditorStore = create<EditorState>((set) => ({
                 ...DEFAULT_STYLE,
                 width: 40,
                 height: 40,
-                fontSize: 24
-            }
+                fontSize: 24,
+                lockAspectRatio: true
+            },
+            showLabel: false,
+            labelPosition: 'right'
         }
         return {
             elements: [...state.elements, newElement],
@@ -445,5 +466,126 @@ export const useEditorStore = create<EditorState>((set) => ({
             elements: next,
             future: newFuture
         }
+    }),
+
+    // Multi-selection actions
+    toggleSelection: (id: string) => set((state) => {
+        const isSelected = state.selectedIds.includes(id)
+        if (isSelected) {
+            return {
+                selectedIds: state.selectedIds.filter(i => i !== id),
+                selectedId: state.selectedIds.length === 1 ? null : state.selectedId
+            }
+        } else {
+            return {
+                selectedIds: [...state.selectedIds, id],
+                selectedId: id
+            }
+        }
+    }),
+
+    selectMultiple: (ids: string[]) => set(() => ({
+        selectedIds: ids,
+        selectedId: ids.length > 0 ? ids[0] : null
+    })),
+
+    clearSelection: () => set(() => ({
+        selectedIds: [],
+        selectedId: null
+    })),
+
+    // Alignment actions with advanced mathematical precision
+    alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => set((state) => {
+        if (state.selectedIds.length < 2) return {}
+
+        // Import alignment engine on demand
+        const { AlignmentEngine, AdvancedMeasurement } = require('@/app/lib/alignment-service')
+
+        const newPast = [...state.past, state.elements]
+        const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
+
+        let alignmentUpdates: Partial<EditorElement>[] = []
+
+        // Use advanced alignment engine based on direction
+        switch (direction) {
+            case 'left':
+                alignmentUpdates = AlignmentEngine.alignLeft(selectedElements)
+                break
+            case 'center':
+                alignmentUpdates = AlignmentEngine.alignCenter(selectedElements)
+                break
+            case 'right':
+                alignmentUpdates = AlignmentEngine.alignRight(selectedElements)
+                break
+            case 'top':
+                alignmentUpdates = AlignmentEngine.alignTop(selectedElements)
+                break
+            case 'middle':
+                alignmentUpdates = AlignmentEngine.alignMiddle(selectedElements)
+                break
+            case 'bottom':
+                alignmentUpdates = AlignmentEngine.alignBottom(selectedElements)
+                break
+            case 'baseline':
+                alignmentUpdates = AlignmentEngine.alignBaseline(selectedElements)
+                break
+        }
+
+        // Apply updates to elements with export snapping
+        const newElements = state.elements.map(el => {
+            if (!state.selectedIds.includes(el.id)) return el
+
+            const idx = selectedElements.findIndex(sel => sel.id === el.id)
+            if (idx === -1) return el
+
+            const update = alignmentUpdates[idx]
+            const snap = (v: number) => Math.round(v * 2) / 2
+
+            return {
+                ...el,
+                x: update.x !== undefined ? snap(update.x) : el.x,
+                y: update.y !== undefined ? snap(update.y) : el.y
+            }
+        })
+
+        return { elements: newElements, past: newPast, future: [] }
+    }),
+
+    // Distribution with intelligent spacing compensation
+    distributeElements: (axis: 'horizontal' | 'vertical') => set((state) => {
+        if (state.selectedIds.length < 3) return {}
+
+        // Import alignment engine on demand
+        const { AlignmentEngine } = require('@/app/lib/alignment-service')
+
+        const newPast = [...state.past, state.elements]
+        const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
+
+        let distributionUpdates: Partial<EditorElement>[] = []
+
+        if (axis === 'horizontal') {
+            distributionUpdates = AlignmentEngine.distributeHorizontal(selectedElements)
+        } else {
+            distributionUpdates = AlignmentEngine.distributeVertical(selectedElements)
+        }
+
+        const snap = (v: number) => Math.round(v * 2) / 2
+
+        const newElements = state.elements.map(el => {
+            if (!state.selectedIds.includes(el.id)) return el
+
+            const idx = selectedElements.findIndex(sel => sel.id === el.id)
+            if (idx === -1) return el
+
+            const update = distributionUpdates[idx]
+
+            return {
+                ...el,
+                x: update.x !== undefined ? snap(update.x) : el.x,
+                y: update.y !== undefined ? snap(update.y) : el.y
+            }
+        })
+
+        return { elements: newElements, past: newPast, future: [] }
     })
 }))

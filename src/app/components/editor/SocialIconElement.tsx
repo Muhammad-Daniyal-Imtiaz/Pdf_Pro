@@ -60,19 +60,24 @@ interface SocialIconElementProps {
 }
 
 export default function SocialIconElement({ element, isSelected, onSelect, onUpdate }: SocialIconElementProps) {
-  const { iconType = 'user' } = element
+  const { iconType = 'user', content = '', showLabel = false, labelPosition = 'right' } = element
   const IconComponent = ICON_MAP[iconType] || User
   const iconColor = ICON_COLORS[iconType] || '#6B7280'
-  
-  const iconStyles = {
+
+  const iconSize = element.style.fontSize || 24
+  const labelSize = Math.round(iconSize * 0.7)
+
+  const iconStyles: React.CSSProperties = {
     position: 'absolute' as const,
     left: `${element.x}px`,
     top: `${element.y}px`,
     width: `${element.style.width}px`,
     height: `${element.style.height}px`,
     display: 'flex',
+    flexDirection: labelPosition === 'top' || labelPosition === 'bottom' ? 'column' : 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: '10px',
     border: isSelected ? '2px solid #3B82F6' : 'none',
     borderRadius: `${element.style.borderRadius || 8}px`,
     backgroundColor: element.style.backgroundColor || 'transparent',
@@ -80,25 +85,65 @@ export default function SocialIconElement({ element, isSelected, onSelect, onUpd
     transform: `rotate(${element.style.rotation || 0}deg)`,
     zIndex: element.style.zIndex || 0,
     cursor: 'move',
-    transition: 'all 0.2s ease'
+    padding: '8px',
+    boxSizing: 'border-box',
+    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+    overflow: 'visible'
   }
+
+  const renderIcon = () => (
+    <div style={{
+      width: `${iconSize}px`,
+      height: `${iconSize}px`,
+      color: iconColor,
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      lineHeight: 1
+    }}>
+      <IconComponent
+        size={iconSize}
+        strokeWidth={2.25}
+        style={{ display: 'block' }}
+      />
+    </div>
+  )
+
+  const renderLabel = () => (
+    showLabel && content && (
+      <span style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        fontSize: `${labelSize}px`,
+        color: element.style.color || '#374151',
+        fontWeight: element.style.fontWeight || '600',
+        fontFamily: element.style.fontFamily || 'Inter, sans-serif',
+        whiteSpace: 'nowrap',
+        lineHeight: 1,
+        letterSpacing: '-0.01em',
+        textRendering: 'geometricPrecision',
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontSmoothing: 'grayscale'
+      } as React.CSSProperties}>
+        {content}
+      </span>
+    )
+  )
 
   return (
     <div
       style={iconStyles}
       onClick={onSelect}
-      className="social-icon-element hover:scale-105 transition-transform"
+      className="social-icon-element group hover:bg-gray-100/30"
     >
-      <div style={{ color: iconColor }}>
-        <IconComponent 
-          size={element.style.fontSize || 24}
-          className="transition-all"
-        />
-      </div>
-      
+      {(labelPosition === 'left' || labelPosition === 'top') && renderLabel()}
+      {renderIcon()}
+      {(labelPosition === 'right' || labelPosition === 'bottom') && renderLabel()}
+
       {isSelected && (
-        <div className="absolute -top-6 left-0 bg-blue-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-          {iconType}
+        <div className="absolute -top-6 left-0 bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded whitespace-nowrap shadow-sm font-bold tracking-tight">
+          {iconType.toUpperCase()}
         </div>
       )}
     </div>

@@ -267,65 +267,108 @@ export default function EditorSidebar() {
 
                                         {/* Element-specific Controls */}
                                         {selectedElement.type === 'line' && (
-                                            <LineControls 
-                                                element={selectedElement} 
-                                                onUpdate={(updates) => updateElement(selectedId!, updates)} 
+                                            <LineControls
+                                                element={selectedElement}
+                                                onUpdate={(updates) => updateElement(selectedId!, updates)}
                                             />
                                         )}
-                                        
+
                                         {selectedElement.type === 'link' && (
-                                            <LinkControls 
-                                                element={selectedElement} 
-                                                onUpdate={(updates) => updateElement(selectedId!, updates)} 
+                                            <LinkControls
+                                                element={selectedElement}
+                                                onUpdate={(updates) => updateElement(selectedId!, updates)}
                                             />
                                         )}
 
                                         {selectedElement.type === 'social-icon' && (
-                                            <div>
-                                                <h4 className="text-sm font-semibold text-gray-700 mb-3">Social Icon Properties</h4>
-                                                <div className="space-y-3">
-                                                    <div>
-                                                        <label className="block text-xs font-medium text-gray-600 mb-2">
-                                                            Icon Size: {selectedElement.style.fontSize}px
-                                                        </label>
-                                                        <input
-                                                            type="range"
-                                                            min="16"
-                                                            max="64"
-                                                            value={selectedElement.style.fontSize || 24}
-                                                            onChange={(e) => updateStyle('fontSize', parseInt(e.target.value))}
-                                                            className="w-full"
-                                                        />
+                                            <div className="space-y-4">
+                                                <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                                    <Share2 size={16} /> Icon Properties
+                                                </h4>
+
+                                                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm space-y-4">
+                                                    {/* Label Controls */}
+                                                    <div className="flex items-center justify-between">
+                                                        <label className="text-xs font-semibold text-gray-700">Show Label</label>
+                                                        <button
+                                                            onClick={() => updateElement(selectedId!, { showLabel: !selectedElement.showLabel })}
+                                                            className={`w-10 h-5 rounded-full relative transition-colors ${selectedElement.showLabel ? 'bg-blue-600' : 'bg-gray-300'}`}
+                                                        >
+                                                            <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${selectedElement.showLabel ? 'left-6' : 'left-1'}`} />
+                                                        </button>
                                                     </div>
-                                                    <div>
-                                                        <label className="block text-xs font-medium text-gray-600 mb-2">
-                                                            Container Size: {selectedElement.style.width}px
-                                                        </label>
-                                                        <input
-                                                            type="range"
-                                                            min="30"
-                                                            max="100"
-                                                            value={selectedElement.style.width || 40}
-                                                            onChange={(e) => {
-                                                                const size = parseInt(e.target.value)
-                                                                updateStyle('width', size)
-                                                                updateStyle('height', size)
-                                                            }}
-                                                            className="w-full"
-                                                        />
+
+                                                    {selectedElement.showLabel && (
+                                                        <div className="space-y-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                                                            <div>
+                                                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Label Text</label>
+                                                                <input
+                                                                    type="text"
+                                                                    value={selectedElement.content || ''}
+                                                                    onChange={(e) => updateElement(selectedId!, { content: e.target.value })}
+                                                                    className="w-full p-2 text-xs border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                                                                    placeholder="e.g. LinkedIn"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Label Position</label>
+                                                                <div className="grid grid-cols-4 gap-1">
+                                                                    {['top', 'bottom', 'left', 'right'].map((pos) => (
+                                                                        <button
+                                                                            key={pos}
+                                                                            onClick={() => updateElement(selectedId!, { labelPosition: pos as any })}
+                                                                            className={`p-1.5 rounded border text-[10px] capitalize transition-all ${selectedElement.labelPosition === pos ? 'bg-blue-600 border-blue-600 text-white font-bold' : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-blue-300'}`}
+                                                                        >
+                                                                            {pos}
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    <hr className="border-gray-100" />
+
+                                                    {/* Resize & Lock */}
+                                                    <div className="flex items-center justify-between">
+                                                        <label className="text-xs font-semibold text-gray-700">Lock Aspect Ratio</label>
+                                                        <button
+                                                            onClick={() => updateStyle('lockAspectRatio', !selectedElement.style.lockAspectRatio)}
+                                                            className={`w-10 h-5 rounded-full relative transition-colors ${selectedElement.style.lockAspectRatio ? 'bg-blue-600' : 'bg-gray-300'}`}
+                                                        >
+                                                            <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${selectedElement.style.lockAspectRatio ? 'left-6' : 'left-1'}`} />
+                                                        </button>
                                                     </div>
-                                                    <div>
-                                                        <label className="block text-xs font-medium text-gray-600 mb-2">
-                                                            Rotation: {selectedElement.style.rotation || 0}°
-                                                        </label>
-                                                        <input
-                                                            type="range"
-                                                            min="0"
-                                                            max="360"
-                                                            value={selectedElement.style.rotation || 0}
-                                                            onChange={(e) => updateStyle('rotation', parseInt(e.target.value))}
-                                                            className="w-full"
-                                                        />
+
+                                                    <div className="space-y-3">
+                                                        <div>
+                                                            <div className="flex justify-between items-center mb-1.5">
+                                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Icon Size</label>
+                                                                <span className="text-[10px] font-mono font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{selectedElement.style.fontSize}px</span>
+                                                            </div>
+                                                            <input
+                                                                type="range"
+                                                                min="12"
+                                                                max="120"
+                                                                value={selectedElement.style.fontSize || 24}
+                                                                onChange={(e) => updateStyle('fontSize', parseInt(e.target.value))}
+                                                                className="w-full"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <div className="flex justify-between items-center mb-1.5">
+                                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Rotation</label>
+                                                                <span className="text-[10px] font-mono font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">{selectedElement.style.rotation || 0}°</span>
+                                                            </div>
+                                                            <input
+                                                                type="range"
+                                                                min="0"
+                                                                max="360"
+                                                                value={selectedElement.style.rotation || 0}
+                                                                onChange={(e) => updateStyle('rotation', parseInt(e.target.value))}
+                                                                className="w-full"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
