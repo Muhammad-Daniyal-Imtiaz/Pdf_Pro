@@ -72,11 +72,14 @@ export default function EditorMain() {
         try {
             await downloadPDF(
                 canvasRef.current,
+                elements,
                 `${docTitle.replace(/\s+/g, '-').toLowerCase() || 'document'}.pdf`,
                 {
                     quality: 2,
                     scale: 2,
-                    debug: false
+                    debug: false,
+                    validateWYSIWYG: true,
+                    applyCorrections: true
                 }
             )
         } catch (error) {

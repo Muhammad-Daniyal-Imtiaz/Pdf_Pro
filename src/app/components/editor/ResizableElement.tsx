@@ -1,7 +1,9 @@
 'use client'
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { EditorElement } from '@/app/store/useEditorStore'
+import { useEditorStore } from '@/app/store/useEditorStore'
+import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
 import SocialIconElement from './SocialIconElement'
 import LinkElement from './LinkElement'
 import LineElement from './LineElement'
@@ -44,29 +46,42 @@ export default function ResizableElement({
     const [initialSize, setInitialSize] = useState({ width: 0, height: 0 })
     const [showMeasurement, setShowMeasurement] = useState(false)
     const contentEditableRef = useRef<HTMLDivElement>(null)
+    
+    // Get PDF generation state from store
+    const isGeneratingPDF = useEditorStore(state => state.isGeneratingPDF)
 
     // Snap to grid helper
     const snapToGrid = (value: number, gridSize: number = 8): number => {
         return Math.round(value / gridSize) * gridSize
     }
 
-    const handleMouseDown = (e: React.MouseEvent) => {
-        if (isEditing) return
-        if ((e.target as HTMLElement).classList.contains('resize-handle')) return
+    // Apply PDF-specific styles during generation
+    useEffect(() => {
+        if (isGeneratingPDF && elementRef.current) {
+            // Apply PDF correction transforms
+            const correction = CoordinateSystem.getPDFCorrection(el)
+            if (correction) {
+                elementRef.current.style.transform = `scale(${correction.scale})`
+                elementRef.current.style.transformOrigin = 'top left'
+            }
 
-        e.stopPropagation()
-
-        // Handle Shift+click for multi-selection
-        if (e.shiftKey && onToggleSelection) {
-            onToggleSelection(el.id)
-            return
+            // Hide UI elements that shouldn't be in PDF
+            const uiElements = elementRef.current.querySelectorAll('[data-html2canvas-ignore="true"]')
+            uiElements.forEach(uiElement => {
+                (uiElement as HTMLElement).style.display = 'none'
+            })
+        } else if (elementRef.current) {
+            // Reset styles when not generating PDF
+            elementRef.current.style.transform = ''
+            elementRef.current.style.transformOrigin = ''
+            
+            // Show UI elements again
+            const uiElements = elementRef.current.querySelectorAll('[data-html2canvas-ignore="true"]')
+            uiElements.forEach(uiElement => {
+                (uiElement as HTMLElement).style.display = ''
+            })
         }
-
-        onSelect(el.id)
-
-        setIsDragging(true)
-        setDragStart({ x: e.clientX - el.x, y: e.clientY - el.y })
-    }
+    }, [isGeneratingPDF, el])
 
     const handleMouseMove = React.useCallback((e: MouseEvent) => {
         if (isDragging && !isResizing) {
@@ -139,6 +154,24 @@ export default function ResizableElement({
             onResize(el.id, newWidth, newHeight)
         }
     }, [isDragging, isResizing, el, dragStart, initialSize, onMove, onResize])
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (isEditing) return
+        if ((e.target as HTMLElement).classList.contains('resize-handle')) return
+
+        e.stopPropagation()
+
+        // Handle Shift+click for multi-selection
+        if (e.shiftKey && onToggleSelection) {
+            onToggleSelection(el.id)
+            return
+        }
+
+        onSelect(el.id)
+
+        setIsDragging(true)
+        setDragStart({ x: e.clientX - el.x, y: e.clientY - el.y })
+    }
 
     const handleMouseUp = React.useCallback(() => {
         setIsDragging(false)
@@ -248,6 +281,7 @@ export default function ResizableElement({
     return (
         <div
             ref={elementRef}
+            data-element-id={el.id}
             style={style}
             className="group absolute outline-none"
             onMouseDown={handleMouseDown}

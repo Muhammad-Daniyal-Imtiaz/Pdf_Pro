@@ -1,8 +1,9 @@
 /**
- * Advanced Auto-Alignment System
+ * Advanced Auto-Alignment System with Real DOM Metrics
  * 
  * Features:
- * - Bounding box detection with subpixel precision
+ * - Real DOM element metrics extraction for pixel-perfect alignment
+ * - Magnetic alignment guides with visual feedback
  * - Baseline grid snapping with optical center calculation
  * - SVG path coordinate analysis for precise icon positioning
  * - Font metrics extraction and optical adjustment
@@ -12,6 +13,7 @@
  */
 
 import { EditorElement, EditorStyle } from '@/app/store/useEditorStore'
+import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
 
 /**
  * Represents the precise bounding box of an element
@@ -28,6 +30,33 @@ export interface PreciseBoundingBox {
     opticalTop: number       // Optical center (top adjustment)
     baselineOffset: number   // Text baseline offset from top
     visualCenter: {
+        x: number
+        y: number
+    }
+}
+
+/**
+ * Magnetic alignment guide for visual feedback
+ */
+export interface AlignmentGuide {
+    type: 'horizontal' | 'vertical'
+    position: number
+    strength: number // 0-1 based on how many elements align
+    elementIds: string[] // Elements that contribute to this guide
+    tolerance: number // Distance threshold for magnetic snapping
+}
+
+/**
+ * Enhanced element with real DOM metrics
+ */
+export interface EnhancedElement extends EditorElement {
+    actualBoundingBox?: {
+        left: number
+        top: number
+        right: number
+        bottom: number
+    }
+    opticalCenter?: {
         x: number
         y: number
     }
@@ -83,15 +112,32 @@ export class AdvancedMeasurement {
     }
 
     /**
-     * Calculate precise bounding box with optical adjustments
-     * For text: includes baseline and font metrics
-     * For icons: includes optical centering
-     * For mixed: applies appropriate compensation
+     * Calculate precise bounding box with REAL DOM measurements
+     * Uses CoordinateSystem to get actual rendered metrics
      */
     static calculateBoundingBox(
-        element: EditorElement,
+        element: EnhancedElement,
         container?: { width: number; height: number }
     ): PreciseBoundingBox {
+        // Try to get real DOM metrics first
+        const realMetrics = CoordinateSystem.getElementMetrics(element.id)
+        
+        if (realMetrics) {
+            return {
+                left: realMetrics.actualBoundingBox.left,
+                top: realMetrics.actualBoundingBox.top,
+                right: realMetrics.actualBoundingBox.right,
+                bottom: realMetrics.actualBoundingBox.bottom,
+                width: realMetrics.width,
+                height: realMetrics.height,
+                opticalLeft: 0, // Will be calculated below
+                opticalTop: 0,  // Will be calculated below
+                baselineOffset: realMetrics.baseline,
+                visualCenter: realMetrics.opticalCenter
+            }
+        }
+
+        // Fallback to original calculation if DOM not available
         const style = element.style
         const width = style.width
         const height = style.height
@@ -104,33 +150,23 @@ export class AdvancedMeasurement {
 
         // Calculate optical adjustments based on element type
         if (element.type === 'social-icon' || element.type === 'image') {
-            // Icons have optical center - apply minimal correction for perfect alignment
-            // Most icons are already centered in their viewbox
             opticalLeft = 0
             opticalTop = 0
             baselineOffset = 0
         } else if (element.type === 'heading' || element.type === 'paragraph' || element.type === 'list' || element.type === 'link') {
-            // Text elements need baseline adjustment
             const metrics = this.calculateFontMetrics(
                 style.fontSize,
                 style.fontFamily,
                 style.lineHeight
             )
 
-            // Baseline is typically at descender depth + optical correction
             baselineOffset = height - (metrics.lineHeight - metrics.ascender) - (metrics.descender * 0.3)
-
-            // Optical adjustment: compensate for visual weight at top of text
-            // Capital letters appear higher than their bounding box suggests
             opticalTop = Math.round((metrics.capHeight - metrics.lineHeight) * 0.15 * 10) / 10
             opticalLeft = 0
         } else if (element.type === 'line') {
-            // Lines need special handling based on orientation
             if (element.lineOrientation === 'horizontal') {
-                // Horizontal lines: vertically center
                 opticalTop = (height - (style.borderWidth || 1)) / 2
             } else {
-                // Vertical lines: horizontally center
                 opticalLeft = (width - (style.borderWidth || 1)) / 2
             }
             baselineOffset = 0
@@ -237,9 +273,302 @@ export class AdvancedMeasurement {
 }
 
 /**
- * Main alignment algorithms with advanced mathematical precision
+ * Main alignment algorithms with enhanced real metrics and magnetic guides
  */
 export class AlignmentEngine {
+    /**
+     * Generate magnetic alignment guides for visual feedback
+     */
+    static createAlignmentGuides(elements: EnhancedElement[]): AlignmentGuide[] {
+        const guides: AlignmentGuide[] = []
+        const tolerance = 8 // Magnetic snapping tolerance in pixels
+
+        // Collect all edge positions
+        const horizontalPositions: number[] = []
+        const verticalPositions: number[] = []
+        const positionMap = new Map<number, string[]>()
+
+        elements.forEach(el => {
+            const bbox = AdvancedMeasurement.calculateBoundingBox(el)
+            
+            // Left edge
+            horizontalPositions.push(bbox.left)
+            if (!positionMap.has(bbox.left)) positionMap.set(bbox.left, [])
+            positionMap.get(bbox.left)!.push(el.id)
+            
+            // Center
+            horizontalPositions.push(bbox.visualCenter.x)
+            if (!positionMap.has(bbox.visualCenter.x)) positionMap.set(bbox.visualCenter.x, [])
+            positionMap.get(bbox.visualCenter.x)!.push(el.id)
+            
+            // Right edge
+            horizontalPositions.push(bbox.right)
+            if (!positionMap.has(bbox.right)) positionMap.set(bbox.right, [])
+            positionMap.get(bbox.right)!.push(el.id)
+            
+            // Top edge
+            verticalPositions.push(bbox.top)
+            if (!positionMap.has(bbox.top)) positionMap.set(bbox.top, [])
+            positionMap.get(bbox.top)!.push(el.id)
+            
+            // Middle
+            verticalPositions.push(bbox.visualCenter.y)
+            if (!positionMap.has(bbox.visualCenter.y)) positionMap.set(bbox.visualCenter.y, [])
+            positionMap.get(bbox.visualCenter.y)!.push(el.id)
+            
+            // Bottom edge
+            verticalPositions.push(bbox.bottom)
+            if (!positionMap.has(bbox.bottom)) positionMap.set(bbox.bottom, [])
+            positionMap.get(bbox.bottom)!.push(el.id)
+        })
+
+        // Find positions with multiple elements (potential guides)
+        const roundedPositions = (positions: number[]) => {
+            const grouped = new Map<number, number[]>()
+            positions.forEach(pos => {
+                const rounded = Math.round(pos / tolerance) * tolerance
+                if (!grouped.has(rounded)) grouped.set(rounded, [])
+                grouped.get(rounded)!.push(pos)
+            })
+            return grouped
+        }
+
+        const horizontalGroups = roundedPositions(horizontalPositions)
+        const verticalGroups = roundedPositions(verticalPositions)
+
+        // Create horizontal guides
+        horizontalGroups.forEach((positions, guidePos) => {
+            if (positions.length >= 2) {
+                const elementIds = new Set<string>()
+                positions.forEach(pos => {
+                    const ids = positionMap.get(pos) || []
+                    ids.forEach(id => elementIds.add(id))
+                })
+
+                guides.push({
+                    type: 'horizontal',
+                    position: guidePos,
+                    strength: Math.min(elementIds.size / elements.length, 1),
+                    elementIds: Array.from(elementIds),
+                    tolerance
+                })
+            }
+        })
+
+        // Create vertical guides
+        verticalGroups.forEach((positions, guidePos) => {
+            if (positions.length >= 2) {
+                const elementIds = new Set<string>()
+                positions.forEach(pos => {
+                    const ids = positionMap.get(pos) || []
+                    ids.forEach(id => elementIds.add(id))
+                })
+
+                guides.push({
+                    type: 'vertical',
+                    position: guidePos,
+                    strength: Math.min(elementIds.size / elements.length, 1),
+                    elementIds: Array.from(elementIds),
+                    tolerance
+                })
+            }
+        })
+
+        return guides.sort((a, b) => b.strength - a.strength)
+    }
+
+    /**
+     * Align elements with real metrics and magnetic snapping
+     */
+    static alignWithRealMetrics(
+        elements: EnhancedElement[],
+        direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline',
+        options: { useOpticalCenter: boolean; snapToGrid: boolean } = { useOpticalCenter: true, snapToGrid: false }
+    ): Partial<EnhancedElement>[] {
+        if (elements.length < 2) return []
+
+        // Get real metrics for all elements
+        const elementsWithMetrics = elements.map(el => ({
+            ...el,
+            bbox: AdvancedMeasurement.calculateBoundingBox(el)
+        }))
+
+        let alignmentUpdates: Partial<EnhancedElement>[] = []
+
+        switch (direction) {
+            case 'left':
+                alignmentUpdates = this.alignLeftWithMetrics(elementsWithMetrics)
+                break
+            case 'center':
+                alignmentUpdates = this.alignCenterWithMetrics(elementsWithMetrics, options.useOpticalCenter)
+                break
+            case 'right':
+                alignmentUpdates = this.alignRightWithMetrics(elementsWithMetrics)
+                break
+            case 'top':
+                alignmentUpdates = this.alignTopWithMetrics(elementsWithMetrics)
+                break
+            case 'middle':
+                alignmentUpdates = this.alignMiddleWithMetrics(elementsWithMetrics, options.useOpticalCenter)
+                break
+            case 'bottom':
+                alignmentUpdates = this.alignBottomWithMetrics(elementsWithMetrics)
+                break
+            case 'baseline':
+                alignmentUpdates = this.alignBaselineWithMetrics(elementsWithMetrics)
+                break
+        }
+
+        return alignmentUpdates
+    }
+
+    /**
+     * Enhanced left alignment with real metrics
+     */
+    private static alignLeftWithMetrics(elementsWithMetrics: Array<{ bbox: PreciseBoundingBox } & EnhancedElement>): Partial<EnhancedElement>[] {
+        let minLeft = Infinity
+        elementsWithMetrics.forEach(({ bbox }) => {
+            minLeft = Math.min(minLeft, bbox.left)
+        })
+
+        return elementsWithMetrics.map(({ bbox, ...el }) => {
+            const offset = minLeft - bbox.left
+            return {
+                x: el.x + offset
+            }
+        })
+    }
+
+    /**
+     * Enhanced center alignment with optical center option
+     */
+    private static alignCenterWithMetrics(
+        elementsWithMetrics: Array<{ bbox: PreciseBoundingBox } & EnhancedElement>,
+        useOpticalCenter: boolean
+    ): Partial<EnhancedElement>[] {
+        let sumCenter = 0
+        elementsWithMetrics.forEach(({ bbox }) => {
+            sumCenter += useOpticalCenter ? bbox.visualCenter.x : (bbox.left + bbox.width / 2)
+        })
+        const centerX = sumCenter / elementsWithMetrics.length
+
+        return elementsWithMetrics.map(({ bbox, ...el }) => {
+            const currentCenter = useOpticalCenter ? bbox.visualCenter.x : (bbox.left + bbox.width / 2)
+            const offset = centerX - currentCenter
+            return {
+                x: el.x + offset
+            }
+        })
+    }
+
+    /**
+     * Enhanced right alignment with real metrics
+     */
+    private static alignRightWithMetrics(elementsWithMetrics: Array<{ bbox: PreciseBoundingBox } & EnhancedElement>): Partial<EnhancedElement>[] {
+        let maxRight = -Infinity
+        elementsWithMetrics.forEach(({ bbox }) => {
+            maxRight = Math.max(maxRight, bbox.right)
+        })
+
+        return elementsWithMetrics.map(({ bbox, ...el }) => {
+            const offset = maxRight - bbox.right
+            return {
+                x: el.x + offset
+            }
+        })
+    }
+
+    /**
+     * Enhanced top alignment with real metrics
+     */
+    private static alignTopWithMetrics(elementsWithMetrics: Array<{ bbox: PreciseBoundingBox } & EnhancedElement>): Partial<EnhancedElement>[] {
+        let minTop = Infinity
+        elementsWithMetrics.forEach(({ bbox }) => {
+            minTop = Math.min(minTop, bbox.top)
+        })
+
+        return elementsWithMetrics.map(({ bbox, ...el }) => {
+            const offset = minTop - bbox.top
+            return {
+                y: el.y + offset
+            }
+        })
+    }
+
+    /**
+     * Enhanced middle alignment with optical center option
+     */
+    private static alignMiddleWithMetrics(
+        elementsWithMetrics: Array<{ bbox: PreciseBoundingBox } & EnhancedElement>,
+        useOpticalCenter: boolean
+    ): Partial<EnhancedElement>[] {
+        let sumCenter = 0
+        elementsWithMetrics.forEach(({ bbox }) => {
+            sumCenter += useOpticalCenter ? bbox.visualCenter.y : (bbox.top + bbox.height / 2)
+        })
+        const centerY = sumCenter / elementsWithMetrics.length
+
+        return elementsWithMetrics.map(({ bbox, ...el }) => {
+            const currentCenter = useOpticalCenter ? bbox.visualCenter.y : (bbox.top + bbox.height / 2)
+            const offset = centerY - currentCenter
+            return {
+                y: el.y + offset
+            }
+        })
+    }
+
+    /**
+     * Enhanced bottom alignment with real metrics
+     */
+    private static alignBottomWithMetrics(elementsWithMetrics: Array<{ bbox: PreciseBoundingBox } & EnhancedElement>): Partial<EnhancedElement>[] {
+        let maxBottom = -Infinity
+        elementsWithMetrics.forEach(({ bbox }) => {
+            maxBottom = Math.max(maxBottom, bbox.bottom)
+        })
+
+        return elementsWithMetrics.map(({ bbox, ...el }) => {
+            const offset = maxBottom - bbox.bottom
+            return {
+                y: el.y + offset
+            }
+        })
+    }
+
+    /**
+     * Enhanced baseline alignment with real metrics
+     */
+    private static alignBaselineWithMetrics(elementsWithMetrics: Array<{ bbox: PreciseBoundingBox } & EnhancedElement>): Partial<EnhancedElement>[] {
+        // Separate text and icon elements
+        const textElements = elementsWithMetrics.filter(el => 
+            ['paragraph', 'link', 'heading', 'list'].includes(el.type)
+        )
+        const iconElements = elementsWithMetrics.filter(el => 
+            ['social-icon', 'image'].includes(el.type)
+        )
+
+        if (textElements.length === 0 || iconElements.length === 0) {
+            // Fall back to middle alignment
+            return this.alignMiddleWithMetrics(elementsWithMetrics, true)
+        }
+
+        // Calculate target baseline (average of icon centers)
+        let iconCenterY = 0
+        iconElements.forEach(({ bbox }) => {
+            iconCenterY += bbox.visualCenter.y
+        })
+        iconCenterY /= iconElements.length
+
+        return elementsWithMetrics.map(({ bbox, ...el }) => {
+            if (textElements.includes(el as any)) {
+                const textCenter = bbox.top + bbox.height / 2 + (bbox.baselineOffset * 0.2)
+                const offset = iconCenterY - textCenter
+                return { y: el.y + offset }
+            } else {
+                // Keep icon position
+                return {}
+            }
+        })
+    }
     /**
      * Align elements to left edge
      * Uses precise bounding box calculation for pixel-perfect alignment

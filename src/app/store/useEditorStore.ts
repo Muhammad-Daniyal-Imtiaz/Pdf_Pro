@@ -1,5 +1,6 @@
 
 import { create } from 'zustand'
+import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
 
 export interface EditorStyle {
     // Typography
@@ -101,6 +102,10 @@ interface EditorState {
     showPreview: boolean
     zoom: number
 
+    // PDF Generation State
+    isGeneratingPDF: boolean
+    pdfValidationWarnings: string[]
+
     // Auto-save
     lastSaved: Date | null
     isAutoSaving: boolean
@@ -149,9 +154,15 @@ interface EditorState {
     selectMultiple: (ids: string[]) => void
     clearSelection: () => void
 
-    // Alignment actions
+    // Enhanced Alignment actions with real metrics
     alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => void
     distributeElements: (axis: 'horizontal' | 'vertical') => void
+    validateAlignment: () => { isValid: boolean; misalignedPairs: Array<{ id1: string; id2: string; deltaX: number; deltaY: number }> }
+    getActualElementMetrics: (elementId: string) => any
+
+    // PDF Generation
+    setGeneratingPDF: (isGenerating: boolean) => void
+    validateWYSIWYGFidelity: () => { isValid: boolean; warnings: string[] }
 
     undo: () => void
     redo: () => void
@@ -199,7 +210,7 @@ const DEFAULT_STYLE: EditorStyle = {
     linkDecoration: 'underline'
 }
 
-export const useEditorStore = create<EditorState>((set) => ({
+export const useEditorStore = create<EditorState>((set, get) => ({
     activeTab: 'document',
     editMode: 'manual',
     elements: [
@@ -233,6 +244,8 @@ export const useEditorStore = create<EditorState>((set) => ({
     zoom: 100,
     lastSaved: null,
     isAutoSaving: true,
+    isGeneratingPDF: false,
+    pdfValidationWarnings: [],
 
     setTab: (tab: 'document' | 'cv' | 'contracts') => set({ activeTab: tab }),
     setEditMode: (mode: 'manual' | 'ai') => set({ editMode: mode }),
@@ -494,9 +507,10 @@ export const useEditorStore = create<EditorState>((set) => ({
         selectedId: null
     })),
 
-    // Alignment actions with advanced mathematical precision
-    alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => set((state) => {
-        if (state.selectedIds.length < 2) return {}
+    // Enhanced alignment actions with real metrics and DOM integration
+    alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => {
+        const state = get()
+        if (state.selectedIds.length < 2) return
 
         // Import alignment engine on demand
         const { AlignmentEngine, AdvancedMeasurement } = require('@/app/lib/alignment-service')
@@ -504,34 +518,54 @@ export const useEditorStore = create<EditorState>((set) => ({
         const newPast = [...state.past, state.elements]
         const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
 
-        let alignmentUpdates: Partial<EditorElement>[] = []
+        // Get ACTUAL rendered positions BEFORE alignment using CoordinateSystem
+        const elementsWithRealMetrics = selectedElements.map(el => {
+            const actualMetrics = CoordinateSystem.getElementMetrics(el.id)
+            return {
+                ...el,
+                actualBoundingBox: actualMetrics?.actualBoundingBox || {
+                    left: el.x,
+                    top: el.y,
+                    right: el.x + el.style.width,
+                    bottom: el.y + el.style.height
+                },
+                opticalCenter: actualMetrics?.opticalCenter || {
+                    x: el.x + el.style.width / 2,
+                    y: el.y + el.style.height / 2
+                }
+            }
+        })
 
-        // Use advanced alignment engine based on direction
+        let alignmentUpdates: Partial<EditorElement>[]
+
+        // Use enhanced alignment with real metrics
         switch (direction) {
             case 'left':
-                alignmentUpdates = AlignmentEngine.alignLeft(selectedElements)
+                alignmentUpdates = AlignmentEngine.alignLeft(elementsWithRealMetrics)
                 break
             case 'center':
-                alignmentUpdates = AlignmentEngine.alignCenter(selectedElements)
+                alignmentUpdates = AlignmentEngine.alignCenter(elementsWithRealMetrics)
                 break
             case 'right':
-                alignmentUpdates = AlignmentEngine.alignRight(selectedElements)
+                alignmentUpdates = AlignmentEngine.alignRight(elementsWithRealMetrics)
                 break
             case 'top':
-                alignmentUpdates = AlignmentEngine.alignTop(selectedElements)
+                alignmentUpdates = AlignmentEngine.alignTop(elementsWithRealMetrics)
                 break
             case 'middle':
-                alignmentUpdates = AlignmentEngine.alignMiddle(selectedElements)
+                alignmentUpdates = AlignmentEngine.alignMiddle(elementsWithRealMetrics)
                 break
             case 'bottom':
-                alignmentUpdates = AlignmentEngine.alignBottom(selectedElements)
+                alignmentUpdates = AlignmentEngine.alignBottom(elementsWithRealMetrics)
                 break
             case 'baseline':
-                alignmentUpdates = AlignmentEngine.alignBaseline(selectedElements)
+                alignmentUpdates = AlignmentEngine.alignBaseline(elementsWithRealMetrics)
                 break
+            default:
+                return
         }
 
-        // Apply updates to elements with export snapping
+        // Apply updates with proper grid snapping and coordinate conversion
         const newElements = state.elements.map(el => {
             if (!state.selectedIds.includes(el.id)) return el
 
@@ -539,7 +573,10 @@ export const useEditorStore = create<EditorState>((set) => ({
             if (idx === -1) return el
 
             const update = alignmentUpdates[idx]
-            const snap = (v: number) => Math.round(v * 2) / 2
+            
+            // Use element-specific grid size for precision
+            const gridSize = CoordinateSystem.getExportGridSize(el.type)
+            const snap = (v: number) => state.snapToGrid ? CoordinateSystem.snapToGrid(v, state.gridSize, gridSize) : v
 
             return {
                 ...el,
@@ -548,12 +585,13 @@ export const useEditorStore = create<EditorState>((set) => ({
             }
         })
 
-        return { elements: newElements, past: newPast, future: [] }
-    }),
+        set({ elements: newElements, past: newPast, future: [] })
+    },
 
-    // Distribution with intelligent spacing compensation
-    distributeElements: (axis: 'horizontal' | 'vertical') => set((state) => {
-        if (state.selectedIds.length < 3) return {}
+    // Enhanced distribution with spacing compensation
+    distributeElements: (axis: 'horizontal' | 'vertical') => {
+        const state = get()
+        if (state.selectedIds.length < 3) return
 
         // Import alignment engine on demand
         const { AlignmentEngine } = require('@/app/lib/alignment-service')
@@ -561,16 +599,29 @@ export const useEditorStore = create<EditorState>((set) => ({
         const newPast = [...state.past, state.elements]
         const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
 
-        let distributionUpdates: Partial<EditorElement>[] = []
+        // Get real metrics for accurate distribution
+        const elementsWithRealMetrics = selectedElements.map(el => {
+            const actualMetrics = CoordinateSystem.getElementMetrics(el.id)
+            return {
+                ...el,
+                actualBoundingBox: actualMetrics?.actualBoundingBox || {
+                    left: el.x,
+                    top: el.y,
+                    right: el.x + el.style.width,
+                    bottom: el.y + el.style.height
+                }
+            }
+        })
+
+        let distributionUpdates: Partial<EditorElement>[]
 
         if (axis === 'horizontal') {
-            distributionUpdates = AlignmentEngine.distributeHorizontal(selectedElements)
+            distributionUpdates = AlignmentEngine.distributeHorizontal(elementsWithRealMetrics)
         } else {
-            distributionUpdates = AlignmentEngine.distributeVertical(selectedElements)
+            distributionUpdates = AlignmentEngine.distributeVertical(elementsWithRealMetrics)
         }
 
-        const snap = (v: number) => Math.round(v * 2) / 2
-
+        // Apply updates with precise snapping
         const newElements = state.elements.map(el => {
             if (!state.selectedIds.includes(el.id)) return el
 
@@ -578,6 +629,8 @@ export const useEditorStore = create<EditorState>((set) => ({
             if (idx === -1) return el
 
             const update = distributionUpdates[idx]
+            const gridSize = CoordinateSystem.getExportGridSize(el.type)
+            const snap = (v: number) => state.snapToGrid ? CoordinateSystem.snapToGrid(v, state.gridSize, gridSize) : v
 
             return {
                 ...el,
@@ -586,6 +639,102 @@ export const useEditorStore = create<EditorState>((set) => ({
             }
         })
 
-        return { elements: newElements, past: newPast, future: [] }
-    })
+        set({ elements: newElements, past: newPast, future: [] })
+    },
+
+    // Validate current alignment of selected elements
+    validateAlignment: () => {
+        const state = get()
+        if (state.selectedIds.length < 2) {
+            return { isValid: true, misalignedPairs: [] }
+        }
+
+        const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
+        const tolerance = CoordinateSystem.getAlignmentTolerance(selectedElements.map(el => el.type))
+        const misalignedPairs: Array<{ id1: string; id2: string; deltaX: number; deltaY: number }> = []
+
+        // Check all pairs for alignment
+        for (let i = 0; i < selectedElements.length; i++) {
+            for (let j = i + 1; j < selectedElements.length; j++) {
+                const el1 = selectedElements[i]
+                const el2 = selectedElements[j]
+
+                const metrics1 = CoordinateSystem.getElementMetrics(el1.id)
+                const metrics2 = CoordinateSystem.getElementMetrics(el2.id)
+
+                if (metrics1 && metrics2) {
+                    const deltaX = Math.abs(metrics1.opticalCenter.x - metrics2.opticalCenter.x)
+                    const deltaY = Math.abs(metrics1.opticalCenter.y - metrics2.opticalCenter.y)
+
+                    // Check if elements are supposed to be aligned (same x or y within tolerance)
+                    const shouldAlignX = Math.abs(el1.x - el2.x) < tolerance
+                    const shouldAlignY = Math.abs(el1.y - el2.y) < tolerance
+
+                    if (shouldAlignX && deltaX > tolerance) {
+                        misalignedPairs.push({
+                            id1: el1.id,
+                            id2: el2.id,
+                            deltaX,
+                            deltaY: 0
+                        })
+                    }
+
+                    if (shouldAlignY && deltaY > tolerance) {
+                        misalignedPairs.push({
+                            id1: el1.id,
+                            id2: el2.id,
+                            deltaX: 0,
+                            deltaY
+                        })
+                    }
+                }
+            }
+        }
+
+        return {
+            isValid: misalignedPairs.length === 0,
+            misalignedPairs
+        }
+    },
+
+    // Get actual rendered metrics for a specific element
+    getActualElementMetrics: (elementId: string) => {
+        return CoordinateSystem.getElementMetrics(elementId)
+    },
+
+    // PDF Generation state management
+    setGeneratingPDF: (isGenerating: boolean) => set({ isGeneratingPDF: isGenerating }),
+
+    validateWYSIWYGFidelity: () => {
+        const state = get()
+        const warnings: string[] = []
+
+        state.elements.forEach(el => {
+            const actualMetrics = CoordinateSystem.getElementMetrics(el.id)
+            if (!actualMetrics) {
+                warnings.push(`Element ${el.id} not found in DOM`)
+                return
+            }
+
+            // Check for subpixel positioning issues
+            if (Math.abs(el.x % 1) > 0.5 || Math.abs(el.y % 1) > 0.5) {
+                warnings.push(`Element ${el.id} has subpixel positioning that may affect PDF quality`)
+            }
+
+            // Check for problematic rotations
+            if (el.style.rotation && el.style.rotation % 90 !== 0) {
+                warnings.push(`Element ${el.id} has rotation ${el.style.rotation}° which may not render consistently in PDF`)
+            }
+
+            // Check for opacity issues
+            if (el.style.opacity && el.style.opacity < 0.95) {
+                warnings.push(`Element ${el.id} has opacity ${el.style.opacity} which may render differently in PDF`)
+            }
+        })
+
+        return {
+            isValid: warnings.length === 0,
+            warnings
+        }
+    },
 }))
