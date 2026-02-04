@@ -164,6 +164,8 @@ interface EditorState {
     setGeneratingPDF: (isGenerating: boolean) => void
     validateWYSIWYGFidelity: () => { isValid: boolean; warnings: string[] }
 
+    updateElementContent: (id: string, content: string) => void
+
     undo: () => void
     redo: () => void
 }
@@ -507,85 +509,36 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         selectedId: null
     })),
 
-    // Enhanced alignment actions with real metrics and DOM integration
+    updateElementContent: (id: string, content: string) => set((state) => ({
+        elements: state.elements.map(el =>
+            el.id === id ? { ...el, content } : el
+        )
+    })),
+
+    // Ensure alignElements properly handles all element types
     alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => {
-        const state = get()
-        if (state.selectedIds.length < 2) return
+        const { selectedIds, elements } = get()
+        if (selectedIds.length < 2) return
 
-        // Import alignment engine on demand
-        const { AlignmentEngine, AdvancedMeasurement } = require('@/app/lib/alignment-service')
+        const { AlignmentEngine } = require('@/app/lib/alignment-service')
+        const selectedElements = elements.filter(el => selectedIds.includes(el.id))
 
-        const newPast = [...state.past, state.elements]
-        const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
+        const updates = AlignmentEngine[direction === 'baseline' ? 'alignBaseline' :
+            direction === 'left' || direction === 'center' || direction === 'right' ?
+                `align${direction.charAt(0).toUpperCase() + direction.slice(1)}` as const :
+                `align${direction.charAt(0).toUpperCase() + direction.slice(1)}` as const
+        ](selectedElements)
 
-        // Get ACTUAL rendered positions BEFORE alignment using CoordinateSystem
-        const elementsWithRealMetrics = selectedElements.map(el => {
-            const actualMetrics = CoordinateSystem.getElementMetrics(el.id)
-            return {
-                ...el,
-                actualBoundingBox: actualMetrics?.actualBoundingBox || {
-                    left: el.x,
-                    top: el.y,
-                    right: el.x + el.style.width,
-                    bottom: el.y + el.style.height
-                },
-                opticalCenter: actualMetrics?.opticalCenter || {
-                    x: el.x + el.style.width / 2,
-                    y: el.y + el.style.height / 2
-                }
-            }
-        })
-
-        let alignmentUpdates: Partial<EditorElement>[]
-
-        // Use enhanced alignment with real metrics
-        switch (direction) {
-            case 'left':
-                alignmentUpdates = AlignmentEngine.alignLeft(elementsWithRealMetrics)
-                break
-            case 'center':
-                alignmentUpdates = AlignmentEngine.alignCenter(elementsWithRealMetrics)
-                break
-            case 'right':
-                alignmentUpdates = AlignmentEngine.alignRight(elementsWithRealMetrics)
-                break
-            case 'top':
-                alignmentUpdates = AlignmentEngine.alignTop(elementsWithRealMetrics)
-                break
-            case 'middle':
-                alignmentUpdates = AlignmentEngine.alignMiddle(elementsWithRealMetrics)
-                break
-            case 'bottom':
-                alignmentUpdates = AlignmentEngine.alignBottom(elementsWithRealMetrics)
-                break
-            case 'baseline':
-                alignmentUpdates = AlignmentEngine.alignBaseline(elementsWithRealMetrics)
-                break
-            default:
-                return
-        }
-
-        // Apply updates with proper grid snapping and coordinate conversion
-        const newElements = state.elements.map(el => {
-            if (!state.selectedIds.includes(el.id)) return el
-
-            const idx = selectedElements.findIndex(sel => sel.id === el.id)
-            if (idx === -1) return el
-
-            const update = alignmentUpdates[idx]
-            
-            // Use element-specific grid size for precision
-            const gridSize = CoordinateSystem.getExportGridSize(el.type)
-            const snap = (v: number) => state.snapToGrid ? CoordinateSystem.snapToGrid(v, state.gridSize, gridSize) : v
-
-            return {
-                ...el,
-                x: update.x !== undefined ? snap(update.x) : el.x,
-                y: update.y !== undefined ? snap(update.y) : el.y
-            }
-        })
-
-        set({ elements: newElements, past: newPast, future: [] })
+        set((state) => ({
+            elements: state.elements.map((el) => {
+                const updateIndex = selectedElements.findIndex(sel => sel.id === el.id)
+                if (updateIndex === -1) return el
+                const update = updates[updateIndex]
+                return { ...el, ...update }
+            }),
+            past: [...state.past, state.elements],
+            future: []
+        }))
     },
 
     // Enhanced distribution with spacing compensation

@@ -54,29 +54,28 @@ export default function EditorMain() {
     const selectedElement = elements.find(el => el.id === selectedId)
 
     const handleDownloadPDF = async () => {
-        if (!canvasRef.current) return
-
-        // 1. Clean UI (Deselect elements to remove blue rings)
-        selectElement(null)
+        // CRITICAL: Exit edit mode first
         setEditingId(null)
+        selectElement(null)
 
-        // 2. Wait for React to commit clean state
+        // Wait for React to update
         await new Promise(resolve => setTimeout(resolve, 100))
+
+        if (!canvasRef.current) return
 
         setGeneratingPDF(true)
         try {
-            // 3. Call Service with 4x High-DPI Scale (Default in service)
             await downloadPDFViaApi(
                 canvasRef.current,
                 elements,
-                `${docTitle.replace(/\s+/g, '-').toLowerCase() || 'document'}.pdf`,
+                `${docTitle || 'document'}.pdf`,
                 {
-                    quality: 4, // 4x Scale for "Canva-Level" crispness
-                    debug: false
+                    quality: 4,
+                    debug: process.env.NODE_ENV === 'development'
                 }
             )
         } catch (error) {
-            console.error('Failed to generate PDF:', error)
+            console.error('PDF generation failed:', error)
             alert('Failed to generate PDF. Please try again.')
         } finally {
             setGeneratingPDF(false)
