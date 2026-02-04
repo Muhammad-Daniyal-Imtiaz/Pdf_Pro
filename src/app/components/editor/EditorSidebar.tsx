@@ -1,8 +1,10 @@
 'use client'
 
-import { useEditorStore, EditorElement } from '@/app/store/useEditorStore'
-import { Type, Heading, List, Image as ImageIcon, Minus, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, AlignJustify, Sparkles, Trash2, Copy, Layers, ChevronLeft, ChevronRight, Settings, Grid, Monitor, Link, Phone, Share2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useEditorStore } from '@/app/store/useEditorStore'
+// FIX: Use 'import type' to resolve Turbopack type resolution errors
+import type { EditorElement } from '@/app/store/useEditorStore'
+import { Type, Heading, List, Minus, ChevronLeft, ChevronRight, Settings, Grid, Monitor, Link, Phone, Share2, Layers, Trash2 } from 'lucide-react'
 import SocialIcons from './SocialIcons'
 import LineControls from './LineControls'
 import LinkControls from './LinkControls'
@@ -34,7 +36,6 @@ export default function EditorSidebar() {
         setMounted(true)
     }, [])
 
-    // Drag handler for sidebar items
     const handleDragStart = (e: React.DragEvent, type: string) => {
         e.dataTransfer.setData('application/react-dnd-type', type)
         e.dataTransfer.effectAllowed = 'copy'
@@ -63,7 +64,7 @@ export default function EditorSidebar() {
                 {isSidebarCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
             </button>
 
-            {/* 1. Edit Mode Toggle */}
+            {/* Edit Mode Toggle */}
             <div className={`p-4 border-b border-gray-100 ${isSidebarCollapsed ? 'items-center' : ''}`}>
                 {!isSidebarCollapsed && (
                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Edit Mode</h3>
@@ -103,13 +104,14 @@ export default function EditorSidebar() {
                         `}
                     >
                         {isSidebarCollapsed ? (
-                            <Sparkles size={18} />
+                            <div style={{ color: '#9333ea' }} className="animate-pulse w-4 h-4 rounded-full bg-gray-300 border-4 border-purple-400 flex items-center justify-center">
+                                <span className="text-[10px] font-bold text-purple-600">AI</span>
+                            </div>
                         ) : (
                             <>
                                 <div className={`w-4 h-4 rounded-full border-4 ${editMode === 'ai' ? 'border-purple-500' : 'border-gray-300'}`} />
                                 <div className="flex items-center gap-2">
                                     <span className="font-medium">AI Gen</span>
-                                    <Sparkles size={14} className={editMode === 'ai' ? 'text-purple-500' : 'text-gray-400'} />
                                 </div>
                             </>
                         )}
@@ -130,19 +132,18 @@ export default function EditorSidebar() {
                                     placeholder="E.g. Create a project proposal..."
                                 />
                                 <button className="w-full py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors flex items-center justify-center gap-2">
-                                    <Sparkles size={16} />
                                     Generate
                                 </button>
                             </>
                         ) : (
                             <div className="flex flex-col items-center gap-4 text-gray-400 text-xs">
-                                <Sparkles size={20} className="text-purple-400" />
+                                <span>AI</span>
                             </div>
                         )}
                     </div>
                 ) : (
                     <>
-                        {/* 2. Add Elements */}
+                        {/* Add Elements */}
                         <div className="p-4 border-b border-gray-100">
                             {!isSidebarCollapsed && (
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Elements</h3>
@@ -199,56 +200,18 @@ export default function EditorSidebar() {
                                     <Minus size={16} className="text-gray-600" />
                                     {!isSidebarCollapsed && <span className="text-xs font-medium text-gray-700">Divider</span>}
                                 </button>
-
-                                <button
-                                    onClick={() => addElement('link')}
-                                    title="Link"
-                                    className={`
-                                        flex items-center gap-2 border rounded-lg transition-colors
-                                        ${isSidebarCollapsed ? 'justify-center p-2' : 'p-3 bg-cyan-50 hover:bg-cyan-100 border-cyan-200'}
-                                    `}
-                                >
-                                    <Link size={16} className="text-cyan-600" />
-                                    {!isSidebarCollapsed && <span className="text-xs font-medium text-cyan-700">Link</span>}
-                                </button>
-
-                                <button
-                                    onClick={() => addLine('horizontal')}
-                                    title="Horizontal Line"
-                                    className={`
-                                        flex items-center gap-2 border rounded-lg transition-colors
-                                        ${isSidebarCollapsed ? 'justify-center p-2' : 'p-3 bg-orange-50 hover:bg-orange-100 border-orange-200'}
-                                    `}
-                                >
-                                    <Minus size={16} className="text-orange-600" />
-                                    {!isSidebarCollapsed && <span className="text-xs font-medium text-orange-700">H-Line</span>}
-                                </button>
-
-                                <button
-                                    onClick={() => addLine('vertical')}
-                                    title="Vertical Line"
-                                    className={`
-                                        flex items-center gap-2 border rounded-lg transition-colors
-                                        ${isSidebarCollapsed ? 'justify-center p-2' : 'p-3 bg-pink-50 hover:bg-pink-100 border-pink-200'}
-                                    `}
-                                >
-                                    <div className="w-4 h-4 bg-pink-600 rounded-full" />
-                                    {!isSidebarCollapsed && <span className="text-xs font-medium text-pink-700">V-Line</span>}
-                                </button>
                             </div>
                         </div>
 
                         {/* Social Icons Section */}
                         <div className="p-4 border-b border-gray-100">
-                            {!isSidebarCollapsed && (
-                                <SocialIcons onIconSelect={addSocialIcon} />
-                            )}
+                            {!isSidebarCollapsed && <SocialIcons onIconSelect={addSocialIcon} />}
                         </div>
 
-                        {/* 3. Style & Layer Controls */}
+                        {/* Style & Layer Controls */}
                         {selectedElement && (
                             <div className={`bg-gray-50 flex-1 space-y-6 ${isSidebarCollapsed ? 'p-2' : 'p-6'}`}>
-                                {!isSidebarCollapsed ? (
+                                {!isSidebarCollapsed && (
                                     <>
                                         {/* Element Info */}
                                         <div>
@@ -327,7 +290,7 @@ export default function EditorSidebar() {
                                                         </div>
                                                     )}
 
-                                                    <hr className="border-gray-100" />
+                                                    <div className="h-px bg-gray-100 my-1" />
 
                                                     {/* Resize & Lock */}
                                                     <div className="flex items-center justify-between">
@@ -343,8 +306,8 @@ export default function EditorSidebar() {
                                                     <div className="space-y-3">
                                                         <div>
                                                             <div className="flex justify-between items-center mb-1.5">
-                                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Icon Size</label>
-                                                                <span className="text-[10px] font-mono font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{selectedElement.style.fontSize}px</span>
+                                                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Icon Size</label>
+                                                                <span className="text-[10px] font-mono font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{selectedElement.style.fontSize || 24}px</span>
                                                             </div>
                                                             <input
                                                                 type="range"
@@ -357,7 +320,7 @@ export default function EditorSidebar() {
                                                         </div>
                                                         <div>
                                                             <div className="flex justify-between items-center mb-1.5">
-                                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Rotation</label>
+                                                                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Rotation</label>
                                                                 <span className="text-[10px] font-mono font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">{selectedElement.style.rotation || 0}°</span>
                                                             </div>
                                                             <input
@@ -423,7 +386,7 @@ export default function EditorSidebar() {
                                                             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                                             }`}
                                                     >
-                                                        <Bold size={14} className="mx-auto" />
+                                                        <div className="w-4 h-4 border-4 border-current bg-current rounded-sm" style={{ borderWidth: '2px', borderColor: selectedElement.style.fontWeight === '700' ? '#3B82F6' : '#D1D5DB' }}></div>
                                                     </button>
                                                     <button
                                                         onClick={() => updateStyle('fontStyle', selectedElement.style.fontStyle === 'italic' ? 'normal' : 'italic')}
@@ -432,7 +395,7 @@ export default function EditorSidebar() {
                                                             : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                                             }`}
                                                     >
-                                                        <Italic size={14} className="mx-auto" />
+                                                        <div className="w-4 h-4 border-4 border-current bg-current rounded-sm" style={{ borderWidth: '2px', borderColor: selectedElement.style.fontStyle === 'italic' ? '#3B82F6' : '#D1D5DB' }}></div>
                                                     </button>
                                                 </div>
 
@@ -447,9 +410,9 @@ export default function EditorSidebar() {
                                                                 : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                                                 }`}
                                                         >
-                                                            {align === 'left' && <AlignLeft size={14} className="mx-auto" />}
-                                                            {align === 'center' && <AlignCenter size={14} className="mx-auto" />}
-                                                            {align === 'right' && <AlignRight size={14} className="mx-auto" />}
+                                                            {align === 'left' && <div className="w-3 h-3 bg-gray-400 rounded-sm" />}
+                                                            {align === 'center' && <div className="w-3 h-3 bg-gray-400 rounded-full mx-auto" />}
+                                                            {align === 'right' && <div className="w-3 h-3 bg-gray-400 rounded-sm ml-auto" />}
                                                         </button>
                                                     ))}
                                                 </div>
@@ -462,7 +425,7 @@ export default function EditorSidebar() {
                                                             type="color"
                                                             value={selectedElement.style.color}
                                                             onChange={(e) => updateStyle('color', e.target.value)}
-                                                            className="w-12 h-10 rounded cursor-pointer border border-gray-300"
+                                                            className="w-12 h-10 p-1 rounded cursor-pointer border border-gray-300"
                                                         />
                                                         <span className="text-xs font-mono text-gray-600">{selectedElement.style.color}</span>
                                                     </div>
@@ -517,14 +480,6 @@ export default function EditorSidebar() {
                                             Delete Element
                                         </button>
                                     </>
-                                ) : (
-                                    <div className="flex flex-col items-center gap-4">
-                                        <div className="w-full h-px bg-gray-200" />
-                                        <Settings size={20} className="text-gray-400" />
-                                        <button onClick={() => removeElement(selectedId!)} className="p-2 text-red-500 hover:bg-red-50 rounded bg-white border border-gray-200 shadow-sm">
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
                                 )}
                             </div>
                         )}

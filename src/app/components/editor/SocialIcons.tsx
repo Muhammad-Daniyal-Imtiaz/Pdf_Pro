@@ -45,7 +45,7 @@ export default function SocialIcons({ onIconSelect }: SocialIconsProps) {
         <h3 className="text-sm font-semibold text-gray-700">Social Media Icons</h3>
         <span className="text-xs text-gray-500">Drag to add</span>
       </div>
-      
+
       <div className="grid grid-cols-4 gap-2">
         {SOCIAL_ICONS.map((icon) => {
           const IconComponent = icon.icon
@@ -57,8 +57,8 @@ export default function SocialIcons({ onIconSelect }: SocialIconsProps) {
               title={icon.name}
             >
               <div style={{ color: icon.color }}>
-                <IconComponent 
-                  size={20} 
+                <IconComponent
+                  size={20}
                   className="mb-1 transition-transform group-hover:scale-110"
                 />
               </div>
@@ -76,5 +76,12 @@ export default function SocialIcons({ onIconSelect }: SocialIconsProps) {
     </div>
   )
 }
+
+// Helper maps for quick lookups by icon type
+export const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string; strokeWidth?: number; style?: React.CSSProperties }>> =
+  SOCIAL_ICONS.reduce((acc, icon) => ({ ...acc, [icon.type]: icon.icon }), {})
+
+export const ICON_COLORS: Record<string, string> =
+  SOCIAL_ICONS.reduce((acc, icon) => ({ ...acc, [icon.type]: icon.color }), {})
 
 export { SOCIAL_ICONS }

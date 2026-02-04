@@ -1,56 +1,7 @@
 'use client'
 
-import { Linkedin, Mail, Phone, Twitter, Github, Globe, Instagram, Facebook, Youtube, MessageCircle, MapPin, Calendar, Clock, User, Briefcase, GraduationCap, Award, Star, Heart, Download, Share2, ExternalLink } from 'lucide-react'
-
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
-  linkedin: Linkedin,
-  email: Mail,
-  phone: Phone,
-  twitter: Twitter,
-  github: Github,
-  website: Globe,
-  instagram: Instagram,
-  facebook: Facebook,
-  youtube: Youtube,
-  whatsapp: MessageCircle,
-  location: MapPin,
-  calendar: Calendar,
-  clock: Clock,
-  user: User,
-  briefcase: Briefcase,
-  graduation: GraduationCap,
-  award: Award,
-  star: Star,
-  heart: Heart,
-  download: Download,
-  share: Share2,
-  external: ExternalLink
-}
-
-const ICON_COLORS: Record<string, string> = {
-  linkedin: '#0077B5',
-  email: '#EA4335',
-  phone: '#10B981',
-  twitter: '#1DA1F2',
-  github: '#333333',
-  website: '#6366F1',
-  instagram: '#E4405F',
-  facebook: '#1877F2',
-  youtube: '#FF0000',
-  whatsapp: '#25D366',
-  location: '#EF4444',
-  calendar: '#F59E0B',
-  clock: '#8B5CF6',
-  user: '#6B7280',
-  briefcase: '#3B82F6',
-  graduation: '#84CC16',
-  award: '#F59E0B',
-  star: '#EAB308',
-  heart: '#EC4899',
-  download: '#10B981',
-  share: '#06B6D4',
-  external: '#6366F1'
-}
+import { ExternalLink, Phone } from 'lucide-react'
+import { ICON_MAP, ICON_COLORS } from './SocialIcons'
 
 interface SocialIconElementProps {
   element: any
@@ -61,7 +12,7 @@ interface SocialIconElementProps {
 
 export default function SocialIconElement({ element, isSelected, onSelect, onUpdate }: SocialIconElementProps) {
   const { iconType = 'user', content = '', showLabel = false, labelPosition = 'right' } = element
-  const IconComponent = ICON_MAP[iconType] || User
+  const IconComponent = ICON_MAP[iconType] || ICON_MAP.user
   const iconColor = ICON_COLORS[iconType] || '#6B7280'
 
   const iconSize = element.style.fontSize || 24
@@ -75,7 +26,7 @@ export default function SocialIconElement({ element, isSelected, onSelect, onUpd
     flexDirection: labelPosition === 'top' || labelPosition === 'bottom' ? 'column' : 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '10px',
+    gap: '8px',
     border: isSelected ? '2px solid #3B82F6' : 'none',
     borderRadius: `${element.style.borderRadius || 8}px`,
     backgroundColor: element.style.backgroundColor || 'transparent',
@@ -84,7 +35,8 @@ export default function SocialIconElement({ element, isSelected, onSelect, onUpd
     zIndex: element.style.zIndex || 0,
     cursor: 'inherit',
     padding: '8px',
-    boxSizing: 'border-box',
+    // CRITICAL FIX: Box Sizing prevents padding from expanding width
+    boxSizing: 'border-box' as any,
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     overflow: 'visible'
   }
@@ -98,7 +50,9 @@ export default function SocialIconElement({ element, isSelected, onSelect, onUpd
       alignItems: 'center',
       justifyContent: 'center',
       flexShrink: 0,
-      lineHeight: 1
+      lineHeight: 1,
+      // Ensure SVG doesn't overflow icon container
+      boxSizing: 'border-box'
     }}>
       <IconComponent
         size={iconSize}
@@ -122,7 +76,9 @@ export default function SocialIconElement({ element, isSelected, onSelect, onUpd
         letterSpacing: '-0.01em',
         textRendering: 'geometricPrecision',
         WebkitFontSmoothing: 'antialiased',
-        MozOsxFontSmoothing: 'grayscale'
+        MozOsxFontSmoothing: 'grayscale',
+        // CRITICAL FIX: Box sizing for text
+        boxSizing: 'border-box'
       } as React.CSSProperties}>
         {content}
       </span>

@@ -23,6 +23,7 @@ export default function SelectionIndicator({ element, isSelected, isMultiSelecte
             <div
                 style={{
                     position: 'absolute',
+                    // Positioned strictly outside to prevent layout shift
                     left: `${element.x - borderWidth}px`,
                     top: `${element.y - borderWidth}px`,
                     width: `${element.style.width + borderWidth * 2}px`,
@@ -34,6 +35,7 @@ export default function SelectionIndicator({ element, isSelected, isMultiSelecte
                     zIndex: 1000,
                     transition: 'all 0.15s ease-out',
                     opacity: 0.9,
+                    boxSizing: 'border-box',
                 }}
                 className="SelectionRing"
                 data-html2canvas-ignore="true"
@@ -50,7 +52,8 @@ export default function SelectionIndicator({ element, isSelected, isMultiSelecte
                                 borderRadius: '50%',
                                 top: '-6px',
                                 left: '-6px',
-                                opacity: 0.8
+                                opacity: 0.8,
+                                boxSizing: 'border-box'
                             }}
                         />
                         <div
@@ -62,7 +65,8 @@ export default function SelectionIndicator({ element, isSelected, isMultiSelecte
                                 borderRadius: '50%',
                                 top: '-6px',
                                 right: '-6px',
-                                opacity: 0.8
+                                opacity: 0.8,
+                                boxSizing: 'border-box'
                             }}
                         />
                         <div
@@ -74,7 +78,8 @@ export default function SelectionIndicator({ element, isSelected, isMultiSelecte
                                 borderRadius: '50%',
                                 bottom: '-6px',
                                 left: '-6px',
-                                opacity: 0.8
+                                opacity: 0.8,
+                                boxSizing: 'border-box'
                             }}
                         />
                         <div
@@ -86,7 +91,8 @@ export default function SelectionIndicator({ element, isSelected, isMultiSelecte
                                 borderRadius: '50%',
                                 bottom: '-6px',
                                 right: '-6px',
-                                opacity: 0.8
+                                opacity: 0.8,
+                                boxSizing: 'border-box'
                             }}
                         />
                     </>
@@ -110,7 +116,8 @@ export default function SelectionIndicator({ element, isSelected, isMultiSelecte
                         zIndex: 1001,
                         pointerEvents: 'none',
                         boxShadow: '0 2px 8px rgba(99, 102, 241, 0.3)',
-                        whiteSpace: 'nowrap'
+                        whiteSpace: 'nowrap',
+                        boxSizing: 'border-box',
                     }}
                     className="SelectionLabel"
                     data-html2canvas-ignore="true"

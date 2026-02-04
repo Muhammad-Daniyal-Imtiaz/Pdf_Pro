@@ -2,184 +2,131 @@
 
 import React, { useState, useEffect } from 'react'
 import { EditorElement } from '@/app/store/useEditorStore'
+import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
 import { AdvancedMeasurement } from '@/app/lib/alignment-service'
 
 interface MeasurementFeedbackProps {
     element: EditorElement
     isSelected: boolean
-    alignmentInfo?: {
-        distanceToAlign?: number
-        opticalCenter?: { x: number; y: number }
-        fontSize?: number
-    }
 }
 
-export default function MeasurementFeedback({ element, isSelected, alignmentInfo }: MeasurementFeedbackProps) {
+export default function MeasurementFeedback({ element, isSelected }: MeasurementFeedbackProps) {
+    const [metrics, setMetrics] = useState<ReturnType<typeof CoordinateSystem.getElementMetrics>>(null)
     const [bbox, setBbox] = useState(AdvancedMeasurement.calculateBoundingBox(element))
 
     useEffect(() => {
-        setBbox(AdvancedMeasurement.calculateBoundingBox(element))
+        // Update metrics in real-time
+        const updateMetrics = () => {
+            const domMetrics = CoordinateSystem.getElementMetrics(element.id)
+            setMetrics(domMetrics)
+            setBbox(AdvancedMeasurement.calculateBoundingBox(element))
+        }
+
+        updateMetrics()
+        const interval = setInterval(updateMetrics, 100) // Update frequently during interaction
+
+        return () => clearInterval(interval)
     }, [element])
 
-    if (!isSelected) return null
+    if (!isSelected || !metrics) return null
 
-    // Calculate readable dimensions
-    const width = Math.round(bbox.width * 10) / 10
-    const height = Math.round(bbox.height * 10) / 10
+    // Check for drift between stored and actual position
+    const driftX = Math.abs(metrics.x - element.x)
+    const driftY = Math.abs(metrics.y - element.y)
+    const hasDrift = driftX > 1 || driftY > 1
 
     return (
-        <div data-html2canvas-ignore="true">
-            {/* Dimension Labels */}
+        <div data-html2canvas-ignore="true" className="pointer-events-none">
+            {/* Dimension Tooltip */}
             <div
+                className="absolute z-[999] bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg"
                 style={{
-                    position: 'absolute',
                     left: `${element.x + element.style.width / 2}px`,
-                    top: `${element.y - 35}px`,
-                    transform: 'translateX(-50%)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.9)',
-                    color: 'white',
-                    padding: '4px 12px',
-                    borderRadius: '6px',
-                    fontSize: '12px',
-                    fontWeight: '600',
-                    zIndex: 999,
-                    pointerEvents: 'none',
-                    whiteSpace: 'nowrap',
-                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
-                    fontFamily: 'monospace'
+                    top: `${element.y - 40}px`,
+                    transform: 'translateX(-50%)'
                 }}
-                className="MeasurementTooltip"
             >
-                {width}px × {height}px
+                {Math.round(bbox.width)}×{Math.round(bbox.height)}px
+                {hasDrift && (
+                    <span className="ml-2 text-yellow-300">
+                        ⚠️ Drift: {driftX.toFixed(1)},{driftY.toFixed(1)}
+                    </span>
+                )}
             </div>
 
-            {/* Position Label */}
+            {/* Position Guides */}
             <div
+                className="absolute z-[998] text-[10px] font-mono bg-indigo-500 text-white px-1.5 py-0.5 rounded opacity-80"
                 style={{
-                    position: 'absolute',
-                    left: `${element.x - 50}px`,
+                    left: `${element.x}px`,
+                    top: `${element.y - 20}px`,
+                    transform: 'translateX(-50%)'
+                }}
+            >
+                X:{Math.round(element.x)}
+            </div>
+
+            <div
+                className="absolute z-[998] text-[10px] font-mono bg-indigo-500 text-white px-1.5 py-0.5 rounded opacity-80"
+                style={{
+                    left: `${element.x - 35}px`,
                     top: `${element.y + element.style.height / 2}px`,
-                    transform: 'translateY(-50%)',
-                    backgroundColor: 'rgba(99, 102, 241, 0.85)',
-                    color: 'white',
-                    padding: '3px 8px',
-                    borderRadius: '4px',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    zIndex: 999,
-                    pointerEvents: 'none',
-                    whiteSpace: 'nowrap',
-                    fontFamily: 'monospace',
-                    opacity: 0.8
+                    transform: 'translateY(-50%)'
                 }}
-                className="MeasurementTooltip"
             >
-                X: {Math.round(element.x)}
+                Y:{Math.round(element.y)}
             </div>
 
-            <div
-                style={{
-                    position: 'absolute',
-                    left: `${element.x + element.style.width / 2}px`,
-                    top: `${element.y - 8}px`,
-                    transform: 'translateX(-50%)',
-                    backgroundColor: 'rgba(99, 102, 241, 0.85)',
-                    color: 'white',
-                    padding: '3px 8px',
-                    borderRadius: '4px',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    zIndex: 999,
-                    pointerEvents: 'none',
-                    whiteSpace: 'nowrap',
-                    fontFamily: 'monospace',
-                    opacity: 0.8
-                }}
-                className="MeasurementTooltip"
-            >
-                Y: {Math.round(element.y)}
-            </div>
-
-            {/* Visual Grid Lines - Helps with alignment */}
+            {/* Alignment Guides - Center Lines */}
             <svg
-                style={{
-                    position: 'absolute',
-                    left: '0',
-                    top: '0',
-                    width: '100%',
-                    height: '100%',
-                    pointerEvents: 'none',
-                    zIndex: 990
-                }}
-                data-html2canvas-ignore="true"
+                className="absolute inset-0 w-full h-full z-[990] pointer-events-none"
+                style={{ overflow: 'visible' }}
             >
-                {/* Center horizontal line */}
                 <line
                     x1={element.x}
                     y1={element.y + element.style.height / 2}
                     x2={element.x + element.style.width}
                     y2={element.y + element.style.height / 2}
-                    stroke="rgba(99, 102, 241, 0.2)"
+                    stroke="rgba(99, 102, 241, 0.3)"
                     strokeWidth="1"
                     strokeDasharray="4,4"
                 />
-                {/* Center vertical line */}
                 <line
                     x1={element.x + element.style.width / 2}
                     y1={element.y}
                     x2={element.x + element.style.width / 2}
                     y2={element.y + element.style.height}
-                    stroke="rgba(99, 102, 241, 0.2)"
+                    stroke="rgba(99, 102, 241, 0.3)"
                     strokeWidth="1"
                     strokeDasharray="4,4"
                 />
-            </svg>
 
-            {/* Optical Center Indicator (for icons) */}
-            {element.type === 'social-icon' && (
-                <div
-                    style={{
-                        position: 'absolute',
-                        left: `${bbox.visualCenter.x - 3}px`,
-                        top: `${bbox.visualCenter.y - 3}px`,
-                        width: '6px',
-                        height: '6px',
-                        backgroundColor: '#10b981',
-                        borderRadius: '50%',
-                        zIndex: 999,
-                        pointerEvents: 'none',
-                        boxShadow: '0 0 4px rgba(16, 185, 129, 0.5)'
-                    }}
-                    className="OpticalCenterIndicator"
-                    data-html2canvas-ignore="true"
-                    title="Optical Center"
-                />
-            )}
-
-            {/* Baseline Indicator (for text) */}
-            {(element.type === 'paragraph' || element.type === 'link') && (
-                <svg
-                    style={{
-                        position: 'absolute',
-                        left: '0',
-                        top: '0',
-                        width: '100%',
-                        height: '100%',
-                        pointerEvents: 'none',
-                        zIndex: 995
-                    }}
-                    data-html2canvas-ignore="true"
-                >
+                {/* Baseline indicator for text */}
+                {(element.type === 'paragraph' || element.type === 'link') && (
                     <line
                         x1={element.x}
                         y1={element.y + bbox.baselineOffset}
                         x2={element.x + element.style.width}
                         y2={element.y + bbox.baselineOffset}
-                        stroke="rgba(168, 85, 247, 0.3)"
+                        stroke="rgba(168, 85, 247, 0.4)"
                         strokeWidth="1"
                         strokeDasharray="2,2"
                     />
-                </svg>
+                )}
+            </svg>
+
+            {/* Drift Warning Overlay */}
+            {hasDrift && (
+                <div
+                    className="absolute z-[1000] border-2 border-red-500 rounded pointer-events-none animate-pulse"
+                    style={{
+                        left: `${metrics.x}px`,
+                        top: `${metrics.y}px`,
+                        width: `${metrics.width}px`,
+                        height: `${metrics.height}px`
+                    }}
+                    title="Visual drift detected"
+                />
             )}
         </div>
     )

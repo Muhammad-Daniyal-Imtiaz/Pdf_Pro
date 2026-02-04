@@ -1,6 +1,5 @@
 'use client'
 import React, { useRef, useEffect, useState } from 'react'
-import { generatePDFPreview } from '@/app/lib/pdf-service'
 import { useEditorStore } from '@/app/store/useEditorStore'
 
 interface PDFPreviewProps {

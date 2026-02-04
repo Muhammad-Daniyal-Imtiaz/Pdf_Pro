@@ -3,19 +3,9 @@ import { PDFDocument } from 'pdf-lib'
 
 export const runtime = 'nodejs'
 
-const A4_WIDTH_PTS = 595.28
-const A4_HEIGHT_PTS = 841.89
-
 type SnapshotRequestBody = {
     imageDataUrl: string
     filename?: string
-    docTitle?: string
-    page?: {
-        widthPt?: number
-        heightPt?: number
-        format?: 'a4'
-        orientation?: 'portrait' | 'landscape'
-    }
 }
 
 function parseDataUrl(dataUrl: string): { mime: string; bytes: Uint8Array } {
@@ -30,12 +20,6 @@ function parseDataUrl(dataUrl: string): { mime: string; bytes: Uint8Array } {
     }
 }
 
-function getPageSizePts(page?: SnapshotRequestBody['page']): { width: number; height: number } {
-    if (page?.widthPt && page?.heightPt) return { width: page.widthPt, height: page.heightPt }
-    if (page?.format === 'a4' && page?.orientation === 'landscape') return { width: A4_HEIGHT_PTS, height: A4_WIDTH_PTS }
-    return { width: A4_WIDTH_PTS, height: A4_HEIGHT_PTS }
-}
-
 export async function POST(request: NextRequest) {
     try {
         const body = (await request.json()) as Partial<SnapshotRequestBody>
@@ -48,10 +32,8 @@ export async function POST(request: NextRequest) {
         }
 
         const { mime, bytes } = parseDataUrl(body.imageDataUrl)
-        const pageSize = getPageSizePts(body.page)
 
         const pdfDoc = await PDFDocument.create()
-        const page = pdfDoc.addPage([pageSize.width, pageSize.height])
 
         let embedded
         if (mime === 'image/png') {
@@ -65,18 +47,29 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        // Draw full-bleed to page. This ensures pixel-perfect WYSIWYG based on the snapshot.
+        // CRITICAL: EXACT 1:1 WYSIWYG MAPPING
+        // We do NOT use fixed A4 dimensions. 
+        // We use the dimensions of the captured image.
+        // If image is 794x1123px, PDF is 794x1123px.
+        // This guarantees what you see is what you get.
+        const imgWidth = embedded.scale(1).width
+        const imgHeight = embedded.scale(1).height
+
+        const page = pdfDoc.addPage([imgWidth, imgHeight])
+
+        // Draw image filling the page exactly
         page.drawImage(embedded, {
             x: 0,
             y: 0,
-            width: pageSize.width,
-            height: pageSize.height
+            width: imgWidth,
+            height: imgHeight
         })
 
         const pdfBytes = await pdfDoc.save()
 
-        const rawName = (body.filename || body.docTitle || 'document')
+        const rawName = (body.filename || 'document')
         const safeName = rawName.replace(/\.pdf$/i, '').replace(/\s+/g, '_')
+
         return new NextResponse(Buffer.from(pdfBytes) as any, {
             status: 200,
             headers: {

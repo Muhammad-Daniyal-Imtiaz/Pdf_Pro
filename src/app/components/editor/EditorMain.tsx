@@ -6,12 +6,9 @@ import AlignmentToolbar from './AlignmentToolbar'
 import SelectionIndicator from './SelectionIndicator'
 import MeasurementFeedback from './MeasurementFeedback'
 import { downloadPDFViaApi } from '@/app/lib/pdf-service'
-import { AdvancedMeasurement } from '@/app/lib/alignment-service'
-import LivePDFPreview from './LivePDFPreview'
-import { Loader2, MousePointer2, Move, Maximize, Grid, ArrowDownToLine, LayoutTemplate, FileText, Save, Clock } from 'lucide-react'
+import { Loader2, MousePointer2, Move, Grid, ArrowDownToLine, LayoutTemplate, FileText, Save, Clock } from 'lucide-react'
 import ErrorBoundary from '../ErrorBoundary'
 import { useAutoSave } from '@/app/hooks/useAutoSave'
-import LoadingSpinner from '../LoadingSpinner'
 
 export default function EditorMain() {
     const {
@@ -31,8 +28,6 @@ export default function EditorMain() {
         moveElement,
         resizeElement,
         removeElement,
-        showPreview,
-        setShowPreview,
         isSidebarCollapsed,
         isAutoSaving,
         lastSaved,
@@ -40,7 +35,7 @@ export default function EditorMain() {
         setGeneratingPDF
     } = useEditorStore()
 
-    const { lastSaved: autoSaveLastSaved } = useAutoSave(30000) // 30 seconds
+    const { lastSaved: autoSaveLastSaved } = useAutoSave(30000)
 
     const [editingId, setEditingId] = React.useState<string | null>(null)
     const [showGrid, setShowGrid] = useState(true)
@@ -51,36 +46,33 @@ export default function EditorMain() {
     const canvasRef = useRef<HTMLDivElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
-    // A4 page dimensions in pixels (at 96 DPI: 210mm = 793px, 297mm = 1123px)
+    // A4 Page Dimensions - Integer values are CRITICAL for exact alignment
     const A4_WIDTH = 794
     const A4_HEIGHT = 1123
     const PAGE_MARGIN = 40
 
     const selectedElement = elements.find(el => el.id === selectedId)
 
-    // Download PDF using html2canvas for perfect WYSIWYG
     const handleDownloadPDF = async () => {
         if (!canvasRef.current) return
 
-        // Deselect element to ensure no UI artifacts (selection rings/blue lines) are captured
+        // 1. Clean UI (Deselect elements to remove blue rings)
         selectElement(null)
         setEditingId(null)
 
-        // Short delay to allow React to render the deselected state
-        await new Promise(resolve => setTimeout(resolve, 50))
+        // 2. Wait for React to commit clean state
+        await new Promise(resolve => setTimeout(resolve, 100))
 
         setGeneratingPDF(true)
         try {
+            // 3. Call Service with 4x High-DPI Scale (Default in service)
             await downloadPDFViaApi(
                 canvasRef.current,
                 elements,
                 `${docTitle.replace(/\s+/g, '-').toLowerCase() || 'document'}.pdf`,
                 {
-                    quality: 2,
-                    scale: 2,
-                    debug: false,
-                    validateWYSIWYG: true,
-                    applyCorrections: true
+                    quality: 4, // 4x Scale for "Canva-Level" crispness
+                    debug: false
                 }
             )
         } catch (error) {
@@ -91,61 +83,25 @@ export default function EditorMain() {
         }
     }
 
-    // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Prevent shortcuts when typing in input fields
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-                return
-            }
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
 
-            // Ctrl+G or Cmd+G - toggle grid
+            // Toggle Grid
             if ((e.ctrlKey || e.metaKey) && e.key === 'g') {
                 e.preventDefault()
                 setShowGrid(prev => !prev)
                 return
             }
 
-            // Ctrl+D or Cmd+D - download PDF
+            // Download PDF
             if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
                 e.preventDefault()
                 handleDownloadPDF()
                 return
             }
 
-            // Ctrl+S or Cmd+S - save document
-            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                e.preventDefault()
-                // Trigger save
-                console.log('Save shortcut triggered')
-                return
-            }
-
-            // Ctrl+Z or Cmd+Z - undo
-            if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-                e.preventDefault()
-                // Undo functionality would go here
-                console.log('Undo shortcut triggered')
-                return
-            }
-
-            // Ctrl+Shift+Z or Cmd+Shift+Z - redo
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'z') {
-                e.preventDefault()
-                // Redo functionality would go here
-                console.log('Redo shortcut triggered')
-                return
-            }
-
-            // Ctrl+A or Cmd+A - select all
-            if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
-                e.preventDefault()
-                // Select all functionality would go here
-                console.log('Select all shortcut triggered')
-                return
-            }
-
-            // Delete or Backspace - delete selected element
+            // Delete Element
             if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
                 e.preventDefault()
                 removeElement(selectedId)
@@ -153,73 +109,42 @@ export default function EditorMain() {
                 return
             }
 
-            // Escape - deselect
+            // Escape / Deselect
             if (e.key === 'Escape') {
                 selectElement(null)
                 setEditingId(null)
                 return
             }
 
-            // Arrow keys - move selected element
+            // Move Elements
             if (selectedId && selectedElement) {
-                const moveAmount = e.shiftKey ? 10 : 1 // Move faster with Shift
-
+                const moveAmount = e.shiftKey ? 10 : 1
                 switch (e.key) {
-                    case 'ArrowUp':
-                        e.preventDefault()
-                        moveElement(selectedId, selectedElement.x, selectedElement.y - moveAmount)
-                        break
-                    case 'ArrowDown':
-                        e.preventDefault()
-                        moveElement(selectedId, selectedElement.x, selectedElement.y + moveAmount)
-                        break
-                    case 'ArrowLeft':
-                        e.preventDefault()
-                        moveElement(selectedId, selectedElement.x - moveAmount, selectedElement.y)
-                        break
-                    case 'ArrowRight':
-                        e.preventDefault()
-                        moveElement(selectedId, selectedElement.x + moveAmount, selectedElement.y)
-                        break
+                    case 'ArrowUp': e.preventDefault(); moveElement(selectedId, selectedElement.x, selectedElement.y - moveAmount); break
+                    case 'ArrowDown': e.preventDefault(); moveElement(selectedId, selectedElement.x, selectedElement.y + moveAmount); break
+                    case 'ArrowLeft': e.preventDefault(); moveElement(selectedId, selectedElement.x - moveAmount, selectedElement.y); break
+                    case 'ArrowRight': e.preventDefault(); moveElement(selectedId, selectedElement.x + moveAmount, selectedElement.y); break
                 }
             }
 
-            // Number keys - quick add elements
+            // Quick Add
             if (!e.ctrlKey && !e.metaKey && !e.altKey) {
                 switch (e.key) {
-                    case '1':
-                        e.preventDefault()
-                        addElement('heading')
-                        break
-                    case '2':
-                        e.preventDefault()
-                        addElement('paragraph')
-                        break
-                    case '3':
-                        e.preventDefault()
-                        addElement('list')
-                        break
-                    case '4':
-                        e.preventDefault()
-                        addElement('link')
-                        break
-                    case '5':
-                        e.preventDefault()
-                        addLine('horizontal')
-                        break
-                    case '6':
-                        e.preventDefault()
-                        addLine('vertical')
-                        break
+                    case '1': e.preventDefault(); addElement('heading'); break
+                    case '2': e.preventDefault(); addElement('paragraph'); break
+                    case '3': e.preventDefault(); addElement('list'); break
+                    case '4': e.preventDefault(); addElement('link'); break
+                    case '5': e.preventDefault(); addLine('horizontal'); break
+                    case '6': e.preventDefault(); addLine('vertical'); break
                 }
             }
         }
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [selectedId, selectedElement, removeElement, selectElement, moveElement, addElement, addLine, showGrid, handleDownloadPDF])
+    }, [selectedId, selectedElement, removeElement, selectElement, moveElement, addElement, addLine, handleDownloadPDF])
 
-    // Auto-save logic
+    // Auto-save
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             const data = JSON.stringify({ elements, docTitle })
@@ -228,7 +153,6 @@ export default function EditorMain() {
         return () => clearTimeout(timeoutId)
     }, [elements, docTitle])
 
-    // Drop zone handler
     const handleCanvasDrop = (e: React.DragEvent) => {
         e.preventDefault()
         const type = e.dataTransfer.getData('application/react-dnd-type')
@@ -260,7 +184,6 @@ export default function EditorMain() {
     return (
         <ErrorBoundary>
             <main className="flex-1 bg-gray-100/50 overflow-hidden h-[calc(100vh-64px)] flex flex-col relative">
-                {/* Multi-Selection Alignment Toolbar */}
                 {selectedIds.length >= 2 && <AlignmentToolbar />}
 
                 {/* Toolbar */}
@@ -301,23 +224,16 @@ export default function EditorMain() {
                     </button>
                 </div>
 
-                {/* Workspace Container */}
+                {/* Workspace */}
                 <div className="flex-1 flex overflow-hidden bg-[#E5E7EB] relative">
-                    {/* Editor Section */}
                     <div
                         ref={containerRef}
-                        className={`
-                        flex-1 flex justify-center items-start overflow-auto p-8 lg:p-12 
-                        transition-all duration-300 ease-in-out scroll-smooth
-                        ${showPreview ? 'mr-[450px]' : 'mr-0'}
-                    `}
+                        className="flex-1 flex justify-center items-start overflow-auto p-8 lg:p-12 scroll-smooth"
                     >
                         <div className="relative shadow-2xl transition-transform duration-200">
-                            {/* Vertical Ruler */}
+                            {/* Rulers */}
                             {showRulers && (
-                                <div
-                                    className="absolute -left-10 top-0 w-10 h-[1123px] bg-white border-r border-gray-200 text-[10px] select-none pointer-events-none font-mono text-gray-400"
-                                >
+                                <div className="absolute -left-10 top-0 w-10 h-[1123px] bg-white border-r border-gray-200 text-[10px] select-none pointer-events-none font-mono text-gray-400">
                                     {Array.from({ length: 30 }).map((_, i) => (
                                         <div key={i} className="h-[37.4px] border-b border-gray-100 flex items-center justify-end pr-1 relative">
                                             {i % 2 === 0 && <span className="absolute right-1 top-[-6px]">{i * 10}</span>}
@@ -325,17 +241,10 @@ export default function EditorMain() {
                                     ))}
                                 </div>
                             )}
-
-                            {/* Horizontal Ruler */}
                             {showRulers && (
-                                <div
-                                    className="absolute -top-10 left-0 w-[794px] h-10 bg-white border-b border-gray-200 text-[10px] select-none pointer-events-none flex font-mono text-gray-400"
-                                >
+                                <div className="absolute -top-10 left-0 w-[794px] h-10 bg-white border-b border-gray-200 text-[10px] select-none pointer-events-none flex font-mono text-gray-400">
                                     {Array.from({ length: 21 }).map((_, i) => (
-                                        <div
-                                            key={i}
-                                            className="flex-1 border-r border-gray-100 flex items-end justify-center pb-1 relative"
-                                        >
+                                        <div key={i} className="flex-1 border-r border-gray-100 flex items-end justify-center pb-1 relative">
                                             {i % 2 === 0 && <span className="absolute bottom-1 left-[-4px]">{i * 10}</span>}
                                         </div>
                                     ))}
@@ -345,21 +254,22 @@ export default function EditorMain() {
                             {/* Canvas */}
                             <div
                                 ref={canvasRef}
+                                data-pdf-preview-root="true"
                                 className="editor-canvas relative bg-white cursor-crosshair print:shadow-none"
                                 style={{
                                     width: `${A4_WIDTH}px`,
                                     height: `${A4_HEIGHT}px`,
                                     padding: `${PAGE_MARGIN}px`,
-                                    boxSizing: 'border-box',
+                                    boxSizing: 'border-box', // CRITICAL: Matches PDF/HTML2Canvas logic
                                     direction: 'ltr',
-                                    textAlign: 'left'
+                                    textAlign: 'left',
+                                    overflow: 'hidden'
                                 }}
                                 onDrop={handleCanvasDrop}
                                 onDragOver={(e) => e.preventDefault()}
                                 onClick={handleCanvasClick}
                                 onMouseMove={handleMouseMove}
                             >
-                                {/* Grid Background */}
                                 {showGrid && (
                                     <div
                                         className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
@@ -372,8 +282,6 @@ export default function EditorMain() {
                                         }}
                                     />
                                 )}
-
-                                {/* Empty State */}
                                 {elements.length === 0 && (
                                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
                                         <div className="text-center text-gray-300">
@@ -383,8 +291,6 @@ export default function EditorMain() {
                                         </div>
                                     </div>
                                 )}
-
-                                {/* Elements */}
                                 {elements.map((el) => (
                                     <React.Fragment key={el.id}>
                                         <ResizableElement
@@ -399,7 +305,6 @@ export default function EditorMain() {
                                             isEditing={editingId}
                                             setIsEditing={setEditingId}
                                         />
-                                        {/* Selection Visual Feedback */}
                                         {(selectedId === el.id || selectedIds.includes(el.id)) && (
                                             <SelectionIndicator
                                                 element={el}
@@ -407,7 +312,6 @@ export default function EditorMain() {
                                                 isMultiSelected={selectedIds.includes(el.id)}
                                             />
                                         )}
-                                        {/* Measurement Feedback */}
                                         {selectedId === el.id && (
                                             <MeasurementFeedback
                                                 element={el}
@@ -419,45 +323,9 @@ export default function EditorMain() {
                             </div>
                         </div>
                     </div>
-
-                    {/* Preview Drawer - Slide In */}
-                    <div
-                        className={`
-                        fixed right-0 top-[64px] bottom-0 w-[450px]
-                        bg-white border-l border-gray-200 shadow-2xl z-20 
-                        transform transition-transform duration-300 ease-in-out flex flex-col
-                        ${showPreview ? 'translate-x-0' : 'translate-x-full'}
-                    `}
-                    >
-                        <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
-                            <div>
-                                <h3 className="font-bold text-gray-800 flex items-center gap-2 text-sm">
-                                    <span className="flex h-2 w-2 relative">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                    </span>
-                                    Live Preview
-                                </h3>
-                                <p className="text-[10px] text-gray-500 mt-0.5 ml-4">100% Scale Match</p>
-                            </div>
-                            <button
-                                onClick={() => setShowPreview(false)}
-                                className="p-1 hover:bg-gray-200 rounded text-gray-500 transition-colors"
-                            >
-                                <Maximize size={16} className="rotate-45" />
-                            </button>
-                        </div>
-
-                        <div className="flex-1 overflow-auto p-6 bg-gray-100/50 flex flex-col items-center">
-                            <div className="relative shadow-xl origin-top transition-transform duration-200 scale-[0.5] sm:scale-[0.55]"
-                                style={{ width: '794px', height: '1123px', marginTop: '-25%' }}>
-                                <LivePDFPreview canvasRef={canvasRef} isVisible={showPreview} onClose={() => { }} inline={true} />
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                {/* Enhanced Status Bar */}
+                {/* Status Bar */}
                 <div className="h-7 bg-white border-t border-gray-200 flex items-center px-4 text-[10px] font-medium text-gray-500 select-none z-30 justify-between">
                     <div className="flex items-center gap-4">
                         <span className="flex items-center gap-1.5">
