@@ -61,7 +61,7 @@ export default function ResizableElement({
             // Apply PDF correction transforms
             const correction = CoordinateSystem.getPDFCorrection(el)
             if (correction) {
-                elementRef.current.style.transform = `scale(${correction.scale})`
+                elementRef.current.style.transform = `translate(${correction.x}px, ${correction.y}px) scale(${correction.scale})`
                 elementRef.current.style.transformOrigin = 'top left'
             }
 

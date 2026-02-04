@@ -25,7 +25,7 @@ export default function LivePDFPreview({ canvasRef, isVisible, onClose, inline =
             if (!canvasRef.current) return
             setIsGenerating(true)
             try {
-                const image = await generatePDFPreview(canvasRef.current!)
+                const image = await generatePDFPreview(canvasRef.current!, elements)
                 setPreviewImage(image)
             } catch (error) {
                 console.error('Preview generation error:', error)

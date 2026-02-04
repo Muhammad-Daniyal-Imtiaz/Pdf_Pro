@@ -12,7 +12,7 @@
  * - 100x+ accuracy vs standard alignment
  */
 
-import { EditorElement, EditorStyle } from '@/app/store/useEditorStore'
+import type { EditorElement, EditorStyle } from '@/app/store/useEditorStore'
 import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
 
 /**

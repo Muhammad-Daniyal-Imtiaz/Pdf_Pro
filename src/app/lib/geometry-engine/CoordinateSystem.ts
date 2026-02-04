@@ -12,7 +12,7 @@
  * - Element-type specific compensation tables
  */
 
-import { EditorElement } from '@/app/store/useEditorStore'
+import type { EditorElement } from '@/app/store/useEditorStore'
 
 export interface RenderedMetrics {
     x: number
@@ -51,6 +51,22 @@ export class CoordinateSystem {
             'twitter': { x: 0, y: -1.1, scale: 0.998 },
             'facebook': { x: 0, y: -0.9, scale: 0.997 },
             'instagram': { x: 0, y: -1.0, scale: 0.998 },
+            'github': { x: 0, y: -1.0, scale: 0.998 },
+            'website': { x: 0, y: -1.0, scale: 0.998 },
+            'youtube': { x: 0, y: -1.0, scale: 0.998 },
+            'whatsapp': { x: 0, y: -1.0, scale: 0.998 },
+            'location': { x: 0, y: -1.0, scale: 0.998 },
+            'calendar': { x: 0, y: -1.0, scale: 0.998 },
+            'clock': { x: 0, y: -1.0, scale: 0.998 },
+            'user': { x: 0, y: -1.0, scale: 0.998 },
+            'briefcase': { x: 0, y: -1.0, scale: 0.998 },
+            'graduation': { x: 0, y: -1.0, scale: 0.998 },
+            'award': { x: 0, y: -1.0, scale: 0.998 },
+            'star': { x: 0, y: -1.0, scale: 0.998 },
+            'heart': { x: 0, y: -1.0, scale: 0.998 },
+            'download': { x: 0, y: -1.0, scale: 0.998 },
+            'share': { x: 0, y: -1.0, scale: 0.998 },
+            'external': { x: 0, y: -1.0, scale: 0.998 },
             'Inter': { x: 0, y: 0.3, scale: 1.001 },
             'Arial': { x: 0, y: 0.2, scale: 1.002 },
             'Helvetica': { x: 0, y: 0.25, scale: 1.001 },

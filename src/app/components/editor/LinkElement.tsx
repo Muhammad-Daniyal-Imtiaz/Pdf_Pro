@@ -27,17 +27,15 @@ export default function LinkElement({ element, isSelected, onSelect, onUpdate }:
   const fontSize = element.style.fontSize || 14
 
   const linkStyles: React.CSSProperties = {
-    position: 'absolute' as const,
-    left: `${element.x}px`,
-    top: `${element.y}px`,
-    width: `${element.style.width}px`,
-    height: `${element.style.height}px`,
+    position: 'relative' as const,
+    width: '100%',
+    height: '100%',
     fontSize: `${fontSize}px`,
     fontFamily: element.style.fontFamily,
     fontWeight: element.style.fontWeight,
     color: isHovered ? (element.style.linkColor || '#0066cc') : (element.style.color || '#0066cc'),
     textDecoration: isHovered ? 'underline' : (element.style.linkDecoration || 'none'),
-    cursor: 'pointer',
+    cursor: 'inherit',
     border: isSelected ? '2px solid #3B82F6' : 'none',
     backgroundColor: isHovered ? 'rgba(59, 130, 246, 0.05)' : (element.style.backgroundColor || 'transparent'),
     padding: `${element.style.padding}px`,

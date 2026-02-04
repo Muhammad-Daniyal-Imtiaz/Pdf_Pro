@@ -5,7 +5,7 @@ import ResizableElement from './ResizableElement'
 import AlignmentToolbar from './AlignmentToolbar'
 import SelectionIndicator from './SelectionIndicator'
 import MeasurementFeedback from './MeasurementFeedback'
-import { downloadPDF } from '@/app/lib/pdf-service'
+import { downloadPDFViaApi } from '@/app/lib/pdf-service'
 import { AdvancedMeasurement } from '@/app/lib/alignment-service'
 import LivePDFPreview from './LivePDFPreview'
 import { Loader2, MousePointer2, Move, Maximize, Grid, ArrowDownToLine, LayoutTemplate, FileText, Save, Clock } from 'lucide-react'
@@ -35,7 +35,9 @@ export default function EditorMain() {
         setShowPreview,
         isSidebarCollapsed,
         isAutoSaving,
-        lastSaved
+        lastSaved,
+        isGeneratingPDF,
+        setGeneratingPDF
     } = useEditorStore()
 
     const { lastSaved: autoSaveLastSaved } = useAutoSave(30000) // 30 seconds
@@ -43,7 +45,6 @@ export default function EditorMain() {
     const [editingId, setEditingId] = React.useState<string | null>(null)
     const [showGrid, setShowGrid] = useState(true)
     const [showRulers, setShowRulers] = useState(true)
-    const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
     const [isLoading, setIsLoading] = useState(false)
 
@@ -68,9 +69,9 @@ export default function EditorMain() {
         // Short delay to allow React to render the deselected state
         await new Promise(resolve => setTimeout(resolve, 50))
 
-        setIsGeneratingPDF(true)
+        setGeneratingPDF(true)
         try {
-            await downloadPDF(
+            await downloadPDFViaApi(
                 canvasRef.current,
                 elements,
                 `${docTitle.replace(/\s+/g, '-').toLowerCase() || 'document'}.pdf`,
@@ -86,7 +87,7 @@ export default function EditorMain() {
             console.error('Failed to generate PDF:', error)
             alert('Failed to generate PDF. Please try again.')
         } finally {
-            setIsGeneratingPDF(false)
+            setGeneratingPDF(false)
         }
     }
 

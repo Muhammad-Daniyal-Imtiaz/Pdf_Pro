@@ -68,11 +68,9 @@ export default function SocialIconElement({ element, isSelected, onSelect, onUpd
   const labelSize = Math.round(iconSize * 0.7)
 
   const iconStyles: React.CSSProperties = {
-    position: 'absolute' as const,
-    left: `${element.x}px`,
-    top: `${element.y}px`,
-    width: `${element.style.width}px`,
-    height: `${element.style.height}px`,
+    position: 'relative' as const,
+    width: '100%',
+    height: '100%',
     display: 'flex',
     flexDirection: labelPosition === 'top' || labelPosition === 'bottom' ? 'column' : 'row',
     alignItems: 'center',
@@ -84,7 +82,7 @@ export default function SocialIconElement({ element, isSelected, onSelect, onUpd
     opacity: element.style.opacity || 1,
     transform: `rotate(${element.style.rotation || 0}deg)`,
     zIndex: element.style.zIndex || 0,
-    cursor: 'move',
+    cursor: 'inherit',
     padding: '8px',
     boxSizing: 'border-box',
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',

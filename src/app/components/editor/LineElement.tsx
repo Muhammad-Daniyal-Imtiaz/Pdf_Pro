@@ -13,13 +13,11 @@ export default function LineElement({ element, isSelected, onSelect, onUpdate }:
   const { lineOrientation = 'horizontal', lineStyle = 'solid', style } = element
 
   const lineStyles: React.CSSProperties = {
-    position: 'absolute' as const,
-    left: `${element.x}px`,
-    top: `${element.y}px`,
-    width: `${element.style.width}px`,
-    height: `${element.style.height}px`,
+    position: 'relative' as const,
+    width: '100%',
+    height: '100%',
     border: isSelected ? '2px solid #3B82F6' : 'none',
-    cursor: 'move',
+    cursor: 'inherit',
     borderRadius: style.borderRadius || 0,
     opacity: style.opacity || 1,
     transform: `rotate(${style.rotation || 0}deg)`,

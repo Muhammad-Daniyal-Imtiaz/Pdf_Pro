@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import html2canvas from 'html2canvas'
 import { Download, Printer, Image } from 'lucide-react'
 
 interface Styles {
@@ -111,23 +112,41 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
       return
     }
 
+    if (!previewRef.current) {
+      setError('Preview not ready. Please try again.')
+      return
+    }
+
     setIsGenerating(true)
     setError(null)
 
     try {
+      const canvas = await html2canvas(previewRef.current, {
+        scale: 2.0,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        scrollX: 0,
+        scrollY: 0,
+        onclone: (doc) => {
+          const root = doc.querySelector('[data-pdf-preview-root="true"]') as HTMLElement | null
+          if (root) {
+            root.style.transform = 'none'
+            root.style.transformOrigin = 'top left'
+          }
+        }
+      })
+
+      const imageDataUrl = canvas.toDataURL('image/png')
+
       const response = await fetch('/api/generate-pdf', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          contentBlocks: contentBlocks.map(block => ({
-            ...block,
-            content: block.content.replace(/\n/g, ' ')
-          })),
-          styles,
-          layout,
-          template
+          imageDataUrl,
+          filename: `pdf-document-${new Date().getTime()}.pdf`
         }),
       })
 
@@ -359,6 +378,7 @@ export default function PDFPreview({ contentBlocks, styles, layout, template }: 
       <div className="flex justify-center mb-4 overflow-auto">
         <div 
           ref={previewRef}
+          data-pdf-preview-root="true"
           className="border-2 border-gray-300 bg-gray-100 shadow-lg"
           style={{
             width: pageDimensions.width,
