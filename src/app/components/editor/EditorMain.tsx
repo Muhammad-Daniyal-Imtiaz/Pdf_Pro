@@ -1,374 +1,197 @@
 'use client'
-import React, { useRef, useState, useEffect } from 'react'
-import { useEditorStore } from '@/app/store/useEditorStore'
-import ResizableElement from './ResizableElement'
-import AlignmentToolbar from './AlignmentToolbar'
-import SelectionIndicator from './SelectionIndicator'
-import MeasurementFeedback from './MeasurementFeedback'
-import { downloadPDFViaApi } from '@/app/lib/pdf-service'
-import { Loader2, MousePointer2, Move, Grid, ArrowDownToLine, LayoutTemplate, FileText, Save, Clock } from 'lucide-react'
-import ErrorBoundary from '../ErrorBoundary'
-import { useAutoSave } from '@/app/hooks/useAutoSave'
+
+import React, { useRef, useState, useEffect, useCallback } from 'react'
+import { useEditorStore, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
+import PDFRenderer from './PDFRenderer'
+import { generatePDF } from '@/app/lib/pdf-service'
+import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut } from 'lucide-react'
 
 export default function EditorMain() {
     const {
         elements,
         selectedId,
-        selectedIds,
         selectElement,
-        toggleSelection,
-        clearSelection,
         updateElement,
-        addElement,
-        addSocialIcon,
-        addLine,
-        showTitle,
-        docTitle,
-        setDocTitle,
+        removeElement,
         moveElement,
         resizeElement,
-        removeElement,
-        isSidebarCollapsed,
-        isAutoSaving,
-        lastSaved,
+        docTitle,
+        setDocTitle,
+        setGeneratingPDF,
         isGeneratingPDF,
-        setGeneratingPDF
+        zoom,
+        setZoom,
     } = useEditorStore()
 
-    const { lastSaved: autoSaveLastSaved } = useAutoSave(30000)
-
-    const [editingId, setEditingId] = React.useState<string | null>(null)
-    const [showGrid, setShowGrid] = useState(true)
-    const [showRulers, setShowRulers] = useState(true)
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-    const [isLoading, setIsLoading] = useState(false)
-
     const canvasRef = useRef<HTMLDivElement>(null)
-    const containerRef = useRef<HTMLDivElement>(null)
+    const [showGrid, setShowGrid] = useState(true)
+    const [editingId, setEditingId] = useState<string | null>(null)
+    const [error, setError] = useState<string | null>(null)
 
-    // A4 Page Dimensions - Integer values are CRITICAL for exact alignment
-    const A4_WIDTH = 794
-    const A4_HEIGHT = 1123
-    const PAGE_MARGIN = 40
-
-    const selectedElement = elements.find(el => el.id === selectedId)
-
-    const handleDownloadPDF = async () => {
-        // CRITICAL: Exit edit mode first
+    const handleDownloadPDF = useCallback(async () => {
+        setError(null)
         setEditingId(null)
         selectElement(null)
 
-        // Wait for React to update
-        await new Promise(resolve => setTimeout(resolve, 100))
-
-        if (!canvasRef.current) return
+        // Wait for UI update
+        await new Promise(r => setTimeout(r, 100))
 
         setGeneratingPDF(true)
+
         try {
-            await downloadPDFViaApi(
-                canvasRef.current,
-                elements,
-                `${docTitle || 'document'}.pdf`,
-                {
-                    quality: 4,
-                    debug: process.env.NODE_ENV === 'development'
-                }
-            )
-        } catch (error) {
-            console.error('PDF generation failed:', error)
-            alert('Failed to generate PDF. Please try again.')
+            const blob = await generatePDF(elements, docTitle, A4_WIDTH, A4_HEIGHT)
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = url
+            link.download = `${docTitle.replace(/[^a-z0-9]/gi, '_')}.pdf`
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+            window.URL.revokeObjectURL(url)
+        } catch (err: any) {
+            console.error('PDF export failed:', err)
+            setError(err.message || 'Failed to generate PDF')
         } finally {
             setGeneratingPDF(false)
         }
-    }
+    }, [elements, docTitle, selectElement, setGeneratingPDF])
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-
-            // Toggle Grid
-            if ((e.ctrlKey || e.metaKey) && e.key === 'g') {
-                e.preventDefault()
-                setShowGrid(prev => !prev)
-                return
-            }
-
-            // Download PDF
             if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
                 e.preventDefault()
                 handleDownloadPDF()
-                return
             }
-
-            // Delete Element
-            if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
-                e.preventDefault()
+            if (e.key === 'Delete' && selectedId) {
                 removeElement(selectedId)
                 selectElement(null)
-                return
             }
-
-            // Escape / Deselect
             if (e.key === 'Escape') {
-                selectElement(null)
                 setEditingId(null)
-                return
-            }
-
-            // Move Elements
-            if (selectedId && selectedElement) {
-                const moveAmount = e.shiftKey ? 10 : 1
-                switch (e.key) {
-                    case 'ArrowUp': e.preventDefault(); moveElement(selectedId, selectedElement.x, selectedElement.y - moveAmount); break
-                    case 'ArrowDown': e.preventDefault(); moveElement(selectedId, selectedElement.x, selectedElement.y + moveAmount); break
-                    case 'ArrowLeft': e.preventDefault(); moveElement(selectedId, selectedElement.x - moveAmount, selectedElement.y); break
-                    case 'ArrowRight': e.preventDefault(); moveElement(selectedId, selectedElement.x + moveAmount, selectedElement.y); break
-                }
-            }
-
-            // Quick Add
-            if (!e.ctrlKey && !e.metaKey && !e.altKey) {
-                switch (e.key) {
-                    case '1': e.preventDefault(); addElement('heading'); break
-                    case '2': e.preventDefault(); addElement('paragraph'); break
-                    case '3': e.preventDefault(); addElement('list'); break
-                    case '4': e.preventDefault(); addElement('link'); break
-                    case '5': e.preventDefault(); addLine('horizontal'); break
-                    case '6': e.preventDefault(); addLine('vertical'); break
-                }
+                selectElement(null)
             }
         }
-
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [selectedId, selectedElement, removeElement, selectElement, moveElement, addElement, addLine, handleDownloadPDF])
+    }, [handleDownloadPDF, selectedId, removeElement, selectElement])
 
-    // Auto-save
+    // Simplified Drag Logic for brevity - ensure logic here uses Math.round()
+    const [isDragging, setIsDragging] = useState(false)
+    const [activeElementId, setActiveElementId] = useState<string | null>(null)
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0, elX: 0, elY: 0 })
+
+    const handleElementMouseDown = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation()
+        const el = elements.find(el => el.id === id)!
+        setIsDragging(true)
+        setActiveElementId(id)
+        selectElement(id)
+
+        const rect = canvasRef.current?.getBoundingClientRect()
+        const scale = zoom / 100
+        const rawX = rect ? (e.clientX - rect.left) / scale : 0
+        const rawY = rect ? (e.clientY - rect.top) / scale : 0
+
+        setDragStart({
+            x: rawX,
+            y: rawY,
+            elX: el.x,
+            elY: el.y,
+        })
+    }
+
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            const data = JSON.stringify({ elements, docTitle })
-            localStorage.setItem('pdf-craft-pro-draft', data)
-        }, 1000)
-        return () => clearTimeout(timeoutId)
-    }, [elements, docTitle])
+        if (!isDragging) return
+        const handleMouseMove = (e: MouseEvent) => {
+            if (isDragging && activeElementId) {
+                const rect = canvasRef.current?.getBoundingClientRect()
+                if (!rect) return
+                const scale = zoom / 100
+                const rawX = (e.clientX - rect.left) / scale
+                const rawY = (e.clientY - rect.top) / scale
+                const dx = rawX - dragStart.x
+                const dy = rawY - dragStart.y
 
-    const handleCanvasDrop = (e: React.DragEvent) => {
-        e.preventDefault()
-        const type = e.dataTransfer.getData('application/react-dnd-type')
-        if (type && type !== 'SORTABLE_ITEM') {
-            addElement(type as any)
+                // Store as integer in store
+                moveElement(activeElementId, Math.round(dragStart.elX + dx), Math.round(dragStart.elY + dy))
+            }
         }
-    }
-
-    const handleCanvasClick = () => {
-        selectElement(null)
-        clearSelection()
-        setEditingId(null)
-    }
-
-    const handleElementChange = (id: string, content: string) => {
-        updateElement(id, { content })
-    }
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (canvasRef.current) {
-            const rect = canvasRef.current.getBoundingClientRect()
-            setMousePos({
-                x: Math.round(e.clientX - rect.left),
-                y: Math.round(e.clientY - rect.top)
-            })
+        const handleMouseUp = () => {
+            setIsDragging(false)
+            setActiveElementId(null)
         }
-    }
+        document.addEventListener('mousemove', handleMouseMove)
+        document.addEventListener('mouseup', handleMouseUp)
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMove)
+            document.removeEventListener('mouseup', handleMouseUp)
+        }
+    }, [isDragging, dragStart, activeElementId, zoom, moveElement])
 
     return (
-        <ErrorBoundary>
-            <main className="flex-1 bg-gray-100/50 overflow-hidden h-[calc(100vh-64px)] flex flex-col relative">
-                {selectedIds.length >= 2 && <AlignmentToolbar />}
-
-                {/* Toolbar */}
-                <div className="h-12 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={() => setShowGrid(!showGrid)}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${showGrid
-                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
-                                }`}
-                            title="Toggle grid (Ctrl+G)"
-                        >
-                            <Grid size={14} />
-                            Grid
-                        </button>
-                        <button
-                            onClick={() => setShowRulers(!showRulers)}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${showRulers
-                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
-                                }`}
-                            title="Toggle rulers"
-                        >
-                            <LayoutTemplate size={14} />
-                            Rulers
-                        </button>
+        <main className="flex-1 bg-gray-100 h-full flex flex-col overflow-hidden">
+            <div className="h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0 z-20">
+                <div className="flex items-center gap-4">
+                    <input
+                        type="text"
+                        value={docTitle}
+                        onChange={(e) => setDocTitle(e.target.value)}
+                        className="font-semibold text-lg bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 w-64"
+                        placeholder="Untitled Document"
+                    />
+                    <div className="h-6 w-px bg-gray-300" />
+                    <button onClick={() => setShowGrid(!showGrid)} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${showGrid ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}>
+                        <Grid size={16} /> Grid
+                    </button>
+                    <div className="flex items-center gap-1">
+                        <button onClick={() => setZoom(zoom - 10)} className="p-1.5 hover:bg-gray-100 rounded"><ZoomOut size={16} /></button>
+                        <span className="text-sm font-medium w-12 text-center">{zoom}%</span>
+                        <button onClick={() => setZoom(zoom + 10)} className="p-1.5 hover:bg-gray-100 rounded"><ZoomIn size={16} /></button>
                     </div>
-
-                    <button
-                        onClick={handleDownloadPDF}
-                        disabled={isGeneratingPDF}
-                        className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-md font-medium text-xs transition-all shadow-sm active:scale-95"
-                        title="Download PDF (Ctrl+D)"
-                    >
-                        {isGeneratingPDF ? <Loader2 size={14} className="animate-spin" /> : <ArrowDownToLine size={14} />}
-                        {isGeneratingPDF ? 'Generating...' : 'Download PDF'}
+                </div>
+                <div className="flex items-center gap-3">
+                    {error && <span className="text-red-500 text-sm bg-red-50 px-3 py-1 rounded">{error}</span>}
+                    <button onClick={handleDownloadPDF} disabled={isGeneratingPDF} className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-medium text-sm transition-all shadow-sm">
+                        {isGeneratingPDF ? <Loader2 size={16} className="animate-spin" /> : <ArrowDownToLine size={16} />}
+                        {isGeneratingPDF ? 'Generating...' : 'Export PDF'}
                     </button>
                 </div>
+            </div>
 
-                {/* Workspace */}
-                <div className="flex-1 flex overflow-hidden bg-[#E5E7EB] relative">
-                    <div
-                        ref={containerRef}
-                        className="flex-1 flex justify-center items-start overflow-auto p-8 lg:p-12 scroll-smooth"
-                    >
-                        <div className="relative shadow-2xl transition-transform duration-200">
-                            {/* Rulers */}
-                            {showRulers && (
-                                <div className="absolute -left-10 top-0 w-10 h-[1123px] bg-white border-r border-gray-200 text-[10px] select-none pointer-events-none font-mono text-gray-400">
-                                    {Array.from({ length: 30 }).map((_, i) => (
-                                        <div key={i} className="h-[37.4px] border-b border-gray-100 flex items-center justify-end pr-1 relative">
-                                            {i % 2 === 0 && <span className="absolute right-1 top-[-6px]">{i * 10}</span>}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            {showRulers && (
-                                <div className="absolute -top-10 left-0 w-[794px] h-10 bg-white border-b border-gray-200 text-[10px] select-none pointer-events-none flex font-mono text-gray-400">
-                                    {Array.from({ length: 21 }).map((_, i) => (
-                                        <div key={i} className="flex-1 border-r border-gray-100 flex items-end justify-center pb-1 relative">
-                                            {i % 2 === 0 && <span className="absolute bottom-1 left-[-4px]">{i * 10}</span>}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+            <div className="flex-1 overflow-auto bg-[#e5e7eb] p-8 flex justify-center items-start">
+                <div className="relative shadow-2xl bg-white" style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top center' }}>
+                    {showGrid && (
+                        <div className="absolute inset-0 pointer-events-none z-0" style={{
+                            backgroundImage: `linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)`,
+                            backgroundSize: '20px 20px',
+                            width: `${A4_WIDTH}px`, height: `${A4_HEIGHT}px`
+                        }} />
+                    )}
 
-                            {/* Canvas */}
-                            <div
-                                ref={canvasRef}
-                                data-pdf-preview-root="true"
-                                className="editor-canvas relative bg-white cursor-crosshair print:shadow-none"
-                                style={{
-                                    width: `${A4_WIDTH}px`,
-                                    height: `${A4_HEIGHT}px`,
-                                    padding: `${PAGE_MARGIN}px`,
-                                    boxSizing: 'border-box', // CRITICAL: Matches PDF/HTML2Canvas logic
-                                    direction: 'ltr',
-                                    textAlign: 'left',
-                                    overflow: 'hidden'
-                                }}
-                                onDrop={handleCanvasDrop}
-                                onDragOver={(e) => e.preventDefault()}
-                                onClick={handleCanvasClick}
-                                onMouseMove={handleMouseMove}
-                            >
-                                {showGrid && (
-                                    <div
-                                        className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
-                                        style={{
-                                            backgroundImage: `
-                                            linear-gradient(#000 1px, transparent 1px),
-                                            linear-gradient(90deg, #000 1px, transparent 1px)
-                                        `,
-                                            backgroundSize: '20px 20px'
-                                        }}
-                                    />
-                                )}
-                                {elements.length === 0 && (
-                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
-                                        <div className="text-center text-gray-300">
-                                            <FileText size={48} className="mx-auto mb-4 opacity-50" />
-                                            <p className="text-xl font-medium mb-2">Build your document</p>
-                                            <p className="text-sm">Drag elements from the sidebar</p>
-                                        </div>
-                                    </div>
-                                )}
-                                {elements.map((el) => (
-                                    <React.Fragment key={el.id}>
-                                        <ResizableElement
-                                            el={el}
-                                            isSelected={selectedId === el.id}
-                                            isMultiSelected={selectedIds.includes(el.id)}
-                                            onSelect={selectElement}
-                                            onToggleSelection={toggleSelection}
-                                            onMove={moveElement}
-                                            onResize={resizeElement}
-                                            onChange={handleElementChange}
-                                            isEditing={editingId}
-                                            setIsEditing={setEditingId}
-                                        />
-                                        {(selectedId === el.id || selectedIds.includes(el.id)) && (
-                                            <SelectionIndicator
-                                                element={el}
-                                                isSelected={selectedId === el.id}
-                                                isMultiSelected={selectedIds.includes(el.id)}
-                                            />
-                                        )}
-                                        {selectedId === el.id && (
-                                            <MeasurementFeedback
-                                                element={el}
-                                                isSelected={true}
-                                            />
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        </div>
+                    <div ref={canvasRef} onClick={() => { if (!isDragging) { selectElement(null); setEditingId(null) } }} style={{ width: `${A4_WIDTH}px`, height: `${A4_HEIGHT}px`, position: 'relative', cursor: isDragging ? 'grabbing' : 'default' }}>
+                        <PDFRenderer
+                            elements={elements}
+                            showSelection={true}
+                            selectedId={selectedId}
+                            editingId={editingId}
+                            onElementMouseDown={handleElementMouseDown}
+                            onContentChange={(id, content) => updateElement(id, { content })}
+                            onBlur={() => setEditingId(null)}
+                            width={A4_WIDTH}
+                            height={A4_HEIGHT}
+                        />
                     </div>
                 </div>
+            </div>
 
-                {/* Status Bar */}
-                <div className="h-7 bg-white border-t border-gray-200 flex items-center px-4 text-[10px] font-medium text-gray-500 select-none z-30 justify-between">
-                    <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1.5">
-                            <FileText size={10} />
-                            A4 ({A4_WIDTH}×{A4_HEIGHT}px)
-                        </span>
-                        <span className="flex items-center gap-1.5 text-gray-400">|</span>
-                        <span className="flex items-center gap-1.5">
-                            <LayoutTemplate size={10} />
-                            Elements: {elements.length}
-                        </span>
-                        <span className="flex items-center gap-1.5 text-gray-400">|</span>
-                        <span className="flex items-center gap-1.5 w-24 font-mono">
-                            <MousePointer2 size={10} />
-                            X: {mousePos.x} Y: {mousePos.y}
-                        </span>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        {selectedElement && (
-                            <>
-                                <span className="flex items-center gap-1.5 text-blue-600">
-                                    <Move size={10} />
-                                    Selected: {Math.round(selectedElement.x)}, {Math.round(selectedElement.y)}
-                                </span>
-                                <span className="flex items-center gap-1.5 text-gray-400">|</span>
-                            </>
-                        )}
-                        {isAutoSaving && (
-                            <>
-                                <span className="flex items-center gap-1.5 text-green-600">
-                                    <Clock size={10} />
-                                    Auto-save: {autoSaveLastSaved ? autoSaveLastSaved.toLocaleTimeString() : 'Enabled'}
-                                </span>
-                                <span className="flex items-center gap-1.5 text-gray-400">|</span>
-                            </>
-                        )}
-                        <span className="opacity-75 flex items-center gap-1">
-                            <Save size={10} />
-                            Ready
-                        </span>
-                    </div>
+            <div className="h-8 bg-white border-t border-gray-200 flex items-center px-4 text-xs text-gray-500 justify-between shrink-0">
+                <div className="flex items-center gap-4">
+                    <span>A4 ({A4_WIDTH} × {A4_HEIGHT}px)</span>
+                    <span>{elements.length} elements</span>
+                    <span className="text-green-600">● Production Mode</span>
                 </div>
-            </main>
-        </ErrorBoundary>
+            </div>
+        </main>
     )
 }

@@ -1,693 +1,303 @@
-
 import { create } from 'zustand'
-import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
 
-export interface EditorStyle {
-    // Typography
-    fontFamily: string
-    fontSize: number
-    fontWeight: 'normal' | 'bold' | '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900'
-    fontStyle: 'normal' | 'italic'
-    textDecoration: 'none' | 'underline' | 'line-through'
-    textAlign: 'left' | 'center' | 'right' | 'justify'
-    lineHeight: number
-    letterSpacing?: number
+export const A4_WIDTH = 794
+export const A4_HEIGHT = 1123
+export const GRID_SIZE = 1 // Snap to 1px for perfection
 
-    // Colors
-    color: string
+export interface ElementStyle {
+    width: number
+    height: number
+    x: number
+    y: number
+    fontSize?: number
+    fontFamily?: string
+    color?: string
     backgroundColor?: string
-    borderColor?: string
-
-    // Spacing (in pixels)
-    padding: number
-    paddingTop?: number
-    paddingRight?: number
-    paddingBottom?: number
-    paddingLeft?: number
-    margin: number
-    marginTop?: number
-    marginRight?: number
-    marginBottom?: number
-    marginLeft?: number
-
-    // Layout (absolute positioning - in pixels)
-    width: number // Always pixels now
-    height: number // Always pixels now
-    minWidth?: number
-    maxWidth?: number
-    minHeight?: number
-    maxHeight?: number
-
-    // Borders
-    borderRadius?: number
     borderWidth?: number
-    borderStyle?: 'solid' | 'dashed' | 'dotted'
-
-    // Transform
-    rotation?: number
-    opacity?: number
+    borderColor?: string
+    borderRadius?: number
+    fontWeight?: string | number
+    lineHeight?: number
+    textAlign?: 'left' | 'center' | 'right' | 'justify'
     zIndex?: number
-
-    // Layout locking
-    lockAspectRatio?: boolean
-
-    // Link styling
-    linkColor?: string
-    linkDecoration?: 'none' | 'underline' | 'line-through'
+    padding?: number
+    linkDecoration?: 'none' | 'underline'
 }
 
 export interface EditorElement {
     id: string
-    type: 'heading' | 'paragraph' | 'list' | 'image' | 'divider' | 'social-icon' | 'link' | 'line'
-    content: string
-    style: EditorStyle
-    // Absolute positioning (in pixels)
+    type: 'heading' | 'paragraph' | 'text' | 'social-icon' | 'image' | 'link' | 'line' | 'container'
     x: number
     y: number
-    // Additional properties for specific element types
-    iconType?: string // For social icons
-    url?: string // For links
-    phoneNumber?: string // For phone numbers
-    lineOrientation?: 'horizontal' | 'vertical' // For lines
-    lineStyle?: 'solid' | 'dashed' | 'dotted' // For lines
-    isClickable?: boolean // For links/phone numbers
-
-    // Labeling (for icons/links)
-    showLabel?: boolean
-    labelPosition?: 'right' | 'left' | 'top' | 'bottom'
+    content: string
+    style: ElementStyle
+    iconType?: string
+    url?: string
+    lineOrientation?: 'horizontal' | 'vertical'
 }
 
 interface EditorState {
-    // Global App State
     activeTab: 'document' | 'cv' | 'contracts'
-    editMode: 'manual' | 'ai'
-
-    // Document State
     elements: EditorElement[]
     selectedId: string | null
-    selectedIds: string[] // Multi-selection support
-
-    // History State
-    past: EditorElement[][]
-    future: EditorElement[][]
-
-    // Document Settings
     docTitle: string
-    showTitle: boolean
-
-    // Canvas Settings
-    snapToGrid: boolean
-    gridSize: number
-    showGuides: boolean
-    showPreview: boolean
+    isSidebarCollapsed: boolean
+    isGeneratingPDF: boolean
     zoom: number
 
-    // PDF Generation State
-    isGeneratingPDF: boolean
-    pdfValidationWarnings: string[]
-
-    // Auto-save
-    lastSaved: Date | null
-    isAutoSaving: boolean
-    toggleAutoSave: () => void
-    saveDocument: () => Promise<void>
-
-    // Interface State
-    isSidebarCollapsed: boolean
-    toggleSidebar: () => void
-
-    // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
-    setEditMode: (mode: 'manual' | 'ai') => void
-    setDocTitle: (title: string) => void
-    toggleShowTitle: () => void
-
-    // Canvas Actions
-    setSnapToGrid: (snap: boolean) => void
-    setGridSize: (size: number) => void
-    setShowGuides: (show: boolean) => void
-    setShowPreview: (show: boolean) => void
-    setZoom: (zoom: number) => void
-
-    addElement: (type: EditorElement['type']) => void
+    addElement: (type: EditorElement['type'], x?: number, y?: number) => void
     addSocialIcon: (iconType: string) => void
     addLine: (orientation: 'horizontal' | 'vertical') => void
     updateElement: (id: string, updates: Partial<EditorElement>) => void
-    updateElementStyle: (id: string, styleUpdates: Partial<EditorStyle>) => void
-
-    // Position & Dimension Methods
-    moveElement: (id: string, x: number, y: number) => void
-    resizeElement: (id: string, width: number, height: number) => void
-
+    updateElementStyle: (id: string, style: Partial<ElementStyle>) => void
     removeElement: (id: string) => void
     selectElement: (id: string | null) => void
-    reorderElements: (newOrder: EditorElement[]) => void
-
-    // Layer operations
-    raiseElement: (id: string) => void
-    lowerElement: (id: string) => void
-    sendToBack: (id: string) => void
+    moveElement: (id: string, x: number, y: number) => void
+    resizeElement: (id: string, width: number, height: number) => void
     bringToFront: (id: string) => void
-
-    // Multi-selection
-    toggleSelection: (id: string) => void
-    selectMultiple: (ids: string[]) => void
-    clearSelection: () => void
-
-    // Enhanced Alignment actions with real metrics
-    alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => void
-    distributeElements: (axis: 'horizontal' | 'vertical') => void
-    validateAlignment: () => { isValid: boolean; misalignedPairs: Array<{ id1: string; id2: string; deltaX: number; deltaY: number }> }
-    getActualElementMetrics: (elementId: string) => any
-
-    // PDF Generation
-    setGeneratingPDF: (isGenerating: boolean) => void
-    validateWYSIWYGFidelity: () => { isValid: boolean; warnings: string[] }
-
-    updateElementContent: (id: string, content: string) => void
-
-    undo: () => void
-    redo: () => void
+    sendToBack: (id: string) => void
+    setDocTitle: (title: string) => void
+    toggleSidebar: () => void
+    setGeneratingPDF: (value: boolean) => void
+    setZoom: (zoom: number) => void
+    getElementJSON: () => string
 }
 
-const DEFAULT_STYLE: EditorStyle = {
-    // Typography
-    fontFamily: 'Inter, sans-serif',
-    fontSize: 14,
-    fontWeight: '400',
-    fontStyle: 'normal',
-    textDecoration: 'none',
-    textAlign: 'left',
-    lineHeight: 1.5,
-    letterSpacing: 0,
-
-    // Colors
-    color: '#000000',
+const DEFAULT_STYLE: ElementStyle = {
+    width: 200,
+    height: 60,
+    x: 0,
+    y: 0,
+    fontSize: 16,
+    fontFamily: 'Inter, system-ui, sans-serif',
+    color: '#1a1a1a',
     backgroundColor: 'transparent',
-    borderColor: '#cccccc',
-
-    // Spacing (pixels)
-    padding: 12,
-    margin: 8,
-
-    // Layout (pixels)
-    width: 400,
-    height: 80,
-    minWidth: 100,
-    maxWidth: 600,
-    minHeight: 30,
-
-    // Borders
-    borderRadius: 0,
     borderWidth: 0,
-    borderStyle: 'solid',
-
-    // Transform
-    rotation: 0,
+    borderColor: '#000000',
+    borderRadius: 0,
+    fontWeight: 400,
+    lineHeight: 1.5,
+    textAlign: 'left',
+    zIndex: 1,
     opacity: 1,
-    zIndex: 0,
-
-    // Link styling
-    linkColor: '#0066cc',
-    linkDecoration: 'underline'
+    padding: 8,
 }
+
+// HELPER: Force integers to prevent sub-pixel blurring
+const snapToInt = (val: number) => Math.round(val)
 
 export const useEditorStore = create<EditorState>((set, get) => ({
     activeTab: 'document',
-    editMode: 'manual',
     elements: [
         {
-            id: 'title-1',
+            id: 'el-1',
             type: 'heading',
-            content: 'Untitled Document',
-            x: 40,
-            y: 40,
-            style: { ...DEFAULT_STYLE, fontSize: 36, fontWeight: '700', width: 600, height: 60 }
+            x: 50,
+            y: 50,
+            content: 'Document Title',
+            style: {
+                ...DEFAULT_STYLE,
+                width: 400,
+                height: 60,
+                fontSize: 32,
+                fontWeight: 700,
+            }
         },
         {
-            id: 'default-1',
+            id: 'el-2',
             type: 'paragraph',
-            content: 'Start typing here...',
-            x: 40,
-            y: 120,
-            style: { ...DEFAULT_STYLE, fontSize: 12, width: 500, height: 30 }
+            x: 50,
+            y: 130,
+            content: 'Start typing your content here. This text will appear exactly as shown in the PDF export.',
+            style: {
+                ...DEFAULT_STYLE,
+                width: 500,
+                height: 100,
+                fontSize: 14,
+                lineHeight: 1.6,
+            }
         }
     ],
     selectedId: null,
-    selectedIds: [],
-    past: [],
-    future: [],
     docTitle: 'Untitled Document',
-    showTitle: false,
-    snapToGrid: true,
-    gridSize: 8,
-    showGuides: true,
-    showPreview: true,
-    zoom: 100,
-    lastSaved: null,
-    isAutoSaving: true,
-    isGeneratingPDF: false,
-    pdfValidationWarnings: [],
-
-    setTab: (tab: 'document' | 'cv' | 'contracts') => set({ activeTab: tab }),
-    setEditMode: (mode: 'manual' | 'ai') => set({ editMode: mode }),
-    setDocTitle: (title: string) => set({ docTitle: title }),
-    toggleShowTitle: () => set((state) => ({ showTitle: !state.showTitle })),
-
-    setSnapToGrid: (snap: boolean) => set({ snapToGrid: snap }),
-    setGridSize: (size: number) => set({ gridSize: size }),
-    setShowGuides: (show: boolean) => set({ showGuides: show }),
-    setShowPreview: (show: boolean) => set({ showPreview: show }),
-    setZoom: (zoom: number) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
-
-    // Interface State
     isSidebarCollapsed: false,
-    toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
+    isGeneratingPDF: false,
+    zoom: 100,
 
-    // Auto-save functionality
-    toggleAutoSave: () => set((state) => ({ isAutoSaving: !state.isAutoSaving })),
-    saveDocument: async () => {
-        // This would integrate with your backend API
-        console.log('Document saved')
-        set({ lastSaved: new Date() })
+    setTab: (tab) => set({ activeTab: tab }),
+
+    addElement: (type, x = 100, y = 100) => {
+        const { elements } = get()
+        const id = `el-${Date.now()}`
+
+        // Snap creation position
+        const snappedX = snapToInt(x)
+        const snappedY = snapToInt(y)
+        const baseStyle = { ...DEFAULT_STYLE, x: snappedX, y: snappedY }
+
+        let newElement: EditorElement = {
+            id,
+            type,
+            x: snappedX,
+            y: snappedY,
+            content: 'New Element',
+            style: baseStyle,
+        }
+
+        switch (type) {
+            case 'heading':
+                newElement.content = 'Heading'
+                newElement.style = { ...baseStyle, width: 300, height: 50, fontSize: 24, fontWeight: 700 }
+                break
+            case 'paragraph':
+                newElement.content = 'Paragraph text'
+                newElement.style = { ...baseStyle, width: 400, height: 80, fontSize: 14 }
+                break
+            case 'link':
+                newElement.content = 'https://example.com'
+                newElement.style = { ...baseStyle, width: 250, height: 40, fontSize: 14, color: '#2563eb' }
+                break
+            case 'container':
+                newElement.content = ''
+                newElement.style = { ...baseStyle, width: 200, height: 200, backgroundColor: '#f3f4f6', borderWidth: 1, borderColor: '#d1d5db' }
+                break
+            case 'image':
+                newElement.content = ''
+                newElement.style = { ...baseStyle, width: 200, height: 150, backgroundColor: '#e5e7eb' }
+                break
+        }
+
+        set({ elements: [...elements, newElement], selectedId: id })
     },
 
-    addElement: (type: EditorElement['type']) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        const baseX = 60
-        const baseY = 120 + (state.elements.length * 30)
-        const newElement: EditorElement = {
-            id: `el-${Date.now()}`,
-            type,
-            content: type === 'heading' ? 'New Heading' : type === 'paragraph' ? 'Start typing...' : type === 'list' ? '• List item' : type === 'link' ? 'https://example.com' : '',
-            x: baseX,
-            y: baseY,
-            style: {
-                ...DEFAULT_STYLE,
-                fontSize: type === 'heading' ? 22 : 14,
-                fontWeight: type === 'heading' ? '700' : '400',
-                width: type === 'heading' ? 500 : 450,
-                height: type === 'heading' ? 50 : 60,
-                linkColor: type === 'link' ? '#0066cc' : DEFAULT_STYLE.linkColor,
-                linkDecoration: type === 'link' ? 'underline' : DEFAULT_STYLE.linkDecoration
-            },
-            isClickable: type === 'link'
-        }
-        return {
-            elements: [...state.elements, newElement],
-            selectedId: newElement.id,
-            past: newPast,
-            future: []
-        }
-    }),
+    addSocialIcon: (iconType) => {
+        const { elements } = get()
+        const id = `icon-${Date.now()}`
+        const size = 48
 
-    addSocialIcon: (iconType: string) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
+        // Snap position
+        const x = snapToInt(100 + (elements.length * 30) % 600)
+        const y = snapToInt(100 + Math.floor(elements.length / 15) * 60)
+
         const newElement: EditorElement = {
-            id: `icon-${Date.now()}`,
+            id,
             type: 'social-icon',
-            content: '',
             iconType,
-            x: 100 + (state.elements.length * 30),
-            y: 100 + (state.elements.length * 30),
-            style: {
-                ...DEFAULT_STYLE,
-                width: 40,
-                height: 40,
-                fontSize: 24,
-                lockAspectRatio: true
-            },
-            showLabel: false,
-            labelPosition: 'right'
+            x,
+            y,
+            content: iconType,
+            style: { width: size, height: size, x, y, fontSize: 24 },
         }
-        return {
-            elements: [...state.elements, newElement],
-            selectedId: newElement.id,
-            past: newPast,
-            future: []
-        }
-    }),
 
-    addLine: (orientation: 'horizontal' | 'vertical') => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
+        set({ elements: [...elements, newElement], selectedId: id })
+    },
+
+    addLine: (orientation) => {
+        const { elements } = get()
+        const id = `line-${Date.now()}`
+        const x = snapToInt(100)
+        const y = snapToInt(200)
+
         const newElement: EditorElement = {
-            id: `line-${Date.now()}`,
+            id,
             type: 'line',
-            content: '',
             lineOrientation: orientation,
-            lineStyle: 'solid',
-            x: 100,
-            y: 200 + (state.elements.length * 20),
+            x,
+            y,
+            content: '',
             style: {
-                ...DEFAULT_STYLE,
-                width: orientation === 'horizontal' ? 200 : 2,
-                height: orientation === 'vertical' ? 100 : 2,
-                backgroundColor: '#000000',
-                borderWidth: orientation === 'horizontal' ? 2 : 0,
-                borderStyle: 'solid'
-            }
+                width: orientation === 'horizontal' ? 300 : 2,
+                height: orientation === 'vertical' ? 200 : 2,
+                x,
+                y,
+                backgroundColor: '#1a1a1a',
+            },
         }
-        return {
-            elements: [...state.elements, newElement],
-            selectedId: newElement.id,
-            past: newPast,
-            future: []
-        }
-    }),
 
-    updateElement: (id: string, updates: Partial<EditorElement>) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        return {
-            elements: state.elements.map((el: EditorElement) => el.id === id ? { ...el, ...updates } : el),
-            past: newPast,
-            future: []
-        }
-    }),
+        set({ elements: [...elements, newElement], selectedId: id })
+    },
 
-    updateElementStyle: (id: string, styleUpdates: Partial<EditorStyle>) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        return {
-            elements: state.elements.map((el: EditorElement) =>
-                el.id === id ? { ...el, style: { ...el.style, ...styleUpdates } } : el
-            ),
-            past: newPast,
-            future: []
-        }
-    }),
-
-    resizeElement: (id: string, width: number, height: number) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        const snap = (v: number) => state.snapToGrid ? Math.round(v / state.gridSize) * state.gridSize : v
-        return {
-            elements: state.elements.map(el =>
-                el.id === id ? {
-                    ...el,
-                    style: { ...el.style, width: snap(width), height: snap(height) }
-                } : el
-            ),
-            past: newPast,
-            future: []
-        }
-    }),
-
-    moveElement: (id: string, x: number, y: number) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        const snap = (v: number) => state.snapToGrid ? Math.round(v / state.gridSize) * state.gridSize : v
-        return {
-            elements: state.elements.map(el =>
-                el.id === id ? {
-                    ...el,
-                    x: Math.max(0, snap(x)),
-                    y: Math.max(0, snap(y))
-                } : el
-            ),
-            past: newPast,
-            future: []
-        }
-    }),
-
-    raiseElement: (id: string) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        const newElements = [...state.elements]
-        const idx = newElements.findIndex(el => el.id === id)
-        if (idx < newElements.length - 1) {
-            [newElements[idx], newElements[idx + 1]] = [newElements[idx + 1], newElements[idx]]
-        }
-        return { elements: newElements, past: newPast, future: [] }
-    }),
-
-    lowerElement: (id: string) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        const newElements = [...state.elements]
-        const idx = newElements.findIndex(el => el.id === id)
-        if (idx > 0) {
-            [newElements[idx], newElements[idx - 1]] = [newElements[idx - 1], newElements[idx]]
-        }
-        return { elements: newElements, past: newPast, future: [] }
-    }),
-
-    sendToBack: (id: string) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        const newElements = state.elements.filter(el => el.id !== id)
-        const element = state.elements.find(el => el.id === id)
-        return { elements: element ? [element, ...newElements] : newElements, past: newPast, future: [] }
-    }),
-
-    bringToFront: (id: string) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        const newElements = state.elements.filter(el => el.id !== id)
-        const element = state.elements.find(el => el.id === id)
-        return { elements: element ? [...newElements, element] : newElements, past: newPast, future: [] }
-    }),
-
-    removeElement: (id: string) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        return {
-            elements: state.elements.filter((el: EditorElement) => el.id !== id),
-            selectedId: state.selectedId === id ? null : state.selectedId,
-            past: newPast,
-            future: []
-        }
-    }),
-
-    selectElement: (id: string | null) => set({ selectedId: id }),
-
-    reorderElements: (newOrder: EditorElement[]) => set((state: EditorState) => {
-        const newPast = [...state.past, state.elements]
-        return {
-            elements: newOrder,
-            past: newPast,
-            future: []
-        }
-    }),
-
-    undo: () => set((state) => {
-        if (state.past.length === 0) return {}
-        const previous = state.past[state.past.length - 1]
-        const newPast = state.past.slice(0, state.past.length - 1)
-        return {
-            past: newPast,
-            elements: previous,
-            future: [state.elements, ...state.future]
-        }
-    }),
-
-    redo: () => set((state) => {
-        if (state.future.length === 0) return {}
-        const next = state.future[0]
-        const newFuture = state.future.slice(1)
-        return {
-            past: [...state.past, state.elements],
-            elements: next,
-            future: newFuture
-        }
-    }),
-
-    // Multi-selection actions
-    toggleSelection: (id: string) => set((state) => {
-        const isSelected = state.selectedIds.includes(id)
-        if (isSelected) {
-            return {
-                selectedIds: state.selectedIds.filter(i => i !== id),
-                selectedId: state.selectedIds.length === 1 ? null : state.selectedId
-            }
-        } else {
-            return {
-                selectedIds: [...state.selectedIds, id],
-                selectedId: id
-            }
-        }
-    }),
-
-    selectMultiple: (ids: string[]) => set(() => ({
-        selectedIds: ids,
-        selectedId: ids.length > 0 ? ids[0] : null
-    })),
-
-    clearSelection: () => set(() => ({
-        selectedIds: [],
-        selectedId: null
-    })),
-
-    updateElementContent: (id: string, content: string) => set((state) => ({
-        elements: state.elements.map(el =>
-            el.id === id ? { ...el, content } : el
-        )
-    })),
-
-    // Ensure alignElements properly handles all element types
-    alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => {
-        const { selectedIds, elements } = get()
-        if (selectedIds.length < 2) return
-
-        const { AlignmentEngine } = require('@/app/lib/alignment-service')
-        const selectedElements = elements.filter(el => selectedIds.includes(el.id))
-
-        const updates = AlignmentEngine[direction === 'baseline' ? 'alignBaseline' :
-            direction === 'left' || direction === 'center' || direction === 'right' ?
-                `align${direction.charAt(0).toUpperCase() + direction.slice(1)}` as const :
-                `align${direction.charAt(0).toUpperCase() + direction.slice(1)}` as const
-        ](selectedElements)
-
+    updateElement: (id, updates) => {
         set((state) => ({
             elements: state.elements.map((el) => {
-                const updateIndex = selectedElements.findIndex(sel => sel.id === el.id)
-                if (updateIndex === -1) return el
-                const update = updates[updateIndex]
-                return { ...el, ...update }
+                if (el.id !== id) return el
+
+                // Snap coordinate updates
+                const processed = { ...el, ...updates }
+                if (updates.x !== undefined) processed.x = snapToInt(updates.x)
+                if (updates.y !== undefined) processed.y = snapToInt(updates.y)
+
+                return processed
             }),
-            past: [...state.past, state.elements],
-            future: []
         }))
     },
 
-    // Enhanced distribution with spacing compensation
-    distributeElements: (axis: 'horizontal' | 'vertical') => {
-        const state = get()
-        if (state.selectedIds.length < 3) return
+    updateElementStyle: (id, styleUpdates) => {
+        set((state) => ({
+            elements: state.elements.map((el) => {
+                if (el.id !== id) return el
 
-        // Import alignment engine on demand
-        const { AlignmentEngine } = require('@/app/lib/alignment-service')
+                // Round dimension updates
+                const processed = { ...styleUpdates }
+                if (styleUpdates.width !== undefined) processed.width = snapToInt(styleUpdates.width)
+                if (styleUpdates.height !== undefined) processed.height = snapToInt(styleUpdates.height)
 
-        const newPast = [...state.past, state.elements]
-        const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
+                return { ...el, style: { ...el.style, ...processed } }
+            }),
+        }))
+    },
 
-        // Get real metrics for accurate distribution
-        const elementsWithRealMetrics = selectedElements.map(el => {
-            const actualMetrics = CoordinateSystem.getElementMetrics(el.id)
-            return {
-                ...el,
-                actualBoundingBox: actualMetrics?.actualBoundingBox || {
-                    left: el.x,
-                    top: el.y,
-                    right: el.x + el.style.width,
-                    bottom: el.y + el.style.height
-                }
-            }
+    removeElement: (id) => {
+        set((state) => ({
+            elements: state.elements.filter((el) => el.id !== id),
+            selectedId: state.selectedId === id ? null : state.selectedId,
+        }))
+    },
+
+    selectElement: (id) => set({ selectedId: id }),
+
+    moveElement: (id, x, y) => {
+        set((state) => ({
+            elements: state.elements.map((el) =>
+                el.id === id ? { ...el, x: snapToInt(Math.max(0, x)), y: snapToInt(Math.max(0, y)) } : el
+            ),
+        }))
+    },
+
+    resizeElement: (id, width, height) => {
+        set((state) => ({
+            elements: state.elements.map((el) =>
+                el.id === id
+                    ? { ...el, style: { ...el.style, width: snapToInt(Math.max(20, width)), height: snapToInt(Math.max(20, height)) } }
+                    : el
+            ),
+        }))
+    },
+
+    bringToFront: (id) => {
+        set((state) => {
+            const element = state.elements.find((el) => el.id === id)
+            const others = state.elements.filter((el) => el.id !== id)
+            return { elements: [...others, element!] }
         })
+    },
 
-        let distributionUpdates: Partial<EditorElement>[]
-
-        if (axis === 'horizontal') {
-            distributionUpdates = AlignmentEngine.distributeHorizontal(elementsWithRealMetrics)
-        } else {
-            distributionUpdates = AlignmentEngine.distributeVertical(elementsWithRealMetrics)
-        }
-
-        // Apply updates with precise snapping
-        const newElements = state.elements.map(el => {
-            if (!state.selectedIds.includes(el.id)) return el
-
-            const idx = selectedElements.findIndex(sel => sel.id === el.id)
-            if (idx === -1) return el
-
-            const update = distributionUpdates[idx]
-            const gridSize = CoordinateSystem.getExportGridSize(el.type)
-            const snap = (v: number) => state.snapToGrid ? CoordinateSystem.snapToGrid(v, state.gridSize, gridSize) : v
-
-            return {
-                ...el,
-                x: update.x !== undefined ? snap(update.x) : el.x,
-                y: update.y !== undefined ? snap(update.y) : el.y
-            }
+    sendToBack: (id) => {
+        set((state) => {
+            const element = state.elements.find((el) => el.id === id)
+            const others = state.elements.filter((el) => el.id !== id)
+            return { elements: [element!, ...others] }
         })
-
-        set({ elements: newElements, past: newPast, future: [] })
     },
 
-    // Validate current alignment of selected elements
-    validateAlignment: () => {
-        const state = get()
-        if (state.selectedIds.length < 2) {
-            return { isValid: true, misalignedPairs: [] }
-        }
+    setDocTitle: (title) => set({ docTitle: title }),
 
-        const selectedElements = state.elements.filter(el => state.selectedIds.includes(el.id))
-        const tolerance = CoordinateSystem.getAlignmentTolerance(selectedElements.map(el => el.type))
-        const misalignedPairs: Array<{ id1: string; id2: string; deltaX: number; deltaY: number }> = []
+    toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
 
-        // Check all pairs for alignment
-        for (let i = 0; i < selectedElements.length; i++) {
-            for (let j = i + 1; j < selectedElements.length; j++) {
-                const el1 = selectedElements[i]
-                const el2 = selectedElements[j]
+    setGeneratingPDF: (value) => set({ isGeneratingPDF: value }),
 
-                const metrics1 = CoordinateSystem.getElementMetrics(el1.id)
-                const metrics2 = CoordinateSystem.getElementMetrics(el2.id)
+    setZoom: (zoom) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
 
-                if (metrics1 && metrics2) {
-                    const deltaX = Math.abs(metrics1.opticalCenter.x - metrics2.opticalCenter.x)
-                    const deltaY = Math.abs(metrics1.opticalCenter.y - metrics2.opticalCenter.y)
-
-                    // Check if elements are supposed to be aligned (same x or y within tolerance)
-                    const shouldAlignX = Math.abs(el1.x - el2.x) < tolerance
-                    const shouldAlignY = Math.abs(el1.y - el2.y) < tolerance
-
-                    if (shouldAlignX && deltaX > tolerance) {
-                        misalignedPairs.push({
-                            id1: el1.id,
-                            id2: el2.id,
-                            deltaX,
-                            deltaY: 0
-                        })
-                    }
-
-                    if (shouldAlignY && deltaY > tolerance) {
-                        misalignedPairs.push({
-                            id1: el1.id,
-                            id2: el2.id,
-                            deltaX: 0,
-                            deltaY
-                        })
-                    }
-                }
-            }
-        }
-
-        return {
-            isValid: misalignedPairs.length === 0,
-            misalignedPairs
-        }
-    },
-
-    // Get actual rendered metrics for a specific element
-    getActualElementMetrics: (elementId: string) => {
-        return CoordinateSystem.getElementMetrics(elementId)
-    },
-
-    // PDF Generation state management
-    setGeneratingPDF: (isGenerating: boolean) => set({ isGeneratingPDF: isGenerating }),
-
-    validateWYSIWYGFidelity: () => {
-        const state = get()
-        const warnings: string[] = []
-
-        state.elements.forEach(el => {
-            const actualMetrics = CoordinateSystem.getElementMetrics(el.id)
-            if (!actualMetrics) {
-                warnings.push(`Element ${el.id} not found in DOM`)
-                return
-            }
-
-            // Check for subpixel positioning issues
-            if (Math.abs(el.x % 1) > 0.5 || Math.abs(el.y % 1) > 0.5) {
-                warnings.push(`Element ${el.id} has subpixel positioning that may affect PDF quality`)
-            }
-
-            // Check for problematic rotations
-            if (el.style.rotation && el.style.rotation % 90 !== 0) {
-                warnings.push(`Element ${el.id} has rotation ${el.style.rotation}° which may not render consistently in PDF`)
-            }
-
-            // Check for opacity issues
-            if (el.style.opacity && el.style.opacity < 0.95) {
-                warnings.push(`Element ${el.id} has opacity ${el.style.opacity} which may render differently in PDF`)
-            }
-        })
-
-        return {
-            isValid: warnings.length === 0,
-            warnings
-        }
-    },
+    getElementJSON: () => JSON.stringify(get().elements, null, 2),
 }))
