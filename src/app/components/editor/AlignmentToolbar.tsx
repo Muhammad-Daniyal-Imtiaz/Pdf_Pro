@@ -1,9 +1,9 @@
+// components/editor/AlignmentToolbar.tsx
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useEditorStore } from '@/app/store/useEditorStore'
-import { AlignmentEngine, WYSIWYGValidator } from '@/app/lib/alignment-service'
-import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
+import { WYSIWYGValidator } from '@/app/lib/alignment-service'
 import {
     AlignLeft, AlignCenter, AlignRight,
     AlignVerticalJustifyStart, AlignVerticalJustifyCenter, AlignVerticalJustifyEnd,
@@ -13,22 +13,44 @@ import {
 export default function AlignmentToolbar() {
     const {
         selectedIds,
-        elements,
+        pages,
         updateElement,
         alignElements,
         distributeElements
     } = useEditorStore()
 
     const [showAdvanced, setShowAdvanced] = useState(false)
-    const [validation, setValidation] = useState<ReturnType<typeof WYSIWYGValidator.validateDocument> | null>(null)
+    const [validation, setValidation] = useState<{ isValid: boolean; totalWarnings: number } | null>(null)
 
-    const selectedElements = elements.filter(el => selectedIds.includes(el.id))
+    // Get all selected elements across all pages
+    const selectedElements = useMemo(() => {
+        const elements: any[] = []
+        pages.forEach(page => {
+            page.elements.forEach(el => {
+                if (selectedIds.includes(el.id)) {
+                    elements.push(el)
+                }
+            })
+        })
+        return elements
+    }, [pages, selectedIds])
+
     const isMultiSelected = selectedIds.length >= 2
 
-    // Real-time validation
+    // Real-time validation with debouncing
     useEffect(() => {
         if (selectedElements.length > 0) {
-            setValidation(WYSIWYGValidator.validateDocument(selectedElements))
+            const timeoutId = setTimeout(() => {
+                const docValidation = WYSIWYGValidator.validateDocument(selectedElements)
+                setValidation({
+                    isValid: docValidation.isValid,
+                    totalWarnings: docValidation.totalWarnings
+                })
+            }, 300)
+
+            return () => clearTimeout(timeoutId)
+        } else {
+            setValidation(null)
         }
     }, [selectedElements])
 
@@ -41,7 +63,6 @@ export default function AlignmentToolbar() {
     }
 
     const handleAutoFix = () => {
-        // Auto-fix all selected elements
         selectedElements.forEach(el => {
             const recommended = WYSIWYGValidator.recommendGridSnapping(el)
             updateElement(el.id, { x: recommended.x, y: recommended.y })
@@ -49,7 +70,11 @@ export default function AlignmentToolbar() {
     }
 
     const handleValidateWYSIWYG = () => {
-        const docValidation = WYSIWYGValidator.validateDocument(elements)
+        const allElements: any[] = []
+        pages.forEach(page => {
+            allElements.push(...page.elements)
+        })
+        const docValidation = WYSIWYGValidator.validateDocument(allElements)
         alert(`WYSIWYG Validation: ${docValidation.isValid ? '✅ Perfect' : `⚠️ ${docValidation.totalWarnings} warnings`}\n\n` +
             docValidation.elementsWithIssues.map(e => `${e.id}: ${e.warnings.join(', ')}`).join('\n'))
     }

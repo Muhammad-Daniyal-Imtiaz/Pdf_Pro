@@ -1,7 +1,8 @@
-import { EditorElement } from '@/app/store/useEditorStore'
+// lib/pdf-service.ts
+import { EditorElement, EditorPage } from '@/app/store/useEditorStore'
 
 export async function generatePDF(
-    elements: EditorElement[],
+    pages: EditorPage[],
     title: string,
     width: number = 794,
     height: number = 1123
@@ -12,7 +13,7 @@ export async function generatePDF(
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            elements,
+            pages,
             title: title || 'Document',
             width,
             height,

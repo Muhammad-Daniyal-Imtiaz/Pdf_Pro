@@ -1,3 +1,4 @@
+// components/editor/EditorSidebar.tsx
 'use client'
 
 import React from 'react'
@@ -15,8 +16,8 @@ export default function EditorSidebar() {
         addElement,
         addSocialIcon,
         addLine,
-        selectedId,
-        elements,
+        selectedIds,
+        pages,
         updateElement,
         updateElementStyle,
         removeElement,
@@ -24,7 +25,8 @@ export default function EditorSidebar() {
         sendToBack,
     } = useEditorStore()
 
-    const selectedElement = elements.find(el => el.id === selectedId)
+    // Find the selected element across all pages
+    const selectedElement = pages.flatMap(page => page.elements).find(el => selectedIds.includes(el.id))
 
     return (
         <aside

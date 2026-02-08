@@ -1,3 +1,4 @@
+// app/page.tsx
 'use client'
 
 import { DndProvider } from 'react-dnd'
@@ -6,6 +7,7 @@ import { useEditorStore } from './store/useEditorStore'
 import EditorHeader from './components/editor/EditorHeader'
 import EditorSidebar from './components/editor/EditorSidebar'
 import EditorMain from './components/editor/EditorMain'
+import AlignmentToolbar from './components/editor/AlignmentToolbar'
 
 export default function Home() {
   const { activeTab } = useEditorStore()
@@ -14,15 +16,18 @@ export default function Home() {
     <DndProvider backend={HTML5Backend}>
       <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
         <EditorHeader />
-        
+
         <div className="flex flex-1 overflow-hidden">
           {activeTab === 'document' && (
             <>
               <EditorSidebar />
-              <EditorMain />
+              <div className="flex-1 flex flex-col">
+                <AlignmentToolbar />
+                <EditorMain />
+              </div>
             </>
           )}
-          
+
           {activeTab === 'cv' && (
             <div className="flex-1 flex items-center justify-center text-gray-400">
               <div className="text-center">
@@ -31,7 +36,7 @@ export default function Home() {
               </div>
             </div>
           )}
-          
+
           {activeTab === 'contracts' && (
             <div className="flex-1 flex items-center justify-center text-gray-400">
               <div className="text-center">

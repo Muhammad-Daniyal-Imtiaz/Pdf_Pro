@@ -1,3 +1,4 @@
+// components/editor/PDFRenderer.tsx
 'use client'
 
 import React from 'react'
@@ -12,7 +13,7 @@ interface PDFRendererProps {
   width?: number
   height?: number
   showSelection?: boolean
-  selectedId?: string | null
+  selectedIds?: string[]
   onElementMouseDown?: (id: string, e: React.MouseEvent) => void
   onContentChange?: (id: string, content: string) => void
   onBlur?: () => void
@@ -38,7 +39,7 @@ export default function PDFRenderer({
   width = A4_WIDTH,
   height = A4_HEIGHT,
   showSelection = false,
-  selectedId,
+  selectedIds = [],
   onElementMouseDown,
   onContentChange,
   onBlur,
@@ -46,7 +47,7 @@ export default function PDFRenderer({
 }: PDFRendererProps) {
 
   const renderElement = (element: EditorElement) => {
-    const isSelected = showSelection && selectedId === element.id
+    const isSelected = showSelection && selectedIds.includes(element.id)
     const isEditing = editingId === element.id
     const { style: elStyle, type, content, id, iconType, lineOrientation, x, y } = element
 
@@ -105,7 +106,51 @@ export default function PDFRenderer({
           return <div style={{ width: '100%', height: '100%', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Image</div>
 
         case 'container':
-          return <div style={{ width: '100%', height: '100%', background: elStyle.backgroundColor || 'transparent', border: `${elStyle.borderWidth}px solid ${elStyle.borderColor}`, borderRadius: elStyle.borderRadius }} />
+          return (
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                background: elStyle.backgroundColor || 'transparent',
+                border: `${elStyle.borderWidth}px solid ${elStyle.borderColor}`,
+                borderRadius: elStyle.borderRadius,
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Editable text inside container */}
+              <div
+                contentEditable={isEditing}
+                suppressContentEditableWarning
+                onBlur={(e) => {
+                  onBlur?.()
+                  onContentChange?.(id, e.currentTarget.innerText)
+                }}
+                onDoubleClick={(e) => e.stopPropagation()}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  fontFamily: elStyle.fontFamily,
+                  fontSize: `${elStyle.fontSize}px`,
+                  fontWeight: elStyle.fontWeight,
+                  lineHeight: elStyle.lineHeight,
+                  color: elStyle.color,
+                  textAlign: elStyle.textAlign,
+                  padding: `${elStyle.padding}px`,
+                  outline: 'none',
+                  wordWrap: 'break-word',
+                  cursor: isEditing ? 'text' : 'inherit',
+                  userSelect: isEditing ? 'text' : 'none',
+                  boxSizing: 'border-box',
+                  overflow: 'auto'
+                }}
+                onClick={(e) => e.stopPropagation()}
+                dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
+              >
+                {isEditing ? content : null}
+              </div>
+            </div>
+          )
 
         case 'link': {
           const Icon = ICON_MAP['external']
@@ -143,8 +188,9 @@ export default function PDFRenderer({
                 userSelect: isEditing ? 'text' : 'none'
               }}
               onClick={(e) => e.stopPropagation()}
+              dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
             >
-              {isEditing ? content : content}
+              {isEditing ? content : null}
             </div>
           )
         }

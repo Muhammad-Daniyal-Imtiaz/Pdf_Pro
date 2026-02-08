@@ -1,3 +1,4 @@
+// lib/geometry-engine/CoordinateSystem.ts
 /**
  * UNIFIED COORDINATE SYSTEM
  * Bridges the gap between Editor (Screen Pixels) and PDF (Points)
@@ -43,7 +44,7 @@ export class CoordinateSystem {
 
     /**
      * Get ACTUAL rendered metrics from DOM element
-     * This is the source of truth for WYSIWYG
+     * This is source of truth for WYSIWYG
      */
     public static getElementMetrics(elementId: string): RenderedMetrics | null {
         const element = document.querySelector(`[data-element-id="${elementId}"]`) as HTMLElement

@@ -1,10 +1,10 @@
+// lib/alignment-service.ts
 /**
  * ADVANCED ALIGNMENT SYSTEM
  * Production-grade alignment with optical compensation and DOM metrics
  */
 
 import type { EditorElement, EditorStyle } from '@/app/store/useEditorStore'
-import { CoordinateSystem, type RenderedMetrics } from './geometry-engine/CoordinateSystem'
 
 /**
  * Represents the precise bounding box of an element
@@ -89,7 +89,7 @@ export class AdvancedMeasurement {
             opticalLeft = 0
             opticalTop = 0
             baselineOffset = 0
-        } else if (element.type === 'heading' || element.type === 'paragraph' || element.type === 'list' || element.type === 'link') {
+        } else if (element.type === 'heading' || element.type === 'paragraph' || element.type === 'link') {
             // Text: calculate optical adjustments based on font metrics
             const metrics = this.calculateFontMetrics(
                 style.fontSize,
@@ -314,7 +314,7 @@ export class AlignmentEngine {
     static alignBaseline(elements: EditorElement[]): Partial<EditorElement>[] {
         // Separate text and icon elements
         const textElements = elements.filter(el =>
-            ['paragraph', 'link', 'heading', 'list'].includes(el.type)
+            ['paragraph', 'link', 'heading'].includes(el.type)
         )
         const iconElements = elements.filter(el =>
             ['social-icon', 'image'].includes(el.type)
@@ -420,10 +420,9 @@ export class AlignmentEngine {
      */
     static snapToExportGrid(elements: EditorElement[], precision: number = 0.5): Partial<EditorElement>[] {
         return elements.map(el => {
-            const gridSize = CoordinateSystem.getExportGridSize(el.type)
             return {
-                x: Math.round(el.x / gridSize) * gridSize,
-                y: Math.round(el.y / gridSize) * gridSize
+                x: Math.round(el.x / precision) * precision,
+                y: Math.round(el.y / precision) * precision
             }
         })
     }
@@ -481,11 +480,18 @@ export class WYSIWYGValidator {
             warnings.push('Opacity < 1 may render slightly differently in PDF vs Editor')
         }
 
-        // Check font availability
-        const systemFonts = ['Arial', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana']
-        const fontFamily = element.style.fontFamily.split(',')[0].trim().replace(/['"]/g, '')
-        if (!systemFonts.includes(fontFamily)) {
-            warnings.push(`Font "${fontFamily}" may substitute in PDF if not available`)
+        // Check font availability - safe check
+        try {
+            const fontFamily = element.style.fontFamily || 'Arial, sans-serif'
+            const systemFonts = ['Arial', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana']
+            const primaryFont = fontFamily.split(',')[0]?.trim().replace(/['"]/g, '') || 'Arial'
+
+            if (!systemFonts.includes(primaryFont)) {
+                warnings.push(`Font "${primaryFont}" may substitute in PDF if not available`)
+            }
+        } catch (error) {
+            // If there's any error accessing fontFamily, add a warning
+            warnings.push('Font validation failed - may substitute in PDF')
         }
 
         return {
@@ -498,10 +504,9 @@ export class WYSIWYGValidator {
      * Recommend optimal grid snapping for element
      */
     static recommendGridSnapping(element: EditorElement, precision: number = 0.5): { x: number; y: number } {
-        const gridSize = CoordinateSystem.getExportGridSize(element.type)
         return {
-            x: Math.round(element.x / gridSize) * gridSize,
-            y: Math.round(element.y / gridSize) * gridSize
+            x: Math.round(element.x / precision) * precision,
+            y: Math.round(element.y / precision) * precision
         }
     }
 

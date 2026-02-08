@@ -1,3 +1,4 @@
+// store/useEditorStore.ts
 import { create } from 'zustand'
 
 export const A4_WIDTH = 794
@@ -7,8 +8,6 @@ export const GRID_SIZE = 1 // Snap to 1px for perfection
 export interface ElementStyle {
     width: number
     height: number
-    x: number
-    y: number
     fontSize?: number
     fontFamily?: string
     color?: string
@@ -22,6 +21,8 @@ export interface ElementStyle {
     zIndex?: number
     padding?: number
     linkDecoration?: 'none' | 'underline'
+    rotation?: number
+    opacity?: number
 }
 
 export interface EditorElement {
@@ -34,17 +35,24 @@ export interface EditorElement {
     iconType?: string
     url?: string
     lineOrientation?: 'horizontal' | 'vertical'
+    pageIndex: number
+}
+
+interface EditorPage {
+    id: string
+    elements: EditorElement[]
 }
 
 interface EditorState {
     activeTab: 'document' | 'cv' | 'contracts'
-    elements: EditorElement[]
-    selectedId: string | null
+    pages: EditorPage[]
+    selectedIds: string[]
     docTitle: string
     isSidebarCollapsed: boolean
     isGeneratingPDF: boolean
     zoom: number
 
+    // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
     addElement: (type: EditorElement['type'], x?: number, y?: number) => void
     addSocialIcon: (iconType: string) => void
@@ -62,13 +70,17 @@ interface EditorState {
     setGeneratingPDF: (value: boolean) => void
     setZoom: (zoom: number) => void
     getElementJSON: () => string
+
+    // Page management
+    addPage: () => void
+    removePage: (index: number) => void
+    alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => void
+    distributeElements: (axis: 'horizontal' | 'vertical') => void
 }
 
 const DEFAULT_STYLE: ElementStyle = {
     width: 200,
     height: 60,
-    x: 0,
-    y: 0,
     fontSize: 16,
     fontFamily: 'Inter, system-ui, sans-serif',
     color: '#1a1a1a',
@@ -89,37 +101,44 @@ const snapToInt = (val: number) => Math.round(val)
 
 export const useEditorStore = create<EditorState>((set, get) => ({
     activeTab: 'document',
-    elements: [
+    pages: [
         {
-            id: 'el-1',
-            type: 'heading',
-            x: 50,
-            y: 50,
-            content: 'Document Title',
-            style: {
-                ...DEFAULT_STYLE,
-                width: 400,
-                height: 60,
-                fontSize: 32,
-                fontWeight: 700,
-            }
-        },
-        {
-            id: 'el-2',
-            type: 'paragraph',
-            x: 50,
-            y: 130,
-            content: 'Start typing your content here. This text will appear exactly as shown in the PDF export.',
-            style: {
-                ...DEFAULT_STYLE,
-                width: 500,
-                height: 100,
-                fontSize: 14,
-                lineHeight: 1.6,
-            }
+            id: 'page-1',
+            elements: [
+                {
+                    id: 'el-1',
+                    type: 'heading',
+                    x: 50,
+                    y: 50,
+                    content: 'Document Title',
+                    style: {
+                        ...DEFAULT_STYLE,
+                        width: 400,
+                        height: 60,
+                        fontSize: 32,
+                        fontWeight: 700,
+                    },
+                    pageIndex: 0
+                },
+                {
+                    id: 'el-2',
+                    type: 'paragraph',
+                    x: 50,
+                    y: 130,
+                    content: 'Start typing your content here. This text will appear exactly as shown in PDF export.',
+                    style: {
+                        ...DEFAULT_STYLE,
+                        width: 500,
+                        height: 100,
+                        fontSize: 14,
+                        lineHeight: 1.6,
+                    },
+                    pageIndex: 0
+                }
+            ]
         }
     ],
-    selectedId: null,
+    selectedIds: [],
     docTitle: 'Untitled Document',
     isSidebarCollapsed: false,
     isGeneratingPDF: false,
@@ -128,7 +147,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     setTab: (tab) => set({ activeTab: tab }),
 
     addElement: (type, x = 100, y = 100) => {
-        const { elements } = get()
+        const { pages } = get()
+        // Add to the last page or create a new page if none exist
+        const targetPageIndex = pages.length - 1
         const id = `el-${Date.now()}`
 
         // Snap creation position
@@ -143,6 +164,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             y: snappedY,
             content: 'New Element',
             style: baseStyle,
+            pageIndex: targetPageIndex
         }
 
         switch (type) {
@@ -159,7 +181,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.style = { ...baseStyle, width: 250, height: 40, fontSize: 14, color: '#2563eb' }
                 break
             case 'container':
-                newElement.content = ''
+                newElement.content = 'Click to edit text'
                 newElement.style = { ...baseStyle, width: 200, height: 200, backgroundColor: '#f3f4f6', borderWidth: 1, borderColor: '#d1d5db' }
                 break
             case 'image':
@@ -168,17 +190,24 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 break
         }
 
-        set({ elements: [...elements, newElement], selectedId: id })
+        const updatedPages = [...pages]
+        updatedPages[targetPageIndex] = {
+            ...updatedPages[targetPageIndex],
+            elements: [...updatedPages[targetPageIndex].elements, newElement]
+        }
+
+        set({ pages: updatedPages, selectedIds: [id] })
     },
 
     addSocialIcon: (iconType) => {
-        const { elements } = get()
+        const { pages } = get()
+        const targetPageIndex = pages.length - 1
         const id = `icon-${Date.now()}`
         const size = 48
 
         // Snap position
-        const x = snapToInt(100 + (elements.length * 30) % 600)
-        const y = snapToInt(100 + Math.floor(elements.length / 15) * 60)
+        const x = snapToInt(100 + (pages[targetPageIndex].elements.length * 30) % 600)
+        const y = snapToInt(100 + Math.floor(pages[targetPageIndex].elements.length / 15) * 60)
 
         const newElement: EditorElement = {
             id,
@@ -188,13 +217,21 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             y,
             content: iconType,
             style: { width: size, height: size, x, y, fontSize: 24 },
+            pageIndex: targetPageIndex
         }
 
-        set({ elements: [...elements, newElement], selectedId: id })
+        const updatedPages = [...pages]
+        updatedPages[targetPageIndex] = {
+            ...updatedPages[targetPageIndex],
+            elements: [...updatedPages[targetPageIndex].elements, newElement]
+        }
+
+        set({ pages: updatedPages, selectedIds: [id] })
     },
 
     addLine: (orientation) => {
-        const { elements } = get()
+        const { pages } = get()
+        const targetPageIndex = pages.length - 1
         const id = `line-${Date.now()}`
         const x = snapToInt(100)
         const y = snapToInt(200)
@@ -213,81 +250,129 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 y,
                 backgroundColor: '#1a1a1a',
             },
+            pageIndex: targetPageIndex
         }
 
-        set({ elements: [...elements, newElement], selectedId: id })
+        const updatedPages = [...pages]
+        updatedPages[targetPageIndex] = {
+            ...updatedPages[targetPageIndex],
+            elements: [...updatedPages[targetPageIndex].elements, newElement]
+        }
+
+        set({ pages: updatedPages, selectedIds: [id] })
     },
 
     updateElement: (id, updates) => {
-        set((state) => ({
-            elements: state.elements.map((el) => {
-                if (el.id !== id) return el
+        set((state) => {
+            const updatedPages = state.pages.map((page) => {
+                const elements = page.elements.map((el) => {
+                    if (el.id !== id) return el
 
-                // Snap coordinate updates
-                const processed = { ...el, ...updates }
-                if (updates.x !== undefined) processed.x = snapToInt(updates.x)
-                if (updates.y !== undefined) processed.y = snapToInt(updates.y)
+                    // Snap coordinate updates
+                    const processed = { ...el, ...updates }
+                    if (updates.x !== undefined) processed.x = snapToInt(updates.x)
+                    if (updates.y !== undefined) processed.y = snapToInt(updates.y)
 
-                return processed
-            }),
-        }))
+                    return processed
+                })
+
+                return { ...page, elements }
+            })
+
+            return { pages: updatedPages }
+        })
     },
 
     updateElementStyle: (id, styleUpdates) => {
-        set((state) => ({
-            elements: state.elements.map((el) => {
-                if (el.id !== id) return el
+        set((state) => {
+            const updatedPages = state.pages.map((page) => {
+                const elements = page.elements.map((el) => {
+                    if (el.id !== id) return el
 
-                // Round dimension updates
-                const processed = { ...styleUpdates }
-                if (styleUpdates.width !== undefined) processed.width = snapToInt(styleUpdates.width)
-                if (styleUpdates.height !== undefined) processed.height = snapToInt(styleUpdates.height)
+                    // Round dimension updates
+                    const processed = { ...styleUpdates }
+                    if (styleUpdates.width !== undefined) processed.width = snapToInt(styleUpdates.width)
+                    if (styleUpdates.height !== undefined) processed.height = snapToInt(styleUpdates.height)
 
-                return { ...el, style: { ...el.style, ...processed } }
-            }),
-        }))
+                    return { ...el, style: { ...el.style, ...processed } }
+                })
+
+                return { ...page, elements }
+            })
+
+            return { pages: updatedPages }
+        })
     },
 
     removeElement: (id) => {
-        set((state) => ({
-            elements: state.elements.filter((el) => el.id !== id),
-            selectedId: state.selectedId === id ? null : state.selectedId,
-        }))
+        set((state) => {
+            const updatedPages = state.pages.map((page) => ({
+                ...page,
+                elements: page.elements.filter((el) => el.id !== id)
+            }))
+
+            return {
+                pages: updatedPages,
+                selectedIds: state.selectedIds.filter(selectedId => selectedId !== id)
+            }
+        })
     },
 
-    selectElement: (id) => set({ selectedId: id }),
+    selectElement: (id) => set({ selectedIds: id ? [id] : [] }),
 
     moveElement: (id, x, y) => {
-        set((state) => ({
-            elements: state.elements.map((el) =>
-                el.id === id ? { ...el, x: snapToInt(Math.max(0, x)), y: snapToInt(Math.max(0, y)) } : el
-            ),
-        }))
+        set((state) => {
+            const updatedPages = state.pages.map((page) => {
+                const elements = page.elements.map((el) =>
+                    el.id === id ? { ...el, x: snapToInt(Math.max(0, x)), y: snapToInt(Math.max(0, y)) } : el
+                )
+
+                return { ...page, elements }
+            })
+
+            return { pages: updatedPages }
+        })
     },
 
     resizeElement: (id, width, height) => {
-        set((state) => ({
-            elements: state.elements.map((el) =>
-                el.id === id
-                    ? { ...el, style: { ...el.style, width: snapToInt(Math.max(20, width)), height: snapToInt(Math.max(20, height)) } }
-                    : el
-            ),
-        }))
+        set((state) => {
+            const updatedPages = state.pages.map((page) => {
+                const elements = page.elements.map((el) =>
+                    el.id === id
+                        ? { ...el, style: { ...el.style, width: snapToInt(Math.max(20, width)), height: snapToInt(Math.max(20, height)) } }
+                        : el
+                )
+
+                return { ...page, elements }
+            })
+
+            return { pages: updatedPages }
+        })
     },
 
     bringToFront: (id) => {
         set((state) => {
-            const element = state.elements.find((el) => el.id === id)
-            const others = state.elements.filter((el) => el.id !== id)
-            return { elements: [...others, element!] }
+            const updatedPages = state.pages.map((page) => {
+                const element = page.elements.find((el) => el.id === id)
+                const others = page.elements.filter((el) => el.id !== id)
+
+                return { ...page, elements: [...others, element!] }
+            })
+
+            return { pages: updatedPages }
         })
     },
 
     sendToBack: (id) => {
         set((state) => {
-            const element = state.elements.find((el) => el.id === id)
-            const others = state.elements.filter((el) => el.id !== id)
-            return { elements: [element!, ...others] }
+            const updatedPages = state.pages.map((page) => {
+                const element = page.elements.find((el) => el.id === id)
+                const others = page.elements.filter((el) => el.id !== id)
+
+                return { ...page, elements: [element!, ...others] }
+            })
+
+            return { pages: updatedPages }
         })
     },
 
@@ -299,5 +384,132 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
     setZoom: (zoom) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
 
-    getElementJSON: () => JSON.stringify(get().elements, null, 2),
+    getElementJSON: () => JSON.stringify(get().pages[get().pages.length - 1].elements, null, 2),
+
+    // Page management
+    addPage: () => {
+        const { pages } = get()
+        const newPage: EditorPage = {
+            id: `page-${Date.now()}`,
+            elements: []
+        }
+        set({ pages: [...pages, newPage] })
+    },
+
+    removePage: (index) => {
+        const { pages } = get()
+        if (pages.length <= 1) return // Prevent removing last page
+
+        const updatedPages = pages.filter((_, i) => i !== index)
+
+        set({
+            pages: updatedPages,
+            selectedIds: [] // Clear selection when removing a page
+        })
+    },
+
+    alignElements: (direction) => {
+        const { pages, selectedIds } = get()
+        if (selectedIds.length < 2) return
+
+        // Find all selected elements across all pages
+        const selectedElements: EditorElement[] = []
+        pages.forEach(page => {
+            page.elements.forEach(el => {
+                if (selectedIds.includes(el.id)) {
+                    selectedElements.push(el)
+                }
+            })
+        })
+
+        // Simple alignment implementation
+        let updates: Partial<EditorElement>[] = []
+
+        switch (direction) {
+            case 'left':
+                const minX = Math.min(...selectedElements.map(el => el.x))
+                updates = selectedElements.map(el => ({ x: minX }))
+                break
+            case 'center':
+                const centerX = selectedElements.reduce((sum, el) => sum + el.x, 0) / selectedElements.length
+                updates = selectedElements.map(el => ({ x: centerX }))
+                break
+            case 'right':
+                const maxX = Math.max(...selectedElements.map(el => el.x + el.style.width))
+                updates = selectedElements.map(el => ({ x: maxX - el.style.width }))
+                break
+            case 'top':
+                const minY = Math.min(...selectedElements.map(el => el.y))
+                updates = selectedElements.map(el => ({ y: minY }))
+                break
+            case 'middle':
+                const middleY = selectedElements.reduce((sum, el) => sum + el.y, 0) / selectedElements.length
+                updates = selectedElements.map(el => ({ y: middleY }))
+                break
+            case 'bottom':
+                const maxY = Math.max(...selectedElements.map(el => el.y + el.style.height))
+                updates = selectedElements.map(el => ({ y: maxY - el.style.height }))
+                break
+            case 'baseline':
+                // For text elements, align by baseline
+                const textElements = selectedElements.filter(el => ['paragraph', 'heading'].includes(el.type))
+                if (textElements.length > 0) {
+                    const baselineY = textElements[0].y + textElements[0].style.height
+                    updates = textElements.map(el => ({ y: baselineY - el.style.height }))
+                }
+                break
+        }
+
+        // Apply updates
+        updates.forEach((update, i) => {
+            const element = selectedElements[i]
+            if (element) {
+                get().updateElement(element.id, update)
+            }
+        })
+    },
+
+    distributeElements: (axis) => {
+        const { pages, selectedIds } = get()
+        if (selectedIds.length < 3) return
+
+        // Find all selected elements across all pages
+        const selectedElements: EditorElement[] = []
+        pages.forEach(page => {
+            page.elements.forEach(el => {
+                if (selectedIds.includes(el.id)) {
+                    selectedElements.push(el)
+                }
+            })
+        })
+
+        const sortedElements = selectedElements
+            .sort((a, b) => axis === 'horizontal' ? a.x - b.x : a.y - b.y)
+
+        if (axis === 'horizontal') {
+            const totalWidth = sortedElements.reduce((sum, el) => sum + el.style.width, 0)
+            const firstX = sortedElements[0].x
+            const lastX = sortedElements[sortedElements.length - 1].x + sortedElements[sortedElements.length - 1].style.width
+            const availableSpace = lastX - firstX - totalWidth
+            const spacing = availableSpace / (sortedElements.length - 1)
+
+            let currentX = firstX
+            sortedElements.forEach((el) => {
+                get().updateElement(el.id, { x: currentX })
+                currentX += el.style.width + spacing
+            })
+        } else {
+            const totalHeight = sortedElements.reduce((sum, el) => sum + el.style.height, 0)
+            const firstY = sortedElements[0].y
+            const lastY = sortedElements[sortedElements.length - 1].y + sortedElements[sortedElements.length - 1].style.height
+            const availableSpace = lastY - firstY - totalHeight
+            const spacing = availableSpace / (sortedElements.length - 1)
+
+            let currentY = firstY
+            sortedElements.forEach((el) => {
+                get().updateElement(el.id, { y: currentY })
+                currentY += el.style.height + spacing
+            })
+        }
+    }
 }))
