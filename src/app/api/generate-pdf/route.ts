@@ -156,6 +156,22 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
         break
 
       case 'line':
+        const isSolid = !el.lineStyle || el.lineStyle === 'solid'
+        const isHorizontal = el.lineOrientation === 'horizontal'
+
+        let lineStyleCss = ''
+        if (isSolid) {
+          lineStyleCss = `background-color: ${style.backgroundColor || '#000000'};`
+        } else {
+          // Dashed or Dotted
+          lineStyleCss = `background-color: transparent;`
+          if (isHorizontal) {
+            lineStyleCss += `border-top: ${style.height}px ${el.lineStyle} ${style.backgroundColor || '#000000'};`
+          } else {
+            lineStyleCss += `border-left: ${style.width}px ${el.lineStyle} ${style.backgroundColor || '#000000'};`
+          }
+        }
+
         elementHTML = `
           <div style="
             position: absolute;
@@ -163,8 +179,7 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
             top: ${el.y}px;
             width: ${style.width}px;
             height: ${style.height}px;
-            background-color: ${style.backgroundColor || '#000000'};
-            border: none;
+            ${lineStyleCss}
             z-index: ${style.zIndex || 1};
             opacity: ${style.opacity || 1};
             transform: rotate(${style.rotation || 0}deg);
@@ -289,7 +304,39 @@ export async function POST(request: NextRequest) {
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
-        '--disable-web-security'
+        '--disable-web-security',
+        '--font-render-hinting=none', // Improve font rendering consistency
+        '--disable-extensions',
+        '--disable-background-networking',
+        '--disable-background-timer-throttling',
+        '--disable-backgrounding-occluded-windows',
+        '--disable-breakpad',
+        '--disable-client-side-phishing-detection',
+        '--disable-component-update',
+        '--disable-default-apps',
+        '--disable-domain-reliability',
+        '--disable-features=AudioServiceOutOfProcess',
+        '--disable-hang-monitor',
+        '--disable-ipc-flooding-protection',
+        '--disable-notifications',
+        '--disable-offer-store-unmasked-wallet-cards',
+        '--disable-popup-blocking',
+        '--disable-print-preview',
+        '--disable-prompt-on-repost',
+        '--disable-renderer-backgrounding',
+        '--disable-speech-api',
+        '--disable-sync',
+        '--hide-scrollbars',
+        '--ignore-gpu-blacklist',
+        '--metrics-recording-only',
+        '--mute-audio',
+        '--no-default-browser-check',
+        '--no-first-run',
+        '--no-pings',
+        '--no-zygote',
+        '--password-store=basic',
+        '--use-gl=swiftshader',
+        '--use-mock-keychain'
       ]
     })
 
@@ -297,7 +344,7 @@ export async function POST(request: NextRequest) {
     await page.setViewport({
       width: Math.ceil(width),
       height: Math.ceil(height),
-      deviceScaleFactor: 2 // Higher DPI for better quality
+      // deviceScaleFactor: 1 // Reduced to 1 for stability
     })
 
     // Generate HTML for all pages
@@ -332,21 +379,19 @@ export async function POST(request: NextRequest) {
     `
 
     await page.setContent(html, {
-      waitUntil: 'networkidle0',
+      waitUntil: ['load', 'domcontentloaded'],
       timeout: 30000
     })
 
-    // Wait for fonts and images to load
-    await page.evaluate(() => document.fonts.ready)
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Wait for fonts to be ready
+    await page.evaluateHandle('document.fonts.ready')
 
     const pdfBuffer = await page.pdf({
       width: `${width}px`,
       height: `${height}px`,
       printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
-      scale: 1,
-      timeout: 60000,
+      pageRanges: '1-' + pages.length
     })
 
     await browser.close()

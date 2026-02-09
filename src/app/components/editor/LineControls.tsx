@@ -45,8 +45,10 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
   }
 
   const handleOrientationChange = (orientation: 'horizontal' | 'vertical') => {
-    const newWidth = orientation === 'horizontal' ? 200 : 2
-    const newHeight = orientation === 'vertical' ? 100 : 2
+    // Swap dimensions to preserve length/thickness logic on rotation
+    const newWidth = style.height
+    const newHeight = style.width
+
     onUpdate({
       lineOrientation: orientation,
       style: { ...style, width: newWidth, height: newHeight }
@@ -73,8 +75,8 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
           <button
             onClick={() => handleOrientationChange('horizontal')}
             className={`flex-1 py-2 px-3 rounded text-xs font-medium transition-colors ${lineOrientation === 'horizontal'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
           >
             Horizontal
@@ -82,8 +84,8 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
           <button
             onClick={() => handleOrientationChange('vertical')}
             className={`flex-1 py-2 px-3 rounded text-xs font-medium transition-colors ${lineOrientation === 'vertical'
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
           >
             Vertical
@@ -100,8 +102,8 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
               key={style}
               onClick={() => handleStyleChange(style)}
               className={`flex-1 py-2 px-3 rounded text-xs font-medium capitalize transition-colors ${lineStyle === style
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
             >
               {style}
@@ -113,31 +115,51 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
       {/* Thickness */}
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-2">
-          Thickness: {lineOrientation === 'horizontal' ? style.height : style.width}px
+          Thickness (px)
         </label>
-        <input
-          type="range"
-          min="1"
-          max="200"
-          value={lineOrientation === 'horizontal' ? style.height : style.width}
-          onChange={(e) => handleThicknessChange(Number(e.target.value))}
-          className="w-full"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="range"
+            min="1"
+            max="200"
+            value={lineOrientation === 'horizontal' ? style.height : style.width}
+            onChange={(e) => handleThicknessChange(Number(e.target.value))}
+            className="flex-1"
+          />
+          <input
+            type="number"
+            min="1"
+            max="200"
+            value={lineOrientation === 'horizontal' ? style.height : style.width}
+            onChange={(e) => handleThicknessChange(Number(e.target.value))}
+            className="w-16 p-1 text-xs border border-gray-300 rounded text-center"
+          />
+        </div>
       </div>
 
       {/* Length */}
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-2">
-          Length: {lineOrientation === 'horizontal' ? style.width : style.height}px
+          Length (px)
         </label>
-        <input
-          type="range"
-          min="10"
-          max="2000"
-          value={lineOrientation === 'horizontal' ? style.width : style.height}
-          onChange={(e) => handleLengthChange(Number(e.target.value))}
-          className="w-full"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="range"
+            min="10"
+            max="2000"
+            value={lineOrientation === 'horizontal' ? style.width : style.height}
+            onChange={(e) => handleLengthChange(Number(e.target.value))}
+            className="flex-1"
+          />
+          <input
+            type="number"
+            min="10"
+            max="2000"
+            value={lineOrientation === 'horizontal' ? style.width : style.height}
+            onChange={(e) => handleLengthChange(Number(e.target.value))}
+            className="w-16 p-1 text-xs border border-gray-300 rounded text-center"
+          />
+        </div>
       </div>
 
       {/* Color */}
@@ -168,14 +190,24 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
           <RotateCw className="w-3 h-3" />
           Rotation: {style.rotation || 0}°
         </label>
-        <input
-          type="range"
-          min="0"
-          max="360"
-          value={style.rotation || 0}
-          onChange={(e) => handleRotationChange(Number(e.target.value))}
-          className="w-full"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            type="range"
+            min="0"
+            max="360"
+            value={style.rotation || 0}
+            onChange={(e) => handleRotationChange(Number(e.target.value))}
+            className="flex-1"
+          />
+          <input
+            type="number"
+            min="0"
+            max="360"
+            value={style.rotation || 0}
+            onChange={(e) => handleRotationChange(Number(e.target.value))}
+            className="w-16 p-1 text-xs border border-gray-300 rounded text-center"
+          />
+        </div>
       </div>
     </div>
   )

@@ -88,9 +88,15 @@ export default function EditorSidebar() {
                                 />
                                 <ElementButton
                                     icon={<Minus size={18} />}
-                                    label="Line"
+                                    label="H. Line"
                                     color="orange"
                                     onClick={() => addLine('horizontal')}
+                                />
+                                <ElementButton
+                                    icon={<Minus size={18} className="rotate-90" />}
+                                    label="V. Line"
+                                    color="orange"
+                                    onClick={() => addLine('vertical')}
                                 />
                             </div>
                         </div>

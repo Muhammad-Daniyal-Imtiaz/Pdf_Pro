@@ -98,10 +98,23 @@ export default function PDFRenderer({
         }
 
         case 'line': {
+          const isSolid = !element.lineStyle || element.lineStyle === 'solid'
+
+          if (isSolid) {
+            return (
+              <div style={{ width: '100%', height: '100%', backgroundColor: elStyle.backgroundColor || '#000' }} />
+            )
+          }
+
+          const isHorizontal = element.lineOrientation === 'horizontal'
           return (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ backgroundColor: elStyle.backgroundColor || '#000', width: '100%', height: '100%' }} />
-            </div>
+            <div style={{
+              width: '100%',
+              height: '100%',
+              borderTop: isHorizontal ? `${elStyle.height}px ${element.lineStyle} ${elStyle.backgroundColor || '#000'}` : undefined,
+              borderLeft: !isHorizontal ? `${elStyle.width}px ${element.lineStyle} ${elStyle.backgroundColor || '#000'}` : undefined,
+              backgroundColor: 'transparent'
+            }} />
           )
         }
 

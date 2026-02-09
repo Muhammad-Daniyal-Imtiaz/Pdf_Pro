@@ -35,6 +35,7 @@ export interface EditorElement {
     iconType?: string
     url?: string
     lineOrientation?: 'horizontal' | 'vertical'
+    lineStyle?: 'solid' | 'dashed' | 'dotted'
     pageIndex: number
 }
 
@@ -216,7 +217,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             x,
             y,
             content: iconType,
-            style: { width: size, height: size, x, y, fontSize: 24 },
+            style: { width: size, height: size, fontSize: 24 },
             pageIndex: targetPageIndex
         }
 
@@ -240,14 +241,13 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             id,
             type: 'line',
             lineOrientation: orientation,
+            lineStyle: 'solid',
             x,
             y,
             content: '',
             style: {
                 width: orientation === 'horizontal' ? 300 : 2,
                 height: orientation === 'vertical' ? 200 : 2,
-                x,
-                y,
                 backgroundColor: '#1a1a1a',
             },
             pageIndex: targetPageIndex
