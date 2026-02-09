@@ -4,6 +4,7 @@ import puppeteer from 'puppeteer-core'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
+export const dynamic = 'force-dynamic'
 
 // FIXED SVG icons - using stroke and fill correctly
 const ICON_SVGS: Record<string, string> = {
@@ -77,6 +78,25 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
         `
         break
 
+      case 'image':
+        elementHTML = `
+          <div style="
+            position: absolute;
+            left: ${el.x}px;
+            top: ${el.y}px;
+            width: ${style.width}px;
+            height: ${style.height}px;
+            z-index: ${style.zIndex || 1};
+            opacity: ${style.opacity || 1};
+            transform: rotate(${style.rotation || 0}deg);
+            transform-origin: top left;
+            overflow: hidden;
+          ">
+            ${el.content ? `<img src="${el.content}" style="width: 100%; height: 100%; object-fit: fill; display: block;" />` : `<div style="width: 100%; height: 100%; background: #f3f4f6;"></div>`}
+          </div>
+        `
+        break
+
       case 'social-icon':
         const iconSVG = ICON_SVGS[el.iconType] || ICON_SVGS.user
         const iconSize = Math.min(style.width, style.height) * 0.8
@@ -136,15 +156,13 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
         break
 
       case 'line':
-        const isHorizontal = el.lineOrientation === 'horizontal'
-        const thickness = style.borderWidth || 2
         elementHTML = `
           <div style="
             position: absolute;
             left: ${el.x}px;
             top: ${el.y}px;
-            width: ${isHorizontal ? style.width : thickness}px;
-            height: ${isHorizontal ? thickness : style.height}px;
+            width: ${style.width}px;
+            height: ${style.height}px;
             background-color: ${style.backgroundColor || '#000000'};
             border: none;
             z-index: ${style.zIndex || 1};

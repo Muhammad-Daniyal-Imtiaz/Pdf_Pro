@@ -47,7 +47,7 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
   const handleOrientationChange = (orientation: 'horizontal' | 'vertical') => {
     const newWidth = orientation === 'horizontal' ? 200 : 2
     const newHeight = orientation === 'vertical' ? 100 : 2
-    onUpdate({ 
+    onUpdate({
       lineOrientation: orientation,
       style: { ...style, width: newWidth, height: newHeight }
     })
@@ -72,21 +72,19 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
         <div className="flex gap-2">
           <button
             onClick={() => handleOrientationChange('horizontal')}
-            className={`flex-1 py-2 px-3 rounded text-xs font-medium transition-colors ${
-              lineOrientation === 'horizontal'
+            className={`flex-1 py-2 px-3 rounded text-xs font-medium transition-colors ${lineOrientation === 'horizontal'
                 ? 'bg-blue-500 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+              }`}
           >
             Horizontal
           </button>
           <button
             onClick={() => handleOrientationChange('vertical')}
-            className={`flex-1 py-2 px-3 rounded text-xs font-medium transition-colors ${
-              lineOrientation === 'vertical'
+            className={`flex-1 py-2 px-3 rounded text-xs font-medium transition-colors ${lineOrientation === 'vertical'
                 ? 'bg-blue-500 text-white'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+              }`}
           >
             Vertical
           </button>
@@ -101,11 +99,10 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
             <button
               key={style}
               onClick={() => handleStyleChange(style)}
-              className={`flex-1 py-2 px-3 rounded text-xs font-medium capitalize transition-colors ${
-                lineStyle === style
+              className={`flex-1 py-2 px-3 rounded text-xs font-medium capitalize transition-colors ${lineStyle === style
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+                }`}
             >
               {style}
             </button>
@@ -121,7 +118,7 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
         <input
           type="range"
           min="1"
-          max="20"
+          max="200"
           value={lineOrientation === 'horizontal' ? style.height : style.width}
           onChange={(e) => handleThicknessChange(Number(e.target.value))}
           className="w-full"
@@ -136,7 +133,7 @@ export default function LineControls({ element, onUpdate }: LineControlsProps) {
         <input
           type="range"
           min="10"
-          max="500"
+          max="2000"
           value={lineOrientation === 'horizontal' ? style.width : style.height}
           onChange={(e) => handleLengthChange(Number(e.target.value))}
           className="w-full"

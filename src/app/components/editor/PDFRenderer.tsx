@@ -67,6 +67,10 @@ export default function PDFRenderer({
       boxSizing: 'border-box', // MATCHES API
       margin: 0,
       padding: 0,
+      transform: `rotate(${elStyle.rotation || 0}deg)`,
+      transformOrigin: 'top left', // Matches API default
+      opacity: elStyle.opacity ?? 1,
+      borderRadius: `${elStyle.borderRadius || 0}px`,
     }
 
     const handleClick = (e: React.MouseEvent) => {
@@ -94,16 +98,34 @@ export default function PDFRenderer({
         }
 
         case 'line': {
-          const isHorizontal = lineOrientation === 'horizontal'
           return (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div style={{ backgroundColor: elStyle.backgroundColor || '#000', width: isHorizontal ? '100%' : '2px', height: isHorizontal ? '2px' : '100%' }} />
+              <div style={{ backgroundColor: elStyle.backgroundColor || '#000', width: '100%', height: '100%' }} />
             </div>
           )
         }
 
         case 'image':
-          return <div style={{ width: '100%', height: '100%', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Image</div>
+          return (
+            <div style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: content ? 'transparent' : '#f3f4f6' }}>
+              {content ? (
+                <img
+                  src={content}
+                  alt="User uploaded"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'fill', // User wants exactly what fills the container
+                    display: 'block',
+                    pointerEvents: 'none' // allow dragging parent
+                  }}
+                  draggable={false} // inhibit native drag
+                />
+              ) : (
+                <div style={{ color: '#9ca3af', fontSize: '12px' }}>Click to Upload</div>
+              )}
+            </div>
+          )
 
         case 'container':
           return (
