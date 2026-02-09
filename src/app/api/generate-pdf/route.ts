@@ -233,52 +233,9 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
   }
 
   return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <style>
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
-        
-        @page {
-          size: ${width}px ${height}px;
-          margin: 0;
-        }
-        
-        body {
-          margin: 0;
-          padding: 0;
-          font-family: Arial, sans-serif;
-          background: white;
-        }
-        
-        .page {
-          width: ${width}px;
-          height: ${height}px;
-          position: relative;
-          overflow: hidden;
-          page-break-after: always;
-        }
-        
-        svg {
-          display: block;
-          max-width: 100%;
-          max-height: 100%;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="page">
-        ${elements.map(renderElement).join('')}
-      </div>
-    </body>
-    </html>
+    <div style="position: relative; width: ${width}px; height: ${height}px; page-break-after: always; overflow: hidden; background: white;">
+      ${elements.map(renderElement).join('')}
+    </div>
   `
 }
 
@@ -350,7 +307,7 @@ export async function POST(request: NextRequest) {
     // Generate HTML for all pages
     const pagesHTML = pages.map((pageData: any, index: number) =>
       generatePageHTML(pageData.elements, width, height)
-    ).join('<div style="page-break-after: always;"></div>')
+    ).join('')
 
     const html = `
       <!DOCTYPE html>
