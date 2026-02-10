@@ -39,9 +39,9 @@ export interface EditorElement {
     pageIndex: number
 }
 
-interface EditorPage {
-    id: string
-    elements: EditorElement[]
+export interface EditorPage {
+    id: string;
+    elements: EditorElement[];
 }
 
 interface EditorState {

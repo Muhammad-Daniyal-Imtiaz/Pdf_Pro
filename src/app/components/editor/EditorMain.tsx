@@ -3,8 +3,8 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useEditorStore, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import PDFRenderer from './PDFRenderer'
-import { generatePDF } from '@/app/lib/pdf-service'
-import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut, Plus, Trash2 } from 'lucide-react'
+import { generatePDF, generateWord, generateText } from '@/app/lib/export-service'
+import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut, Plus, Trash2, FileText, FileType } from 'lucide-react'
 
 export default function EditorMain() {
     const {
@@ -29,8 +29,9 @@ export default function EditorMain() {
     const [showGrid, setShowGrid] = useState(true)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [exportFormat, setExportFormat] = useState<'pdf' | 'doc' | 'txt'>('pdf')
 
-    const handleDownloadPDF = useCallback(async () => {
+    const handleExport = useCallback(async () => {
         setError(null)
         setEditingId(null)
         selectElement(null)
@@ -41,29 +42,43 @@ export default function EditorMain() {
         setGeneratingPDF(true)
 
         try {
-            const blob = await generatePDF(pages, docTitle, A4_WIDTH, A4_HEIGHT)
+            let blob: Blob
+            let extension: string
+            const filename = docTitle.replace(/[^a-z0-9]/gi, '_') || 'document'
+
+            if (exportFormat === 'pdf') {
+                blob = await generatePDF(pages, docTitle, A4_WIDTH, A4_HEIGHT)
+                extension = 'pdf'
+            } else if (exportFormat === 'doc') {
+                blob = generateWord(pages, docTitle, A4_WIDTH, A4_HEIGHT)
+                extension = 'doc'
+            } else {
+                blob = generateText(pages, docTitle)
+                extension = 'txt'
+            }
+
             const url = window.URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = url
-            link.download = `${docTitle.replace(/[^a-z0-9]/gi, '_')}.pdf`
+            link.download = `${filename}.${extension}`
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
             window.URL.revokeObjectURL(url)
         } catch (err: any) {
-            console.error('PDF export failed:', err)
-            setError(err.message || 'Failed to generate PDF')
+            console.error('Export failed:', err)
+            setError(err.message || 'Failed to export document')
         } finally {
             setGeneratingPDF(false)
         }
-    }, [pages, docTitle, selectElement, setGeneratingPDF])
+    }, [pages, docTitle, selectElement, setGeneratingPDF, exportFormat])
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
             if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
                 e.preventDefault()
-                handleDownloadPDF()
+                handleExport()
             }
             if (e.key === 'Delete' && selectedIds.length > 0) {
                 selectedIds.forEach(id => removeElement(id))
@@ -76,7 +91,7 @@ export default function EditorMain() {
         }
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [handleDownloadPDF, selectedIds, removeElement, selectElement])
+    }, [handleExport, selectedIds, removeElement, selectElement])
 
     const [isDragging, setIsDragging] = useState(false)
     const [activeElementId, setActiveElementId] = useState<string | null>(null)
@@ -170,11 +185,38 @@ export default function EditorMain() {
                         <button onClick={() => setZoom(zoom + 10)} className="p-1.5 hover:bg-gray-100 rounded"><ZoomIn size={16} /></button>
                     </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    {error && <span className="text-red-500 text-sm bg-red-50 px-3 py-1 rounded">{error}</span>}
-                    <button onClick={handleDownloadPDF} disabled={isGeneratingPDF} className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-medium text-sm transition-all shadow-sm">
+                <div className="flex items-center gap-2">
+                    {error && <span className="text-red-500 text-sm bg-red-50 px-3 py-1 rounded mr-2">{error}</span>}
+
+                    {/* Format Selector */}
+                    <div className="flex bg-gray-100 p-1 rounded-lg border border-gray-200">
+                        <button
+                            onClick={() => setExportFormat('pdf')}
+                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${exportFormat === 'pdf' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            PDF
+                        </button>
+                        <button
+                            onClick={() => setExportFormat('doc')}
+                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${exportFormat === 'doc' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            WORD
+                        </button>
+                        <button
+                            onClick={() => setExportFormat('txt')}
+                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${exportFormat === 'txt' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            TEXT
+                        </button>
+                    </div>
+
+                    <button
+                        onClick={handleExport}
+                        disabled={isGeneratingPDF}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-bold text-sm transition-all shadow-md active:scale-95 ml-2"
+                    >
                         {isGeneratingPDF ? <Loader2 size={16} className="animate-spin" /> : <ArrowDownToLine size={16} />}
-                        {isGeneratingPDF ? 'Generating...' : 'Export PDF'}
+                        {isGeneratingPDF ? 'Exporting...' : `Export ${exportFormat.toUpperCase()}`}
                     </button>
                 </div>
             </div>
