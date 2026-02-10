@@ -1,414 +1,97 @@
 import { NextRequest, NextResponse } from 'next/server'
-import puppeteer from 'puppeteer-core'
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
-// FIXED SVG icons - using stroke and fill correctly
-const ICON_SVGS: Record<string, string> = {
-  linkedin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#0077b5" stroke-width="2" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
-  email: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#EA4335" stroke-width="2" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><path d="m22 6-10 7L2 6"/></svg>`,
-  phone: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#10B981" stroke-width="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 1 .7 2.81 2 2 0 0 1-.45 2.11"/><path d="M18 2h.01"/></svg>`,
-  twitter: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#1DA1F2" stroke-width="2" fill="none"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>`,
-  github: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#333333" stroke-width="2" fill="none"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>`,
-  website: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#6366F1" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
-  instagram: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#E4405F" stroke-width="2" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
-  facebook: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#1877F2" stroke-width="2" fill="none"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
-  youtube: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#FF0000" stroke-width="2" fill="none"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>`,
-  whatsapp: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#25D366" stroke-width="2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>`,
-  location: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#EF4444" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
-  calendar: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#F59E0B" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
-  user: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#6B7280" stroke-width="2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-  download: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#10B981" stroke-width="2" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
-  external: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#6366F1" stroke-width="2" fill="none"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`
-}
-
-async function findChrome(): Promise<string> {
-  if (process.env.CHROME_EXECUTABLE_PATH) return process.env.CHROME_EXECUTABLE_PATH
-  const platform = process.platform
-  if (platform === 'win32') return 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-  if (platform === 'darwin') return '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-  return '/usr/bin/google-chrome'
-}
-
-function escapeHtml(text: string): string {
-  if (!text) return ''
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-    .replace(/\n/g, '<br>')
-}
-
-function generatePageHTML(elements: any[], width: number, height: number, hasOriginalPdf: boolean): string {
-  const renderElement = (el: any) => {
-    const style = el.style || {}
-    const content = escapeHtml(el.content || '')
-
-    let elementHTML = ''
-
-    switch (el.type) {
-      case 'heading':
-      case 'paragraph':
-      case 'list':
-      case 'text':
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            font-family: ${style.fontFamily || 'Arial, sans-serif'};
-            font-size: ${style.fontSize || 14}px;
-            font-weight: ${style.fontWeight || 'normal'};
-            color: ${style.color || '#000000'};
-            line-height: ${style.lineHeight || 1.5};
-            text-align: ${style.textAlign || 'left'};
-            padding: ${style.padding || 0}px;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-          ">${content}</div>
-        `
-        break
-
-      case 'image':
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-            overflow: hidden;
-          ">
-            ${el.content ? `<img src="${el.content}" style="width: 100%; height: 100%; object-fit: fill; display: block;" />` : `<div style="width: 100%; height: 100%; background: #f3f4f6;"></div>`}
-          </div>
-        `
-        break
-
-      case 'social-icon':
-        const iconSVG = ICON_SVGS[el.iconType] || ICON_SVGS.user
-        const iconSize = Math.min(style.width, style.height) * 0.8
-        // FIXED: Apply icon-specific PDF corrections for exact positioning
-        const iconCorrections: Record<string, { y: number; scale: number }> = {
-          'email': { y: -1.2, scale: 0.998 },
-          'linkedin': { y: -1.0, scale: 0.997 },
-          'phone': { y: -0.8, scale: 0.999 },
-          'twitter': { y: -1.1, scale: 0.998 },
-          'facebook': { y: -0.9, scale: 0.997 },
-          'instagram': { y: -1.0, scale: 0.998 },
-          'github': { y: -0.7, scale: 0.999 },
-          'website': { y: -0.6, scale: 1.000 },
-          'whatsapp': { y: -1.0, scale: 0.998 },
-          'location': { y: -0.5, scale: 1.000 },
-          'calendar': { y: -0.4, scale: 1.001 },
-          'user': { y: -0.2, scale: 1.000 },
-          'download': { y: -0.3, scale: 1.000 },
-          'external': { y: -0.5, scale: 1.000 }
-        }
-        const correction = iconCorrections[el.iconType] || { y: -1.0, scale: 0.998 }
-
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y + correction.y}px;
-            width: ${style.width * correction.scale}px;
-            height: ${style.height * correction.scale}px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-          ">
-            <div style="
-              width: ${iconSize}px;
-              height: ${iconSize}px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            ">${iconSVG}</div>
-            ${el.showLabel && el.content ? `
-              <span style="
-                margin-left: 8px;
-                font-family: ${style.fontFamily || 'Arial, sans-serif'};
-                font-size: ${style.fontSize ? style.fontSize * 0.7 : 10}px;
-                font-weight: ${style.fontWeight || 'normal'};
-                color: ${style.color || '#374151'};
-                white-space: nowrap;
-              ">${content}</span>
-            ` : ''}
-          </div>
-        `
-        break
-
-      case 'line':
-        const isSolid = !el.lineStyle || el.lineStyle === 'solid'
-        const isHorizontal = el.lineOrientation === 'horizontal'
-
-        let lineStyleCss = ''
-        if (isSolid) {
-          lineStyleCss = `background-color: ${style.backgroundColor || '#000000'};`
-        } else {
-          // Dashed or Dotted
-          lineStyleCss = `background-color: transparent;`
-          if (isHorizontal) {
-            lineStyleCss += `border-top: ${style.height}px ${el.lineStyle} ${style.backgroundColor || '#000000'};`
-          } else {
-            lineStyleCss += `border-left: ${style.width}px ${el.lineStyle} ${style.backgroundColor || '#000000'};`
-          }
-        }
-
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            ${lineStyleCss}
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-          "></div>
-        `
-        break
-
-      case 'link':
-        const linkIcon = ICON_SVGS.external
-        elementHTML = `
-          <a href="${el.url || '#'}" target="_blank" style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            font-family: ${style.fontFamily || 'Arial, sans-serif'};
-            font-size: ${style.fontSize || 14}px;
-            font-weight: ${style.fontWeight || 'normal'};
-            color: ${style.color || '#0066cc'};
-            text-decoration: ${style.linkDecoration || 'none'};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: ${style.padding || 8}px;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-          ">
-            <div style="
-              width: 16px;
-              height: 16px;
-              margin-right: 6px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            ">${linkIcon}</div>
-            <span style="
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            ">${content}</span>
-          </a>
-        `
-        break
-    }
-
-    return elementHTML
-  }
-
-  // FIXED: If originalPdf exists, ensure background is transparent for overlay
-  const backgroundStyle = hasOriginalPdf ? 'background: transparent;' : 'background: white;'
-
-  return `
-    <div style="position: relative; width: ${width}px; height: ${height}px; page-break-after: always; overflow: hidden; ${backgroundStyle}">
-      ${elements.map(renderElement).join('')}
-    </div>
-  `
-}
-
 export async function POST(request: NextRequest) {
-  let browser = null
   try {
     const body = await request.json()
-    const { pages, title = 'document', width = 794, height = 1123, originalPdf } = body
-    const hasOriginalPdf = !!originalPdf
+    const { pages, title = 'document', originalPdf } = body
 
     if (!pages || !Array.isArray(pages) || pages.length === 0) {
       return NextResponse.json({ error: 'Invalid pages data' }, { status: 400 })
     }
 
-    const executablePath = await findChrome()
     console.log(`Generating PDF with ${pages.length} pages...`)
 
-    // FIXED: Use correct headless option
-    browser = await puppeteer.launch({
-      executablePath,
-      headless: true, // Changed from 'new' to true (boolean)
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--disable-web-security',
-        '--font-render-hinting=none', // Improve font rendering consistency
-        '--disable-extensions',
-        '--disable-background-networking',
-        '--disable-background-timer-throttling',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-breakpad',
-        '--disable-client-side-phishing-detection',
-        '--disable-component-update',
-        '--disable-default-apps',
-        '--disable-domain-reliability',
-        '--disable-features=AudioServiceOutOfProcess',
-        '--disable-hang-monitor',
-        '--disable-ipc-flooding-protection',
-        '--disable-notifications',
-        '--disable-offer-store-unmasked-wallet-cards',
-        '--disable-popup-blocking',
-        '--disable-print-preview',
-        '--disable-prompt-on-repost',
-        '--disable-renderer-backgrounding',
-        '--disable-speech-api',
-        '--disable-sync',
-        '--hide-scrollbars',
-        '--ignore-gpu-blacklist',
-        '--metrics-recording-only',
-        '--mute-audio',
-        '--no-default-browser-check',
-        '--no-first-run',
-        '--no-pings',
-        '--no-zygote',
-        '--password-store=basic',
-        '--use-gl=swiftshader',
-        '--use-mock-keychain'
-      ]
-    })
+    let pdfDoc: PDFDocument
 
-    const page = await browser.newPage()
-    await page.setViewport({
-      width: Math.ceil(width),
-      height: Math.ceil(height),
-      // deviceScaleFactor: 1 // Reduced to 1 for stability
-    })
-
-    // Generate HTML for all pages
-    const pagesHTML = pages.map((pageData: any, index: number) =>
-      generatePageHTML(pageData.elements, width, height, hasOriginalPdf)
-    ).join('')
-
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>${escapeHtml(title)}</title>
-        <style>
-          @page {
-            size: ${width}px ${height}px;
-            margin: 0;
-          }
-          body {
-            margin: 0;
-            padding: 0;
-            background: white;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-          }
-        </style>
-      </head>
-      <body>
-        ${pagesHTML}
-      </body>
-      </html>
-    `
-
-    await page.setContent(html, {
-      waitUntil: ['load', 'domcontentloaded'],
-      timeout: 30000
-    })
-
-    // Wait for fonts to be ready
-    await page.evaluateHandle('document.fonts.ready')
-
-    const pdfBuffer = await page.pdf({
-      width: `${width}px`,
-      height: `${height}px`,
-      printBackground: true,
-      margin: { top: 0, right: 0, bottom: 0, left: 0 },
-      pageRanges: '1-' + pages.length
-    })
-
-    await browser.close()
-    browser = null
-
-    let finalPdfBuffer: Buffer = Buffer.from(pdfBuffer)
-
-    // IF WE HAVE AN ORIGINAL PDF, MERGE IT
+    // Load original PDF or create new
     if (originalPdf) {
-      try {
-        const originalPdfBytes = Buffer.from(originalPdf, 'base64')
-        const overlayPdfBytes = finalPdfBuffer
+      const originalBytes = Buffer.from(originalPdf, 'base64')
+      pdfDoc = await PDFDocument.load(originalBytes)
+    } else {
+      pdfDoc = await PDFDocument.create()
+    }
 
-        const originalPdfDoc = await PDFDocument.load(originalPdfBytes)
-        const overlayPdfDoc = await PDFDocument.load(overlayPdfBytes)
+    // Embed fonts
+    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica)
+    const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
 
-        const mergedPdfDoc = await PDFDocument.create()
+    // Process each page
+    for (let i = 0; i < pages.length; i++) {
+      const page = pages[i]
+      let pdfPage = pdfDoc.getPage(i)
+      
+      if (!pdfPage) {
+        pdfPage = pdfDoc.addPage([page.width || 794, page.height || 1123])
+      }
 
-        const numPages = Math.min(originalPdfDoc.getPageCount(), overlayPdfDoc.getPageCount())
+      const { width, height } = pdfPage.getSize()
 
-        for (let i = 0; i < numPages; i++) {
-          const originalPage = originalPdfDoc.getPage(i)
-          const { width: pWidth, height: pHeight } = originalPage.getSize()
+      // Draw elements
+      for (const el of page.elements || []) {
+        if (el.isImported && !el.isModified) continue // Skip unmodified imported elements
 
-          // Copy original page
-          const [copiedPage] = await mergedPdfDoc.copyPages(originalPdfDoc, [i])
-          mergedPdfDoc.addPage(copiedPage)
+        const x = el.x * 0.75 // Convert CSS pixels to PDF points (72/96)
+        const y = height - (el.y * 0.75) - (el.style.height * 0.75) // Flip Y and scale
 
-          // Embed overlay
-          const [overlayPage] = await mergedPdfDoc.copyPages(overlayPdfDoc, [i])
-          const embeddedOverlay = await mergedPdfDoc.embedPage(overlayPage)
+        // Parse color
+        const hex = el.style.color?.replace('#', '') || '000000'
+        const r = parseInt(hex.substring(0, 2), 16) / 255
+        const g = parseInt(hex.substring(2, 4), 16) / 255  
+        const b = parseInt(hex.substring(4, 6), 16) / 255
 
-          // Draw overlay onto the new page at the original dimensions
-          const targetPage = mergedPdfDoc.getPage(i)
-          targetPage.drawPage(embeddedOverlay, {
-            x: 0,
-            y: 0,
-            width: pWidth,
-            height: pHeight,
+        if (el.type === 'text' || el.type === 'heading' || el.type === 'paragraph') {
+          const font = el.style.fontWeight === 'bold' ? helveticaBold : helvetica
+          const fontSize = (el.style.fontSize || 14) * 0.75
+
+          // Add whiteout background for modified imported elements
+          if (el.isImported && el.isModified) {
+            pdfPage.drawRectangle({
+              x: x - 2,
+              y: y - 2,
+              width: (el.style.width || 200) * 0.75 + 4,
+              height: (el.style.height || 20) * 0.75 + 4,
+              color: rgb(1, 1, 1), // White background
+            })
+          }
+
+          pdfPage.drawText(el.content || '', {
+            x,
+            y,
+            size: fontSize,
+            font,
+            color: rgb(r, g, b),
+            maxWidth: (el.style.width || 200) * 0.75,
+          })
+        } else if (el.type === 'line') {
+          pdfPage.drawRectangle({
+            x,
+            y,
+            width: (el.style.width || 100) * 0.75,
+            height: (el.style.height || 2) * 0.75,
+            color: rgb(r, g, b),
           })
         }
-
-        // Add remaining pages if any from overlay
-        if (overlayPdfDoc.getPageCount() > originalPdfDoc.getPageCount()) {
-          const extraPages = await mergedPdfDoc.copyPages(
-            overlayPdfDoc,
-            Array.from({ length: overlayPdfDoc.getPageCount() - originalPdfDoc.getPageCount() }, (_, i) => i + originalPdfDoc.getPageCount())
-          )
-          extraPages.forEach(p => mergedPdfDoc.addPage(p))
-        }
-
-        finalPdfBuffer = Buffer.from(await mergedPdfDoc.save())
-      } catch (mergeError) {
-        console.error('Merging Error:', mergeError)
       }
     }
+
+    // Save PDF
+    const pdfBytes = await pdfDoc.save()
+    console.log(`PDF generated: ${pdfBytes.length} bytes`)
 
     // Create safe filename
     const safeFilename = title
@@ -416,7 +99,7 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]+/g, '_')
       .replace(/^_+|_+$/g, '') || 'document'
 
-    return new NextResponse(new Uint8Array(finalPdfBuffer), {
+    return new NextResponse(new Uint8Array(pdfBytes), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
@@ -427,8 +110,6 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('PDF Generation Error:', error)
-    if (browser) await browser.close()
-
     return NextResponse.json(
       {
         error: 'Failed to generate PDF',
@@ -447,8 +128,7 @@ export async function GET() {
     required_fields: {
       pages: 'Array of page objects with elements',
       title: 'Document title (optional)',
-      width: 'Page width in pixels (default: 794)',
-      height: 'Page height in pixels (default: 1123)'
+      originalPdf: 'Base64 encoded original PDF (optional)'
     }
   })
 }

@@ -37,12 +37,16 @@ export interface EditorElement {
     lineOrientation?: 'horizontal' | 'vertical'
     lineStyle?: 'solid' | 'dashed' | 'dotted'
     pageIndex: number
+    isImported?: boolean
+    isModified?: boolean
 }
 
 export interface EditorPage {
     id: string
     elements: EditorElement[]
-    backgroundImage?: string // Data URL of the PDF page render
+    backgroundImage?: string
+    width?: number
+    height?: number
 }
 
 interface EditorState {
@@ -53,7 +57,8 @@ interface EditorState {
     isSidebarCollapsed: boolean
     isGeneratingPDF: boolean
     zoom: number
-    originalPdf?: Uint8Array // Original PDF source for high-fidelity merging
+    originalPdf?: Uint8Array
+    activePageIndex: number
 
     // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
@@ -81,6 +86,7 @@ interface EditorState {
     removePage: (index: number) => void
     alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => void
     distributeElements: (axis: 'horizontal' | 'vertical') => void
+    setActivePage: (index: number) => void
 }
 
 const DEFAULT_STYLE: ElementStyle = {
@@ -148,6 +154,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     isSidebarCollapsed: false,
     isGeneratingPDF: false,
     zoom: 100,
+    activePageIndex: 0,
 
     setTab: (tab) => set({ activeTab: tab }),
 
@@ -205,8 +212,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     addSocialIcon: (iconType) => {
-        const { pages } = get()
-        const targetPageIndex = pages.length - 1
+        const { pages, activePageIndex } = get()
+        const targetPageIndex = activePageIndex < pages.length ? activePageIndex : pages.length - 1
         const id = `icon-${Date.now()}`
         const size = 48
 
@@ -235,8 +242,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     addLine: (orientation) => {
-        const { pages } = get()
-        const targetPageIndex = pages.length - 1
+        const { pages, activePageIndex } = get()
+        const targetPageIndex = activePageIndex < pages.length ? activePageIndex : pages.length - 1
         const id = `line-${Date.now()}`
         const x = snapToInt(100)
         const y = snapToInt(200)
@@ -272,8 +279,12 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 const elements = page.elements.map((el) => {
                     if (el.id !== id) return el
 
-                    // Snap coordinate updates
+                    // Mark as modified if it's an imported element and content/style is changing
                     const processed = { ...el, ...updates }
+                    if (el.isImported && (updates.content !== undefined || updates.style !== undefined)) {
+                        processed.isModified = true
+                    }
+
                     if (updates.x !== undefined) processed.x = snapToInt(updates.x)
                     if (updates.y !== undefined) processed.y = snapToInt(updates.y)
 
@@ -293,12 +304,16 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 const elements = page.elements.map((el) => {
                     if (el.id !== id) return el
 
-                    // Round dimension updates
-                    const processed = { ...styleUpdates }
-                    if (styleUpdates.width !== undefined) processed.width = snapToInt(styleUpdates.width)
-                    if (styleUpdates.height !== undefined) processed.height = snapToInt(styleUpdates.height)
+                    const processedStyle = { ...el.style, ...styleUpdates }
+                    if (styleUpdates.width !== undefined) processedStyle.width = snapToInt(styleUpdates.width)
+                    if (styleUpdates.height !== undefined) processedStyle.height = snapToInt(styleUpdates.height)
 
-                    return { ...el, style: { ...el.style, ...processed } }
+                    const processed = { ...el, style: processedStyle }
+                    if (el.isImported) {
+                        processed.isModified = true
+                    }
+
+                    return processed
                 })
 
                 return { ...page, elements }
@@ -393,7 +408,14 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     clearPages: () => set({ pages: [], selectedIds: [] }),
 
     importPdf: (newPages, originalPdf) => set({
-        pages: newPages,
+        pages: newPages.map(page => ({
+            ...page,
+            elements: page.elements.map(el => ({
+                ...el,
+                isImported: true,
+                isModified: false,
+            }))
+        })),
         selectedIds: [],
         docTitle: 'Imported Document',
         originalPdf
@@ -401,12 +423,12 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
     // Page management
     addPage: () => {
-        const { pages } = get()
+        const { pages, activePageIndex } = get()
         const newPage: EditorPage = {
             id: `page-${Date.now()}`,
             elements: []
         }
-        set({ pages: [...pages, newPage] })
+        set({ pages: [...pages, newPage], activePageIndex: pages.length })
     },
 
     removePage: (index) => {
@@ -524,5 +546,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 currentY += el.style.height + spacing
             })
         }
-    }
+    },
+
+    setActivePage: (index) => set({ activePageIndex: index })
 }))

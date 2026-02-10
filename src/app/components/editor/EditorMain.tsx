@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useEditorStore, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
-import PDFRenderer from './PDFRenderer'
+import PageContainer from './PageContainer'
 import { generatePDF } from '@/app/lib/pdf-service'
 import { parsePdf } from '@/app/lib/pdf-import-service'
 import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut, Plus, Trash2, Upload } from 'lucide-react'
@@ -26,7 +26,9 @@ export default function EditorMain() {
         removePage,
         importPdf,
         clearPages,
-        originalPdf
+        originalPdf,
+        activePageIndex,
+        setActivePage
     } = useEditorStore()
 
     const canvasRef = useRef<HTMLDivElement>(null)
@@ -117,8 +119,10 @@ export default function EditorMain() {
     const [activeElementId, setActiveElementId] = useState<string | null>(null)
     const [dragStart, setDragStart] = useState({ x: 0, y: 0, elX: 0, elY: 0 })
 
-    const handleElementMouseDown = (id: string, e: React.MouseEvent) => {
+    const handleElementMouseDown = (id: string, e: React.MouseEvent, pageIndex: number) => {
         e.stopPropagation()
+        setActivePage(pageIndex)
+        selectElement(id)
 
         // Find the element across all pages
         let foundElement = null
@@ -251,43 +255,16 @@ export default function EditorMain() {
 
                             {/* Page Content */}
                             <div className="relative shadow-2xl bg-white">
-                                {showGrid && (
-                                    <div className="absolute inset-0 pointer-events-none z-0" style={{
-                                        backgroundImage: `linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)`,
-                                        backgroundSize: '20px 20px',
-                                        width: `${A4_WIDTH}px`,
-                                        height: `${A4_HEIGHT}px`
-                                    }} />
-                                )}
-
-                                <div
-                                    ref={pageIndex === 0 ? canvasRef : null}
-                                    onClick={() => {
-                                        if (!isDragging) {
-                                            selectElement(null);
-                                            setEditingId(null)
-                                        }
-                                    }}
-                                    style={{
-                                        width: `${A4_WIDTH}px`,
-                                        height: `${A4_HEIGHT}px`,
-                                        position: 'relative',
-                                        cursor: isDragging ? 'grabbing' : 'default'
-                                    }}
-                                >
-                                    <PDFRenderer
-                                        elements={page.elements}
-                                        showSelection={true}
-                                        selectedIds={selectedIds}
-                                        editingId={editingId}
-                                        onElementMouseDown={handleElementMouseDown}
-                                        onContentChange={(id, content) => updateElement(id, { content })}
-                                        onBlur={() => setEditingId(null)}
-                                        width={A4_WIDTH}
-                                        height={A4_HEIGHT}
-                                        backgroundImage={page.backgroundImage}
-                                    />
-                                </div>
+                                <PageContainer
+                                    page={page}
+                                    pageIndex={pageIndex}
+                                    zoom={100}
+                                    showGrid={showGrid}
+                                    selectedIds={selectedIds}
+                                    onElementSelect={selectElement}
+                                    onElementUpdate={updateElement}
+                                    onElementMove={moveElement}
+                                />
                             </div>
 
                             {/* Page Footer */}

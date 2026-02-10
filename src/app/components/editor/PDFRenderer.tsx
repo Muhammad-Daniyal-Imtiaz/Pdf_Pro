@@ -47,10 +47,25 @@ export default function PDFRenderer({
   editingId,
   backgroundImage
 }: PDFRendererProps) {
+  const [localEditingId, setLocalEditingId] = React.useState<string | null>(null)
+  const activeEditingId = editingId !== undefined ? editingId : localEditingId
+
+  const handleElementClick = (id: string, type: string) => {
+    // Enable editing on single click for text elements
+    if (type === 'text' || type === 'heading' || type === 'paragraph') {
+      setLocalEditingId(id)
+    }
+  }
+
+  const handleBlur = (id: string, content: string) => {
+    setLocalEditingId(null)
+    onBlur?.()
+    onContentChange?.(id, content)
+  }
 
   const renderElement = (element: EditorElement) => {
     const isSelected = showSelection && selectedIds.includes(element.id)
-    const isEditing = editingId === element.id
+    const isEditing = activeEditingId === element.id
     const { style: elStyle, type, content, id, iconType, lineOrientation, x, y } = element
 
     // MATCH API LOGIC: Round to integers
@@ -65,18 +80,19 @@ export default function PDFRenderer({
       top: `${exactY}px`,
       width: `${exactW}px`,
       height: `${exactH}px`,
-      zIndex: elStyle.zIndex || 1,
+      zIndex: (elStyle.zIndex || 1) + 100, // CRITICAL: Editable layer ON TOP of background (z-index > background)
       boxSizing: 'border-box', // MATCHES API
       margin: 0,
       padding: 0,
       transform: `rotate(${elStyle.rotation || 0}deg)`,
-      transformOrigin: 'top left', // Matches API default
+      transformOrigin: 'top left',
       opacity: elStyle.opacity ?? 1,
       borderRadius: `${elStyle.borderRadius || 0}px`,
     }
 
     const handleClick = (e: React.MouseEvent) => {
-      // handled by parent
+      e.stopPropagation()
+      handleElementClick(id, type)
     }
 
     const handleMouseDown = (e: React.MouseEvent) => {
@@ -159,11 +175,8 @@ export default function PDFRenderer({
               <div
                 contentEditable={isEditing}
                 suppressContentEditableWarning
-                onBlur={(e) => {
-                  onBlur?.()
-                  onContentChange?.(id, e.currentTarget.innerText)
-                }}
-                onDoubleClick={(e) => e.stopPropagation()}
+                onBlur={(e) => handleBlur(id, e.currentTarget.innerText)}
+                onClick={(e) => e.stopPropagation()}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -181,8 +194,6 @@ export default function PDFRenderer({
                   boxSizing: 'border-box',
                   overflow: 'auto'
                 }}
-                onClick={(e) => e.stopPropagation()}
-                dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
               >
                 {isEditing ? content : null}
               </div>
@@ -204,11 +215,8 @@ export default function PDFRenderer({
             <div
               contentEditable={isEditing}
               suppressContentEditableWarning
-              onBlur={(e) => {
-                onBlur?.()
-                onContentChange?.(id, e.currentTarget.innerText)
-              }}
-              onDoubleClick={(e) => e.stopPropagation()}
+              onBlur={(e) => handleBlur(id, e.currentTarget.innerText)}
+              onClick={(e) => e.stopPropagation()}
               style={{
                 width: '100%',
                 height: '100%',
@@ -224,7 +232,6 @@ export default function PDFRenderer({
                 cursor: isEditing ? 'text' : 'inherit',
                 userSelect: isEditing ? 'text' : 'none'
               }}
-              onClick={(e) => e.stopPropagation()}
               dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
             >
               {isEditing ? content : null}
@@ -281,7 +288,7 @@ export default function PDFRenderer({
           <img
             src={backgroundImage}
             alt="Page background"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            style={{ width: '100%', height: '100%', objectFit: 'fill' }}
           />
         </div>
       )}

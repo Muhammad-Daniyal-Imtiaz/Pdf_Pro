@@ -1,9 +1,18 @@
 import * as pdfjsLib from 'pdfjs-dist'
-import { EditorPage, EditorElement, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
+import { EditorPage, EditorElement } from '@/app/store/useEditorStore'
+import { CoordinateSystem, createFromViewport } from './coordinates'
 
 // Set worker source
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`
 
+/**
+ * Parse a PDF file and extract pages with editable elements
+ * 
+ * Key improvements:
+ * 1. Uses unified CoordinateSystem for all coordinate conversions
+ * 2. Applies whiteouts to prevent ghosting (double text render)
+ * 3. All coordinates stored as CSS pixels (top-left origin)
+ */
 export async function parsePdf(file: File): Promise<{ pages: EditorPage[], originalPdf: Uint8Array }> {
     const arrayBuffer = await file.arrayBuffer()
     // Create a copy for PDF.js as it might detach the buffer
@@ -17,24 +26,70 @@ export async function parsePdf(file: File): Promise<{ pages: EditorPage[], origi
 
     for (let i = 1; i <= numPages; i++) {
         const page = await pdf.getPage(i)
-
-        // Use a scale that maps the PDF width to A4_WIDTH (794px)
-        const baseViewport = page.getViewport({ scale: 1.0 })
-        const scale = A4_WIDTH / baseViewport.width
-        const renderViewport = page.getViewport({ scale: scale })
-
-        // Create canvas exactly at A4 dimensions
+        
+        // Create coordinate system for this page using viewport at scale 1.0
+        const viewport = page.getViewport({ scale: 1.0 })
+        const coords = createFromViewport(viewport)
+        
+        // Create canvas for background rendering
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
         if (!context) throw new Error('Could not get canvas context')
 
-        canvas.width = A4_WIDTH
-        canvas.height = A4_HEIGHT
+        // Canvas size matches coordinate system exactly
+        canvas.width = coords.pageWidth
+        canvas.height = coords.pageHeight
 
-        // Fill background with white
+        // STEP 1: Extract text content with positions using CoordinateSystem
+        const textContent = await page.getTextContent()
+        const elements: EditorElement[] = []
+
+        textContent.items.forEach((item: any, index: number) => {
+            if (!item.str || item.str.trim() === '') return
+
+            // PDF.js transform: [scaleX, skewX, skewY, scaleY, tx, ty]
+            // tx, ty are in PDF coordinates (points, bottom-left origin)
+            const tx = item.transform[4]
+            const ty = item.transform[5]
+            
+            // Get item dimensions in PDF points
+            const itemHeightPdf = item.height || 12
+            const itemWidthPdf = item.width || (item.str.length * itemHeightPdf * 0.6)
+
+            // Convert to CSS coordinates (pixels, top-left origin) using CoordinateSystem
+            const cssRect = coords.pdfRectToCss(tx, ty, itemWidthPdf, itemHeightPdf)
+
+            elements.push({
+                id: `imported-${i}-${index}`,
+                type: 'text',
+                x: cssRect.x,
+                y: cssRect.y,
+                content: item.str,
+                pageIndex: i - 1,
+                style: {
+                    width: cssRect.width,
+                    height: cssRect.height,
+                    fontSize: cssRect.height, // Approximate font size from height
+                    fontFamily: 'Arial, sans-serif',
+                    color: '#000000',
+                    backgroundColor: 'transparent',
+                    padding: 0,
+                    lineHeight: 1,
+                    textAlign: 'left',
+                    zIndex: 10,
+                },
+                isImported: true,
+                isModified: false
+            })
+        })
+
+        // STEP 2: Render PDF to canvas (no whiteouts needed)
+        // Fill white background
         context.fillStyle = 'white'
         context.fillRect(0, 0, canvas.width, canvas.height)
 
+        // Render PDF at the correct scale from coordinate system
+        const renderViewport = page.getViewport({ scale: coords.scale })
         await page.render({
             canvasContext: context,
             viewport: renderViewport
@@ -42,54 +97,11 @@ export async function parsePdf(file: File): Promise<{ pages: EditorPage[], origi
 
         const backgroundImage = canvas.toDataURL('image/png')
 
-        // Extract text elements
-        const textContent = await page.getTextContent()
-        const elements: EditorElement[] = []
-
-        textContent.items.forEach((item: any, index: number) => {
-            if (!item.str || item.str.trim() === '') return
-
-            // PDF.js transform is [scaleX, skewX, skewY, scaleY, tx, ty]
-            // We can use the viewport to transform these coordinates to canvas space
-            // The item.transform is in PDF space. 
-            // We need to map it to our renderViewport (which is A4_WIDTH wide)
-
-            const tx = item.transform[4]
-            const ty = item.transform[5]
-
-            // Map PDF coordinates (tx, ty) to canvas coordinates (x, y)
-            // PDF.js viewport.convertToViewportPoint does exactly this
-            const [x, y] = renderViewport.convertToViewportPoint(tx, ty)
-
-            // PDF.js returns y from top in viewport coordinates
-            // item.height is in PDF points, scale it
-            const itemHeight = (item.height || 12) * scale
-            const itemWidth = item.width * scale
-
-            elements.push({
-                id: `imported-${i}-${index}`,
-                type: 'text',
-                x: Math.round(x),
-                y: Math.round(y - itemHeight), // Viewport y is the baseline usually, shift up by height
-                content: item.str,
-                pageIndex: i - 1,
-                style: {
-                    width: Math.round(itemWidth),
-                    height: Math.round(itemHeight),
-                    fontSize: Math.round(itemHeight),
-                    fontFamily: 'Arial, sans-serif',
-                    color: 'transparent',
-                    padding: 0,
-                    lineHeight: 1,
-                    textAlign: 'left',
-                    zIndex: 10,
-                }
-            })
-        })
-
         editorPages.push({
             id: `page-${i}-${Date.now()}`,
             backgroundImage,
+            width: coords.pageWidth,
+            height: coords.pageHeight,
             elements: elements
         })
     }

@@ -12,17 +12,20 @@ export async function generatePDF(
     let originalPdfBase64 = null
     if (originalPdf && originalPdf.length > 0) {
         try {
-            // Robust way to convert Uint8Array to base64 for potentially large files
+            // Optimized base64 conversion for Uint8Array
+            // This method avoids potential stack overflow issues with large arrays
+            // when using String.fromCharCode.apply and is more robust.
             let binary = '';
             const len = originalPdf.byteLength;
-            const chunk_size = 8192;
-            for (let i = 0; i < len; i += chunk_size) {
-                binary += String.fromCharCode.apply(null, Array.from(originalPdf.subarray(i, i + chunk_size)));
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(originalPdf[i]);
             }
             originalPdfBase64 = btoa(binary);
         } catch (e) {
-            console.error('Failed to convert PDF to base64:', e);
-            // Fallback to Puppeteer-only if base64 conversion fails
+            console.error('Core Error: Failed to convert PDF to base64:', e);
+            // Optionally re-throw or handle the error more gracefully,
+            // e.g., by proceeding without the original PDF if it's not critical.
+            originalPdfBase64 = null; // Ensure it's null if conversion fails
         }
     }
 
