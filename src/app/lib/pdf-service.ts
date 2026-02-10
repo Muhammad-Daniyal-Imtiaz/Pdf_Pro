@@ -5,8 +5,22 @@ export async function generatePDF(
     pages: EditorPage[],
     title: string,
     width: number = 794,
-    height: number = 1123
+    height: number = 1123,
+    originalPdf?: Uint8Array
 ): Promise<Blob> {
+    // Convert Uint8Array to base64 for transport if present
+    let originalPdfBase64 = null
+    if (originalPdf) {
+        // Safe way to convert large Uint8Array to base64
+        let binary = '';
+        const bytes = new Uint8Array(originalPdf);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        originalPdfBase64 = btoa(binary);
+    }
+
     const response = await fetch('/api/generate-pdf', {
         method: 'POST',
         headers: {
@@ -17,6 +31,7 @@ export async function generatePDF(
             title: title || 'Document',
             width,
             height,
+            originalPdf: originalPdfBase64
         }),
     })
 

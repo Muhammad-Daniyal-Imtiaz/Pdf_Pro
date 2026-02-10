@@ -18,6 +18,7 @@ interface PDFRendererProps {
   onContentChange?: (id: string, content: string) => void
   onBlur?: () => void
   editingId?: string | null
+  backgroundImage?: string
 }
 
 const ICON_MAP: Record<string, any> = {
@@ -43,7 +44,8 @@ export default function PDFRenderer({
   onElementMouseDown,
   onContentChange,
   onBlur,
-  editingId
+  editingId,
+  backgroundImage
 }: PDFRendererProps) {
 
   const renderElement = (element: EditorElement) => {
@@ -267,6 +269,22 @@ export default function PDFRenderer({
         boxSizing: 'border-box'
       }}
     >
+      {backgroundImage && (
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        >
+          <img
+            src={backgroundImage}
+            alt="Page background"
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
+        </div>
+      )}
       {elements.map(renderElement)}
     </div>
   )

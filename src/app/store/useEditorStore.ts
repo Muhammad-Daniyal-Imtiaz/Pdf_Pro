@@ -39,9 +39,10 @@ export interface EditorElement {
     pageIndex: number
 }
 
-interface EditorPage {
+export interface EditorPage {
     id: string
     elements: EditorElement[]
+    backgroundImage?: string // Data URL of the PDF page render
 }
 
 interface EditorState {
@@ -52,6 +53,7 @@ interface EditorState {
     isSidebarCollapsed: boolean
     isGeneratingPDF: boolean
     zoom: number
+    originalPdf?: Uint8Array // Original PDF source for high-fidelity merging
 
     // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
@@ -71,6 +73,8 @@ interface EditorState {
     setGeneratingPDF: (value: boolean) => void
     setZoom: (zoom: number) => void
     getElementJSON: () => string
+    clearPages: () => void
+    importPdf: (pages: EditorPage[], originalPdf?: Uint8Array) => void
 
     // Page management
     addPage: () => void
@@ -385,6 +389,15 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     setZoom: (zoom) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
 
     getElementJSON: () => JSON.stringify(get().pages[get().pages.length - 1].elements, null, 2),
+
+    clearPages: () => set({ pages: [], selectedIds: [] }),
+
+    importPdf: (newPages, originalPdf) => set({
+        pages: newPages,
+        selectedIds: [],
+        docTitle: 'Imported Document',
+        originalPdf
+    }),
 
     // Page management
     addPage: () => {

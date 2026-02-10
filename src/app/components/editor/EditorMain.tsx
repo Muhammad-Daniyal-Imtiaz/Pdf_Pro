@@ -4,7 +4,8 @@ import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { useEditorStore, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import PDFRenderer from './PDFRenderer'
 import { generatePDF } from '@/app/lib/pdf-service'
-import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut, Plus, Trash2 } from 'lucide-react'
+import { parsePdf } from '@/app/lib/pdf-import-service'
+import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut, Plus, Trash2, Upload } from 'lucide-react'
 
 export default function EditorMain() {
     const {
@@ -23,12 +24,17 @@ export default function EditorMain() {
         setZoom,
         addPage,
         removePage,
+        importPdf,
+        clearPages,
+        originalPdf
     } = useEditorStore()
 
     const canvasRef = useRef<HTMLDivElement>(null)
     const [showGrid, setShowGrid] = useState(true)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [isImporting, setIsImporting] = useState(false)
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const handleDownloadPDF = useCallback(async () => {
         setError(null)
@@ -41,7 +47,7 @@ export default function EditorMain() {
         setGeneratingPDF(true)
 
         try {
-            const blob = await generatePDF(pages, docTitle, A4_WIDTH, A4_HEIGHT)
+            const blob = await generatePDF(pages, docTitle, A4_WIDTH, A4_HEIGHT, originalPdf)
             const url = window.URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = url
@@ -57,6 +63,35 @@ export default function EditorMain() {
             setGeneratingPDF(false)
         }
     }, [pages, docTitle, selectElement, setGeneratingPDF])
+
+    const handleUploadClick = () => {
+        fileInputRef.current?.click()
+    }
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        if (file.type !== 'application/pdf') {
+            setError('Please upload a valid PDF file.')
+            return
+        }
+
+        setIsImporting(true)
+        setError(null)
+
+        try {
+            const { pages: importedPages, originalPdf } = await parsePdf(file)
+            importPdf(importedPages, originalPdf)
+            setDocTitle(file.name.replace('.pdf', ''))
+        } catch (err: any) {
+            console.error('PDF import failed:', err)
+            setError('Failed to import PDF: ' + err.message)
+        } finally {
+            setIsImporting(false)
+            if (e.target) e.target.value = ''
+        }
+    }
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -169,6 +204,22 @@ export default function EditorMain() {
                         <span className="text-sm font-medium w-12 text-center">{zoom}%</span>
                         <button onClick={() => setZoom(zoom + 10)} className="p-1.5 hover:bg-gray-100 rounded"><ZoomIn size={16} /></button>
                     </div>
+                    <div className="h-6 w-px bg-gray-300" />
+                    <button
+                        onClick={handleUploadClick}
+                        disabled={isImporting}
+                        className="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-md text-sm font-medium transition-colors"
+                    >
+                        {isImporting ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                        {isImporting ? 'Importing...' : 'Upload PDF'}
+                    </button>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="hidden"
+                        accept=".pdf"
+                        onChange={handleFileChange}
+                    />
                 </div>
                 <div className="flex items-center gap-3">
                     {error && <span className="text-red-500 text-sm bg-red-50 px-3 py-1 rounded">{error}</span>}
@@ -234,6 +285,7 @@ export default function EditorMain() {
                                         onBlur={() => setEditingId(null)}
                                         width={A4_WIDTH}
                                         height={A4_HEIGHT}
+                                        backgroundImage={page.backgroundImage}
                                     />
                                 </div>
                             </div>

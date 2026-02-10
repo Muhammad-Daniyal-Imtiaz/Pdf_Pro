@@ -1,6 +1,6 @@
-// app/api/generate-pdf/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import puppeteer from 'puppeteer-core'
+import { PDFDocument } from 'pdf-lib'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -44,7 +44,7 @@ function escapeHtml(text: string): string {
     .replace(/\n/g, '<br>')
 }
 
-function generatePageHTML(elements: any[], width: number, height: number): string {
+function generatePageHTML(elements: any[], width: number, height: number, hasOriginalPdf: boolean): string {
   const renderElement = (el: any) => {
     const style = el.style || {}
     const content = escapeHtml(el.content || '')
@@ -232,8 +232,11 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
     return elementHTML
   }
 
+  // FIXED: If originalPdf exists, ensure background is transparent for overlay
+  const backgroundStyle = hasOriginalPdf ? 'background: transparent;' : 'background: white;'
+
   return `
-    <div style="position: relative; width: ${width}px; height: ${height}px; page-break-after: always; overflow: hidden; background: white;">
+    <div style="position: relative; width: ${width}px; height: ${height}px; page-break-after: always; overflow: hidden; ${backgroundStyle}">
       ${elements.map(renderElement).join('')}
     </div>
   `
@@ -243,7 +246,8 @@ export async function POST(request: NextRequest) {
   let browser = null
   try {
     const body = await request.json()
-    const { pages, title = 'document', width = 794, height = 1123 } = body
+    const { pages, title = 'document', width = 794, height = 1123, originalPdf } = body
+    const hasOriginalPdf = !!originalPdf
 
     if (!pages || !Array.isArray(pages) || pages.length === 0) {
       return NextResponse.json({ error: 'Invalid pages data' }, { status: 400 })
@@ -306,7 +310,7 @@ export async function POST(request: NextRequest) {
 
     // Generate HTML for all pages
     const pagesHTML = pages.map((pageData: any, index: number) =>
-      generatePageHTML(pageData.elements, width, height)
+      generatePageHTML(pageData.elements, width, height, hasOriginalPdf)
     ).join('')
 
     const html = `
@@ -353,6 +357,60 @@ export async function POST(request: NextRequest) {
 
     await browser.close()
     browser = null
+
+    let finalPdfBuffer: Buffer = Buffer.from(pdfBuffer)
+
+    // IF WE HAVE AN ORIGINAL PDF, MERGE IT
+    if (originalPdf) {
+      try {
+        const originalPdfBytes = Buffer.from(originalPdf, 'base64')
+        const overlayPdfBytes = finalPdfBuffer
+
+        const originalPdfDoc = await PDFDocument.load(originalPdfBytes)
+        const overlayPdfDoc = await PDFDocument.load(overlayPdfBytes)
+
+        const mergedPdfDoc = await PDFDocument.create()
+
+        const numPages = Math.min(originalPdfDoc.getPageCount(), overlayPdfDoc.getPageCount())
+
+        for (let i = 0; i < numPages; i++) {
+          // Copy page from original
+          const [originalPage] = await mergedPdfDoc.copyPages(originalPdfDoc, [i])
+          mergedPdfDoc.addPage(originalPage)
+
+          // Embed overlay page onto the same page
+          const [overlayPage] = await mergedPdfDoc.copyPages(overlayPdfDoc, [i])
+
+          // Draw the overlay onto the original page
+          // Note: We're actually adding a new page from original then drawing overlay on it
+          // Wait, better approach: copy original page, then embed overlay content on it
+          const embeddedOverlay = await mergedPdfDoc.embedPage(overlayPage)
+
+          const { width: pWidth, height: pHeight } = originalPage.getSize()
+          const newPage = mergedPdfDoc.getPage(i)
+          newPage.drawPage(embeddedOverlay, {
+            x: 0,
+            y: 0,
+            width: pWidth,
+            height: pHeight,
+          })
+        }
+
+        // Add remaining pages if any
+        if (overlayPdfDoc.getPageCount() > originalPdfDoc.getPageCount()) {
+          const extraPages = await mergedPdfDoc.copyPages(
+            overlayPdfDoc,
+            Array.from({ length: overlayPdfDoc.getPageCount() - originalPdfDoc.getPageCount() }, (_, i) => i + originalPdfDoc.getPageCount())
+          )
+          extraPages.forEach(p => mergedPdfDoc.addPage(p))
+        }
+
+        finalPdfBuffer = Buffer.from(await mergedPdfDoc.save())
+      } catch (mergeError) {
+        console.error('Merging Error:', mergeError)
+        // Fallback to Puppeteer only PDF if merge fails
+      }
+    }
 
     // Create safe filename
     const safeFilename = title
