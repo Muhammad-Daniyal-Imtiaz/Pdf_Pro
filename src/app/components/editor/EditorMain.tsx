@@ -50,8 +50,8 @@ export default function EditorMain() {
                 blob = await generatePDF(pages, docTitle, A4_WIDTH, A4_HEIGHT)
                 extension = 'pdf'
             } else if (exportFormat === 'doc') {
-                blob = generateWord(pages, docTitle, A4_WIDTH, A4_HEIGHT)
-                extension = 'doc'
+                blob = await generateWord(pages, docTitle, A4_WIDTH, A4_HEIGHT)
+                extension = 'docx'
             } else {
                 blob = generateText(pages, docTitle)
                 extension = 'txt'
