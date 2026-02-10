@@ -1,35 +1,39 @@
 import * as pdfjsLib from 'pdfjs-dist'
 import { EditorPage, EditorElement, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 
-// Set worker source (using local node_modules path or unpkg for browser compatibility)
+// Set worker source
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`
 
 export async function parsePdf(file: File): Promise<{ pages: EditorPage[], originalPdf: Uint8Array }> {
     const arrayBuffer = await file.arrayBuffer()
+    // Create a copy for PDF.js as it might detach the buffer
+    const copyForParsing = arrayBuffer.slice(0)
     const originalPdf = new Uint8Array(arrayBuffer)
-    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer })
+
+    const loadingTask = pdfjsLib.getDocument({ data: copyForParsing })
     const pdf = await loadingTask.promise
     const numPages = pdf.numPages
     const editorPages: EditorPage[] = []
 
     for (let i = 1; i <= numPages; i++) {
         const page = await pdf.getPage(i)
-        const viewport = page.getViewport({ scale: 2.0 }) // High scale for better rendering quality
 
-        // Calculate scale to fit A4_WIDTH while maintaining aspect ratio
-        const scaleX = A4_WIDTH / viewport.width
-        const scaleY = A4_HEIGHT / viewport.height
-        const finalScale = 2.0 * Math.min(scaleX, scaleY)
+        // Use a scale that maps the PDF width to A4_WIDTH (794px)
+        const baseViewport = page.getViewport({ scale: 1.0 })
+        const scale = A4_WIDTH / baseViewport.width
+        const renderViewport = page.getViewport({ scale: scale })
 
-        const renderViewport = page.getViewport({ scale: finalScale })
-
-        // Render page to canvas then to data URL
+        // Create canvas exactly at A4 dimensions
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d')
         if (!context) throw new Error('Could not get canvas context')
 
-        canvas.width = renderViewport.width
-        canvas.height = renderViewport.height
+        canvas.width = A4_WIDTH
+        canvas.height = A4_HEIGHT
+
+        // Fill background with white
+        context.fillStyle = 'white'
+        context.fillRect(0, 0, canvas.width, canvas.height)
 
         await page.render({
             canvasContext: context,
@@ -42,34 +46,43 @@ export async function parsePdf(file: File): Promise<{ pages: EditorPage[], origi
         const textContent = await page.getTextContent()
         const elements: EditorElement[] = []
 
-        // Group text items by y-coordinate to form paragraphs if they are close
-        // For simplicity in this first version, we'll map each text item to an element
         textContent.items.forEach((item: any, index: number) => {
             if (!item.str || item.str.trim() === '') return
 
-            // pdf.js gives coordinates from bottom-left
-            // transform property: [scaleX, skewX, skewY, scaleY, translateX, translateY]
-            const [scaleX, skewX, skewY, scaleY, tx, ty] = item.transform
+            // PDF.js transform is [scaleX, skewX, skewY, scaleY, tx, ty]
+            // We can use the viewport to transform these coordinates to canvas space
+            // The item.transform is in PDF space. 
+            // We need to map it to our renderViewport (which is A4_WIDTH wide)
 
-            // Convert to our editor coordinates (top-left)
-            // Note: y is inverted
-            const x = tx * (A4_WIDTH / 595.276) // Normalize to A4_WIDTH (794) from standard PDF (595)
-            const y = A4_HEIGHT - (ty * (A4_HEIGHT / 841.89)) // Normalize to A4_HEIGHT (1123) from standard PDF (841)
+            const tx = item.transform[4]
+            const ty = item.transform[5]
+
+            // Map PDF coordinates (tx, ty) to canvas coordinates (x, y)
+            // PDF.js viewport.convertToViewportPoint does exactly this
+            const [x, y] = renderViewport.convertToViewportPoint(tx, ty)
+
+            // PDF.js returns y from top in viewport coordinates
+            // item.height is in PDF points, scale it
+            const itemHeight = (item.height || 12) * scale
+            const itemWidth = item.width * scale
 
             elements.push({
                 id: `imported-${i}-${index}`,
                 type: 'text',
                 x: Math.round(x),
-                y: Math.round(y - (item.height || 14)), // Adjust y slightly as PDF.js uses baseline
+                y: Math.round(y - itemHeight), // Viewport y is the baseline usually, shift up by height
                 content: item.str,
                 pageIndex: i - 1,
                 style: {
-                    width: Math.round(item.width * (A4_WIDTH / 595.276)),
-                    height: Math.round(item.height * (A4_HEIGHT / 841.89)) || 20,
-                    fontSize: Math.round(item.height || 14),
-                    fontFamily: item.fontName || 'Arial',
-                    color: '#000000',
-                    zIndex: 10, // Put imported text above background
+                    width: Math.round(itemWidth),
+                    height: Math.round(itemHeight),
+                    fontSize: Math.round(itemHeight),
+                    fontFamily: 'Arial, sans-serif',
+                    color: 'transparent',
+                    padding: 0,
+                    lineHeight: 1,
+                    textAlign: 'left',
+                    zIndex: 10,
                 }
             })
         })

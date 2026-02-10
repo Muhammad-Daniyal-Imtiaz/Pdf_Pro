@@ -10,15 +10,20 @@ export async function generatePDF(
 ): Promise<Blob> {
     // Convert Uint8Array to base64 for transport if present
     let originalPdfBase64 = null
-    if (originalPdf) {
-        // Safe way to convert large Uint8Array to base64
-        let binary = '';
-        const bytes = new Uint8Array(originalPdf);
-        const len = bytes.byteLength;
-        for (let i = 0; i < len; i++) {
-            binary += String.fromCharCode(bytes[i]);
+    if (originalPdf && originalPdf.length > 0) {
+        try {
+            // Robust way to convert Uint8Array to base64 for potentially large files
+            let binary = '';
+            const len = originalPdf.byteLength;
+            const chunk_size = 8192;
+            for (let i = 0; i < len; i += chunk_size) {
+                binary += String.fromCharCode.apply(null, Array.from(originalPdf.subarray(i, i + chunk_size)));
+            }
+            originalPdfBase64 = btoa(binary);
+        } catch (e) {
+            console.error('Failed to convert PDF to base64:', e);
+            // Fallback to Puppeteer-only if base64 conversion fails
         }
-        originalPdfBase64 = btoa(binary);
     }
 
     const response = await fetch('/api/generate-pdf', {

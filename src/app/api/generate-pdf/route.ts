@@ -374,21 +374,20 @@ export async function POST(request: NextRequest) {
         const numPages = Math.min(originalPdfDoc.getPageCount(), overlayPdfDoc.getPageCount())
 
         for (let i = 0; i < numPages; i++) {
-          // Copy page from original
-          const [originalPage] = await mergedPdfDoc.copyPages(originalPdfDoc, [i])
-          mergedPdfDoc.addPage(originalPage)
+          const originalPage = originalPdfDoc.getPage(i)
+          const { width: pWidth, height: pHeight } = originalPage.getSize()
 
-          // Embed overlay page onto the same page
+          // Copy original page
+          const [copiedPage] = await mergedPdfDoc.copyPages(originalPdfDoc, [i])
+          mergedPdfDoc.addPage(copiedPage)
+
+          // Embed overlay
           const [overlayPage] = await mergedPdfDoc.copyPages(overlayPdfDoc, [i])
-
-          // Draw the overlay onto the original page
-          // Note: We're actually adding a new page from original then drawing overlay on it
-          // Wait, better approach: copy original page, then embed overlay content on it
           const embeddedOverlay = await mergedPdfDoc.embedPage(overlayPage)
 
-          const { width: pWidth, height: pHeight } = originalPage.getSize()
-          const newPage = mergedPdfDoc.getPage(i)
-          newPage.drawPage(embeddedOverlay, {
+          // Draw overlay onto the new page at the original dimensions
+          const targetPage = mergedPdfDoc.getPage(i)
+          targetPage.drawPage(embeddedOverlay, {
             x: 0,
             y: 0,
             width: pWidth,
@@ -396,7 +395,7 @@ export async function POST(request: NextRequest) {
           })
         }
 
-        // Add remaining pages if any
+        // Add remaining pages if any from overlay
         if (overlayPdfDoc.getPageCount() > originalPdfDoc.getPageCount()) {
           const extraPages = await mergedPdfDoc.copyPages(
             overlayPdfDoc,
@@ -408,7 +407,6 @@ export async function POST(request: NextRequest) {
         finalPdfBuffer = Buffer.from(await mergedPdfDoc.save())
       } catch (mergeError) {
         console.error('Merging Error:', mergeError)
-        // Fallback to Puppeteer only PDF if merge fails
       }
     }
 
@@ -418,7 +416,7 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]+/g, '_')
       .replace(/^_+|_+$/g, '') || 'document'
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(finalPdfBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
