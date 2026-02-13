@@ -37,11 +37,14 @@ export interface EditorElement {
     lineOrientation?: 'horizontal' | 'vertical'
     lineStyle?: 'solid' | 'dashed' | 'dotted'
     pageIndex: number
+    isImported?: boolean
+    isModified?: boolean
 }
 
 interface EditorPage {
     id: string
     elements: EditorElement[]
+    backgroundImage?: string
 }
 
 interface EditorState {
@@ -71,6 +74,10 @@ interface EditorState {
     setGeneratingPDF: (value: boolean) => void
     setZoom: (zoom: number) => void
     getElementJSON: () => string
+
+    // ADDED: Missing functions
+    clearPages: () => void
+    setPages: (pages: EditorPage[]) => void
 
     // Page management
     addPage: () => void
@@ -385,6 +392,11 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     setZoom: (zoom) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
 
     getElementJSON: () => JSON.stringify(get().pages[get().pages.length - 1].elements, null, 2),
+
+    // ADDED: Implementation of clearPages and setPages
+    clearPages: () => set({ pages: [], selectedIds: [] }),
+
+    setPages: (newPages) => set({ pages: newPages }),
 
     // Page management
     addPage: () => {

@@ -63,7 +63,7 @@ export default function PDFRenderer({
       top: `${exactY}px`,
       width: `${exactW}px`,
       height: `${exactH}px`,
-      zIndex: elStyle.zIndex || 1,
+      zIndex: elStyle.zIndex ?? 1,
       boxSizing: 'border-box', // MATCHES API
       margin: 0,
       padding: 0,
@@ -120,19 +120,27 @@ export default function PDFRenderer({
 
         case 'image':
           return (
-            <div style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: content ? 'transparent' : '#f3f4f6' }}>
+            <div style={{
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: content ? 'transparent' : '#f3f4f6'
+            }}>
               {content ? (
                 <img
                   src={content}
-                  alt="User uploaded"
+                  alt="PDF Page"
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'fill', // User wants exactly what fills the container
+                    objectFit: 'contain', // Changed from 'fill' to 'contain' to ensure full visibility
                     display: 'block',
-                    pointerEvents: 'none' // allow dragging parent
+                    pointerEvents: 'none'
                   }}
-                  draggable={false} // inhibit native drag
+                  draggable={false}
                 />
               ) : (
                 <div style={{ color: '#9ca3af', fontSize: '12px' }}>Click to Upload</div>

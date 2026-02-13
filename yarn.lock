@@ -194,6 +194,28 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@napi-rs/canvas-win32-x64-msvc@0.1.92":
+  version "0.1.92"
+  resolved "https://registry.npmjs.org/@napi-rs/canvas-win32-x64-msvc/-/canvas-win32-x64-msvc-0.1.92.tgz"
+  integrity sha512-KEhyZLzq1MXCNlXybz4k25MJmHFp+uK1SIb8yJB0xfrQjz5aogAMhyseSzewo+XxAq3OAOdyKvfHGNzT3w1RPg==
+
+"@napi-rs/canvas@^0.1.88":
+  version "0.1.92"
+  resolved "https://registry.npmjs.org/@napi-rs/canvas/-/canvas-0.1.92.tgz"
+  integrity sha512-q7ZaUCJkEU5BeOdE7fBx1XWRd2T5Ady65nxq4brMf5L4cE1VV/ACq5w9Z5b/IVJs8CwSSIwc30nlthH0gFo4Ig==
+  optionalDependencies:
+    "@napi-rs/canvas-android-arm64" "0.1.92"
+    "@napi-rs/canvas-darwin-arm64" "0.1.92"
+    "@napi-rs/canvas-darwin-x64" "0.1.92"
+    "@napi-rs/canvas-linux-arm-gnueabihf" "0.1.92"
+    "@napi-rs/canvas-linux-arm64-gnu" "0.1.92"
+    "@napi-rs/canvas-linux-arm64-musl" "0.1.92"
+    "@napi-rs/canvas-linux-riscv64-gnu" "0.1.92"
+    "@napi-rs/canvas-linux-x64-gnu" "0.1.92"
+    "@napi-rs/canvas-linux-x64-musl" "0.1.92"
+    "@napi-rs/canvas-win32-arm64-msvc" "0.1.92"
+    "@napi-rs/canvas-win32-x64-msvc" "0.1.92"
+
 "@next/env@15.5.9":
   version "15.5.9"
   resolved "https://registry.npmjs.org/@next/env/-/env-15.5.9.tgz"
@@ -2954,6 +2976,11 @@ node-fetch@^3.3.2:
     fetch-blob "^3.1.4"
     formdata-polyfill "^4.0.10"
 
+node-readable-to-web-readable-stream@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.npmjs.org/node-readable-to-web-readable-stream/-/node-readable-to-web-readable-stream-0.4.2.tgz"
+  integrity sha512-/cMZNI34v//jUTrI+UIo4ieHAB5EZRY/+7OmXZgBxaWBMcW2tGdceIw06RFxWxrKZ5Jp3sI2i5TsRo+CBhtVLQ==
+
 normalize-svg-path@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/normalize-svg-path/-/normalize-svg-path-1.1.0.tgz"
@@ -3182,6 +3209,14 @@ pdf-lib@^1.17.1:
     "@pdf-lib/upng" "^1.0.1"
     pako "^1.0.11"
     tslib "^1.11.1"
+
+pdfjs-dist@^5.4.624:
+  version "5.4.624"
+  resolved "https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-5.4.624.tgz"
+  integrity sha512-sm6TxKTtWv1Oh6n3C6J6a8odejb5uO4A4zo/2dgkHuC0iu8ZMAXOezEODkVaoVp8nX1Xzr+0WxFJJmUr45hQzg==
+  optionalDependencies:
+    "@napi-rs/canvas" "^0.1.88"
+    node-readable-to-web-readable-stream "^0.4.2"
 
 pend@~1.2.0:
   version "1.2.0"
