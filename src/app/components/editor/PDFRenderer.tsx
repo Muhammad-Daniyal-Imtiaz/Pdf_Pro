@@ -75,6 +75,7 @@ export default function PDFRenderer({
       padding: 0,
       transform: `rotate(${elStyle.rotation || 0}deg)`,
       transformOrigin: 'top left', // Matches API default
+      fontStyle: elStyle.fontStyle || 'normal',
       // SMART VISIBILITY: Hide masking boxes for unmodified imported text
       // so the user sees the crisp original PDF background unless they edit it.
       opacity: (element.isImported && !element.isModified && !isEditing) ? 0.01 : (elStyle.opacity ?? 1),

@@ -23,6 +23,7 @@ export interface ElementStyle {
     linkDecoration?: 'none' | 'underline'
     rotation?: number
     opacity?: number
+    fontStyle?: 'normal' | 'italic'
 }
 
 export interface EditorElement {

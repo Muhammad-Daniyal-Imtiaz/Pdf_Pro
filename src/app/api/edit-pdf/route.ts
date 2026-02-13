@@ -75,11 +75,12 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
             top: ${el.y}px;
             width: ${style.width}px;
             height: ${style.height}px;
-            font-family: ${style.fontFamily || 'Arial, sans-serif'};
+            font-family: ${style.fontFamily || 'Inter, Arial, sans-serif'};
             font-size: ${style.fontSize || 14}px;
             font-weight: ${style.fontWeight || 'normal'};
+            font-style: ${style.fontStyle || 'normal'};
             color: ${style.color || '#000000'};
-            line-height: ${style.lineHeight || 1.5};
+            line-height: ${style.lineHeight || 1.2};
             text-align: ${style.textAlign || 'left'};
             padding: ${style.padding || 0}px;
             z-index: ${style.zIndex || 1};
@@ -91,6 +92,8 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
             border-radius: ${style.borderRadius || 0}px;
             display: flex;
             align-items: flex-start; /* content alignment */
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
           ">${content}</div>
         `
                 break

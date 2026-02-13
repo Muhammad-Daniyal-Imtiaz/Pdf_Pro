@@ -33,6 +33,10 @@ const FONT_MAPPING: Record<string, string> = {
     'Verdana': 'Verdana, sans-serif',
     'Georgia': 'Georgia, serif',
     'ComicSansMS': 'Comic Sans MS, cursive',
+    'Trebuchet': 'Trebuchet MS, sans-serif',
+    'Garamond': 'Garamond, serif',
+    'Palatino': 'Palatino, serif',
+    'BookAntiqua': 'Book Antiqua, serif',
 }
 
 const getFontFamily = (fontName: string): string => {
@@ -105,6 +109,45 @@ const getDominantColor = (ctx: CanvasRenderingContext2D, x: number, y: number, w
         } catch (e) { }
     })
     return rgbaToHex(dominant)
+}
+
+// Helper to get text color by sampling multiple points inside the bounds
+const getTextColor = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): string => {
+    // Sample a 3x3 grid in the middle 50% of the box to find the non-background color
+    const samples: string[] = []
+    const margin = 0.25
+
+    for (let i = 1; i <= 3; i++) {
+        for (let j = 1; j <= 3; j++) {
+            const sx = x + (width * margin) + (width * (1 - margin * 2) * (i / 4))
+            const sy = y + (height * margin) + (height * (1 - margin * 2) * (j / 4))
+
+            try {
+                const pixel = ctx.getImageData(Math.round(sx), Math.round(sy), 1, 1).data
+                // Only consider it a "text" color if it has some non-white/non-transparent content
+                // (Assuming background is usually white-ish)
+                if (pixel[3] > 100 && (pixel[0] < 240 || pixel[1] < 240 || pixel[2] < 240)) {
+                    samples.push(`rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, 1)`)
+                }
+            } catch (e) { }
+        }
+    }
+
+    if (samples.length === 0) return '#000000' // Default to black
+
+    const counts: Record<string, number> = {}
+    let max = 0
+    let best = '#000000'
+
+    samples.forEach(c => {
+        counts[c] = (counts[c] || 0) + 1
+        if (counts[c] > max) {
+            max = counts[c]
+            best = c
+        }
+    })
+
+    return rgbaToHex(best)
 }
 
 const rgbaToHex = (rgba: string) => {
@@ -253,22 +296,25 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
         const primary = currentGroup[0]
         const type = primary.fontSize > 18 ? 'heading' : 'paragraph'
 
-        // Background Color Sampling
+        // Background & Text Color Sampling
         let bgColor = '#ffffff'
+        let textColor = '#000000'
         if (ctx) {
             bgColor = getDominantColor(ctx, minX, minY, width, height)
+            textColor = getTextColor(ctx, minX, minY, width, height)
         }
 
-        // Create "masking box" with safety margin
+        // Calculate PDF-space coordinates for perfect masking
+        const pdfX = Math.min(...currentGroup.map(item => item.originalTransform[4]))
+        const pdfY = Math.min(...currentGroup.map(item => item.originalTransform[5]))
+        const pdfMaxX = Math.max(...currentGroup.map(item => item.originalTransform[4] + (item.width / scale)))
+        const pdfMaxY = Math.max(...currentGroup.map(item => item.originalTransform[5] + (item.height / scale)))
+        const pdfW = pdfMaxX - pdfX
+        const pdfH = pdfMaxY - pdfY
+
+        // Create "masking box" with safety margin for perfect coverage
         const maskPaddingX = 2
         const maskPaddingY = 2
-
-        // Calculate PDF-space coordinates for perfect masking
-        // PDF Y is from bottom, Editor Y is from top.
-        const pdfX = Math.min(...currentGroup.map(item => item.transform[4]))
-        const pdfY = Math.min(...currentGroup.map(item => item.transform[5]))
-        const pdfW = width / scale
-        const pdfH = height / scale
 
         elements.push({
             id: `el-${crypto.randomUUID()}`,
@@ -282,8 +328,9 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
                 fontSize: primary.fontSize,
                 fontFamily: getFontFamily(primary.fontName),
                 fontWeight: getFontWeight(primary.fontName),
-                color: '#000000',
-                backgroundColor: bgColor, // DYNAMIC MASKING
+                fontStyle: getFontStyle(primary.fontName) as 'normal' | 'italic',
+                color: textColor,
+                backgroundColor: bgColor,
                 textAlign: 'left',
                 zIndex: 2,
                 lineHeight: 1.2,
@@ -315,11 +362,16 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
         }
 
         const verticalDist = item.y - last.y
-        const isSameLine = Math.abs(verticalDist) < (last.fontSize * 0.5)
+        // Relax threshold for very small items (like dots/bullets) which might have slight offsets
+        const isSmallChar = item.str.length === 1 && item.width < (last.fontSize * 0.5)
+        const lineThreshold = isSmallChar ? (last.fontSize * 0.8) : (last.fontSize * 0.5)
+        const isSameLine = Math.abs(verticalDist) < lineThreshold
 
         if (isSameLine) {
             const gap = item.x - (last.x + last.width)
-            if (gap > (last.fontSize * 3)) {
+            // If the gap is more than roughly 80% of font size, 
+            // it's likely a separate logical block (e.g. Phone vs Email)
+            if (gap > (last.fontSize * 0.8)) {
                 flushGroup()
                 currentGroup = [item]
             } else {
