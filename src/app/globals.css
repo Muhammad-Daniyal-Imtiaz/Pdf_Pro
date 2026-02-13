@@ -32,3 +32,18 @@ html2canvas-cloned-element {
   animation: none !important;
   transition: none !important;
 }
+
+/* PDF Editor Styles */
+.pdf-element {
+  transition: opacity 0.2s ease;
+}
+
+.pdf-element:hover {
+  outline: 1px dashed #3b82f6 !important;
+  opacity: 0.5 !important;
+  cursor: pointer;
+}
+
+.pdf-element:active {
+  cursor: grabbing;
+}

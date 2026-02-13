@@ -280,7 +280,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     if (el.id !== id) return el
 
                     // Snap coordinate updates
-                    const processed = { ...el, ...updates }
+                    const processed = { ...el, ...updates, isModified: true }
                     if (updates.x !== undefined) processed.x = snapToInt(updates.x)
                     if (updates.y !== undefined) processed.y = snapToInt(updates.y)
 
@@ -305,7 +305,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     if (styleUpdates.width !== undefined) processed.width = snapToInt(styleUpdates.width)
                     if (styleUpdates.height !== undefined) processed.height = snapToInt(styleUpdates.height)
 
-                    return { ...el, style: { ...el.style, ...processed } }
+                    return { ...el, isModified: true, style: { ...el.style, ...processed } }
                 })
 
                 return { ...page, elements }

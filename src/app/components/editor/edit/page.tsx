@@ -84,16 +84,20 @@ export default function EditPage() {
 
       if (showBackground && originalPdfBase64) {
         // HYBRID MODE (Overlay on Original)
-        // Use edit-pdf which merges edits onto original PDF
-        // Flatten elements from all pages
-        const allElements = pages.flatMap(p => p.elements)
+        // CRITICAL: Filter elements to prevent "double text".
+        // Only send elements that were ADDED newly OR elements that were MODIFIED.
+        // Unmodified imported elements already exist in the original PDF background.
+        const filteredElements = pages.flatMap(p => p.elements).filter(el => {
+          if (el.isImported) return el.isModified // Only send modified imported text
+          return true // Always send new elements
+        })
 
         response = await fetch('/api/edit-pdf', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             originalPdf: originalPdfBase64,
-            elements: allElements,
+            elements: filteredElements,
             title: docTitle
           })
         })

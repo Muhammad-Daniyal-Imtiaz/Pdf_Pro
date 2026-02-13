@@ -69,12 +69,15 @@ export default function PDFRenderer({
       width: `${exactW}px`,
       height: `${exactH}px`,
       zIndex: elStyle.zIndex ?? 1,
+      backgroundColor: elStyle.backgroundColor || 'transparent',
       boxSizing: 'border-box', // MATCHES API
       margin: 0,
       padding: 0,
       transform: `rotate(${elStyle.rotation || 0}deg)`,
       transformOrigin: 'top left', // Matches API default
-      opacity: elStyle.opacity ?? 1,
+      // SMART VISIBILITY: Hide masking boxes for unmodified imported text
+      // so the user sees the crisp original PDF background unless they edit it.
+      opacity: (element.isImported && !element.isModified && !isEditing) ? 0.01 : (elStyle.opacity ?? 1),
       borderRadius: `${elStyle.borderRadius || 0}px`,
     }
 
