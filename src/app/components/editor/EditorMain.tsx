@@ -7,6 +7,9 @@ import { generatePDF } from '@/app/lib/pdf-service'
 import { parsePdf } from '@/app/lib/pdf-import-service'
 import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut, Plus, Trash2, Upload } from 'lucide-react'
 
+import PageContainer from './PageContainer'
+import OverlayLayer from './OverlayLayer'
+
 export default function EditorMain() {
     const {
         pages,
@@ -34,6 +37,8 @@ export default function EditorMain() {
     const [editingId, setEditingId] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [isImporting, setIsImporting] = useState(false)
+    const [isResizing, setIsResizing] = useState(false)
+    const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0, handle: '' })
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const handleDownloadPDF = useCallback(async () => {
@@ -62,7 +67,7 @@ export default function EditorMain() {
         } finally {
             setGeneratingPDF(false)
         }
-    }, [pages, docTitle, selectElement, setGeneratingPDF])
+    }, [pages, docTitle, selectElement, setGeneratingPDF, originalPdf])
 
     const handleUploadClick = () => {
         fileInputRef.current?.click()
@@ -118,9 +123,9 @@ export default function EditorMain() {
     const [dragStart, setDragStart] = useState({ x: 0, y: 0, elX: 0, elY: 0 })
 
     const handleElementMouseDown = (id: string, e: React.MouseEvent) => {
+        if (editingId === id) return
         e.stopPropagation()
 
-        // Find the element across all pages
         let foundElement = null
         for (const page of pages) {
             foundElement = page.elements.find(el => el.id === id)
@@ -146,46 +151,113 @@ export default function EditorMain() {
         })
     }
 
-    useEffect(() => {
-        if (!isDragging) return
-        const handleMouseMove = (e: MouseEvent) => {
-            if (isDragging && activeElementId) {
-                const rect = canvasRef.current?.getBoundingClientRect()
-                if (!rect) return
-                const scale = zoom / 100
-                const rawX = (e.clientX - rect.left) / scale
-                const rawY = (e.clientY - rect.top) / scale
-                const dx = rawX - dragStart.x
-                const dy = rawY - dragStart.y
+    const handleElementDoubleClick = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation()
+        let foundElement = null
+        for (const page of pages) {
+            foundElement = page.elements.find(el => el.id === id)
+            if (foundElement) break
+        }
 
-                moveElement(activeElementId, Math.round(dragStart.elX + dx), Math.round(dragStart.elY + dy))
+        if (foundElement && ['text', 'heading', 'paragraph', 'container'].includes(foundElement.type)) {
+            setEditingId(id)
+        }
+    }
+
+    const handleResizeStart = (id: string, handle: string, e: React.MouseEvent) => {
+        e.stopPropagation()
+        e.preventDefault()
+
+        let foundElement = null
+        for (const page of pages) {
+            foundElement = page.elements.find(el => el.id === id)
+            if (foundElement) break
+        }
+        if (!foundElement) return
+
+        setIsResizing(true)
+        setActiveElementId(id)
+        selectElement(id)
+        setResizeStart({
+            x: e.clientX,
+            y: e.clientY,
+            width: foundElement.style.width,
+            height: foundElement.style.height,
+            handle
+        })
+    }
+
+    useEffect(() => {
+        if (!isDragging && !isResizing) return
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (activeElementId) {
+                if (isDragging) {
+                    const rect = canvasRef.current?.getBoundingClientRect()
+                    if (!rect) return
+                    const scale = zoom / 100
+                    const rawX = (e.clientX - rect.left) / scale
+                    const rawY = (e.clientY - rect.top) / scale
+                    const dx = rawX - dragStart.x
+                    const dy = rawY - dragStart.y
+                    moveElement(activeElementId, Math.round(dragStart.elX + dx), Math.round(dragStart.elY + dy))
+                }
+
+                if (isResizing) {
+                    const dx = (e.clientX - resizeStart.x) * (100 / zoom)
+                    const dy = (e.clientY - resizeStart.y) * (100 / zoom)
+
+                    let newWidth = resizeStart.width
+                    let newHeight = resizeStart.height
+
+                    if (resizeStart.handle.includes('e')) newWidth += dx
+                    if (resizeStart.handle.includes('s')) newHeight += dy
+                    if (resizeStart.handle.includes('w')) {
+                        // Complex resize not implemented yet for simplicity
+                        newWidth -= dx
+                    }
+                    if (resizeStart.handle.includes('n')) {
+                        newHeight -= dy
+                    }
+
+                    resizeElement(activeElementId, Math.max(20, newWidth), Math.max(20, newHeight))
+                }
             }
         }
+
         const handleMouseUp = () => {
             setIsDragging(false)
+            setIsResizing(false)
             setActiveElementId(null)
         }
+
         document.addEventListener('mousemove', handleMouseMove)
         document.addEventListener('mouseup', handleMouseUp)
         return () => {
             document.removeEventListener('mousemove', handleMouseMove)
             document.removeEventListener('mouseup', handleMouseUp)
         }
-    }, [isDragging, dragStart, activeElementId, zoom, moveElement])
+    }, [isDragging, isResizing, dragStart, resizeStart, activeElementId, zoom, moveElement, resizeElement])
+
+    const handleContentChange = useCallback((id: string, content: string, markAsModified?: boolean) => {
+        if (markAsModified) {
+            updateElement(id, { content, isModified: true })
+        } else {
+            updateElement(id, { content })
+        }
+    }, [updateElement])
 
     const handleAddPage = () => {
         addPage()
-        // Scroll to bottom to show new page
         setTimeout(() => {
             const container = canvasRef.current?.parentElement?.parentElement
-            if (container) {
-                container.scrollTop = container.scrollHeight
-            }
+            if (container) container.scrollTop = container.scrollHeight
         }, 100)
     }
 
     return (
         <main className="flex-1 bg-gray-100 h-full flex flex-col overflow-hidden">
+            {/* Header Toolbar */}
             <div className="h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0 z-20">
                 <div className="flex items-center gap-4">
                     <input
@@ -193,132 +265,88 @@ export default function EditorMain() {
                         value={docTitle}
                         onChange={(e) => setDocTitle(e.target.value)}
                         className="font-semibold text-lg bg-transparent border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 w-64"
-                        placeholder="Untitled Document"
                     />
                     <div className="h-6 w-px bg-gray-300" />
                     <button onClick={() => setShowGrid(!showGrid)} className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${showGrid ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}>
                         <Grid size={16} /> Grid
                     </button>
                     <div className="flex items-center gap-1">
-                        <button onClick={() => setZoom(zoom - 10)} className="p-1.5 hover:bg-gray-100 rounded"><ZoomOut size={16} /></button>
-                        <span className="text-sm font-medium w-12 text-center">{zoom}%</span>
-                        <button onClick={() => setZoom(zoom + 10)} className="p-1.5 hover:bg-gray-100 rounded"><ZoomIn size={16} /></button>
+                        <button onClick={() => setZoom(zoom - 10)} className="p-1.5 hover:bg-gray-100 rounded text-gray-500"><ZoomOut size={16} /></button>
+                        <span className="text-xs font-bold w-12 text-center text-gray-700">{zoom}%</span>
+                        <button onClick={() => setZoom(zoom + 10)} className="p-1.5 hover:bg-gray-100 rounded text-gray-500"><ZoomIn size={16} /></button>
                     </div>
                     <div className="h-6 w-px bg-gray-300" />
-                    <button
-                        onClick={handleUploadClick}
-                        disabled={isImporting}
-                        className="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-md text-sm font-medium transition-colors"
-                    >
-                        {isImporting ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                    <button onClick={handleUploadClick} disabled={isImporting} className="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 rounded-md text-sm font-medium transition-colors">
+                        {isImporting ? <Loader2 size={16} className="animate-spin text-blue-500" /> : <Upload size={16} />}
                         {isImporting ? 'Importing...' : 'Upload PDF'}
                     </button>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="hidden"
-                        accept=".pdf"
-                        onChange={handleFileChange}
-                    />
+                    <input type="file" ref={fileInputRef} className="hidden" accept=".pdf" onChange={handleFileChange} />
                 </div>
                 <div className="flex items-center gap-3">
-                    {error && <span className="text-red-500 text-sm bg-red-50 px-3 py-1 rounded">{error}</span>}
-                    <button onClick={handleDownloadPDF} disabled={isGeneratingPDF} className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-lg font-medium text-sm transition-all shadow-sm">
-                        {isGeneratingPDF ? <Loader2 size={16} className="animate-spin" /> : <ArrowDownToLine size={16} />}
-                        {isGeneratingPDF ? 'Generating...' : 'Export PDF'}
+                    {error && <span className="text-red-500 text-[10px] font-bold bg-red-50 border border-red-100 px-3 py-1.5 rounded uppercase tracking-wider animate-pulse">{error}</span>}
+                    <button onClick={handleDownloadPDF} disabled={isGeneratingPDF} className="flex items-center gap-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-full font-bold text-xs uppercase tracking-widest transition-all shadow-lg active:scale-95">
+                        {isGeneratingPDF ? <Loader2 size={14} className="animate-spin" /> : <ArrowDownToLine size={14} />}
+                        {isGeneratingPDF ? 'Generating...' : 'Export'}
                     </button>
                 </div>
             </div>
 
-            {/* Pages Container - Vertical Scroll */}
-            <div className="flex-1 overflow-auto bg-[#e5e7eb] p-8">
-                <div className="flex flex-col gap-8 items-center" style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top center' }}>
+            {/* Pages Container */}
+            <div className="flex-1 overflow-auto bg-[#f8fafc] p-12 scroll-smooth">
+                <div className="flex flex-col gap-12 items-center" style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'top center', paddingBottom: '100px' }}>
                     {pages.map((page, pageIndex) => (
-                        <div key={page.id} className="relative">
-                            {/* Page Header */}
-                            <div className="absolute -top-8 left-0 right-0 flex items-center justify-between px-4 py-2 bg-white rounded-t-lg shadow-sm">
-                                <span className="text-sm font-medium text-gray-700">Page {pageIndex + 1}</span>
-                                {pages.length > 1 && (
-                                    <button
-                                        onClick={() => removePage(pageIndex)}
-                                        disabled={pages.length <= 1}
-                                        className="text-xs text-red-600 hover:text-red-800 disabled:opacity-40 disabled:cursor-not-allowed"
-                                    >
-                                        <Trash2 size={14} />
-                                    </button>
-                                )}
+                        <PageContainer
+                            key={page.id}
+                            pageIndex={pageIndex}
+                            showGrid={showGrid}
+                            onRemove={pages.length > 1 ? () => removePage(pageIndex) : undefined}
+                            elementsCount={page.elements.length}
+                            zoom={zoom}
+                        >
+                            <div
+                                ref={pageIndex === 0 ? canvasRef : null}
+                                onClick={() => { if (!isDragging) { selectElement(null); setEditingId(null) } }}
+                                className="w-full h-full relative"
+                            >
+                                <PDFRenderer
+                                    elements={page.elements}
+                                    editingId={editingId}
+                                    onElementMouseDown={handleElementMouseDown}
+                                    onElementDoubleClick={handleElementDoubleClick}
+                                    onContentChange={handleContentChange}
+                                    onBlur={() => setEditingId(null)}
+                                    backgroundImage={page.backgroundImage}
+                                />
+                                <OverlayLayer
+                                    elements={page.elements}
+                                    selectedIds={selectedIds}
+                                    onResizeStart={handleResizeStart}
+                                />
                             </div>
-
-                            {/* Page Content */}
-                            <div className="relative shadow-2xl bg-white">
-                                {showGrid && (
-                                    <div className="absolute inset-0 pointer-events-none z-0" style={{
-                                        backgroundImage: `linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)`,
-                                        backgroundSize: '20px 20px',
-                                        width: `${A4_WIDTH}px`,
-                                        height: `${A4_HEIGHT}px`
-                                    }} />
-                                )}
-
-                                <div
-                                    ref={pageIndex === 0 ? canvasRef : null}
-                                    onClick={() => {
-                                        if (!isDragging) {
-                                            selectElement(null);
-                                            setEditingId(null)
-                                        }
-                                    }}
-                                    style={{
-                                        width: `${A4_WIDTH}px`,
-                                        height: `${A4_HEIGHT}px`,
-                                        position: 'relative',
-                                        cursor: isDragging ? 'grabbing' : 'default'
-                                    }}
-                                >
-                                    <PDFRenderer
-                                        elements={page.elements}
-                                        showSelection={true}
-                                        selectedIds={selectedIds}
-                                        editingId={editingId}
-                                        onElementMouseDown={handleElementMouseDown}
-                                        onContentChange={(id, content) => updateElement(id, { content })}
-                                        onBlur={() => setEditingId(null)}
-                                        width={A4_WIDTH}
-                                        height={A4_HEIGHT}
-                                        backgroundImage={page.backgroundImage}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Page Footer */}
-                            <div className="absolute -bottom-8 left-0 right-0 text-center">
-                                <span className="text-xs text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm">
-                                    {page.elements.length} elements
-                                </span>
-                            </div>
-                        </div>
+                        </PageContainer>
                     ))}
                 </div>
             </div>
 
-            {/* Floating Add Page Button */}
-            <div className="fixed bottom-8 right-8">
-                <button
-                    onClick={handleAddPage}
-                    className="flex items-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg transition-all hover:scale-105"
-                >
-                    <Plus size={20} />
-                    <span className="font-medium">Add Page</span>
-                </button>
-            </div>
+            {/* Floating Action Button */}
+            <button
+                onClick={handleAddPage}
+                className="fixed bottom-12 right-12 flex items-center gap-2 px-6 py-4 bg-gray-900 hover:bg-black text-white rounded-full shadow-2xl transition-all hover:scale-105 active:scale-95 z-50 group"
+            >
+                <Plus size={20} className="group-hover:rotate-90 transition-transform" />
+                <span className="font-bold text-sm">ADD PAGE</span>
+            </button>
 
             {/* Status Bar */}
-            <div className="h-8 bg-white border-t border-gray-200 flex items-center px-4 text-xs text-gray-500 justify-between shrink-0">
+            <div className="h-8 bg-white border-t border-gray-100 flex items-center px-4 text-[10px] font-bold text-gray-400 justify-between shrink-0 uppercase tracking-widest">
+                <div className="flex items-center gap-6">
+                    <span className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-blue-500" /> A4 FORMAT</span>
+                    <span>{pages.length} PAGES</span>
+                    <span>{pages.reduce((total, p) => total + p.elements.length, 0)} TOTAL ELEMENTS</span>
+                </div>
                 <div className="flex items-center gap-4">
-                    <span>A4 ({A4_WIDTH} × {A4_HEIGHT}px)</span>
-                    <span>{pages.length} page{pages.length !== 1 ? 's' : ''}</span>
-                    <span>{pages.reduce((total, page) => total + page.elements.length, 0)} total elements</span>
-                    <span className="text-green-600">● Production Mode</span>
+                    <span className="text-gray-300">SYSTEM_READY</span>
+                    <span className="text-blue-500">v2.0.0_PRO</span>
                 </div>
             </div>
         </main>

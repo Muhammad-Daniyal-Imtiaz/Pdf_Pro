@@ -1,4 +1,3 @@
-// components/editor/PDFRenderer.tsx
 'use client'
 
 import React from 'react'
@@ -7,15 +6,15 @@ import {
   Linkedin, Mail, Phone, Twitter, Github, Globe, Instagram,
   Facebook, Youtube, MapPin, Calendar, User, Download, ExternalLink
 } from 'lucide-react'
+import EditableElement from './EditableElement'
 
 interface PDFRendererProps {
   elements: EditorElement[]
   width?: number
   height?: number
-  showSelection?: boolean
-  selectedIds?: string[]
   onElementMouseDown?: (id: string, e: React.MouseEvent) => void
-  onContentChange?: (id: string, content: string) => void
+  onElementDoubleClick?: (id: string, e: React.MouseEvent) => void
+  onContentChange?: (id: string, content: string, markAsModified?: boolean) => void
   onBlur?: () => void
   editingId?: string | null
   backgroundImage?: string
@@ -39,9 +38,8 @@ export default function PDFRenderer({
   elements,
   width = A4_WIDTH,
   height = A4_HEIGHT,
-  showSelection = false,
-  selectedIds = [],
   onElementMouseDown,
+  onElementDoubleClick,
   onContentChange,
   onBlur,
   editingId,
@@ -49,15 +47,17 @@ export default function PDFRenderer({
 }: PDFRendererProps) {
 
   const renderElement = (element: EditorElement) => {
-    const isSelected = showSelection && selectedIds.includes(element.id)
     const isEditing = editingId === element.id
-    const { style: elStyle, type, content, id, iconType, lineOrientation, x, y } = element
+    const { style: elStyle, type, content, id, iconType, isImported, isModified, x, y } = element
 
-    // MATCH API LOGIC: Round to integers
     const exactX = Math.round(x)
     const exactY = Math.round(y)
     const exactW = Math.round(elStyle.width || 100)
     const exactH = Math.round(elStyle.height || 40)
+
+    const isImportedUnmodified = isImported && !isModified
+    const displayColor = isEditing ? '#000000' : (isImportedUnmodified ? 'transparent' : (elStyle.color === 'transparent' ? '#000000' : (elStyle.color || '#000000')))
+    const displayOpacity = isImportedUnmodified && !isEditing ? 0 : (elStyle.opacity ?? 1)
 
     const baseStyles: React.CSSProperties = {
       position: 'absolute',
@@ -66,21 +66,13 @@ export default function PDFRenderer({
       width: `${exactW}px`,
       height: `${exactH}px`,
       zIndex: elStyle.zIndex || 1,
-      boxSizing: 'border-box', // MATCHES API
+      boxSizing: 'border-box',
       margin: 0,
       padding: 0,
       transform: `rotate(${elStyle.rotation || 0}deg)`,
-      transformOrigin: 'top left', // Matches API default
-      opacity: elStyle.opacity ?? 1,
+      transformOrigin: 'top left',
       borderRadius: `${elStyle.borderRadius || 0}px`,
-    }
-
-    const handleClick = (e: React.MouseEvent) => {
-      // handled by parent
-    }
-
-    const handleMouseDown = (e: React.MouseEvent) => {
-      onElementMouseDown?.(id, e)
+      backgroundColor: isImported && isModified ? 'white' : (elStyle.backgroundColor || 'transparent'),
     }
 
     const renderContent = () => {
@@ -89,170 +81,75 @@ export default function PDFRenderer({
           const Icon = ICON_MAP[iconType || 'user']
           const color = ICON_COLORS[iconType || 'user'] || '#6b7280'
           const iconSize = Math.min(exactW, exactH) * 0.8
-
-          if (!Icon) return null
-
-          return (
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          return Icon ? (
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: displayOpacity }}>
               <Icon size={Math.round(iconSize)} color={color} style={{ display: 'block' }} />
             </div>
-          )
+          ) : null
         }
 
         case 'line': {
           const isSolid = !element.lineStyle || element.lineStyle === 'solid'
-
-          if (isSolid) {
-            return (
-              <div style={{ width: '100%', height: '100%', backgroundColor: elStyle.backgroundColor || '#000' }} />
-            )
-          }
-
           const isHorizontal = element.lineOrientation === 'horizontal'
           return (
             <div style={{
               width: '100%',
               height: '100%',
-              borderTop: isHorizontal ? `${elStyle.height}px ${element.lineStyle} ${elStyle.backgroundColor || '#000'}` : undefined,
-              borderLeft: !isHorizontal ? `${elStyle.width}px ${element.lineStyle} ${elStyle.backgroundColor || '#000'}` : undefined,
-              backgroundColor: 'transparent'
+              backgroundColor: isSolid ? (elStyle.backgroundColor || '#000') : 'transparent',
+              borderTop: !isSolid && isHorizontal ? `${elStyle.height}px ${element.lineStyle} ${elStyle.backgroundColor || '#000'}` : undefined,
+              borderLeft: !isSolid && !isHorizontal ? `${elStyle.width}px ${element.lineStyle} ${elStyle.backgroundColor || '#000'}` : undefined,
+              opacity: displayOpacity
             }} />
           )
         }
 
         case 'image':
           return (
-            <div style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: content ? 'transparent' : '#f3f4f6' }}>
+            <div style={{ width: '100%', height: '100%', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: content ? 'transparent' : '#f3f4f6', opacity: displayOpacity }}>
               {content ? (
-                <img
-                  src={content}
-                  alt="User uploaded"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'fill', // User wants exactly what fills the container
-                    display: 'block',
-                    pointerEvents: 'none' // allow dragging parent
-                  }}
-                  draggable={false} // inhibit native drag
-                />
+                <img src={content} alt="" style={{ width: '100%', height: '100%', objectFit: 'fill', display: 'block', pointerEvents: 'none' }} draggable={false} />
               ) : (
-                <div style={{ color: '#9ca3af', fontSize: '12px' }}>Click to Upload</div>
+                <div style={{ color: '#9ca3af', fontSize: '10px' }}>NO IMAGE</div>
               )}
-            </div>
-          )
-
-        case 'container':
-          return (
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                background: elStyle.backgroundColor || 'transparent',
-                border: `${elStyle.borderWidth}px solid ${elStyle.borderColor}`,
-                borderRadius: elStyle.borderRadius,
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              {/* Editable text inside container */}
-              <div
-                contentEditable={isEditing}
-                suppressContentEditableWarning
-                onBlur={(e) => {
-                  onBlur?.()
-                  onContentChange?.(id, e.currentTarget.innerText)
-                }}
-                onDoubleClick={(e) => e.stopPropagation()}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  fontFamily: elStyle.fontFamily,
-                  fontSize: `${elStyle.fontSize}px`,
-                  fontWeight: elStyle.fontWeight,
-                  lineHeight: elStyle.lineHeight,
-                  color: elStyle.color,
-                  textAlign: elStyle.textAlign,
-                  padding: `${elStyle.padding}px`,
-                  outline: 'none',
-                  wordWrap: 'break-word',
-                  cursor: isEditing ? 'text' : 'inherit',
-                  userSelect: isEditing ? 'text' : 'none',
-                  boxSizing: 'border-box',
-                  overflow: 'auto'
-                }}
-                onClick={(e) => e.stopPropagation()}
-                dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
-              >
-                {isEditing ? content : null}
-              </div>
             </div>
           )
 
         case 'link': {
           const Icon = ICON_MAP['external']
           return (
-            <div style={{ width: '100%', height: '100%', fontFamily: elStyle.fontFamily, fontSize: `${elStyle.fontSize}px`, color: elStyle.color, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '8px' }}>
-              <Icon size={16} color={elStyle.color} style={{ display: 'block' }} />
+            <div style={{ width: '100%', height: '100%', fontFamily: elStyle.fontFamily, fontSize: `${elStyle.fontSize}px`, color: elStyle.color, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '8px', opacity: displayOpacity }}>
+              <Icon size={14} color={elStyle.color} />
               <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{content}</span>
             </div>
           )
         }
 
-        default: {
+        case 'container':
+        default:
           return (
-            <div
-              contentEditable={isEditing}
-              suppressContentEditableWarning
-              onBlur={(e) => {
-                onBlur?.()
-                onContentChange?.(id, e.currentTarget.innerText)
-              }}
-              onDoubleClick={(e) => e.stopPropagation()}
-              style={{
-                width: '100%',
-                height: '100%',
-                fontFamily: elStyle.fontFamily,
-                fontSize: `${elStyle.fontSize}px`,
-                fontWeight: elStyle.fontWeight,
-                lineHeight: elStyle.lineHeight,
-                color: elStyle.color,
-                textAlign: elStyle.textAlign,
-                padding: `${elStyle.padding}px`,
-                outline: 'none',
-                wordWrap: 'break-word',
-                cursor: isEditing ? 'text' : 'inherit',
-                userSelect: isEditing ? 'text' : 'none'
-              }}
-              onClick={(e) => e.stopPropagation()}
-              dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
-            >
-              {isEditing ? content : null}
-            </div>
+            <EditableElement
+              element={element}
+              isEditing={isEditing}
+              displayColor={displayColor}
+              displayOpacity={displayOpacity}
+              onBlur={() => onBlur?.()}
+              onContentChange={(id, content, mod) => onContentChange?.(id, content, mod)}
+              onDoubleClick={(e) => onElementDoubleClick?.(id, e)}
+              onMouseDown={(e) => onElementMouseDown?.(id, e)}
+            />
           )
-        }
       }
     }
 
     return (
       <div
         key={id}
-        style={{
-          ...baseStyles,
-          outline: isSelected ? '2px solid #3b82f6' : 'none',
-          outlineOffset: isSelected ? '2px' : '0'
-        }}
+        style={baseStyles}
         className="pdf-element"
-        onClick={handleClick}
-        onMouseDown={handleMouseDown}
+        onMouseDown={(e) => onElementMouseDown?.(id, e)}
+        onDoubleClick={(e) => onElementDoubleClick?.(id, e)}
       >
         {renderContent()}
-
-        {isSelected && showSelection && (
-          <div style={{ position: 'absolute', top: -22, left: 0, background: '#3b82f6', color: '#fff', fontSize: '10px', padding: '2px 6px', borderRadius: 2, textTransform: 'uppercase', pointerEvents: 'none' }}>
-            {type}
-          </div>
-        )}
       </div>
     )
   }
@@ -264,25 +161,14 @@ export default function PDFRenderer({
         width: `${width}px`,
         height: `${height}px`,
         position: 'relative',
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         overflow: 'hidden',
         boxSizing: 'border-box'
       }}
     >
       {backgroundImage && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-        >
-          <img
-            src={backgroundImage}
-            alt="Page background"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
+        <div style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+          <img src={backgroundImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </div>
       )}
       {elements.map(renderElement)}

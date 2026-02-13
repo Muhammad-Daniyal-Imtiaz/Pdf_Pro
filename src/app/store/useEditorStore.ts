@@ -37,6 +37,8 @@ export interface EditorElement {
     lineOrientation?: 'horizontal' | 'vertical'
     lineStyle?: 'solid' | 'dashed' | 'dotted'
     pageIndex: number
+    isImported?: boolean // True if element was imported from PDF
+    isModified?: boolean // True if imported element has been edited
 }
 
 export interface EditorPage {

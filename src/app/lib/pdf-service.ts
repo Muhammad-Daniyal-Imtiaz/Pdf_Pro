@@ -26,7 +26,9 @@ export async function generatePDF(
         }
     }
 
-    const response = await fetch('/api/generate-pdf', {
+    const endpoint = originalPdf ? '/api/edit' : '/api/generate-pdf'
+
+    const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

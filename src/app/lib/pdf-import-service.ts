@@ -73,6 +73,8 @@ export async function parsePdf(file: File): Promise<{ pages: EditorPage[], origi
                 y: Math.round(y - itemHeight), // Viewport y is the baseline usually, shift up by height
                 content: item.str,
                 pageIndex: i - 1,
+                isImported: true,
+                isModified: false,
                 style: {
                     width: Math.round(itemWidth),
                     height: Math.round(itemHeight),
