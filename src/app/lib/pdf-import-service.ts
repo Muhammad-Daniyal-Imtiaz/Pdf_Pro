@@ -259,15 +259,26 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
             bgColor = getDominantColor(ctx, minX, minY, width, height)
         }
 
+        // Create "masking box" with safety margin
+        const maskPaddingX = 2
+        const maskPaddingY = 2
+
+        // Calculate PDF-space coordinates for perfect masking
+        // PDF Y is from bottom, Editor Y is from top.
+        const pdfX = Math.min(...currentGroup.map(item => item.transform[4]))
+        const pdfY = Math.min(...currentGroup.map(item => item.transform[5]))
+        const pdfW = width / scale
+        const pdfH = height / scale
+
         elements.push({
             id: `el-${crypto.randomUUID()}`,
             type,
-            x: minX,
-            y: minY,
+            x: minX - maskPaddingX,
+            y: minY - maskPaddingY,
             content: combinedText.trim(),
             style: {
-                width: Math.max(width, 20),
-                height: Math.max(height, primary.fontSize),
+                width: width + (maskPaddingX * 2),
+                height: Math.max(height, primary.fontSize) + (maskPaddingY * 2),
                 fontSize: primary.fontSize,
                 fontFamily: getFontFamily(primary.fontName),
                 fontWeight: getFontWeight(primary.fontName),
@@ -276,10 +287,14 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
                 textAlign: 'left',
                 zIndex: 2,
                 lineHeight: 1.2,
-                padding: 0
+                padding: maskPaddingY
             },
             pageIndex,
-            isImported: true // CRITICAL: Mark as imported to prevent double text
+            isImported: true,
+            pdfX,
+            pdfY,
+            pdfW,
+            pdfH
         })
         currentGroup = []
     }

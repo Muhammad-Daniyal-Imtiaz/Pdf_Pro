@@ -39,6 +39,10 @@ export interface EditorElement {
     pageIndex: number
     isImported?: boolean
     isModified?: boolean
+    pdfX?: number
+    pdfY?: number
+    pdfW?: number
+    pdfH?: number
 }
 
 export interface EditorPage {

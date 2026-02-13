@@ -1,7 +1,8 @@
 // app/api/edit-pdf/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument, rgb } from 'pdf-lib'
 import puppeteer from 'puppeteer-core'
+
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -254,6 +255,7 @@ export async function POST(request: NextRequest) {
                 <style>
                     @page { size: ${TARGET_WIDTH}px ${TARGET_HEIGHT}px; margin: 0; }
                     body { margin: 0; padding: 0; background: transparent; }
+                    * { -webkit-print-color-adjust: exact; box-sizing: border-box; }
                 </style>
             </head>
             <body>
@@ -277,7 +279,7 @@ export async function POST(request: NextRequest) {
         await browser.close()
         browser = null
 
-        // D. Merge Overlay
+        // D. Merge Overlay & MASKING
         const overlayDoc = await PDFDocument.load(overlayBuffer)
         const overlayPages = overlayDoc.getPages()
 
@@ -286,20 +288,59 @@ export async function POST(request: NextRequest) {
 
         const originalPages = originalDoc.getPages()
 
+        // Helper for colors
+        const hexToRgb = (hex: string) => {
+            if (!hex || typeof hex !== 'string' || !hex.startsWith('#')) return { r: 1, g: 1, b: 1 } // Default to white
+            try {
+                const r = parseInt(hex.substring(1, 3), 16) / 255
+                const g = parseInt(hex.substring(3, 5), 16) / 255
+                const b = parseInt(hex.substring(5, 7), 16) / 255
+                return { r: isNaN(r) ? 1 : r, g: isNaN(g) ? 1 : g, b: isNaN(b) ? 1 : b }
+            } catch (e) {
+                return { r: 1, g: 1, b: 1 }
+            }
+        }
+
         for (let i = 0; i < originalPages.length; i++) {
-            if (i >= overlayPages.length) break
-
-            const overlayPage = await originalDoc.embedPage(overlayPages[i])
             const originPage = originalPages[i]
-            const { width: opW, height: opH } = originPage.getSize()
+            const pageEls = pagesElements[i]
 
-            originPage.drawPage(overlayPage, {
-                x: 0,
-                y: 0,
-                width: opW,
-                height: opH,
-                opacity: 1
-            })
+            // 1. HARD MASKING: Draw solid patches on the original PDF first
+            // This is 100% opaque and prevents "double text" ghosting.
+            for (const el of pageEls) {
+                try {
+                    if (el.isImported && el.isModified && el.pdfX !== undefined) {
+                        const bgColor = el.style?.backgroundColor || '#ffffff'
+                        const color = hexToRgb(bgColor)
+                        const margin = 2 // Safety margin
+
+                        originPage.drawRectangle({
+                            x: el.pdfX - margin,
+                            y: el.pdfY - margin,
+                            width: el.pdfW + (margin * 2),
+                            height: el.pdfH + (margin * 2),
+                            color: rgb(color.r, color.g, color.b),
+                            opacity: 1
+                        })
+                    }
+                } catch (elError) {
+                    console.error('Error masking element:', elError)
+                }
+            }
+
+            // 2. Draw Puppeteer Overlay (New/Modified Text)
+            if (i < overlayPages.length) {
+                const overlayPage = await originalDoc.embedPage(overlayPages[i])
+                const { width: opW, height: opH } = originPage.getSize()
+
+                originPage.drawPage(overlayPage, {
+                    x: 0,
+                    y: 0,
+                    width: opW,
+                    height: opH,
+                    opacity: 1
+                })
+            }
         }
 
         // E. Save
