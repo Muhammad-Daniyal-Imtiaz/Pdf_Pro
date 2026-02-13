@@ -158,7 +158,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const { pages } = get()
         // Add to the last page or create a new page if none exist
         const targetPageIndex = pages.length - 1
-        const id = `el-${Date.now()}`
+        const id = `el-${crypto.randomUUID()}`
 
         // Snap creation position
         const snappedX = snapToInt(x)
@@ -196,6 +196,10 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.content = ''
                 newElement.style = { ...baseStyle, width: 200, height: 150, backgroundColor: '#e5e7eb' }
                 break
+            case 'text':
+                newElement.content = 'Text'
+                newElement.style = { ...baseStyle, width: 200, height: 40, fontSize: 14 }
+                break
         }
 
         const updatedPages = [...pages]
@@ -210,7 +214,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     addSocialIcon: (iconType) => {
         const { pages } = get()
         const targetPageIndex = pages.length - 1
-        const id = `icon-${Date.now()}`
+        const id = `icon-${crypto.randomUUID()}`
         const size = 48
 
         // Snap position
@@ -240,7 +244,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     addLine: (orientation) => {
         const { pages } = get()
         const targetPageIndex = pages.length - 1
-        const id = `line-${Date.now()}`
+        const id = `line-${crypto.randomUUID()}`
         const x = snapToInt(100)
         const y = snapToInt(200)
 
@@ -402,7 +406,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     addPage: () => {
         const { pages } = get()
         const newPage: EditorPage = {
-            id: `page-${Date.now()}`,
+            id: `page-${crypto.randomUUID()}`,
             elements: []
         }
         set({ pages: [...pages, newPage] })

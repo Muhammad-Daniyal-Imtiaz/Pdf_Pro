@@ -73,11 +73,11 @@ export default function EditPage() {
       const scale = A4_WIDTH / viewportUnscaled.width
       const viewport = page.getViewport({ scale })
 
+      // 1. Render Background Image
       const canvas = document.createElement('canvas')
       const context = canvas.getContext('2d')
       canvas.width = Math.round(viewport.width)
       canvas.height = Math.round(viewport.height)
-
       context!.fillStyle = 'white'
       context!.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -87,27 +87,99 @@ export default function EditPage() {
       const currentState = useEditorStore.getState()
       if (currentState.pages.length === 0) useEditorStore.getState().addPage()
 
+      // Add Background
       useEditorStore.getState().addElement('image')
 
-      // Delay slightly to ensure element exists
-      setTimeout(() => {
-        const updatedState = useEditorStore.getState()
-        const lastPage = updatedState.pages[updatedState.pages.length - 1]
-        const lastElement = lastPage?.elements[lastPage.elements.length - 1]
+      // 2. Extract Text Items (The "Magic" Step)
+      const textContent = await page.getTextContent()
+      const textItems = textContent.items.filter((item: any) => 'str' in item && item.str.trim().length > 0)
 
-        if (lastElement) {
-          useEditorStore.getState().updateElement(lastElement.id, {
+      const newElements: any[] = []
+
+      // Wait for background to be set
+      setTimeout(() => {
+        const state = useEditorStore.getState()
+        const lastPage = state.pages[state.pages.length - 1]
+
+        // Update Background
+        const bgElement = lastPage.elements[lastPage.elements.length - 1]
+        if (bgElement) {
+          useEditorStore.getState().updateElement(bgElement.id, {
             content: backgroundImage,
             x: 0, y: 0,
-            isImported: true, // Mark as imported to skip in export if needed
-            style: {
-              width: A4_WIDTH,
-              height: A4_HEIGHT,
-              zIndex: 0, // Background
-              opacity: 1,
-            }
+            isImported: true,
+            style: { width: A4_WIDTH, height: A4_HEIGHT, zIndex: 0, opacity: 1 }
           })
         }
+
+        // Add Text Elements
+        textItems.forEach((item: any) => {
+          // Transform PDF coordinates to Viewport
+          // item.transform is [scaleX, skewY, skewX, scaleY, x, y]
+          // PDF origin is usually bottom-left
+
+          const tx = item.transform
+
+          // Calculate position
+          // We use the viewport to transform the point (tx[4], tx[5])
+          // Note: PDF.js 'transform' array is [hScale, hSkew, vSkew, vScale, x, y]
+
+          const x = tx[4]
+          const y = tx[5]
+
+          // Convert to viewport coordinates
+          // viewport.transform is [scale, 0, 0, -scale, 0, viewport.height] (roughly)
+          // But simplify: utilize viewport.convertToViewportPoint
+          const [vx, vy] = viewport.convertToViewportPoint(x, y)
+
+          // Calculate size
+          // Approximate height from font size * scale
+          // item.height is not directly available in all versions, use transform or view
+          // tx[3] is roughly font size? scaleY
+          // item.width is available
+
+          const fontSize = Math.sqrt(tx[0] * tx[0] + tx[1] * tx[1]) // approximate scale
+          const scaledFontSize = fontSize * scale
+
+          // Height correction: vy is the Baseline. We need Top-Left for DOM.
+          // Move up by fontSize
+          const topY = vy - scaledFontSize
+
+          // Width: item.width * scale
+          const width = item.width * scale
+
+          // Add Element
+          // We use 'addText' logic but direct store manipulation is safer for bulk
+          // But we can use addElement sequentially or create a bulk action?
+          // For now, let's just trigger addElement ('text') then update it.
+          // Actually, calling addElement repeatedly triggers state updates. 
+          // It's better to construct the object and push it if possible.
+          // But we only have `addElement`. Let's use it.
+
+          // Optimization: Just add the most significant text blocks?
+          // No, add all.
+
+          useEditorStore.getState().addElement('text')
+          const newState = useEditorStore.getState()
+          const p = newState.pages[newState.pages.length - 1]
+          const newEl = p.elements[p.elements.length - 1]
+
+          useEditorStore.getState().updateElement(newEl.id, {
+            content: item.str,
+            x: vx,
+            y: topY,
+            style: {
+              width: width + 5, // slight buffer
+              height: scaledFontSize * 1.2,
+              fontSize: scaledFontSize,
+              fontFamily: 'Arial', // Default
+              color: 'black',
+              backgroundColor: 'white', // Masks original
+              zIndex: 2,
+              padding: 0
+            }
+          })
+        })
       }, 50)
 
     } catch (err: any) {
@@ -280,6 +352,7 @@ export default function EditPage() {
                           selectedIds={selectedIds}
                           editingId={editingId}
                           onElementMouseDown={handleElementMouseDown}
+                          onElementDoubleClick={(id) => setEditingId(id)}
                           onContentChange={(id, content) => updateElement(id, { content, isModified: true })}
                           onBlur={() => setEditingId(null)}
                         />
