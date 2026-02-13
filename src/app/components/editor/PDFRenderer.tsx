@@ -5,7 +5,8 @@ import React from 'react'
 import { EditorElement, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import {
   Linkedin, Mail, Phone, Twitter, Github, Globe, Instagram,
-  Facebook, Youtube, MapPin, Calendar, User, Download, ExternalLink
+  Facebook, Youtube, MapPin, Calendar, User, Download, ExternalLink,
+  Check, X, Star, Heart
 } from 'lucide-react'
 
 interface PDFRendererProps {
@@ -15,6 +16,7 @@ interface PDFRendererProps {
   showSelection?: boolean
   selectedIds?: string[]
   onElementMouseDown?: (id: string, e: React.MouseEvent) => void
+  onElementDoubleClick?: (id: string, e: React.MouseEvent) => void
   onContentChange?: (id: string, content: string) => void
   onBlur?: () => void
   editingId?: string | null
@@ -24,14 +26,16 @@ const ICON_MAP: Record<string, any> = {
   linkedin: Linkedin, email: Mail, phone: Phone, twitter: Twitter,
   github: Github, website: Globe, instagram: Instagram, facebook: Facebook,
   youtube: Youtube, whatsapp: Phone, location: MapPin, calendar: Calendar,
-  user: User, download: Download, external: ExternalLink
+  user: User, download: Download, external: ExternalLink,
+  check: Check, x: X, star: Star, heart: Heart
 }
 
 const ICON_COLORS: Record<string, string> = {
   linkedin: '#0077b5', email: '#EA4335', phone: '#10B981', twitter: '#1DA1F2',
   github: '#333', website: '#6366F1', instagram: '#E4405F', facebook: '#1877F2',
   youtube: '#FF0000', whatsapp: '#25D366', location: '#EF4444', calendar: '#F59E0B',
-  user: '#6B7280', download: '#10B981', external: '#6366F1'
+  user: '#6B7280', download: '#10B981', external: '#6366F1',
+  check: '#10B981', x: '#EF4444', star: '#F59E0B', heart: '#EC4899'
 }
 
 export default function PDFRenderer({
@@ -41,6 +45,7 @@ export default function PDFRenderer({
   showSelection = false,
   selectedIds = [],
   onElementMouseDown,
+  onElementDoubleClick,
   onContentChange,
   onBlur,
   editingId
@@ -79,6 +84,11 @@ export default function PDFRenderer({
 
     const handleMouseDown = (e: React.MouseEvent) => {
       onElementMouseDown?.(id, e)
+    }
+
+    const handleDoubleClick = (e: React.MouseEvent) => {
+      e.stopPropagation()
+      onElementDoubleClick?.(id, e)
     }
 
     const renderContent = () => {
@@ -169,7 +179,9 @@ export default function PDFRenderer({
                   onBlur?.()
                   onContentChange?.(id, e.currentTarget.innerText)
                 }}
-                onDoubleClick={(e) => e.stopPropagation()}
+                onDoubleClick={(e) => {
+                  if (!isEditing) handleDoubleClick(e)
+                }}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -214,7 +226,9 @@ export default function PDFRenderer({
                 onBlur?.()
                 onContentChange?.(id, e.currentTarget.innerText)
               }}
-              onDoubleClick={(e) => e.stopPropagation()}
+              onDoubleClick={(e) => {
+                if (!isEditing) handleDoubleClick(e)
+              }}
               style={{
                 width: '100%',
                 height: '100%',
@@ -251,6 +265,7 @@ export default function PDFRenderer({
         className="pdf-element"
         onClick={handleClick}
         onMouseDown={handleMouseDown}
+        onDoubleClick={handleDoubleClick}
       >
         {renderContent()}
 
