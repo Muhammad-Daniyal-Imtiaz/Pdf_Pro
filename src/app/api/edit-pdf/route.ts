@@ -50,8 +50,10 @@ function escapeHtml(text: string): string {
 
 function generatePageHTML(elements: any[], width: number, height: number): string {
     const renderElement = (el: any) => {
-        // SKIP IMPORTED ELEMENTS (Background PDF)
-        if (el.isImported) return ''
+        // Since the client filters elements, if it reaches here and isImported, 
+        // it means it's a MODIFIED text box that needs to mask the original.
+        // We only skip the actual background image element if it sneakily got in.
+        if (el.isImported && el.type === 'image') return ''
 
         const style = el.style || {}
         const content = escapeHtml(el.content || '')
@@ -304,7 +306,7 @@ export async function POST(request: NextRequest) {
         const pdfBytesModified = await originalDoc.save()
         const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase()
 
-        return new NextResponse(pdfBytesModified, {
+        return new Response(pdfBytesModified as any, {
             status: 200,
             headers: {
                 'Content-Type': 'application/pdf',

@@ -63,27 +63,37 @@ const getFontStyle = (fontName: string): string => {
 // Helper to get most common color from samples
 const getDominantColor = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): string => {
     // Sample points around the box to find background color
-    // Points: Top-Left, Top-Right, Bottom-Left, Bottom-Right (padded)
-    // Also Mid-Left, Mid-Right
-    const padding = 4
+    // We sample a bit further out (8-10px) to avoid letter anti-aliasing pixels
+    const p1 = 4
+    const p2 = 8
     const points = [
-        { x: x - padding, y: y - padding },
-        { x: x + width + padding, y: y - padding },
-        { x: x - padding, y: y + height + padding },
-        { x: x + width + padding, y: y + height + padding },
-        { x: x - padding, y: y + height / 2 },
-        { x: x + width + padding, y: y + height / 2 }
+        // Above
+        { x: x + width / 2, y: y - p1 },
+        { x: x + width / 2, y: y - p2 },
+        // Below
+        { x: x + width / 2, y: y + height + p1 },
+        { x: x + width / 2, y: y + height + p2 },
+        // Left
+        { x: x - p1, y: y + height / 2 },
+        { x: x - p2, y: y + height / 2 },
+        // Right
+        { x: x + width + p1, y: y + height / 2 },
+        { x: x + width + p2, y: y + height / 2 },
+        // Corners
+        { x: x - p1, y: y - p1 },
+        { x: x + width + p1, y: y - p1 },
+        { x: x - p1, y: y + height + p1 },
+        { x: x + width + p1, y: y + height + p1 },
     ]
 
     const colorCounts: Record<string, number> = {}
     let maxCount = 0
-    let dominant = 'rgba(255, 255, 255, 1)' // Default White
+    let dominant = 'rgba(255, 255, 255, 1)'
 
     points.forEach(p => {
         if (p.x < 0 || p.y < 0) return
         try {
-            const pixel = ctx.getImageData(p.x, p.y, 1, 1).data
-            // Ignore transparent pixels (if any)
+            const pixel = ctx.getImageData(Math.round(p.x), Math.round(p.y), 1, 1).data
             if (pixel[3] < 50) return
 
             const color = `rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, 1)`
@@ -92,15 +102,8 @@ const getDominantColor = (ctx: CanvasRenderingContext2D, x: number, y: number, w
                 maxCount = colorCounts[color]
                 dominant = color
             }
-        } catch (e) {
-            // Ignore out of bounds
-        }
+        } catch (e) { }
     })
-
-    // Fallback: if no clear winner or mostly white?
-    // If dominant count is low (e.g. 1), it might be noise.
-    // But for solid backgrounds, it should be consistent.
-    // Convert rgba to hex for better style compatibility?
     return rgbaToHex(dominant)
 }
 
@@ -275,7 +278,8 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
                 lineHeight: 1.2,
                 padding: 0
             },
-            pageIndex
+            pageIndex,
+            isImported: true // CRITICAL: Mark as imported to prevent double text
         })
         currentGroup = []
     }

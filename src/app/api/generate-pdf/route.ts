@@ -56,6 +56,7 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
       case 'paragraph':
       case 'list':
       case 'text':
+      case 'container':
         elementHTML = `
           <div style="
             position: absolute;
@@ -74,10 +75,15 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
             opacity: ${style.opacity || 1};
             transform: rotate(${style.rotation || 0}deg);
             transform-origin: top left;
+            background-color: ${style.backgroundColor || 'transparent'};
+            border: ${style.borderWidth ? `${style.borderWidth}px solid ${style.borderColor || '#000'}` : 'none'};
+            border-radius: ${style.borderRadius || 0}px;
+            display: flex;
+            align-items: flex-start;
+            box-sizing: border-box;
           ">${content}</div>
         `
         break
-
       case 'image':
         elementHTML = `
           <div style="
@@ -91,8 +97,10 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
             transform: rotate(${style.rotation || 0}deg);
             transform-origin: top left;
             overflow: hidden;
+            border-radius: ${style.borderRadius || 0}px;
+            border: ${style.borderWidth ? `${style.borderWidth}px solid ${style.borderColor || '#000'}` : 'none'};
           ">
-            ${el.content ? `<img src="${el.content}" style="width: 100%; height: 100%; object-fit: fill; display: block;" />` : `<div style="width: 100%; height: 100%; background: #f3f4f6;"></div>`}
+            ${el.content ? `<img src="${el.content}" style="width: 100%; height: 100%; object-fit: contain; display: block;" />` : ``}
           </div>
         `
         break
