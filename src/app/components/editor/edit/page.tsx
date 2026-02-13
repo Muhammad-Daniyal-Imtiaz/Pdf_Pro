@@ -5,8 +5,8 @@ import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { useEditorStore, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import EditorSidebar from '../../../components/editor/EditorSidebar'
 import PDFRenderer from '../../../components/editor/PDFRenderer'
-import { saveEditedPDF } from '../../../lib/pdf-edit-service'
-import { Upload, Download, Loader2, ArrowLeft, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react'
+import { extractPDFElements } from '../../../lib/pdf-import-service'
+import { Upload, Download, Loader2, ArrowLeft, ZoomIn, ZoomOut, RotateCcw, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 
 export default function EditPage() {
@@ -19,6 +19,7 @@ export default function EditPage() {
     selectElement,
     selectedIds,
     clearPages,
+    setPages,
     moveElement,
     zoom,
     setZoom
@@ -29,6 +30,7 @@ export default function EditPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [showBackground, setShowBackground] = useState(true) // Default to Visible
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Drag State
@@ -58,129 +60,14 @@ export default function EditPage() {
     clearPages()
 
     try {
-      const pdfjsLib = await import('pdfjs-dist')
-      pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
-
       const base64 = await fileToBase64(file)
       setOriginalPdfBase64(base64)
       setDocTitle(file.name.replace('.pdf', ''))
 
-      const arrayBuffer = await file.arrayBuffer()
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
-      const page = await pdf.getPage(1)
-
-      const viewportUnscaled = page.getViewport({ scale: 1 })
-      const scale = A4_WIDTH / viewportUnscaled.width
-      const viewport = page.getViewport({ scale })
-
-      // 1. Render Background Image
-      const canvas = document.createElement('canvas')
-      const context = canvas.getContext('2d')
-      canvas.width = Math.round(viewport.width)
-      canvas.height = Math.round(viewport.height)
-      context!.fillStyle = 'white'
-      context!.fillRect(0, 0, canvas.width, canvas.height)
-
-      await page.render({ canvasContext: context!, viewport: viewport, canvas: canvas }).promise
-      const backgroundImage = canvas.toDataURL('image/png')
-
-      const currentState = useEditorStore.getState()
-      if (currentState.pages.length === 0) useEditorStore.getState().addPage()
-
-      // Add Background
-      useEditorStore.getState().addElement('image')
-
-      // 2. Extract Text Items (The "Magic" Step)
-      const textContent = await page.getTextContent()
-      const textItems = textContent.items.filter((item: any) => 'str' in item && item.str.trim().length > 0)
-
-      const newElements: any[] = []
-
-      // Wait for background to be set
-      setTimeout(() => {
-        const state = useEditorStore.getState()
-        const lastPage = state.pages[state.pages.length - 1]
-
-        // Update Background
-        const bgElement = lastPage.elements[lastPage.elements.length - 1]
-        if (bgElement) {
-          useEditorStore.getState().updateElement(bgElement.id, {
-            content: backgroundImage,
-            x: 0, y: 0,
-            isImported: true,
-            style: { width: A4_WIDTH, height: A4_HEIGHT, zIndex: 0, opacity: 1 }
-          })
-        }
-
-        // Add Text Elements
-        textItems.forEach((item: any) => {
-          // Transform PDF coordinates to Viewport
-          // item.transform is [scaleX, skewY, skewX, scaleY, x, y]
-          // PDF origin is usually bottom-left
-
-          const tx = item.transform
-
-          // Calculate position
-          // We use the viewport to transform the point (tx[4], tx[5])
-          // Note: PDF.js 'transform' array is [hScale, hSkew, vSkew, vScale, x, y]
-
-          const x = tx[4]
-          const y = tx[5]
-
-          // Convert to viewport coordinates
-          // viewport.transform is [scale, 0, 0, -scale, 0, viewport.height] (roughly)
-          // But simplify: utilize viewport.convertToViewportPoint
-          const [vx, vy] = viewport.convertToViewportPoint(x, y)
-
-          // Calculate size
-          // Approximate height from font size * scale
-          // item.height is not directly available in all versions, use transform or view
-          // tx[3] is roughly font size? scaleY
-          // item.width is available
-
-          const fontSize = Math.sqrt(tx[0] * tx[0] + tx[1] * tx[1]) // approximate scale
-          const scaledFontSize = fontSize * scale
-
-          // Height correction: vy is the Baseline. We need Top-Left for DOM.
-          // Move up by fontSize
-          const topY = vy - scaledFontSize
-
-          // Width: item.width * scale
-          const width = item.width * scale
-
-          // Add Element
-          // We use 'addText' logic but direct store manipulation is safer for bulk
-          // But we can use addElement sequentially or create a bulk action?
-          // For now, let's just trigger addElement ('text') then update it.
-          // Actually, calling addElement repeatedly triggers state updates. 
-          // It's better to construct the object and push it if possible.
-          // But we only have `addElement`. Let's use it.
-
-          // Optimization: Just add the most significant text blocks?
-          // No, add all.
-
-          useEditorStore.getState().addElement('text')
-          const newState = useEditorStore.getState()
-          const p = newState.pages[newState.pages.length - 1]
-          const newEl = p.elements[p.elements.length - 1]
-
-          useEditorStore.getState().updateElement(newEl.id, {
-            content: item.str,
-            x: vx,
-            y: topY,
-            style: {
-              width: width + 5, // slight buffer
-              height: scaledFontSize * 1.2,
-              fontSize: scaledFontSize,
-              fontFamily: 'Arial', // Default
-              color: 'black',
-              backgroundColor: 'white', // Masks original
-              zIndex: 2,
-              padding: 0
-            }
-          })
-        })
-      }, 50)
+      // Use the new Import Service
+      const { pages: importedPages } = await extractPDFElements(file)
+      setPages(importedPages)
+      setShowBackground(true) // Ensure visible on new import
 
     } catch (err: any) {
       console.error(err)
@@ -188,25 +75,67 @@ export default function EditPage() {
     } finally {
       setIsProcessing(false)
     }
-  }, [clearPages, setDocTitle])
+  }, [clearPages, setDocTitle, setPages])
 
   const handleSave = useCallback(async () => {
-    if (!originalPdfBase64) return
     setIsSaving(true)
     try {
-      const blob = await saveEditedPDF(originalPdfBase64, pages, docTitle)
+      let response;
+
+      if (showBackground && originalPdfBase64) {
+        // HYBRID MODE (Overlay on Original)
+        // Use edit-pdf which merges edits onto original PDF
+        // Flatten elements from all pages
+        const allElements = pages.flatMap(p => p.elements)
+
+        response = await fetch('/api/edit-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            originalPdf: originalPdfBase64,
+            elements: allElements,
+            title: docTitle
+          })
+        })
+
+      } else {
+        // RECONSTRUCTION MODE (Clean PDF from Elements)
+        // Use generate-pdf which creates PDF from scratch
+        // Filter out background images
+        const pagesToExport = pages.map(p => ({
+          ...p,
+          elements: p.elements.filter(el => !el.isImported)
+        }))
+
+        response = await fetch('/api/generate-pdf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            pages: pagesToExport,
+            title: docTitle,
+            width: A4_WIDTH,
+            height: A4_HEIGHT
+          })
+        })
+      }
+
+      if (!response.ok) throw new Error('Failed to generate PDF')
+
+      const blob = await response.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
       a.download = `${docTitle}_edited.pdf`
       a.click()
       URL.revokeObjectURL(url)
+
     } catch (err) {
+      console.error(err)
       setError('Failed to save PDF')
     } finally {
       setIsSaving(false)
     }
-  }, [originalPdfBase64, pages, docTitle])
+  }, [pages, docTitle, showBackground, originalPdfBase64])
 
   const handleZoomIn = () => setZoom(Math.min(200, zoom + 10))
   const handleZoomOut = () => setZoom(Math.max(50, zoom - 10))
@@ -216,7 +145,9 @@ export default function EditPage() {
   const handleElementMouseDown = useCallback((id: string, e: React.MouseEvent) => {
     e.stopPropagation()
     const el = pages[0].elements.find(el => el.id === id)
-    if (!el || el.isImported) return // Don't drag background
+    // Prevent dragging background if it's visible (it's locked usually)
+    // If it's imported (background), usually we don't drag it.
+    if (!el || el.isImported) return
 
     selectElement(id)
     setIsDragging(true)
@@ -257,6 +188,12 @@ export default function EditPage() {
     return () => window.removeEventListener('mouseup', handleGlobalMouseUp)
   }, [isDragging])
 
+  // Filter elements for display
+  const displayedElements = pages[0]?.elements.filter(el => {
+    // If element is imported (background image) AND we want to hide background, exclude it.
+    if (el.isImported && !showBackground) return false
+    return true
+  }) || []
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
@@ -282,6 +219,16 @@ export default function EditPage() {
               <RotateCcw size={14} />
             </button>
           </div>
+
+          <div className="h-6 w-px bg-gray-200 mx-2" />
+
+          <button
+            onClick={() => setShowBackground(!showBackground)}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium transition-colors ${showBackground ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+          >
+            {showBackground ? <Eye size={16} /> : <EyeOff size={16} />}
+            {showBackground ? 'Background Visible' : 'Background Hidden'}
+          </button>
         </div>
 
         <div className="flex items-center gap-3">
@@ -289,9 +236,9 @@ export default function EditPage() {
           <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors">
             <Upload size={16} /> Import PDF
           </button>
-          <button onClick={handleSave} disabled={!originalPdfBase64 || isSaving} className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white rounded text-sm font-medium shadow-sm transition-colors">
+          <button onClick={handleSave} disabled={pages.length === 0 || isSaving} className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white rounded text-sm font-medium shadow-sm transition-colors">
             {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
-            Save Changes
+            Save PDF
           </button>
         </div>
       </header>
@@ -340,12 +287,10 @@ export default function EditPage() {
                       setEditingId(null)
                     }}
                   >
-                    {pages[0] && (
-                      <div onDoubleClick={(e) => {
-                        // Handle double click on background if needed
-                      }}>
+                    {pages[0] ? (
+                      <div>
                         <PDFRenderer
-                          elements={pages[0].elements}
+                          elements={displayedElements}
                           width={A4_WIDTH}
                           height={A4_HEIGHT}
                           showSelection={true}
@@ -356,36 +301,8 @@ export default function EditPage() {
                           onContentChange={(id, content) => updateElement(id, { content, isModified: true })}
                           onBlur={() => setEditingId(null)}
                         />
-                        {/* Invisible Overlay to catch double clicks on elements? 
-                              Actually PDFRenderer elements handle their own double click if we pass a handler 
-                              Wait, PDFRenderer text elements are contentEditable when isEditing is true.
-                              We need to enable editing on Double Click.
-                          */}
                       </div>
-                    )}
-
-                    {/* Explicitly passing a ref/handler to PDFRenderer's elements would be cleaner, 
-                        but effectively we can hack it by catching the event in PDFRenderer if we update it,
-                        OR we can just update PDFRenderer ABOVE to handle onDoubleClick.
-                        
-                        Wait, I didn't verify PDFRenderer has onDoubleClick props.
-                        Looking at PDFRenderer.tsx previously: 
-                        It has `onContentChange`, `onBlur`, `editingId`. 
-                        It renders `contentEditable={isEditing}`.
-                        It does NOT have onDoubleClick prop exposed in interface, BUT
-                        Inside `renderElement` -> `switch` -> `default`:
-                        It has `onDoubleClick={(e) => e.stopPropagation()}` (blocking bubble).
-                        
-                        I need to UPDATE PDFRenderer to accept `onElementDoubleClick`.
-                        
-                        HOWEVER, I only replaced EditPage.tsx in this tool call.
-                        I will assume I can update PDFRenderer.tsx in the next step or I should have included it.
-                        
-                        I will define a `handleElementDoubleClick` here and pass it, 
-                        knowing I will update PDFRenderer next.
-                    */}
-
-                    {!originalPdfBase64 && (
+                    ) : (
                       <div className="absolute inset-0 flex items-center justify-center bg-gray-50 border-4 border-dashed border-gray-200 rounded-lg m-4 pointer-events-none">
                         <div className="text-center">
                           <Upload size={48} className="mx-auto text-gray-300 mb-4" />

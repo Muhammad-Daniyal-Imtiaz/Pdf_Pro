@@ -41,7 +41,7 @@ export interface EditorElement {
     isModified?: boolean
 }
 
-interface EditorPage {
+export interface EditorPage {
     id: string
     elements: EditorElement[]
     backgroundImage?: string
