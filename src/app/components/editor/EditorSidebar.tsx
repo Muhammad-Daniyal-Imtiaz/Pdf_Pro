@@ -6,7 +6,7 @@ import { useEditorStore } from '@/app/store/useEditorStore'
 import {
     Type, Heading, List, Minus, Link, Image, Square,
     ChevronLeft, ChevronRight, Trash2, Layers, ArrowUp, ArrowDown, Upload,
-    Check, X, Star, Heart
+    Check, X, Star, Heart, Scissors, Combine, Info
 } from 'lucide-react'
 import SocialIcons from './SocialIcons'
 import LineControls from './LineControls'
@@ -28,6 +28,8 @@ export default function EditorSidebar() {
         removeElement,
         bringToFront,
         sendToBack,
+        splitElement,
+        mergeElements
     } = useEditorStore()
 
     // Find the selected element across all pages
@@ -263,6 +265,43 @@ export default function EditorSidebar() {
                                     <div>Y: {selectedElement.y}</div>
                                     <div>W: {selectedElement.style.width}</div>
                                     <div>H: {selectedElement.style.height}</div>
+                                </div>
+
+                                {/* PRODUCTION GRADE: Precision Tools */}
+                                <div className="space-y-3 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <div className="p-1 bg-blue-100 rounded text-blue-600">
+                                            <Scissors size={14} />
+                                        </div>
+                                        <label className="text-xs font-bold text-blue-700 uppercase tracking-tight">Precision Tools</label>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        {selectedIds.length === 1 && selectedElement.originalItems && selectedElement.originalItems.length > 1 && (
+                                            <button
+                                                onClick={() => splitElement(selectedElement.id)}
+                                                className="w-full py-2 bg-white hover:bg-blue-50 border border-blue-200 rounded-lg text-xs font-semibold text-blue-700 shadow-sm flex items-center justify-center gap-2 transition-all"
+                                            >
+                                                <Scissors size={14} /> Split into Individual Items
+                                            </button>
+                                        )}
+
+                                        {selectedIds.length > 1 && (
+                                            <button
+                                                onClick={() => mergeElements()}
+                                                className="w-full py-2 bg-white hover:bg-green-50 border border-green-200 rounded-lg text-xs font-semibold text-green-700 shadow-sm flex items-center justify-center gap-2 transition-all"
+                                            >
+                                                <Combine size={14} /> Merge Selected Items
+                                            </button>
+                                        )}
+
+                                        <div className="flex items-start gap-2 text-[10px] text-blue-600 leading-tight bg-white/50 p-2 rounded border border-blue-50">
+                                            <Info size={12} className="shrink-0 mt-0.5" />
+                                            <span>
+                                                Use <strong>Split</strong> to break apart contact lines and preserve punctuation exactly. Use <strong>Merge</strong> to group them back.
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>

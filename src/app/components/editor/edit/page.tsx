@@ -22,7 +22,9 @@ export default function EditPage() {
     setPages,
     moveElement,
     zoom,
-    setZoom
+    setZoom,
+    importPrecision,
+    setImportPrecision
   } = useEditorStore()
 
   const [originalPdfBase64, setOriginalPdfBase64] = useState<string | null>(null)
@@ -65,7 +67,7 @@ export default function EditPage() {
       setDocTitle(file.name.replace('.pdf', ''))
 
       // Use the new Import Service
-      const { pages: importedPages } = await extractPDFElements(file)
+      const { pages: importedPages } = await extractPDFElements(file, importPrecision)
       setPages(importedPages)
       setShowBackground(true) // Ensure visible on new import
 
@@ -75,7 +77,7 @@ export default function EditPage() {
     } finally {
       setIsProcessing(false)
     }
-  }, [clearPages, setDocTitle, setPages])
+  }, [clearPages, setDocTitle, setPages, importPrecision])
 
   const handleSave = useCallback(async () => {
     setIsSaving(true)
@@ -236,6 +238,18 @@ export default function EditPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 mr-2 border-r pr-3 border-gray-200">
+            <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Mode:</span>
+            <select
+              value={importPrecision}
+              onChange={(e) => setImportPrecision(e.target.value as any)}
+              className="bg-transparent text-xs font-semibold text-gray-700 outline-none cursor-pointer"
+            >
+              <option value="paragraph">🚀 Balanced</option>
+              <option value="precise">🎯 High Precision</option>
+              <option value="raw">🧱 Raw PDF</option>
+            </select>
+          </div>
           <input type="file" ref={fileInputRef} onChange={handleFileUpload} className="hidden" accept=".pdf" />
           <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors">
             <Upload size={16} /> Import PDF

@@ -44,6 +44,7 @@ export interface EditorElement {
     pdfY?: number
     pdfW?: number
     pdfH?: number
+    originalItems?: any[]
 }
 
 export interface EditorPage {
@@ -60,9 +61,11 @@ interface EditorState {
     isSidebarCollapsed: boolean
     isGeneratingPDF: boolean
     zoom: number
+    importPrecision: 'paragraph' | 'precise' | 'raw'
 
     // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
+    setImportPrecision: (precision: 'paragraph' | 'precise' | 'raw') => void
     addElement: (type: EditorElement['type'], x?: number, y?: number) => void
     addSocialIcon: (iconType: string) => void
     addLine: (orientation: 'horizontal' | 'vertical') => void
@@ -89,6 +92,8 @@ interface EditorState {
     removePage: (index: number) => void
     alignElements: (direction: 'left' | 'center' | 'right' | 'top' | 'middle' | 'bottom' | 'baseline') => void
     distributeElements: (axis: 'horizontal' | 'vertical') => void
+    splitElement: (id: string) => void
+    mergeElements: () => void
 }
 
 const DEFAULT_STYLE: ElementStyle = {
@@ -156,8 +161,11 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     isSidebarCollapsed: false,
     isGeneratingPDF: false,
     zoom: 100,
+    importPrecision: 'precise',
 
     setTab: (tab) => set({ activeTab: tab }),
+
+    setImportPrecision: (precision) => set({ importPrecision: precision }),
 
     addElement: (type, x = 100, y = 100) => {
         const { pages } = get()
@@ -532,5 +540,105 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 currentY += el.style.height + spacing
             })
         }
+    },
+
+    splitElement: (id) => {
+        set((state) => {
+            const el = state.pages.flatMap(p => p.elements).find(item => item.id === id)
+            if (!el || !el.originalItems || el.originalItems.length <= 1) return state
+
+            // Create new elements for each original item
+            const newElements: EditorElement[] = el.originalItems.map(item => ({
+                id: `el-${crypto.randomUUID()}`,
+                type: 'text',
+                x: item.x,
+                y: item.y,
+                content: item.str,
+                pageIndex: el.pageIndex,
+                isImported: true,
+                isModified: true, // Mark so they mask original
+                pdfX: item.pdfX,
+                pdfY: item.pdfY,
+                pdfW: item.pdfW,
+                pdfH: item.pdfH,
+                style: {
+                    ...el.style,
+                    width: item.width,
+                    height: item.height,
+                    fontSize: item.fontSize,
+                    backgroundColor: el.style.backgroundColor || '#ffffff',
+                    padding: 0
+                }
+            }))
+
+            const updatedPages = state.pages.map(page => {
+                if (page.elements.every(item => item.id !== id)) return page
+                return {
+                    ...page,
+                    elements: [
+                        ...page.elements.filter(item => item.id !== id),
+                        ...newElements
+                    ]
+                }
+            })
+
+            return { pages: updatedPages, selectedIds: newElements.map(e => e.id) }
+        })
+    },
+
+    mergeElements: () => {
+        const { pages, selectedIds } = get()
+        if (selectedIds.length < 2) return
+
+        const selectedEls = pages.flatMap(p => p.elements).filter(el => selectedIds.includes(el.id))
+        if (selectedEls.length === 0) return
+
+        const first = selectedEls[0]
+        const minX = Math.min(...selectedEls.map(el => el.x))
+        const minY = Math.min(...selectedEls.map(el => el.y))
+        const maxX = Math.max(...selectedEls.map(el => el.x + el.style.width))
+        const maxY = Math.max(...selectedEls.map(el => el.y + el.style.height))
+
+        // PDF bounds
+        const pdfX = Math.min(...selectedEls.filter(e => e.pdfX !== undefined).map(e => e.pdfX!))
+        const pdfY = Math.min(...selectedEls.filter(e => e.pdfY !== undefined).map(e => e.pdfY!))
+        const pdfMaxX = Math.max(...selectedEls.filter(e => e.pdfX !== undefined).map(e => e.pdfX! + e.pdfW!))
+        const pdfMaxY = Math.max(...selectedEls.filter(e => e.pdfY !== undefined).map(e => e.pdfY! + e.pdfH!))
+
+        const newId = `merged-${crypto.randomUUID()}`
+        const merged: EditorElement = {
+            id: newId,
+            type: 'text',
+            x: minX,
+            y: minY,
+            content: selectedEls.map(el => el.content).join(' '),
+            pageIndex: first.pageIndex,
+            isModified: true,
+            isImported: selectedEls.some(e => e.isImported),
+            pdfX,
+            pdfY,
+            pdfW: pdfMaxX - pdfX,
+            pdfH: pdfMaxY - pdfY,
+            style: {
+                ...first.style,
+                width: maxX - minX,
+                height: maxY - minY,
+            }
+        }
+
+        const updatedPages = pages.map(page => {
+            if (page.elements.some(el => selectedIds.includes(el.id))) {
+                return {
+                    ...page,
+                    elements: [
+                        ...page.elements.filter(el => !selectedIds.includes(el.id)),
+                        merged
+                    ]
+                }
+            }
+            return page
+        })
+
+        set({ pages: updatedPages, selectedIds: [newId] })
     }
 }))

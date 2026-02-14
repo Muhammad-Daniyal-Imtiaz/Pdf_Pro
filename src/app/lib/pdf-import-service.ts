@@ -159,7 +159,7 @@ const rgbaToHex = (rgba: string) => {
     return `#${r}${g}${b}`
 }
 
-export const extractPDFElements = async (file: File): Promise<{ pages: EditorPage[] }> => {
+export const extractPDFElements = async (file: File, precision: 'paragraph' | 'precise' | 'raw' = 'precise'): Promise<{ pages: EditorPage[] }> => {
     // Dynamic Import
     const pdfjsLib = await import('pdfjs-dist')
     pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
@@ -176,7 +176,7 @@ export const extractPDFElements = async (file: File): Promise<{ pages: EditorPag
         const { image: backgroundImage, context } = await renderPageToContext(page)
 
         // 2. Process Text with Context for Color Sampling
-        const elements = await processPage(page, i - 1, context)
+        const elements = await processPage(page, i - 1, context, precision)
 
         const bgId = `bg-${crypto.randomUUID()}`
 
@@ -208,7 +208,7 @@ export const extractPDFElements = async (file: File): Promise<{ pages: EditorPag
     return { pages }
 }
 
-const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingContext2D | null): Promise<EditorElement[]> => {
+const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingContext2D | null, precision: 'paragraph' | 'precise' | 'raw' = 'precise'): Promise<EditorElement[]> => {
     const viewportUnscaled = page.getViewport({ scale: 1 })
     const scale = A4_WIDTH / viewportUnscaled.width // Scale to fit our editor
     const viewport = page.getViewport({ scale })
@@ -255,7 +255,55 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
     const flushGroup = () => {
         if (currentGroup.length === 0) return
 
+        // FOR RAW MODE: One element per item
+        if (precision === 'raw') {
+            for (const item of currentGroup) {
+                const pdfX = item.originalTransform[4]
+                const pdfY = item.originalTransform[5]
+                const pdfW = item.width / scale
+                const pdfH = item.height / scale
+
+                let bgColor = '#ffffff'
+                let textColor = '#000000'
+                if (ctx) {
+                    bgColor = getDominantColor(ctx, item.x, item.y, item.width, item.height)
+                    textColor = getTextColor(ctx, item.x, item.y, item.width, item.height)
+                }
+
+                elements.push({
+                    id: `el-${crypto.randomUUID()}`,
+                    type: item.fontSize > 18 ? 'heading' : 'paragraph',
+                    x: item.x,
+                    y: item.y,
+                    content: item.str.trim(),
+                    style: {
+                        width: item.width,
+                        height: item.height,
+                        fontSize: item.fontSize,
+                        fontFamily: getFontFamily(item.fontName),
+                        fontWeight: getFontWeight(item.fontName),
+                        fontStyle: getFontStyle(item.fontName) as 'normal' | 'italic',
+                        color: textColor,
+                        backgroundColor: bgColor,
+                        textAlign: 'left',
+                        zIndex: 2,
+                        lineHeight: 1.2,
+                        padding: 0
+                    },
+                    pageIndex,
+                    isImported: true,
+                    pdfX,
+                    pdfY,
+                    pdfW,
+                    pdfH
+                })
+            }
+            currentGroup = []
+            return
+        }
+
         const first = currentGroup[0]
+        // ... (rest of flushGroup logic for merged modes) ...
 
         let minX = Infinity
         let minY = Infinity
@@ -341,10 +389,27 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
             pdfX,
             pdfY,
             pdfW,
-            pdfH
+            pdfH,
+            originalItems: currentGroup.map(item => ({
+                id: `sub-${crypto.randomUUID()}`,
+                str: item.str,
+                x: item.x,
+                y: item.y,
+                width: item.width,
+                height: item.height,
+                fontSize: item.fontSize,
+                fontName: item.fontName,
+                pdfX: item.originalTransform[4],
+                pdfY: item.originalTransform[5],
+                pdfW: item.width / scale,
+                pdfH: item.height / scale
+            }))
         })
         currentGroup = []
     }
+
+    const gapThreshold = precision === 'paragraph' ? 3.0 : 0.8
+    const lineThreshold = precision === 'paragraph' ? 0.8 : 0.5
 
     for (const item of convertedItems) {
         if (currentGroup.length === 0) {
@@ -362,16 +427,14 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
         }
 
         const verticalDist = item.y - last.y
-        // Relax threshold for very small items (like dots/bullets) which might have slight offsets
+        // Relax threshold for very small items (like dots/bullets)
         const isSmallChar = item.str.length === 1 && item.width < (last.fontSize * 0.5)
-        const lineThreshold = isSmallChar ? (last.fontSize * 0.8) : (last.fontSize * 0.5)
-        const isSameLine = Math.abs(verticalDist) < lineThreshold
+        const currentLineThreshold = isSmallChar ? (last.fontSize * 0.8) : (last.fontSize * lineThreshold)
+        const isSameLine = Math.abs(verticalDist) < currentLineThreshold
 
         if (isSameLine) {
             const gap = item.x - (last.x + last.width)
-            // If the gap is more than roughly 80% of font size, 
-            // it's likely a separate logical block (e.g. Phone vs Email)
-            if (gap > (last.fontSize * 0.8)) {
+            if (gap > (last.fontSize * gapThreshold)) {
                 flushGroup()
                 currentGroup = [item]
             } else {
@@ -381,7 +444,8 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
             const isNextLine = verticalDist > 0 && verticalDist < (last.fontSize * 2.0)
             const isAligned = Math.abs(item.x - currentGroup[0].x) < 20
 
-            if (isNextLine && isAligned) {
+            // ONLY merge multi-line groups in 'paragraph' mode
+            if (precision === 'paragraph' && isNextLine && isAligned) {
                 currentGroup.push(item)
             } else {
                 flushGroup()
