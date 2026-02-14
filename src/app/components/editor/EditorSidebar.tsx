@@ -155,6 +155,40 @@ export default function EditorSidebar() {
                                     </div>
                                 )}
 
+                                {/* Layout & Dimensions */}
+                                <div className="space-y-3 p-3 bg-gray-50 rounded border">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <label className="text-xs font-bold text-gray-400 uppercase">Layout & Dimensions</label>
+                                        {selectedElement.isImported && selectedElement.type === 'image' && (
+                                            <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">PDF PAGE</span>
+                                        )}
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="text-[10px] text-gray-500 block mb-1">Width (px)</label>
+                                            <input
+                                                type="number"
+                                                value={Math.round(selectedElement.style.width || 0)}
+                                                onChange={(e) => updateElementStyle(selectedElement.id, { width: Number(e.target.value) })}
+                                                className="w-full p-1.5 text-sm border rounded bg-white font-mono"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] text-gray-500 block mb-1">Height (px)</label>
+                                            <input
+                                                type="number"
+                                                value={Math.round(selectedElement.style.height || 0)}
+                                                onChange={(e) => updateElementStyle(selectedElement.id, { height: Number(e.target.value) })}
+                                                className="w-full p-1.5 text-sm border rounded bg-white font-mono"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between text-[10px] text-gray-400 font-mono px-1">
+                                        <span>X: {Math.round(selectedElement.x)}px</span>
+                                        <span>Y: {Math.round(selectedElement.y)}px</span>
+                                    </div>
+                                </div>
+
                                 {/* Typography Controls (Text Only) */}
                                 {['paragraph', 'heading', 'text', 'link'].includes(selectedElement.type) && (
                                     <div className="space-y-3 p-3 bg-gray-50 rounded border">
@@ -258,15 +292,6 @@ export default function EditorSidebar() {
                                         <ArrowDown size={12} /> Send Back
                                     </button>
                                 </div>
-
-                                {/* Layout/Position */}
-                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-400">
-                                    <div>X: {selectedElement.x}</div>
-                                    <div>Y: {selectedElement.y}</div>
-                                    <div>W: {selectedElement.style.width}</div>
-                                    <div>H: {selectedElement.style.height}</div>
-                                </div>
-
                                 {/* PRODUCTION GRADE: Precision Tools */}
                                 <div className="space-y-3 p-3 bg-blue-50/50 rounded-xl border border-blue-100">
                                     <div className="flex items-center gap-2 mb-1">

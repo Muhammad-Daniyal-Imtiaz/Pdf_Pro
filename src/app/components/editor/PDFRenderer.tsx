@@ -122,7 +122,7 @@ export default function PDFRenderer({
         ? 0.01
         : (elStyle.opacity ?? 1),
       borderRadius: `${elStyle.borderRadius || 0}px`,
-      pointerEvents: isBackground ? 'none' : 'auto',
+      pointerEvents: 'auto', // Allow all elements to be selected/interacted with
       transition: 'opacity 0.1s ease-out, background-color 0.1s ease-out',
       overflow: 'visible'
     }
