@@ -146,18 +146,34 @@ export default function PDFRenderer({
 
         const element = e.currentTarget
 
-        // HORIZONTAL AUTO-EXPAND: 
-        // We briefly disable wrapping to see how wide the text "wants" to be.
+        // HORIZONTAL GROWTH: 
+        // Force no-wrap temporarily to measure the true "ideal" width of the text.
         const prevWS = element.style.whiteSpace
         element.style.whiteSpace = 'pre'
-        const desiredW = Math.ceil(element.scrollWidth) + 5 // +5 for cursor breathing room
+        const desiredW = Math.ceil(element.scrollWidth) + 12 // +12 for cursor headroom
         element.style.whiteSpace = prevWS
 
-        // VERTICAL AUTO-EXPAND:
+        // Measure actual height with the current wrapping
         const desiredH = Math.ceil(element.scrollHeight)
 
-        if (desiredW > exactW || desiredH > exactH) {
-          onResize?.(id, Math.max(exactW, desiredW), Math.max(exactH, desiredH))
+        // Safety: Don't grow beyond the page width
+        const widthLimit = A4_WIDTH - exactX - 10
+        let newW = exactW
+        let newH = exactH
+
+        // If the text wants to be wider than the current box, stretch horizontally first
+        if (desiredW > exactW) {
+          newW = Math.min(desiredW, widthLimit)
+        }
+
+        // Only stretch vertically if the text still overflows after width adjustment
+        // (common for hard newlines or multi-sentence paragraphs).
+        if (desiredH > exactH) {
+          newH = desiredH
+        }
+
+        if (newW !== exactW || newH !== exactH) {
+          onResize?.(id, newW, newH)
         }
       }
 

@@ -26,14 +26,23 @@ export default function EditorSidebar() {
         updateElement,
         updateElementStyle,
         removeElement,
+        selectElement,
         bringToFront,
         sendToBack,
         splitElement,
         mergeElements
     } = useEditorStore()
 
-    // Find the selected element across all pages
-    const selectedElement = pages.flatMap(page => page.elements).find(el => selectedIds.includes(el.id))
+    // Find the selected element across all pages with memoization for stability
+    const selectedElement = React.useMemo(() => {
+        if (selectedIds.length === 0) return null
+
+        for (const page of pages) {
+            const found = page.elements.find(el => selectedIds.includes(el.id))
+            if (found) return found
+        }
+        return null
+    }, [pages, selectedIds])
 
     // Auto-expand sidebar when an element is selected
     useEffect(() => {
@@ -97,17 +106,61 @@ export default function EditorSidebar() {
                         {/* PROPERTIES PANEL - Shows when Element Selected */}
                         {selectedElement && (
                             <div className="border-t pt-4 space-y-5 animate-in slide-in-from-left-2 duration-200">
-                                <div className="flex items-center justify-between bg-blue-50 px-3 py-2 rounded-lg border border-blue-100">
-                                    <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">
-                                        Edit {selectedElement.type}
-                                    </span>
+                                {/* Header / Selection Status */}
+                                <div className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 shadow-sm transition-all">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Selected {selectedElement.type}</span>
+                                            {selectedIds.length > 1 && (
+                                                <span className="bg-blue-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">+{selectedIds.length - 1} more</span>
+                                            )}
+                                        </div>
+                                        <span className="text-xs font-bold text-gray-700 truncate max-w-[150px]">
+                                            {selectedElement.isImported ? "Imported Layer" : "New Element"}
+                                        </span>
+                                    </div>
                                     <button
                                         onClick={() => removeElement(selectedElement.id)}
-                                        className="text-red-500 hover:text-red-700 hover:bg-red-100 p-1 rounded transition-colors"
+                                        className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-md transition-all active:scale-95"
                                         title="Delete Element"
                                     >
                                         <Trash2 size={16} />
                                     </button>
+                                </div>
+
+                                {/* Layout & Dimensions - PRIMARY CONTROL */}
+                                <div className="space-y-3 p-3 bg-gray-50 rounded-xl border border-gray-200 shadow-sm">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-tight">Layout & Dimensions</label>
+                                        {selectedElement.isImported && (
+                                            <span className="text-[9px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-tight">Imported Layer</span>
+                                        )}
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="text-[10px] text-gray-400 block mb-1 font-medium italic">Width (px)</label>
+                                            <input
+                                                type="number"
+                                                value={Math.round(selectedElement.style?.width || 0)}
+                                                onChange={(e) => updateElementStyle(selectedElement.id, { width: Number(e.target.value) })}
+                                                className="w-full p-2 text-sm border rounded-lg bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] text-gray-400 block mb-1 font-medium italic">Height (px)</label>
+                                            <input
+                                                type="number"
+                                                value={Math.round(selectedElement.style?.height || 0)}
+                                                onChange={(e) => updateElementStyle(selectedElement.id, { height: Number(e.target.value) })}
+                                                className="w-full p-2 text-sm border rounded-lg bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-center text-[10px] text-gray-400 font-mono bg-white/50 p-1.5 rounded-md border border-gray-100/50 mt-1">
+                                        <span>X {Math.round(selectedElement.x)}px</span>
+                                        <div className="w-1 h-1 bg-gray-200 rounded-full"></div>
+                                        <span>Y {Math.round(selectedElement.y)}px</span>
+                                    </div>
                                 </div>
 
                                 {/* Content Control */}
@@ -155,39 +208,6 @@ export default function EditorSidebar() {
                                     </div>
                                 )}
 
-                                {/* Layout & Dimensions */}
-                                <div className="space-y-3 p-3 bg-gray-50 rounded border">
-                                    <div className="flex items-center justify-between mb-1">
-                                        <label className="text-xs font-bold text-gray-400 uppercase">Layout & Dimensions</label>
-                                        {selectedElement.isImported && selectedElement.type === 'image' && (
-                                            <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">PDF PAGE</span>
-                                        )}
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label className="text-[10px] text-gray-500 block mb-1">Width (px)</label>
-                                            <input
-                                                type="number"
-                                                value={Math.round(selectedElement.style.width || 0)}
-                                                onChange={(e) => updateElementStyle(selectedElement.id, { width: Number(e.target.value) })}
-                                                className="w-full p-1.5 text-sm border rounded bg-white font-mono"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="text-[10px] text-gray-500 block mb-1">Height (px)</label>
-                                            <input
-                                                type="number"
-                                                value={Math.round(selectedElement.style.height || 0)}
-                                                onChange={(e) => updateElementStyle(selectedElement.id, { height: Number(e.target.value) })}
-                                                className="w-full p-1.5 text-sm border rounded bg-white font-mono"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-between text-[10px] text-gray-400 font-mono px-1">
-                                        <span>X: {Math.round(selectedElement.x)}px</span>
-                                        <span>Y: {Math.round(selectedElement.y)}px</span>
-                                    </div>
-                                </div>
 
                                 {/* Typography Controls (Text Only) */}
                                 {['paragraph', 'heading', 'text', 'link'].includes(selectedElement.type) && (
@@ -259,8 +279,8 @@ export default function EditorSidebar() {
                                         />
                                     </div>
 
-                                    {/* Background & Border (Box/Image) */}
-                                    {['container', 'image', 'rect', 'circle'].includes(selectedElement.type) && (
+                                    {/* Background & Border (Box/Image/Text Mask) */}
+                                    {['container', 'image', 'rect', 'circle', 'text', 'paragraph', 'heading'].includes(selectedElement.type) && (
                                         <>
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div>
@@ -329,6 +349,14 @@ export default function EditorSidebar() {
                                     </div>
                                 </div>
 
+                            </div>
+                        )}
+                        {/* Fallback for selection troubleshooting */}
+                        {selectedIds.length > 0 && !selectedElement && (
+                            <div className="mt-4 p-3 bg-red-50 border border-red-100 rounded-lg text-center">
+                                <p className="text-[10px] text-red-600 font-bold uppercase mb-1">Selection Error</p>
+                                <p className="text-[10px] text-red-500">Selected ID found in UI but missing from state. Please re-select.</p>
+                                <button onClick={() => selectElement(null)} className="mt-2 text-[9px] underline text-red-700 font-bold">Resync Selection</button>
                             </div>
                         )}
                     </>
