@@ -283,8 +283,9 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
                         backgroundColor: bgColor,
                         textAlign: 'left',
                         zIndex: 2,
-                        lineHeight: 1.2,
-                        padding: 0
+                        lineHeight: 1.5,
+                        padding: 0,
+                        resizeMode: 'fixed'
                     },
                     pageIndex,
                     isImported: true,
@@ -377,8 +378,9 @@ const processPage = async (page: any, pageIndex: number, ctx: CanvasRenderingCon
                 backgroundColor: bgColor,
                 textAlign: 'left',
                 zIndex: 2,
-                lineHeight: 1.2,
-                padding: maskPaddingY
+                lineHeight: 1.5,
+                padding: maskPaddingY,
+                resizeMode: 'fixed'
             },
             pageIndex,
             isImported: true,

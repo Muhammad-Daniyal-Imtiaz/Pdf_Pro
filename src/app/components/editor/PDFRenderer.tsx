@@ -219,10 +219,10 @@ export default function PDFRenderer({
               fontFamily: elStyle.fontFamily || 'Inter, Arial, sans-serif',
               fontSize: `${elStyle.fontSize}px`,
               fontWeight: elStyle.fontWeight,
-              lineHeight: elStyle.lineHeight || 1.2,
+              lineHeight: 1.5, // FORCE 1.5 for absolute stability
               color: elStyle.color || '#000000',
               textAlign: elStyle.textAlign || 'left',
-              padding: isInsideContainer ? `${elStyle.padding}px` : '0px',
+              padding: `${elStyle.padding || 0}px`, // Always use style padding
               outline: 'none',
               wordWrap: 'break-word',
               overflowWrap: 'break-word',
@@ -235,9 +235,9 @@ export default function PDFRenderer({
               overflow: mode === 'fixed' ? 'hidden' : 'visible'
             }}
             onClick={(e) => isEditing && e.stopPropagation()}
-            dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
+            dangerouslySetInnerHTML={isEditing ? undefined : { __html: (content || '').replace(/\n/g, '<br>') }}
           >
-            {isEditing ? content : null}
+            {isEditing ? (content || '') : null}
           </div>
 
           {/* OVERFLOW INDICATOR */}

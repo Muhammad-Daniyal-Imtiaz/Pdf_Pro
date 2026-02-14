@@ -125,7 +125,7 @@ const DEFAULT_STYLE: ElementStyle = {
     zIndex: 1,
     opacity: 1,
     padding: 8,
-    resizeMode: 'auto-height', // Default: grow height, fixed width
+    resizeMode: 'fixed', // Default: stable layout like Canva/Figma
 }
 
 const snapToInt = (val: number) => Math.round(val)
