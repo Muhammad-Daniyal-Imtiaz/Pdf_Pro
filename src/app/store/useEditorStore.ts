@@ -1,9 +1,12 @@
-// store/useEditorStore.ts
+// store/useEditorStore.ts - UPDATED WITH RESIZE MODES
 import { create } from 'zustand'
 
 export const A4_WIDTH = 794
 export const A4_HEIGHT = 1123
-export const GRID_SIZE = 1 // Snap to 1px for perfection
+export const GRID_SIZE = 1
+
+// TEXT RESIZE MODES - Canva/Figma style
+export type TextResizeMode = 'fixed' | 'auto-width' | 'auto-height' | 'auto-both'
 
 export interface ElementStyle {
     width: number
@@ -24,6 +27,13 @@ export interface ElementStyle {
     rotation?: number
     opacity?: number
     fontStyle?: 'normal' | 'italic'
+    // NEW: Resize mode for text elements
+    resizeMode?: TextResizeMode
+    // NEW: Min/max constraints
+    minWidth?: number
+    maxWidth?: number
+    minHeight?: number
+    maxHeight?: number
 }
 
 export interface EditorElement {
@@ -83,7 +93,10 @@ interface EditorState {
     setZoom: (zoom: number) => void
     getElementJSON: () => string
 
-    // ADDED: Missing functions
+    // NEW: Resize mode actions
+    setElementResizeMode: (id: string, mode: TextResizeMode) => void
+    toggleResizeMode: (id: string) => void
+
     clearPages: () => void
     setPages: (pages: EditorPage[]) => void
 
@@ -112,9 +125,9 @@ const DEFAULT_STYLE: ElementStyle = {
     zIndex: 1,
     opacity: 1,
     padding: 8,
+    resizeMode: 'auto-height', // Default: grow height, fixed width
 }
 
-// HELPER: Force integers to prevent sub-pixel blurring
 const snapToInt = (val: number) => Math.round(val)
 
 export const useEditorStore = create<EditorState>((set, get) => ({
@@ -135,6 +148,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                         height: 60,
                         fontSize: 32,
                         fontWeight: 700,
+                        resizeMode: 'auto-height',
                     },
                     pageIndex: 0
                 },
@@ -143,13 +157,14 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     type: 'paragraph',
                     x: 50,
                     y: 130,
-                    content: 'Start typing your content here. This text will appear exactly as shown in PDF export.',
+                    content: 'Start typing your content here. Text will automatically wrap and the box will grow as you type. Try clicking the text to edit it!',
                     style: {
                         ...DEFAULT_STYLE,
                         width: 500,
                         height: 100,
                         fontSize: 14,
                         lineHeight: 1.6,
+                        resizeMode: 'auto-height',
                     },
                     pageIndex: 0
                 }
@@ -164,16 +179,13 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     importPrecision: 'precise',
 
     setTab: (tab) => set({ activeTab: tab }),
-
     setImportPrecision: (precision) => set({ importPrecision: precision }),
 
     addElement: (type, x = 100, y = 100) => {
         const { pages } = get()
-        // Add to the last page or create a new page if none exist
         const targetPageIndex = pages.length - 1
         const id = `el-${crypto.randomUUID()}`
 
-        // Snap creation position
         const snappedX = snapToInt(x)
         const snappedY = snapToInt(y)
         const baseStyle = { ...DEFAULT_STYLE, x: snappedX, y: snappedY }
@@ -191,27 +203,27 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         switch (type) {
             case 'heading':
                 newElement.content = 'Heading'
-                newElement.style = { ...baseStyle, width: 300, height: 50, fontSize: 24, fontWeight: 700 }
+                newElement.style = { ...baseStyle, width: 300, height: 50, fontSize: 24, fontWeight: 700, resizeMode: 'auto-height' }
                 break
             case 'paragraph':
                 newElement.content = 'Paragraph text'
-                newElement.style = { ...baseStyle, width: 400, height: 80, fontSize: 14 }
-                break
-            case 'link':
-                newElement.content = 'https://example.com'
-                newElement.style = { ...baseStyle, width: 250, height: 40, fontSize: 14, color: '#2563eb' }
-                break
-            case 'container':
-                newElement.content = 'Click to edit text'
-                newElement.style = { ...baseStyle, width: 200, height: 200, backgroundColor: '#f3f4f6', borderWidth: 1, borderColor: '#d1d5db' }
-                break
-            case 'image':
-                newElement.content = ''
-                newElement.style = { ...baseStyle, width: 200, height: 150, backgroundColor: '#e5e7eb' }
+                newElement.style = { ...baseStyle, width: 400, height: 80, fontSize: 14, resizeMode: 'auto-height' }
                 break
             case 'text':
                 newElement.content = 'Text'
-                newElement.style = { ...baseStyle, width: 200, height: 40, fontSize: 14 }
+                newElement.style = { ...baseStyle, width: 200, height: 40, fontSize: 14, resizeMode: 'auto-height' }
+                break
+            case 'link':
+                newElement.content = 'https://example.com'
+                newElement.style = { ...baseStyle, width: 250, height: 40, fontSize: 14, color: '#2563eb', resizeMode: 'fixed' }
+                break
+            case 'container':
+                newElement.content = 'Click to edit text'
+                newElement.style = { ...baseStyle, width: 200, height: 200, backgroundColor: '#f3f4f6', borderWidth: 1, borderColor: '#d1d5db', resizeMode: 'fixed' }
+                break
+            case 'image':
+                newElement.content = ''
+                newElement.style = { ...baseStyle, width: 200, height: 150, backgroundColor: '#e5e7eb', resizeMode: 'fixed' }
                 break
         }
 
@@ -230,7 +242,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const id = `icon-${crypto.randomUUID()}`
         const size = 48
 
-        // Snap position
         const x = snapToInt(100 + (pages[targetPageIndex].elements.length * 30) % 600)
         const y = snapToInt(100 + Math.floor(pages[targetPageIndex].elements.length / 15) * 60)
 
@@ -241,7 +252,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             x,
             y,
             content: iconType,
-            style: { width: size, height: size, fontSize: 24 },
+            style: { width: size, height: size, fontSize: 24, resizeMode: 'fixed' },
             pageIndex: targetPageIndex
         }
 
@@ -273,6 +284,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 width: orientation === 'horizontal' ? 300 : 2,
                 height: orientation === 'vertical' ? 200 : 2,
                 backgroundColor: '#1a1a1a',
+                resizeMode: 'fixed'
             },
             pageIndex: targetPageIndex
         }
@@ -292,7 +304,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 const elements = page.elements.map((el) => {
                     if (el.id !== id) return el
 
-                    // Snap coordinate updates
                     const processed = { ...el, ...updates, isModified: true }
                     if (updates.x !== undefined) processed.x = snapToInt(updates.x)
                     if (updates.y !== undefined) processed.y = snapToInt(updates.y)
@@ -313,7 +324,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 const elements = page.elements.map((el) => {
                     if (el.id !== id) return el
 
-                    // Round dimension updates
                     const processed = { ...styleUpdates }
                     if (styleUpdates.width !== undefined) processed.width = snapToInt(styleUpdates.width)
                     if (styleUpdates.height !== undefined) processed.height = snapToInt(styleUpdates.height)
@@ -374,6 +384,45 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         })
     },
 
+    // NEW: Set resize mode for element
+    setElementResizeMode: (id, mode) => {
+        set((state) => {
+            const updatedPages = state.pages.map((page) => {
+                const elements = page.elements.map((el) =>
+                    el.id === id
+                        ? { ...el, style: { ...el.style, resizeMode: mode } }
+                        : el
+                )
+                return { ...page, elements }
+            })
+            return { pages: updatedPages }
+        })
+    },
+
+    // NEW: Toggle through resize modes
+    toggleResizeMode: (id) => {
+        set((state) => {
+            const element = state.pages.flatMap(p => p.elements).find(el => el.id === id)
+            if (!element) return state
+
+            const currentMode = element.style.resizeMode || 'auto-height'
+            const modes: TextResizeMode[] = ['fixed', 'auto-width', 'auto-height', 'auto-both']
+            const currentIndex = modes.indexOf(currentMode)
+            const nextMode = modes[(currentIndex + 1) % modes.length]
+
+            const updatedPages = state.pages.map((page) => {
+                const elements = page.elements.map((el) =>
+                    el.id === id
+                        ? { ...el, style: { ...el.style, resizeMode: nextMode } }
+                        : el
+                )
+                return { ...page, elements }
+            })
+
+            return { pages: updatedPages }
+        })
+    },
+
     bringToFront: (id) => {
         set((state) => {
             const updatedPages = state.pages.map((page) => {
@@ -401,21 +450,14 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     setDocTitle: (title) => set({ docTitle: title }),
-
     toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
-
     setGeneratingPDF: (value) => set({ isGeneratingPDF: value }),
-
     setZoom: (zoom) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
-
     getElementJSON: () => JSON.stringify(get().pages[get().pages.length - 1].elements, null, 2),
 
-    // ADDED: Implementation of clearPages and setPages
     clearPages: () => set({ pages: [], selectedIds: [] }),
-
     setPages: (newPages) => set({ pages: newPages }),
 
-    // Page management
     addPage: () => {
         const { pages } = get()
         const newPage: EditorPage = {
@@ -427,13 +469,13 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
     removePage: (index) => {
         const { pages } = get()
-        if (pages.length <= 1) return // Prevent removing last page
+        if (pages.length <= 1) return
 
         const updatedPages = pages.filter((_, i) => i !== index)
 
         set({
             pages: updatedPages,
-            selectedIds: [] // Clear selection when removing a page
+            selectedIds: []
         })
     },
 
@@ -441,7 +483,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const { pages, selectedIds } = get()
         if (selectedIds.length < 2) return
 
-        // Find all selected elements across all pages
         const selectedElements: EditorElement[] = []
         pages.forEach(page => {
             page.elements.forEach(el => {
@@ -451,7 +492,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             })
         })
 
-        // Simple alignment implementation
         let updates: Partial<EditorElement>[] = []
 
         switch (direction) {
@@ -480,7 +520,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 updates = selectedElements.map(el => ({ y: maxY - el.style.height }))
                 break
             case 'baseline':
-                // For text elements, align by baseline
                 const textElements = selectedElements.filter(el => ['paragraph', 'heading'].includes(el.type))
                 if (textElements.length > 0) {
                     const baselineY = textElements[0].y + textElements[0].style.height
@@ -489,7 +528,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 break
         }
 
-        // Apply updates
         updates.forEach((update, i) => {
             const element = selectedElements[i]
             if (element) {
@@ -502,7 +540,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const { pages, selectedIds } = get()
         if (selectedIds.length < 3) return
 
-        // Find all selected elements across all pages
         const selectedElements: EditorElement[] = []
         pages.forEach(page => {
             page.elements.forEach(el => {
@@ -547,7 +584,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             const el = state.pages.flatMap(p => p.elements).find(item => item.id === id)
             if (!el || !el.originalItems || el.originalItems.length <= 1) return state
 
-            // Create new elements for each original item
             const newElements: EditorElement[] = el.originalItems.map(item => ({
                 id: `el-${crypto.randomUUID()}`,
                 type: 'text',
@@ -556,7 +592,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 content: item.str,
                 pageIndex: el.pageIndex,
                 isImported: true,
-                isModified: true, // Mark so they mask original
+                isModified: true,
                 pdfX: item.pdfX,
                 pdfY: item.pdfY,
                 pdfW: item.pdfW,
@@ -567,7 +603,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     height: item.height,
                     fontSize: item.fontSize,
                     backgroundColor: el.style.backgroundColor || '#ffffff',
-                    padding: 0
+                    padding: 0,
+                    resizeMode: 'fixed'
                 }
             }))
 
@@ -599,7 +636,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const maxX = Math.max(...selectedEls.map(el => el.x + el.style.width))
         const maxY = Math.max(...selectedEls.map(el => el.y + el.style.height))
 
-        // PDF bounds
         const pdfX = Math.min(...selectedEls.filter(e => e.pdfX !== undefined).map(e => e.pdfX!))
         const pdfY = Math.min(...selectedEls.filter(e => e.pdfY !== undefined).map(e => e.pdfY!))
         const pdfMaxX = Math.max(...selectedEls.filter(e => e.pdfX !== undefined).map(e => e.pdfX! + e.pdfW!))
@@ -623,6 +659,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 ...first.style,
                 width: maxX - minX,
                 height: maxY - minY,
+                resizeMode: 'auto-height'
             }
         }
 

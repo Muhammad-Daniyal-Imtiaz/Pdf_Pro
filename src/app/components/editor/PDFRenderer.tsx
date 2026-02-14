@@ -6,8 +6,9 @@ import { EditorElement, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import {
   Linkedin, Mail, Phone, Twitter, Github, Globe, Instagram,
   Facebook, Youtube, MapPin, Calendar, User, Download, ExternalLink,
-  Check, X, Star, Heart
+  Check, X, Star, Heart, AlertCircle
 } from 'lucide-react'
+import { getTextMeasurementService } from '@/app/lib/text-measurement-service'
 
 interface PDFRendererProps {
   elements: EditorElement[]
@@ -141,80 +142,127 @@ export default function PDFRenderer({
     }
 
     const renderTextContent = (isInsideContainer: boolean = false) => {
+      const textMeasurementService = getTextMeasurementService()
+      const mode = elStyle.resizeMode || 'auto-height'
+
       const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
         if (!isEditing) return
 
-        const element = e.currentTarget
+        const text = e.currentTarget.innerText || ''
+        const padding = elStyle.padding || 0
+        const availableW = exactW - (padding * 2)
 
-        // HORIZONTAL GROWTH: 
-        // Force no-wrap temporarily to measure the true "ideal" width of the text.
-        const prevWS = element.style.whiteSpace
-        element.style.whiteSpace = 'pre'
-        const desiredW = Math.ceil(element.scrollWidth) + 12 // +12 for cursor headroom
-        element.style.whiteSpace = prevWS
+        // Measure text with current style and constraints
+        const measurement = textMeasurementService.measureText(
+          text,
+          {
+            fontFamily: elStyle.fontFamily || 'Inter, sans-serif',
+            fontSize: elStyle.fontSize || 14,
+            fontWeight: elStyle.fontWeight || 400,
+            lineHeight: elStyle.lineHeight || 1.5
+          },
+          mode === 'auto-width' || mode === 'auto-both' ? undefined : availableW
+        )
 
-        // Measure actual height with the current wrapping
-        const desiredH = Math.ceil(element.scrollHeight)
-
-        // Safety: Don't grow beyond the page width
-        const widthLimit = A4_WIDTH - exactX - 10
         let newW = exactW
         let newH = exactH
 
-        // If the text wants to be wider than the current box, stretch horizontally first
-        if (desiredW > exactW) {
-          newW = Math.min(desiredW, widthLimit)
+        // Logic for different resize modes
+        if (mode === 'auto-width' || mode === 'auto-both') {
+          newW = Math.ceil(measurement.width + (padding * 2) + 12)
         }
 
-        // Only stretch vertically if the text still overflows after width adjustment
-        // (common for hard newlines or multi-sentence paragraphs).
-        if (desiredH > exactH) {
-          newH = desiredH
+        if (mode === 'auto-height' || mode === 'auto-both') {
+          newH = Math.ceil(measurement.height + (padding * 2))
         }
+
+        // Cap width to page boundary
+        const widthLimit = A4_WIDTH - exactX - 10
+        newW = Math.min(newW, widthLimit)
 
         if (newW !== exactW || newH !== exactH) {
           onResize?.(id, newW, newH)
         }
       }
 
+      // Check overflow for fixed mode
+      const overflow = mode === 'fixed' ? textMeasurementService.checkOverflow(
+        content,
+        {
+          fontFamily: elStyle.fontFamily || 'Inter, sans-serif',
+          fontSize: elStyle.fontSize || 14,
+          fontWeight: elStyle.fontWeight || 400,
+          lineHeight: elStyle.lineHeight || 1.5
+        },
+        exactW,
+        exactH,
+        elStyle.padding || 0
+      ) : { isOverflowing: false }
+
       return (
-        <div
-          contentEditable={isEditing}
-          suppressContentEditableWarning
-          onInput={handleInput}
-          onBlur={(e) => {
-            onBlur?.()
-            onContentChange?.(id, e.currentTarget.innerText)
-          }}
-          onDoubleClick={(e) => {
-            if (!isEditing) handleDoubleClick(e)
-          }}
-          style={{
-            width: '100%',
-            height: '100%',
-            minHeight: '1em',
-            fontFamily: elStyle.fontFamily || 'Inter, Arial, sans-serif',
-            fontSize: `${elStyle.fontSize}px`,
-            fontWeight: elStyle.fontWeight,
-            lineHeight: elStyle.lineHeight || 1.2,
-            color: elStyle.color || '#000000',
-            textAlign: elStyle.textAlign || 'left',
-            padding: isInsideContainer ? `${elStyle.padding}px` : '0px',
-            outline: 'none',
-            wordWrap: 'break-word',
-            overflowWrap: 'break-word',
-            whiteSpace: 'pre-wrap', // Preserves formatting during edit
-            cursor: isEditing ? 'text' : 'inherit',
-            userSelect: isEditing ? 'text' : 'none',
-            boxSizing: 'border-box',
-            WebkitFontSmoothing: 'antialiased',
-            display: 'block', // Use block for natural text flow
-            overflow: 'visible'
-          }}
-          onClick={(e) => isEditing && e.stopPropagation()}
-          dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
-        >
-          {isEditing ? content : null}
+        <div className="relative w-full h-full">
+          <div
+            contentEditable={isEditing}
+            suppressContentEditableWarning
+            onInput={handleInput}
+            onBlur={(e) => {
+              onBlur?.()
+              onContentChange?.(id, e.currentTarget.innerText)
+            }}
+            onDoubleClick={(e) => {
+              if (!isEditing) handleDoubleClick(e)
+            }}
+            style={{
+              width: '100%',
+              height: '100%',
+              minHeight: '1em',
+              fontFamily: elStyle.fontFamily || 'Inter, Arial, sans-serif',
+              fontSize: `${elStyle.fontSize}px`,
+              fontWeight: elStyle.fontWeight,
+              lineHeight: elStyle.lineHeight || 1.2,
+              color: elStyle.color || '#000000',
+              textAlign: elStyle.textAlign || 'left',
+              padding: isInsideContainer ? `${elStyle.padding}px` : '0px',
+              outline: 'none',
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              whiteSpace: mode === 'auto-width' ? 'nowrap' : 'pre-wrap',
+              cursor: isEditing ? 'text' : 'inherit',
+              userSelect: isEditing ? 'text' : 'none',
+              boxSizing: 'border-box',
+              WebkitFontSmoothing: 'antialiased',
+              display: 'block',
+              overflow: mode === 'fixed' ? 'hidden' : 'visible'
+            }}
+            onClick={(e) => isEditing && e.stopPropagation()}
+            dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
+          >
+            {isEditing ? content : null}
+          </div>
+
+          {/* OVERFLOW INDICATOR */}
+          {overflow.isOverflowing && !isEditing && (
+            <div
+              className="absolute -bottom-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-lg z-50 cursor-pointer pointer-events-auto"
+              title="Content exceeds container size. Click to expand."
+              onClick={(e) => {
+                e.stopPropagation()
+                const measurement = textMeasurementService.measureText(
+                  content,
+                  {
+                    fontFamily: elStyle.fontFamily || 'Inter, sans-serif',
+                    fontSize: elStyle.fontSize || 14,
+                    fontWeight: elStyle.fontWeight || 400,
+                    lineHeight: elStyle.lineHeight || 1.5
+                  },
+                  exactW - (elStyle.padding || 0) * 2
+                )
+                onResize?.(id, exactW, Math.ceil(measurement.height + (elStyle.padding || 0) * 2))
+              }}
+            >
+              <AlertCircle size={10} />
+            </div>
+          )}
         </div>
       )
     }

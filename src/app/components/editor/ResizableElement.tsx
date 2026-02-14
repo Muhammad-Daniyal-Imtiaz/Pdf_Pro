@@ -1,7 +1,10 @@
+// components/editor/ResizableElement.tsx - PRODUCTION GRADE VERSION
 'use client'
 
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import type { EditorElement } from '@/app/store/useEditorStore'
+import { getTextMeasurementService } from '@/app/lib/text-measurement-service'
+import { AlertCircle } from 'lucide-react'
 
 interface ResizableElementProps {
     el: EditorElement
@@ -36,6 +39,10 @@ export default function ResizableElement({
     const [isResizing, setIsResizing] = useState<ResizeHandle | null>(null)
     const [dragStart, setDragStart] = useState({ x: 0, y: 0, elX: 0, elY: 0 })
     const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 })
+    const [isOverflowing, setIsOverflowing] = useState(false)
+    const [overflowInfo, setOverflowInfo] = useState({ height: 0, lines: 0 })
+
+    const textMeasurementService = getTextMeasurementService()
 
     // Sync contenteditable with store content
     useEffect(() => {
@@ -48,28 +55,63 @@ export default function ResizableElement({
         }
     }, [el.content, el.id, isEditing])
 
-    // Auto-grow height for text elements
+    // Check for overflow when content or size changes
     useEffect(() => {
         if (!contentRef.current) return
-        if (el.type === 'image' || el.type === 'divider' || el.type === 'social-icon') return
+        const isTextElement = ['paragraph', 'heading', 'list', 'link', 'text'].includes(el.type)
+        if (!isTextElement) return
+
+        const checkOverflow = () => {
+            const padding = el.style.padding || 8
+            const overflow = textMeasurementService.checkOverflow(
+                el.content || '',
+                {
+                    fontFamily: el.style.fontFamily || 'Inter, sans-serif',
+                    fontSize: el.style.fontSize || 14,
+                    fontWeight: el.style.fontWeight || 400,
+                    fontStyle: el.style.fontStyle || 'normal',
+                    lineHeight: el.style.lineHeight || 1.5
+                },
+                el.style.width,
+                el.style.height,
+                padding
+            )
+
+            setIsOverflowing(overflow.isOverflowing)
+            setOverflowInfo({
+                height: overflow.overflowHeight,
+                lines: overflow.overflowLines
+            })
+        }
+
+        checkOverflow()
+    }, [el.content, el.style.width, el.style.height, el.style.fontSize, el.style.lineHeight, el.style.padding, el.type])
+
+    // Auto-grow height for text elements (when not in FIXED resize mode)
+    const resizeMode = (el.style as any).resizeMode || 'auto-height'
+    useEffect(() => {
+        if (!contentRef.current) return
+        if (el.type === 'image' || el.type === 'line' || el.type === 'social-icon') return
         if (isResizing) return
+        if (resizeMode === 'fixed') return // Don't auto-grow in fixed mode
 
         const scrollHeight = contentRef.current.scrollHeight
         const currentHeight = el.style.height || 0
+        const padding = el.style.padding || 8
 
-        // Only grow, never shrink automatically (prevents jitter)
-        if (scrollHeight > currentHeight - 8) {
-            const newHeight = Math.ceil((scrollHeight + 8) / 4) * 4 // Round to 4px grid
-            if (newHeight > currentHeight) {
+        // Auto-grow based on resize mode
+        if (resizeMode === 'auto-height' || resizeMode === 'auto-both') {
+            if (scrollHeight + padding * 2 > currentHeight) {
+                const newHeight = Math.ceil((scrollHeight + padding * 2) / 4) * 4 // Round to 4px grid
                 onResize(el.id, el.style.width, newHeight)
             }
         }
-    }, [el.content, el.style.width, el.style.height, el.id, el.type, onResize, isResizing])
+    }, [el.content, el.style.width, el.style.height, el.id, el.type, onResize, isResizing, resizeMode])
 
-    // Round to 0.5px for sub-pixel precision without jitter
+    // Round to integer pixels for crisp rendering
     const exactPosition = {
-        x: Math.round(el.x * 2) / 2,
-        y: Math.round(el.y * 2) / 2,
+        x: Math.round(el.x),
+        y: Math.round(el.y),
         width: Math.round(el.style.width),
         height: Math.round(el.style.height)
     }
@@ -116,9 +158,8 @@ export default function ResizableElement({
                 const dx = e.clientX - dragStart.x
                 const dy = e.clientY - dragStart.y
 
-                // Round to 0.5px for smooth dragging without sub-pixel issues
-                const newX = Math.round((dragStart.elX + dx) * 2) / 2
-                const newY = Math.round((dragStart.elY + dy) * 2) / 2
+                const newX = Math.round(dragStart.elX + dx)
+                const newY = Math.round(dragStart.elY + dy)
 
                 onMove(el.id, newX, newY)
             }
@@ -130,10 +171,10 @@ export default function ResizableElement({
                 let newWidth = resizeStart.width
                 let newHeight = resizeStart.height
 
-                if (isResizing.includes('e')) newWidth = Math.max(20, resizeStart.width + dx)
-                if (isResizing.includes('w')) newWidth = Math.max(20, resizeStart.width - dx)
-                if (isResizing.includes('s')) newHeight = Math.max(20, resizeStart.height + dy)
-                if (isResizing.includes('n')) newHeight = Math.max(20, resizeStart.height - dy)
+                if (isResizing.includes('e')) newWidth = Math.max(50, resizeStart.width + dx)
+                if (isResizing.includes('w')) newWidth = Math.max(50, resizeStart.width - dx)
+                if (isResizing.includes('s')) newHeight = Math.max(30, resizeStart.height + dy)
+                if (isResizing.includes('n')) newHeight = Math.max(30, resizeStart.height - dy)
 
                 onResize(el.id, Math.round(newWidth), Math.round(newHeight))
             }
@@ -174,17 +215,15 @@ export default function ResizableElement({
         }
     }, [setIsEditing])
 
-    const isTextElement = ['paragraph', 'heading', 'list', 'link'].includes(el.type)
+    const isTextElement = ['paragraph', 'heading', 'list', 'link', 'text'].includes(el.type)
 
-    // CRITICAL FIX: Use consistent positioning that prevents overlap issues
+    // CRITICAL FIX: Proper overflow handling
     const baseStyles: React.CSSProperties = {
         position: 'absolute',
         left: `${exactPosition.x}px`,
         top: `${exactPosition.y}px`,
         width: `${exactPosition.width}px`,
-        // For text elements, let height be auto when not resizing to prevent overlap
-        height: isTextElement && !isResizing ? 'auto' : `${exactPosition.height}px`,
-        minHeight: isTextElement ? `${exactPosition.height}px` : undefined,
+        height: `${exactPosition.height}px`,
         fontFamily: el.style.fontFamily || 'Inter, sans-serif',
         fontSize: `${el.style.fontSize || 14}px`,
         color: el.style.color || '#000000',
@@ -192,26 +231,29 @@ export default function ResizableElement({
         fontStyle: el.style.fontStyle || 'normal',
         textAlign: (el.style.textAlign as any) || 'left',
         lineHeight: el.style.lineHeight || 1.5,
-        padding: isTextElement ? `${el.style.padding || 12}px` : '0',
+        padding: isTextElement ? `${el.style.padding || 8}px` : '0',
         backgroundColor: el.style.backgroundColor || 'transparent',
         borderColor: el.style.borderColor || '#cccccc',
-        borderWidth: el.type === 'divider' ? '0' : `${el.style.borderWidth || 0}px`,
-        borderStyle: el.style.borderStyle || 'solid',
-        borderRadius: el.type === 'divider' ? '0' : `${el.style.borderRadius || 0}px`,
+        borderWidth: el.type === 'line' ? '0' : `${el.style.borderWidth || 0}px`,
+        borderStyle: 'solid',
+        borderRadius: el.type === 'line' ? '0' : `${el.style.borderRadius || 0}px`,
         opacity: el.style.opacity ?? 1,
-        zIndex: el.style.zIndex || 0,
+        zIndex: el.style.zIndex || 1,
         cursor: isDragging ? 'grabbing' : isEditing === el.id ? 'text' : 'grab',
         userSelect: 'none',
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
-        // CRITICAL: Allow text elements to expand naturally
-        overflow: isTextElement ? 'visible' : 'hidden',
+        // CRITICAL FIX: Proper overflow handling based on resize mode
+        overflow: resizeMode === 'fixed' ? 'hidden' : 'visible',
         transform: el.style.rotation ? `rotate(${el.style.rotation}deg)` : undefined,
         transformOrigin: 'center center',
         pointerEvents: 'auto',
-        // Prevent overlap issues with clear isolation
-        isolation: 'isolate'
+        isolation: 'isolate',
+        // Prevent text selection during drag
+        WebkitUserSelect: isDragging ? 'none' : undefined,
+        MozUserSelect: isDragging ? 'none' : undefined,
+        msUserSelect: isDragging ? 'none' : undefined,
     }
 
     const contentStyles: React.CSSProperties = isTextElement ? {
@@ -226,12 +268,13 @@ export default function ResizableElement({
         boxSizing: 'border-box',
         padding: '0',
         margin: '0',
-        // CRITICAL: Ensure text doesn't get clipped by other elements
         position: 'relative',
-        zIndex: 1
+        zIndex: 1,
+        // CRITICAL: Ensure content doesn't escape container in fixed mode
+        overflow: resizeMode === 'fixed' ? 'hidden' : 'visible',
     } : {}
 
-    // Render social icon directly without wrapper
+    // Render social icon
     if (el.type === 'social-icon') {
         const SocialIconComponent = require('./SocialIconElement').default
         return (
@@ -244,7 +287,7 @@ export default function ResizableElement({
                     top: `${exactPosition.y}px`,
                     width: `${exactPosition.width}px`,
                     height: `${exactPosition.height}px`,
-                    zIndex: el.style.zIndex || 0,
+                    zIndex: el.style.zIndex || 1,
                     cursor: isDragging ? 'grabbing' : 'grab',
                     userSelect: 'none'
                 }}
@@ -301,7 +344,7 @@ export default function ResizableElement({
             }}
             onDoubleClick={(e) => {
                 e.stopPropagation()
-                if (el.type !== 'divider' && setIsEditing) {
+                if (el.type !== 'line' && setIsEditing) {
                     setIsEditing(el.id)
                     setTimeout(() => contentRef.current?.focus(), 10)
                 }
@@ -326,10 +369,39 @@ export default function ResizableElement({
             {/* Type Label */}
             {isSelected && !isDragging && (
                 <div
-                    className="absolute -top-6 left-0 bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider pointer-events-none whitespace-nowrap z-50"
+                    className="absolute -top-6 left-0 bg-blue-500 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider pointer-events-none whitespace-nowrap z-50 flex items-center gap-1"
                     data-html2canvas-ignore="true"
                 >
                     {el.type}
+                    {resizeMode !== 'auto-height' && <span className="opacity-75">({resizeMode})</span>}
+                </div>
+            )}
+
+            {/* OVERFLOW INDICATOR - Canva/InDesign style */}
+            {isOverflowing && resizeMode === 'fixed' && (
+                <div
+                    className="absolute -bottom-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-lg z-50 cursor-pointer hover:scale-110 transition-transform"
+                    data-html2canvas-ignore="true"
+                    title={`${overflowInfo.lines} line(s) hidden, ${overflowInfo.height}px overflow`}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        // Auto-expand to fit content
+                        const padding = el.style.padding || 8
+                        const measurement = textMeasurementService.measureText(
+                            el.content || '',
+                            {
+                                fontFamily: el.style.fontFamily || 'Inter, sans-serif',
+                                fontSize: el.style.fontSize || 14,
+                                fontWeight: el.style.fontWeight || 400,
+                                fontStyle: el.style.fontStyle || 'normal',
+                                lineHeight: el.style.lineHeight || 1.5
+                            },
+                            el.style.width - padding * 2
+                        )
+                        onResize(el.id, el.style.width, measurement.height + padding * 2)
+                    }}
+                >
+                    <AlertCircle size={14} />
                 </div>
             )}
 
@@ -349,7 +421,7 @@ export default function ResizableElement({
             ))}
 
             {/* Content */}
-            {el.type === 'divider' ? (
+            {el.type === 'line' ? (
                 <div className="w-full h-0 border-t-2 border-gray-400 absolute top-1/2 left-0 -translate-y-1/2" />
             ) : isTextElement ? (
                 <div

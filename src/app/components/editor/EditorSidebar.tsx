@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import SocialIcons from './SocialIcons'
 import LineControls from './LineControls'
+import TextResizeModeControl from './TextResizeModeControl'
 
 const IMAGE_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E"
 
@@ -220,54 +221,59 @@ export default function EditorSidebar() {
 
                                 {/* Typography Controls (Text Only) */}
                                 {['paragraph', 'heading', 'text', 'link'].includes(selectedElement.type) && (
-                                    <div className="space-y-3 p-3 bg-gray-50 rounded border">
-                                        <label className="text-xs font-bold text-gray-400 uppercase">Typography</label>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <div>
-                                                <label className="text-[10px] text-gray-500 block mb-1">Size (px)</label>
-                                                <input type="number" value={selectedElement.style.fontSize || 16} onChange={(e) => updateElementStyle(selectedElement.id, { fontSize: Number(e.target.value) })} className="w-full p-1.5 text-sm border rounded" />
-                                            </div>
-                                            <div>
-                                                <label className="text-[10px] text-gray-500 block mb-1">Weight</label>
-                                                <select
-                                                    value={selectedElement.style.fontWeight || 400}
-                                                    onChange={(e) => updateElementStyle(selectedElement.id, { fontWeight: Number(e.target.value) })}
-                                                    className="w-full p-1.5 text-sm border rounded bg-white"
-                                                >
-                                                    <option value={300}>Light</option>
-                                                    <option value={400}>Regular</option>
-                                                    <option value={500}>Medium</option>
-                                                    <option value={600}>Semibold</option>
-                                                    <option value={700}>Bold</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <div>
-                                                <label className="text-[10px] text-gray-500 block mb-1">Color</label>
-                                                <div className="flex items-center gap-2">
-                                                    <input type="color" value={selectedElement.style.color || '#000000'} onChange={(e) => updateElementStyle(selectedElement.id, { color: e.target.value })} className="w-6 h-6 p-0 border rounded cursor-pointer" />
-                                                    <span className="text-xs text-gray-600">{selectedElement.style.color}</span>
+                                    <>
+                                        <div className="space-y-3 p-3 bg-gray-50 rounded border">
+                                            <label className="text-xs font-bold text-gray-400 uppercase">Typography</label>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <label className="text-[10px] text-gray-500 block mb-1">Size (px)</label>
+                                                    <input type="number" value={selectedElement.style.fontSize || 16} onChange={(e) => updateElementStyle(selectedElement.id, { fontSize: Number(e.target.value) })} className="w-full p-1.5 text-sm border rounded" />
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] text-gray-500 block mb-1">Weight</label>
+                                                    <select
+                                                        value={selectedElement.style.fontWeight || 400}
+                                                        onChange={(e) => updateElementStyle(selectedElement.id, { fontWeight: Number(e.target.value) })}
+                                                        className="w-full p-1.5 text-sm border rounded bg-white"
+                                                    >
+                                                        <option value={300}>Light</option>
+                                                        <option value={400}>Regular</option>
+                                                        <option value={500}>Medium</option>
+                                                        <option value={600}>Semibold</option>
+                                                        <option value={700}>Bold</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <label className="text-[10px] text-gray-500 block mb-1">Align</label>
-                                                <div className="flex bg-white rounded border overflow-hidden">
-                                                    {['left', 'center', 'right'].map((align) => (
-                                                        <button
-                                                            key={align}
-                                                            onClick={() => updateElementStyle(selectedElement.id, { textAlign: align as any })}
-                                                            className={`flex-1 p-1 hover:bg-gray-100 ${selectedElement.style.textAlign === align ? 'bg-blue-50 text-blue-600' : 'text-gray-400'}`}
-                                                        >
-                                                            {align === 'left' && <AlignLeftIcon />}
-                                                            {align === 'center' && <AlignCenterIcon />}
-                                                            {align === 'right' && <AlignRightIcon />}
-                                                        </button>
-                                                    ))}
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div>
+                                                    <label className="text-[10px] text-gray-500 block mb-1">Color</label>
+                                                    <div className="flex items-center gap-2">
+                                                        <input type="color" value={selectedElement.style.color || '#000000'} onChange={(e) => updateElementStyle(selectedElement.id, { color: e.target.value })} className="w-6 h-6 p-0 border rounded cursor-pointer" />
+                                                        <span className="text-xs text-gray-600">{selectedElement.style.color}</span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="text-[10px] text-gray-500 block mb-1">Align</label>
+                                                    <div className="flex bg-white rounded border overflow-hidden">
+                                                        {['left', 'center', 'right'].map((align) => (
+                                                            <button
+                                                                key={align}
+                                                                onClick={() => updateElementStyle(selectedElement.id, { textAlign: align as any })}
+                                                                className={`flex-1 p-1 hover:bg-gray-100 ${selectedElement.style.textAlign === align ? 'bg-blue-50 text-blue-600' : 'text-gray-400'}`}
+                                                            >
+                                                                {align === 'left' && <AlignLeftIcon />}
+                                                                {align === 'center' && <AlignCenterIcon />}
+                                                                {align === 'right' && <AlignRightIcon />}
+                                                            </button>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                        {/* PRODUCTION FEATURE: Text resize modes */}
+                                        <TextResizeModeControl />
+                                    </>
                                 )}
 
                                 {/* Appearance Controls */}
