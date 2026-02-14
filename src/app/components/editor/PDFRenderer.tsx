@@ -62,6 +62,8 @@ export default function PDFRenderer({
     const exactW = Math.round(elStyle.width || 100)
     const exactH = Math.round(elStyle.height || 40)
 
+    const isBackground = element.isImported && type === 'image' && exactW >= A4_WIDTH
+
     const baseStyles: React.CSSProperties = {
       position: 'absolute',
       left: `${exactX}px`,
@@ -76,12 +78,16 @@ export default function PDFRenderer({
       transform: `rotate(${elStyle.rotation || 0}deg)`,
       transformOrigin: 'top left', // Matches API default
       fontStyle: elStyle.fontStyle || 'normal',
-      // SMART VISIBILITY: Hide masking boxes for unmodified imported text
-      // so the user sees the crisp original PDF background unless they edit it.
-      opacity: (element.isImported && !element.isModified && !isEditing) ? 0.01 : (elStyle.opacity ?? 1),
+      // SMART VISIBILITY: Hide masking boxes for unmodified imported TEXT only.
+      // We keep images (like the background) visible so the user can see the PDF. 
+      // Text is kept nearly invisible (0.01) so they see the crisp original background text,
+      // but it becomes fully visible when edited or modified (masking logic).
+      opacity: (element.isImported && !element.isModified && !isEditing && ['text', 'paragraph', 'heading'].includes(type))
+        ? 0.01
+        : (elStyle.opacity ?? 1),
       borderRadius: `${elStyle.borderRadius || 0}px`,
+      pointerEvents: isBackground ? 'none' : 'auto',
     }
-
     const handleClick = (e: React.MouseEvent) => {
       // handled by parent
     }
@@ -150,7 +156,7 @@ export default function PDFRenderer({
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'contain', // Changed from 'fill' to 'contain' to ensure full visibility
+                    objectFit: 'contain',
                     display: 'block',
                     pointerEvents: 'none'
                   }}
@@ -266,12 +272,13 @@ export default function PDFRenderer({
           outline: isSelected ? '2px solid #3b82f6' : 'none',
           outlineOffset: isSelected ? '2px' : '0'
         }}
-        className="pdf-element"
+        className={isBackground ? "" : "pdf-element"}
         onClick={handleClick}
         onMouseDown={handleMouseDown}
         onDoubleClick={handleDoubleClick}
       >
         {renderContent()}
+
 
         {isSelected && showSelection && (
           <div style={{ position: 'absolute', top: -22, left: 0, background: '#3b82f6', color: '#fff', fontSize: '10px', padding: '2px 6px', borderRadius: 2, textTransform: 'uppercase', pointerEvents: 'none' }}>

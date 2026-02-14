@@ -40,7 +40,6 @@ html2canvas-cloned-element {
 
 .pdf-element:hover {
   outline: 1px dashed #3b82f6 !important;
-  opacity: 0.5 !important;
   cursor: pointer;
 }
 
