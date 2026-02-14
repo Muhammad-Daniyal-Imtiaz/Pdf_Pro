@@ -62,7 +62,9 @@ export default function PDFRenderer({
     const exactW = Math.round(elStyle.width || 100)
     const exactH = Math.round(elStyle.height || 40)
 
+    const isTextElement = ['text', 'paragraph', 'heading'].includes(type)
     const isBackground = element.isImported && type === 'image' && exactW >= A4_WIDTH
+    const shouldMask = (element.isImported && (element.isModified || isEditing))
 
     const baseStyles: React.CSSProperties = {
       position: 'absolute',
@@ -70,24 +72,28 @@ export default function PDFRenderer({
       top: `${exactY}px`,
       width: `${exactW}px`,
       height: `${exactH}px`,
-      zIndex: elStyle.zIndex ?? 1,
-      backgroundColor: elStyle.backgroundColor || 'transparent',
-      boxSizing: 'border-box', // MATCHES API
+      zIndex: elStyle.zIndex ?? (isBackground ? 0 : 2),
+      // If we are editing or modified an imported element, we MUST show the background color
+      // to act as a "live mask" over the original PDF text.
+      backgroundColor: shouldMask ? (elStyle.backgroundColor || '#ffffff') : (elStyle.backgroundColor || 'transparent'),
+      boxSizing: 'border-box',
       margin: 0,
       padding: 0,
       transform: `rotate(${elStyle.rotation || 0}deg)`,
-      transformOrigin: 'top left', // Matches API default
+      transformOrigin: 'top left',
       fontStyle: elStyle.fontStyle || 'normal',
-      // SMART VISIBILITY: Hide masking boxes for unmodified imported TEXT only.
-      // We keep images (like the background) visible so the user can see the PDF. 
-      // Text is kept nearly invisible (0.01) so they see the crisp original background text,
-      // but it becomes fully visible when edited or modified (masking logic).
-      opacity: (element.isImported && !element.isModified && !isEditing && ['text', 'paragraph', 'heading'].includes(type))
+      // SMART VISIBILITY: 
+      // Unmodified imported text is Nearly invisible (0.01) so they see the crisp original.
+      // Once they click/edit/modify, it pops to 1.0 and masks the original.
+      opacity: (element.isImported && !element.isModified && !isEditing && isTextElement)
         ? 0.01
         : (elStyle.opacity ?? 1),
       borderRadius: `${elStyle.borderRadius || 0}px`,
       pointerEvents: isBackground ? 'none' : 'auto',
+      transition: 'opacity 0.1s ease-out, background-color 0.1s ease-out',
+      overflow: 'visible'
     }
+
     const handleClick = (e: React.MouseEvent) => {
       // handled by parent
     }
@@ -101,15 +107,54 @@ export default function PDFRenderer({
       onElementDoubleClick?.(id, e)
     }
 
+    const renderTextContent = (isInsideContainer: boolean = false) => {
+      return (
+        <div
+          contentEditable={isEditing}
+          suppressContentEditableWarning
+          onBlur={(e) => {
+            onBlur?.()
+            onContentChange?.(id, e.currentTarget.innerText)
+          }}
+          onDoubleClick={(e) => {
+            if (!isEditing) handleDoubleClick(e)
+          }}
+          style={{
+            width: '100%',
+            height: '100%',
+            fontFamily: elStyle.fontFamily || 'Inter, Arial, sans-serif',
+            fontSize: `${elStyle.fontSize}px`,
+            fontWeight: elStyle.fontWeight,
+            lineHeight: elStyle.lineHeight || 1.2,
+            color: elStyle.color || '#000000',
+            textAlign: elStyle.textAlign || 'left',
+            padding: isInsideContainer ? `${elStyle.padding}px` : '0px',
+            outline: 'none',
+            wordWrap: 'break-word',
+            whiteSpace: 'pre-wrap', // Preserves formatting during edit
+            cursor: isEditing ? 'text' : 'inherit',
+            userSelect: isEditing ? 'text' : 'none',
+            boxSizing: 'border-box',
+            WebkitFontSmoothing: 'antialiased',
+            display: 'flex',
+            alignItems: 'flex-start',
+            overflow: 'visible'
+          }}
+          onClick={(e) => isEditing && e.stopPropagation()}
+          dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
+        >
+          {isEditing ? content : null}
+        </div>
+      )
+    }
+
     const renderContent = () => {
       switch (type) {
         case 'social-icon': {
           const Icon = ICON_MAP[iconType || 'user']
           const color = ICON_COLORS[iconType || 'user'] || '#6b7280'
           const iconSize = Math.min(exactW, exactH) * 0.8
-
           if (!Icon) return null
-
           return (
             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Icon size={Math.round(iconSize)} color={color} style={{ display: 'block' }} />
@@ -119,13 +164,11 @@ export default function PDFRenderer({
 
         case 'line': {
           const isSolid = !element.lineStyle || element.lineStyle === 'solid'
-
           if (isSolid) {
             return (
               <div style={{ width: '100%', height: '100%', backgroundColor: elStyle.backgroundColor || '#000' }} />
             )
           }
-
           const isHorizontal = element.lineOrientation === 'horizontal'
           return (
             <div style={{
@@ -152,11 +195,11 @@ export default function PDFRenderer({
               {content ? (
                 <img
                   src={content}
-                  alt="PDF Page"
+                  alt="Element"
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'contain',
+                    objectFit: isBackground ? 'contain' : 'cover',
                     display: 'block',
                     pointerEvents: 'none'
                   }}
@@ -175,45 +218,14 @@ export default function PDFRenderer({
                 width: '100%',
                 height: '100%',
                 background: elStyle.backgroundColor || 'transparent',
-                border: `${elStyle.borderWidth}px solid ${elStyle.borderColor}`,
+                border: elStyle.borderWidth ? `${elStyle.borderWidth}px solid ${elStyle.borderColor}` : 'none',
                 borderRadius: elStyle.borderRadius,
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                boxSizing: 'border-box'
               }}
             >
-              {/* Editable text inside container */}
-              <div
-                contentEditable={isEditing}
-                suppressContentEditableWarning
-                onBlur={(e) => {
-                  onBlur?.()
-                  onContentChange?.(id, e.currentTarget.innerText)
-                }}
-                onDoubleClick={(e) => {
-                  if (!isEditing) handleDoubleClick(e)
-                }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  fontFamily: elStyle.fontFamily,
-                  fontSize: `${elStyle.fontSize}px`,
-                  fontWeight: elStyle.fontWeight,
-                  lineHeight: elStyle.lineHeight,
-                  color: elStyle.color,
-                  textAlign: elStyle.textAlign,
-                  padding: `${elStyle.padding}px`,
-                  outline: 'none',
-                  wordWrap: 'break-word',
-                  cursor: isEditing ? 'text' : 'inherit',
-                  userSelect: isEditing ? 'text' : 'none',
-                  boxSizing: 'border-box',
-                  overflow: 'auto'
-                }}
-                onClick={(e) => e.stopPropagation()}
-                dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
-              >
-                {isEditing ? content : null}
-              </div>
+              {renderTextContent(true)}
             </div>
           )
 
@@ -227,40 +239,8 @@ export default function PDFRenderer({
           )
         }
 
-        default: {
-          return (
-            <div
-              contentEditable={isEditing}
-              suppressContentEditableWarning
-              onBlur={(e) => {
-                onBlur?.()
-                onContentChange?.(id, e.currentTarget.innerText)
-              }}
-              onDoubleClick={(e) => {
-                if (!isEditing) handleDoubleClick(e)
-              }}
-              style={{
-                width: '100%',
-                height: '100%',
-                fontFamily: elStyle.fontFamily,
-                fontSize: `${elStyle.fontSize}px`,
-                fontWeight: elStyle.fontWeight,
-                lineHeight: elStyle.lineHeight,
-                color: elStyle.color,
-                textAlign: elStyle.textAlign,
-                padding: `${elStyle.padding}px`,
-                outline: 'none',
-                wordWrap: 'break-word',
-                cursor: isEditing ? 'text' : 'inherit',
-                userSelect: isEditing ? 'text' : 'none'
-              }}
-              onClick={(e) => e.stopPropagation()}
-              dangerouslySetInnerHTML={isEditing ? undefined : { __html: content.replace(/\n/g, '<br>') }}
-            >
-              {isEditing ? content : null}
-            </div>
-          )
-        }
+        default:
+          return renderTextContent(false)
       }
     }
 

@@ -113,41 +113,37 @@ const getDominantColor = (ctx: CanvasRenderingContext2D, x: number, y: number, w
 
 // Helper to get text color by sampling multiple points inside the bounds
 const getTextColor = (ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): string => {
-    // Sample a 3x3 grid in the middle 50% of the box to find the non-background color
-    const samples: string[] = []
-    const margin = 0.25
+    const samples: { color: string, brightness: number }[] = []
 
-    for (let i = 1; i <= 3; i++) {
-        for (let j = 1; j <= 3; j++) {
-            const sx = x + (width * margin) + (width * (1 - margin * 2) * (i / 4))
-            const sy = y + (height * margin) + (height * (1 - margin * 2) * (j / 4))
+    for (let i = 1; i <= 5; i++) {
+        for (let j = 1; j <= 5; j++) {
+            const sx = x + (width * (i / 6))
+            const sy = y + (height * (j / 6))
 
             try {
                 const pixel = ctx.getImageData(Math.round(sx), Math.round(sy), 1, 1).data
-                // Only consider it a "text" color if it has some non-white/non-transparent content
-                // (Assuming background is usually white-ish)
-                if (pixel[3] > 100 && (pixel[0] < 240 || pixel[1] < 240 || pixel[2] < 240)) {
-                    samples.push(`rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, 1)`)
+                const brightness = pixel[0] + pixel[1] + pixel[2]
+
+                // Only consider solid pixels (opaque enough)
+                if (pixel[3] > 150) {
+                    samples.push({
+                        color: `rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, 1)`,
+                        brightness
+                    })
                 }
             } catch (e) { }
         }
     }
 
-    if (samples.length === 0) return '#000000' // Default to black
+    if (samples.length === 0) return '#000000'
 
-    const counts: Record<string, number> = {}
-    let max = 0
-    let best = '#000000'
+    // Sort by brightness (darkest first) to pick up the actual text stroke color
+    // but filter out pure black if there are other solid colors
+    samples.sort((a, b) => a.brightness - b.brightness)
 
-    samples.forEach(c => {
-        counts[c] = (counts[c] || 0) + 1
-        if (counts[c] > max) {
-            max = counts[c]
-            best = c
-        }
-    })
-
-    return rgbaToHex(best)
+    // Pick the most dominant non-background color. 
+    // Usually the darkest solid color is the text.
+    return rgbaToHex(samples[0].color)
 }
 
 const rgbaToHex = (rgba: string) => {
