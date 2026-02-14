@@ -152,10 +152,16 @@ export default function EditPage() {
   const handleElementMouseDown = useCallback((id: string, e: React.MouseEvent) => {
     e.stopPropagation()
     const el = pages.flatMap(p => p.elements).find(el => el.id === id)
-    // Prevent dragging background if it's visible (it's locked usually)
-    if (!el || el.isImported) return
+    if (!el) return
 
+    // CRITICAL FIX: Always allow selection, even for imported elements
+    // This ensures the sidebar opens when clicking ANY part of the PDF
     selectElement(id)
+
+    // Prevent dragging the main PDF background image to keep things stable
+    const isBackground = el.isImported && el.type === 'image' && el.style.width >= A4_WIDTH
+    if (isBackground) return
+
     setIsDragging(true)
     setDragStart({
       x: e.clientX,

@@ -37,8 +37,11 @@ export default function EditorSidebar() {
     const selectedElement = React.useMemo(() => {
         if (selectedIds.length === 0) return null
 
+        // Prioritize the LATEST selected ID to ensure we don't pick the background by mistake
+        const targetId = selectedIds[selectedIds.length - 1]
+
         for (const page of pages) {
-            const found = page.elements.find(el => selectedIds.includes(el.id))
+            const found = page.elements.find(el => el.id === targetId)
             if (found) return found
         }
         return null
@@ -105,27 +108,33 @@ export default function EditorSidebar() {
 
                         {/* PROPERTIES PANEL - Shows when Element Selected */}
                         {selectedElement && (
-                            <div className="border-t pt-4 space-y-5 animate-in slide-in-from-left-2 duration-200">
+                            <div
+                                key={selectedElement.id}
+                                className="border-t pt-4 space-y-5 animate-in slide-in-from-left-2 duration-200"
+                            >
                                 {/* Header / Selection Status */}
                                 <div className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 shadow-sm transition-all">
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Selected {selectedElement.type}</span>
+                                            <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100 uppercase tracking-widest">{selectedElement.type}</span>
                                             {selectedIds.length > 1 && (
-                                                <span className="bg-blue-600 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">+{selectedIds.length - 1} more</span>
+                                                <span className="bg-gray-800 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">+{selectedIds.length - 1} Selected</span>
                                             )}
                                         </div>
-                                        <span className="text-xs font-bold text-gray-700 truncate max-w-[150px]">
-                                            {selectedElement.isImported ? "Imported Layer" : "New Element"}
+                                        <span className="text-xs font-bold text-gray-700 truncate max-w-[150px] mt-0.5">
+                                            {selectedElement.isImported ? "Imported PDF Layer" : "New Document Element"}
                                         </span>
+                                        <span className="text-[9px] text-gray-400 font-mono mt-0.5">ID: {selectedElement.id.split('-').pop()}</span>
                                     </div>
-                                    <button
-                                        onClick={() => removeElement(selectedElement.id)}
-                                        className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-md transition-all active:scale-95"
-                                        title="Delete Element"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
+                                    <div className="flex gap-1">
+                                        <button
+                                            onClick={() => removeElement(selectedElement.id)}
+                                            className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-md transition-all active:scale-95"
+                                            title="Delete Element"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Layout & Dimensions - PRIMARY CONTROL */}
@@ -141,7 +150,7 @@ export default function EditorSidebar() {
                                             <label className="text-[10px] text-gray-400 block mb-1 font-medium italic">Width (px)</label>
                                             <input
                                                 type="number"
-                                                value={Math.round(selectedElement.style?.width || 0)}
+                                                value={Math.round(selectedElement.style?.width || (selectedElement as any).width || 0)}
                                                 onChange={(e) => updateElementStyle(selectedElement.id, { width: Number(e.target.value) })}
                                                 className="w-full p-2 text-sm border rounded-lg bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             />
@@ -150,7 +159,7 @@ export default function EditorSidebar() {
                                             <label className="text-[10px] text-gray-400 block mb-1 font-medium italic">Height (px)</label>
                                             <input
                                                 type="number"
-                                                value={Math.round(selectedElement.style?.height || 0)}
+                                                value={Math.round(selectedElement.style?.height || (selectedElement as any).height || 0)}
                                                 onChange={(e) => updateElementStyle(selectedElement.id, { height: Number(e.target.value) })}
                                                 className="w-full p-2 text-sm border rounded-lg bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             />
