@@ -18,8 +18,10 @@ interface PDFRendererProps {
   onElementMouseDown?: (id: string, e: React.MouseEvent) => void
   onElementDoubleClick?: (id: string, e: React.MouseEvent) => void
   onContentChange?: (id: string, content: string) => void
+  onResize?: (id: string, width: number, height: number) => void
   onBlur?: () => void
   editingId?: string | null
+  zoom?: number
 }
 
 const ICON_MAP: Record<string, any> = {
@@ -47,9 +49,40 @@ export default function PDFRenderer({
   onElementMouseDown,
   onElementDoubleClick,
   onContentChange,
+  onResize,
   onBlur,
-  editingId
+  editingId,
+  zoom = 100
 }: PDFRendererProps) {
+  const [resizingId, setResizingId] = React.useState<string | null>(null)
+  const [resizeStart, setResizeStart] = React.useState<{ x: number, y: number, initialW: number, initialH: number } | null>(null)
+
+  React.useEffect(() => {
+    if (!resizingId || !resizeStart) return
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const zoomFactor = zoom / 100
+      const deltaX = (e.clientX - resizeStart.x) / zoomFactor
+      const deltaY = (e.clientY - resizeStart.y) / zoomFactor
+
+      const newW = Math.max(20, resizeStart.initialW + deltaX)
+      const newH = Math.max(20, resizeStart.initialH + deltaY)
+
+      onResize?.(resizingId, Math.round(newW), Math.round(newH))
+    }
+
+    const handleMouseUp = () => {
+      setResizingId(null)
+      setResizeStart(null)
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [resizingId, resizeStart, zoom, onResize])
 
   const renderElement = (element: EditorElement) => {
     const isSelected = showSelection && selectedIds.includes(element.id)
@@ -85,7 +118,7 @@ export default function PDFRenderer({
       // SMART VISIBILITY: 
       // Unmodified imported text is Nearly invisible (0.01) so they see the crisp original.
       // Once they click/edit/modify, it pops to 1.0 and masks the original.
-      opacity: (element.isImported && !element.isModified && !isEditing && isTextElement)
+      opacity: (element.isImported && !element.isModified && !isEditing && !isSelected && isTextElement)
         ? 0.01
         : (elStyle.opacity ?? 1),
       borderRadius: `${elStyle.borderRadius || 0}px`,
@@ -108,10 +141,31 @@ export default function PDFRenderer({
     }
 
     const renderTextContent = (isInsideContainer: boolean = false) => {
+      const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+        if (!isEditing) return
+
+        const element = e.currentTarget
+
+        // HORIZONTAL AUTO-EXPAND: 
+        // We briefly disable wrapping to see how wide the text "wants" to be.
+        const prevWS = element.style.whiteSpace
+        element.style.whiteSpace = 'pre'
+        const desiredW = Math.ceil(element.scrollWidth) + 5 // +5 for cursor breathing room
+        element.style.whiteSpace = prevWS
+
+        // VERTICAL AUTO-EXPAND:
+        const desiredH = Math.ceil(element.scrollHeight)
+
+        if (desiredW > exactW || desiredH > exactH) {
+          onResize?.(id, Math.max(exactW, desiredW), Math.max(exactH, desiredH))
+        }
+      }
+
       return (
         <div
           contentEditable={isEditing}
           suppressContentEditableWarning
+          onInput={handleInput}
           onBlur={(e) => {
             onBlur?.()
             onContentChange?.(id, e.currentTarget.innerText)
@@ -122,6 +176,7 @@ export default function PDFRenderer({
           style={{
             width: '100%',
             height: '100%',
+            minHeight: '1em',
             fontFamily: elStyle.fontFamily || 'Inter, Arial, sans-serif',
             fontSize: `${elStyle.fontSize}px`,
             fontWeight: elStyle.fontWeight,
@@ -131,13 +186,13 @@ export default function PDFRenderer({
             padding: isInsideContainer ? `${elStyle.padding}px` : '0px',
             outline: 'none',
             wordWrap: 'break-word',
+            overflowWrap: 'break-word',
             whiteSpace: 'pre-wrap', // Preserves formatting during edit
             cursor: isEditing ? 'text' : 'inherit',
             userSelect: isEditing ? 'text' : 'none',
             boxSizing: 'border-box',
             WebkitFontSmoothing: 'antialiased',
-            display: 'flex',
-            alignItems: 'flex-start',
+            display: 'block', // Use block for natural text flow
             overflow: 'visible'
           }}
           onClick={(e) => isEditing && e.stopPropagation()}
@@ -259,11 +314,41 @@ export default function PDFRenderer({
       >
         {renderContent()}
 
-
         {isSelected && showSelection && (
-          <div style={{ position: 'absolute', top: -22, left: 0, background: '#3b82f6', color: '#fff', fontSize: '10px', padding: '2px 6px', borderRadius: 2, textTransform: 'uppercase', pointerEvents: 'none' }}>
-            {type}
-          </div>
+          <>
+            {/* Element Label */}
+            <div style={{ position: 'absolute', top: -22, left: 0, background: '#3b82f6', color: '#fff', fontSize: '10px', padding: '2px 6px', borderRadius: 2, textTransform: 'uppercase', pointerEvents: 'none', zIndex: 10 }}>
+              {type}
+            </div>
+
+            {/* Resize Handle */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: -5,
+                right: -5,
+                width: 12,
+                height: 12,
+                backgroundColor: '#fff',
+                border: '2px solid #3b82f6',
+                borderRadius: '50%',
+                cursor: 'nwse-resize',
+                zIndex: 20,
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+              onMouseDown={(e) => {
+                e.stopPropagation()
+                e.preventDefault()
+                setResizingId(id)
+                setResizeStart({
+                  x: e.clientX,
+                  y: e.clientY,
+                  initialW: exactW,
+                  initialH: exactH
+                })
+              }}
+            />
+          </>
         )}
       </div>
     )

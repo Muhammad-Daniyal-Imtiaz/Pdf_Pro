@@ -16,6 +16,7 @@ export default function EditPage() {
     setDocTitle,
     addElement,
     updateElement,
+    updateElementStyle,
     selectElement,
     selectedIds,
     clearPages,
@@ -150,9 +151,8 @@ export default function EditPage() {
   // DRAG HANDLERS
   const handleElementMouseDown = useCallback((id: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    const el = pages[0].elements.find(el => el.id === id)
+    const el = pages.flatMap(p => p.elements).find(el => el.id === id)
     // Prevent dragging background if it's visible (it's locked usually)
-    // If it's imported (background), usually we don't drag it.
     if (!el || el.isImported) return
 
     selectElement(id)
@@ -194,12 +194,13 @@ export default function EditPage() {
     return () => window.removeEventListener('mouseup', handleGlobalMouseUp)
   }, [isDragging])
 
-  // Filter elements for display
-  const displayedElements = pages[0]?.elements.filter(el => {
-    // If element is imported (background image) AND we want to hide background, exclude it.
-    if (el.isImported && !showBackground) return false
-    return true
-  }) || []
+  // Filter function for page elements
+  const getPageElements = (pageIndex: number) => {
+    return pages[pageIndex]?.elements.filter(el => {
+      if (el.isImported && !showBackground) return false
+      return true
+    }) || []
+  }
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
@@ -265,70 +266,76 @@ export default function EditPage() {
         <EditorSidebar />
 
         {/* Main Editor Area with Zoom Support */}
-        <main className="flex-1 bg-gray-200/50 overflow-auto flex relative"
+        <main className="flex-1 bg-gray-100 overflow-auto"
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
         >
-          <div className="m-auto p-12 transition-all duration-200 ease-out">
+          <div className="flex flex-col items-center py-12 gap-8 min-w-max">
             {isProcessing ? (
               <div className="flex flex-col items-center gap-3">
                 <Loader2 className="animate-spin text-blue-600" size={32} />
                 <span className="font-medium text-gray-600">Processing PDF...</span>
               </div>
-            ) : (
-              <div
-                className="relative shadow-2xl bg-white origin-top-left transition-transform duration-200"
-                style={{
-                  width: `${A4_WIDTH}px`,
-                  height: `${A4_HEIGHT}px`,
-                  transform: `scale(${zoom / 100})`,
-                }}
-              >
-                {/* Scaled Wrapper */}
-                <div style={{
-                  width: `${A4_WIDTH * (zoom / 100)}px`,
-                  height: `${A4_HEIGHT * (zoom / 100)}px`,
-                  position: 'relative'
-                }}>
+            ) : pages.length > 0 ? (
+              pages.map((page, index) => (
+                <div key={page.id} className="relative group">
+                  {/* Page Label */}
+                  <div className="absolute -left-16 top-0 text-xs font-bold text-gray-400 uppercase tracking-widest [writing-mode:vertical-lr] h-full flex items-center border-r border-gray-200 pr-4 group-hover:text-blue-500 transition-colors">
+                    Page {index + 1}
+                  </div>
+
                   <div
-                    className="bg-white shadow-2xl origin-top-left"
+                    className="bg-white shadow-2xl origin-top-left transition-transform duration-200"
                     style={{
-                      width: `${A4_WIDTH}px`,
-                      height: `${A4_HEIGHT}px`,
-                      transform: `scale(${zoom / 100})`,
-                      position: 'absolute',
-                      top: 0,
-                      left: 0
-                    }}
-                    onClick={() => {
-                      selectElement(null)
-                      setEditingId(null)
+                      width: `${A4_WIDTH * (zoom / 100)}px`,
+                      height: `${A4_HEIGHT * (zoom / 100)}px`,
                     }}
                   >
-                    {pages[0] ? (
-                      <div>
-                        <PDFRenderer
-                          elements={displayedElements}
-                          width={A4_WIDTH}
-                          height={A4_HEIGHT}
-                          showSelection={true}
-                          selectedIds={selectedIds}
-                          editingId={editingId}
-                          onElementMouseDown={handleElementMouseDown}
-                          onElementDoubleClick={(id) => setEditingId(id)}
-                          onContentChange={(id, content) => updateElement(id, { content, isModified: true })}
-                          onBlur={() => setEditingId(null)}
-                        />
-                      </div>
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-gray-50 border-4 border-dashed border-gray-200 rounded-lg m-4 pointer-events-none">
-                        <div className="text-center">
-                          <Upload size={48} className="mx-auto text-gray-300 mb-4" />
-                          <p className="font-medium text-gray-500">Import a PDF to start editing</p>
-                        </div>
-                      </div>
-                    )}
+                    <div
+                      style={{
+                        width: `${A4_WIDTH}px`,
+                        height: `${A4_HEIGHT}px`,
+                        transform: `scale(${zoom / 100})`,
+                        transformOrigin: 'top left',
+                        position: 'relative'
+                      }}
+                      onClick={() => {
+                        selectElement(null)
+                        setEditingId(null)
+                      }}
+                    >
+                      <PDFRenderer
+                        elements={getPageElements(index)}
+                        width={A4_WIDTH}
+                        height={A4_HEIGHT}
+                        showSelection={true}
+                        selectedIds={selectedIds}
+                        editingId={editingId}
+                        onElementMouseDown={handleElementMouseDown}
+                        onElementDoubleClick={(id) => setEditingId(id)}
+                        onContentChange={(id, content) => updateElement(id, { content, isModified: true })}
+                        onResize={(id, width, height) => updateElementStyle(id, { width, height })}
+                        onBlur={() => setEditingId(null)}
+                        zoom={zoom}
+                      />
+                    </div>
                   </div>
+                </div>
+              ))
+            ) : (
+              <div
+                className="bg-white shadow-xl border-2 border-dashed border-gray-200 rounded-2xl flex items-center justify-center"
+                style={{
+                  width: `${A4_WIDTH * (zoom / 100)}px`,
+                  height: `${A4_HEIGHT * (zoom / 100)}px`
+                }}
+              >
+                <div className="text-center p-8">
+                  <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <Upload size={32} className="text-blue-600" />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-800 mb-2">Ready to edit?</h3>
+                  <p className="text-sm text-gray-500 max-w-[200px] mx-auto">Import your PDF to begin your production-grade editing experience.</p>
                 </div>
               </div>
             )}
