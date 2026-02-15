@@ -8,6 +8,7 @@ import {
   Facebook, Youtube, MapPin, Calendar, User, Download, ExternalLink,
   Check, X, Star, Heart, AlertCircle
 } from 'lucide-react'
+import { sanitizeContent } from '@/app/lib/sanitize'
 import { getTextMeasurementService } from '@/app/lib/text-measurement-service'
 
 interface PDFRendererProps {
@@ -23,6 +24,7 @@ interface PDFRendererProps {
   onBlur?: () => void
   editingId?: string | null
   zoom?: number
+  isProcessing?: boolean
 }
 
 const ICON_MAP: Record<string, any> = {
@@ -53,23 +55,33 @@ export default function PDFRenderer({
   onResize,
   onBlur,
   editingId,
-  zoom = 100
+  zoom = 100,
+  isProcessing = false
 }: PDFRendererProps) {
   const [resizingId, setResizingId] = React.useState<string | null>(null)
   const [resizeStart, setResizeStart] = React.useState<{ x: number, y: number, initialW: number, initialH: number } | null>(null)
 
+  // Use refs to avoid memory leaks and unnecessary re-renders in persistent listeners
+  const resizingIdRef = React.useRef<string | null>(null)
+  const resizeStartRef = React.useRef<{ x: number, y: number, initialW: number, initialH: number } | null>(null)
+
   React.useEffect(() => {
-    if (!resizingId || !resizeStart) return
+    resizingIdRef.current = resizingId
+    resizeStartRef.current = resizeStart
+  }, [resizingId, resizeStart])
 
+  React.useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      if (!resizingIdRef.current || !resizeStartRef.current) return
+
       const zoomFactor = zoom / 100
-      const deltaX = (e.clientX - resizeStart.x) / zoomFactor
-      const deltaY = (e.clientY - resizeStart.y) / zoomFactor
+      const deltaX = (e.clientX - resizeStartRef.current.x) / zoomFactor
+      const deltaY = (e.clientY - resizeStartRef.current.y) / zoomFactor
 
-      const newW = Math.max(20, resizeStart.initialW + deltaX)
-      const newH = Math.max(20, resizeStart.initialH + deltaY)
+      const newW = Math.max(20, resizeStartRef.current.initialW + deltaX)
+      const newH = Math.max(20, resizeStartRef.current.initialH + deltaY)
 
-      onResize?.(resizingId, Math.round(newW), Math.round(newH))
+      onResize?.(resizingIdRef.current, Math.round(newW), Math.round(newH))
     }
 
     const handleMouseUp = () => {
@@ -83,7 +95,7 @@ export default function PDFRenderer({
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [resizingId, resizeStart, zoom, onResize])
+  }, [zoom, onResize])
 
   const renderElement = (element: EditorElement) => {
     const isSelected = showSelection && selectedIds.includes(element.id)
@@ -425,12 +437,40 @@ export default function PDFRenderer({
         width: `${width}px`,
         height: `${height}px`,
         position: 'relative',
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
         overflow: 'hidden',
         boxSizing: 'border-box'
       }}
     >
       {elements.map(renderElement)}
+
+      {isProcessing && (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(255, 255, 255, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 100,
+          backdropFilter: 'blur(2px)'
+        }}>
+          <div style={{
+            background: '#fff',
+            padding: '20px 40px',
+            borderRadius: '12px',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '12px',
+            border: '1px solid #e5e7eb'
+          }}>
+            <Loader2 className="animate-spin text-blue-600" size={32} />
+            <span style={{ fontWeight: 500, color: '#374151' }}>Processing PDF...</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

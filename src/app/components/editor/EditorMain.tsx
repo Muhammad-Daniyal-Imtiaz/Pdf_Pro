@@ -5,6 +5,8 @@ import { useEditorStore, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import PDFRenderer from './PDFRenderer'
 import { generatePDF } from '@/app/lib/pdf-service'
 import { Loader2, Grid, ArrowDownToLine, ZoomIn, ZoomOut, Plus, Trash2 } from 'lucide-react'
+import { flushSync } from 'react-dom'
+import { useKeyboardShortcuts } from '@/app/hooks/useKeyboardShortcuts'
 
 export default function EditorMain() {
     const {
@@ -30,13 +32,17 @@ export default function EditorMain() {
     const [editingId, setEditingId] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
 
+    // Load shortcuts
+    useKeyboardShortcuts()
+
     const handleDownloadPDF = useCallback(async () => {
         setError(null)
-        setEditingId(null)
-        selectElement(null)
 
-        // Wait for UI update
-        await new Promise(r => setTimeout(r, 100))
+        // Use flushSync to guarantee DOM updates before starting PDF generation
+        flushSync(() => {
+            setEditingId(null)
+            selectElement(null)
+        })
 
         setGeneratingPDF(true)
 
@@ -57,26 +63,6 @@ export default function EditorMain() {
             setGeneratingPDF(false)
         }
     }, [pages, docTitle, selectElement, setGeneratingPDF])
-
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-                e.preventDefault()
-                handleDownloadPDF()
-            }
-            if (e.key === 'Delete' && selectedIds.length > 0) {
-                selectedIds.forEach(id => removeElement(id))
-                selectElement(null)
-            }
-            if (e.key === 'Escape') {
-                setEditingId(null)
-                selectElement(null)
-            }
-        }
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [handleDownloadPDF, selectedIds, removeElement, selectElement])
 
     const [isDragging, setIsDragging] = useState(false)
     const [activeElementId, setActiveElementId] = useState<string | null>(null)

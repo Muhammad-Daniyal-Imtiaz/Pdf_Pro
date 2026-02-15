@@ -33,232 +33,75 @@ async function findChrome(): Promise<string> {
   return '/usr/bin/google-chrome'
 }
 
-function escapeHtml(text: string): string {
-  if (!text) return ''
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-    .replace(/\n/g, '<br>')
-}
+import { generateElementHTML, escapeHtml } from '@/app/lib/pdf-renderer'
 
 function generatePageHTML(elements: any[], width: number, height: number): string {
-  const renderElement = (el: any) => {
-    const style = el.style || {}
-    const content = escapeHtml(el.content || '')
-
-    let elementHTML = ''
-
-    switch (el.type) {
-      case 'heading':
-      case 'paragraph':
-      case 'list':
-      case 'text':
-      case 'container':
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            font-family: ${style.fontFamily || 'Inter, Arial, sans-serif'};
-            font-size: ${style.fontSize || 14}px;
-            font-weight: ${style.fontWeight || 'normal'};
-            font-style: ${style.fontStyle || 'normal'};
-            color: ${style.color || '#000000'};
-            line-height: ${style.lineHeight || 1.2};
-            text-align: ${style.textAlign || 'left'};
-            padding: ${style.padding || 0}px;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-            background-color: ${style.backgroundColor || 'transparent'};
-            border: ${style.borderWidth ? `${style.borderWidth}px solid ${style.borderColor || '#000'}` : 'none'};
-            border-radius: ${style.borderRadius || 0}px;
-            display: flex;
-            align-items: flex-start;
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
-          ">${content}</div>
-        `
-        break
-      case 'image':
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-            overflow: hidden;
-            border-radius: ${style.borderRadius || 0}px;
-            border: ${style.borderWidth ? `${style.borderWidth}px solid ${style.borderColor || '#000'}` : 'none'};
-          ">
-            ${el.content ? `<img src="${el.content}" style="width: 100%; height: 100%; object-fit: contain; display: block;" />` : ``}
-          </div>
-        `
-        break
-
-      case 'social-icon':
-        const iconSVG = ICON_SVGS[el.iconType] || ICON_SVGS.user
-        const iconSize = Math.min(style.width, style.height) * 0.8
-        // FIXED: Apply icon-specific PDF corrections for exact positioning
-        const iconCorrections: Record<string, { y: number; scale: number }> = {
-          'email': { y: -1.2, scale: 0.998 },
-          'linkedin': { y: -1.0, scale: 0.997 },
-          'phone': { y: -0.8, scale: 0.999 },
-          'twitter': { y: -1.1, scale: 0.998 },
-          'facebook': { y: -0.9, scale: 0.997 },
-          'instagram': { y: -1.0, scale: 0.998 },
-          'github': { y: -0.7, scale: 0.999 },
-          'website': { y: -0.6, scale: 1.000 },
-          'whatsapp': { y: -1.0, scale: 0.998 },
-          'location': { y: -0.5, scale: 1.000 },
-          'calendar': { y: -0.4, scale: 1.001 },
-          'user': { y: -0.2, scale: 1.000 },
-          'download': { y: -0.3, scale: 1.000 },
-          'external': { y: -0.5, scale: 1.000 }
-        }
-        const correction = iconCorrections[el.iconType] || { y: -1.0, scale: 0.998 }
-
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y + correction.y}px;
-            width: ${style.width * correction.scale}px;
-            height: ${style.height * correction.scale}px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-          ">
-            <div style="
-              width: ${iconSize}px;
-              height: ${iconSize}px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            ">${iconSVG}</div>
-            ${el.showLabel && el.content ? `
-              <span style="
-                margin-left: 8px;
-                font-family: ${style.fontFamily || 'Arial, sans-serif'};
-                font-size: ${style.fontSize ? style.fontSize * 0.7 : 10}px;
-                font-weight: ${style.fontWeight || 'normal'};
-                color: ${style.color || '#374151'};
-                white-space: nowrap;
-              ">${content}</span>
-            ` : ''}
-          </div>
-        `
-        break
-
-      case 'line':
-        const isSolid = !el.lineStyle || el.lineStyle === 'solid'
-        const isHorizontal = el.lineOrientation === 'horizontal'
-
-        let lineStyleCss = ''
-        if (isSolid) {
-          lineStyleCss = `background-color: ${style.backgroundColor || '#000000'};`
-        } else {
-          // Dashed or Dotted
-          lineStyleCss = `background-color: transparent;`
-          if (isHorizontal) {
-            lineStyleCss += `border-top: ${style.height}px ${el.lineStyle} ${style.backgroundColor || '#000000'};`
-          } else {
-            lineStyleCss += `border-left: ${style.width}px ${el.lineStyle} ${style.backgroundColor || '#000000'};`
-          }
-        }
-
-        elementHTML = `
-          <div style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            ${lineStyleCss}
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-          "></div>
-        `
-        break
-
-      case 'link':
-        const linkIcon = ICON_SVGS.external
-        elementHTML = `
-          <a href="${el.url || '#'}" target="_blank" style="
-            position: absolute;
-            left: ${el.x}px;
-            top: ${el.y}px;
-            width: ${style.width}px;
-            height: ${style.height}px;
-            font-family: ${style.fontFamily || 'Arial, sans-serif'};
-            font-size: ${style.fontSize || 14}px;
-            font-weight: ${style.fontWeight || 'normal'};
-            color: ${style.color || '#0066cc'};
-            text-decoration: ${style.linkDecoration || 'none'};
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: ${style.padding || 8}px;
-            z-index: ${style.zIndex || 1};
-            opacity: ${style.opacity || 1};
-            transform: rotate(${style.rotation || 0}deg);
-            transform-origin: top left;
-          ">
-            <div style="
-              width: 16px;
-              height: 16px;
-              margin-right: 6px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            ">${linkIcon}</div>
-            <span style="
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-            ">${content}</span>
-          </a>
-        `
-        break
-    }
-
-    return elementHTML
-  }
-
   return `
     <div style="position: relative; width: ${width}px; height: ${height}px; page-break-after: always; overflow: hidden; background: white;">
-      ${elements.map(renderElement).join('')}
+      ${elements.map(el => generateElementHTML(el)).join('')}
     </div>
   `
 }
 
+import { z } from 'zod'
+
+const ElementStyleSchema = z.object({
+  width: z.number().max(2000),
+  height: z.number().max(3000),
+  fontSize: z.number().max(200).optional(),
+  fontFamily: z.string().optional(),
+  color: z.string().optional(),
+  backgroundColor: z.string().optional(),
+  borderWidth: z.number().optional(),
+  borderColor: z.string().optional(),
+  borderRadius: z.number().optional(),
+  fontWeight: z.union([z.string(), z.number()]).optional(),
+  lineHeight: z.number().optional(),
+  textAlign: z.string().optional(),
+  zIndex: z.number().optional(),
+  padding: z.number().optional(),
+  rotation: z.number().optional(),
+  opacity: z.number().optional(),
+}).passthrough()
+
+const ElementSchema = z.object({
+  id: z.string(),
+  type: z.string(), // We validate types in code, but Zod can be strict if needed
+  x: z.number(),
+  y: z.number(),
+  content: z.string().max(50000).optional(), // Increased limit for images/large text
+  style: ElementStyleSchema,
+  pageIndex: z.number(),
+  iconType: z.string().optional(),
+  url: z.string().optional(),
+  lineOrientation: z.string().optional(),
+  lineStyle: z.string().optional(),
+}).passthrough()
+
+const RequestSchema = z.object({
+  pages: z.array(z.object({
+    id: z.string(),
+    elements: z.array(ElementSchema).max(1000)
+  })).max(100),
+  title: z.string().max(255).optional(),
+  width: z.number().max(5000).optional(),
+  height: z.number().max(5000).optional(),
+})
+
 export async function POST(request: NextRequest) {
   let browser = null
   try {
-    const body = await request.json()
-    const { pages, title = 'document', width = 794, height = 1123 } = body
+    const rawBody = await request.json()
+    const result = RequestSchema.safeParse(rawBody)
 
-    if (!pages || !Array.isArray(pages) || pages.length === 0) {
-      return NextResponse.json({ error: 'Invalid pages data' }, { status: 400 })
+    if (!result.success) {
+      return NextResponse.json({
+        error: 'Invalid request data',
+        details: result.error.errors
+      }, { status: 400 })
     }
+
+    const { pages, title = 'document', width = 794, height = 1123 } = result.data
 
     const executablePath = await findChrome()
     console.log(`Generating PDF with ${pages.length} pages...`)

@@ -107,6 +107,12 @@ interface EditorState {
     distributeElements: (axis: 'horizontal' | 'vertical') => void
     splitElement: (id: string) => void
     mergeElements: () => void
+
+    // History
+    undo: () => void
+    redo: () => void
+    canUndo: boolean
+    canRedo: boolean
 }
 
 const DEFAULT_STYLE: ElementStyle = {
@@ -125,10 +131,31 @@ const DEFAULT_STYLE: ElementStyle = {
     zIndex: 1,
     opacity: 1,
     padding: 8,
-    resizeMode: 'fixed', // Default: stable layout like Canva/Figma
+    resizeMode: 'fixed',
 }
 
 const snapToInt = (val: number) => Math.round(val)
+
+const history: EditorPage[][] = []
+let historyIndex = -1
+const MAX_HISTORY = 50
+
+const saveHistory = (pages: EditorPage[]) => {
+    // Deep clone to avoid mutations in history
+    const snapshot = JSON.parse(JSON.stringify(pages))
+
+    // If we're not at the end of history, remove future entries
+    if (historyIndex < history.length - 1) {
+        history.splice(historyIndex + 1)
+    }
+
+    history.push(snapshot)
+    if (history.length > MAX_HISTORY) {
+        history.shift()
+    } else {
+        historyIndex++
+    }
+}
 
 export const useEditorStore = create<EditorState>((set, get) => ({
     activeTab: 'document',
@@ -151,22 +178,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                         resizeMode: 'auto-height',
                     },
                     pageIndex: 0
-                },
-                {
-                    id: 'el-2',
-                    type: 'paragraph',
-                    x: 50,
-                    y: 130,
-                    content: 'Start typing your content here. Text will automatically wrap and the box will grow as you type. Try clicking the text to edit it!',
-                    style: {
-                        ...DEFAULT_STYLE,
-                        width: 500,
-                        height: 100,
-                        fontSize: 14,
-                        lineHeight: 1.6,
-                        resizeMode: 'auto-height',
-                    },
-                    pageIndex: 0
                 }
             ]
         }
@@ -178,11 +189,38 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     zoom: 100,
     importPrecision: 'precise',
 
+    canUndo: false,
+    canRedo: false,
+
+    undo: () => {
+        if (historyIndex > 0) {
+            historyIndex--
+            set({
+                pages: JSON.parse(JSON.stringify(history[historyIndex])),
+                canUndo: historyIndex > 0,
+                canRedo: historyIndex < history.length - 1
+            })
+        }
+    },
+
+    redo: () => {
+        if (historyIndex < history.length - 1) {
+            historyIndex++
+            set({
+                pages: JSON.parse(JSON.stringify(history[historyIndex])),
+                canUndo: historyIndex > 0,
+                canRedo: historyIndex < history.length - 1
+            })
+        }
+    },
+
     setTab: (tab) => set({ activeTab: tab }),
     setImportPrecision: (precision) => set({ importPrecision: precision }),
 
     addElement: (type, x = 100, y = 100) => {
+        saveHistory(get().pages)
         const { pages } = get()
+        // ... rest of addElement ...
         const targetPageIndex = pages.length - 1
         const id = `el-${crypto.randomUUID()}`
 
@@ -237,6 +275,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     addSocialIcon: (iconType) => {
+        saveHistory(get().pages)
         const { pages } = get()
         const targetPageIndex = pages.length - 1
         const id = `icon-${crypto.randomUUID()}`
@@ -266,6 +305,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     addLine: (orientation) => {
+        saveHistory(get().pages)
         const { pages } = get()
         const targetPageIndex = pages.length - 1
         const id = `line-${crypto.randomUUID()}`
@@ -299,6 +339,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     updateElement: (id, updates) => {
+        saveHistory(get().pages)
         set((state) => {
             const updatedPages = state.pages.map((page) => {
                 const elements = page.elements.map((el) => {
@@ -319,6 +360,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     updateElementStyle: (id, styleUpdates) => {
+        saveHistory(get().pages)
         set((state) => {
             const updatedPages = state.pages.map((page) => {
                 const elements = page.elements.map((el) => {
@@ -339,6 +381,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     removeElement: (id) => {
+        saveHistory(get().pages)
         set((state) => {
             const updatedPages = state.pages.map((page) => ({
                 ...page,
@@ -355,6 +398,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     selectElement: (id) => set({ selectedIds: id ? [id] : [] }),
 
     moveElement: (id, x, y) => {
+        // Move is high frequency, so we don't save history here usually
+        // but for completeness we can, or just save on "move end" if we had that.
+        // For now, let's keep it responsive without history on every pixel.
         set((state) => {
             const updatedPages = state.pages.map((page) => {
                 const elements = page.elements.map((el) =>
@@ -369,6 +415,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     resizeElement: (id, width, height) => {
+        // Same as move
         set((state) => {
             const updatedPages = state.pages.map((page) => {
                 const elements = page.elements.map((el) =>
@@ -459,6 +506,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     setPages: (newPages) => set({ pages: newPages }),
 
     addPage: () => {
+        saveHistory(get().pages)
         const { pages } = get()
         const newPage: EditorPage = {
             id: `page-${crypto.randomUUID()}`,
@@ -468,6 +516,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     removePage: (index) => {
+        saveHistory(get().pages)
         const { pages } = get()
         if (pages.length <= 1) return
 
@@ -480,6 +529,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     alignElements: (direction) => {
+        saveHistory(get().pages)
         const { pages, selectedIds } = get()
         if (selectedIds.length < 2) return
 
@@ -537,6 +587,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     distributeElements: (axis) => {
+        saveHistory(get().pages)
         const { pages, selectedIds } = get()
         if (selectedIds.length < 3) return
 
@@ -580,6 +631,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     splitElement: (id) => {
+        saveHistory(get().pages)
         set((state) => {
             const el = state.pages.flatMap(p => p.elements).find(item => item.id === id)
             if (!el || !el.originalItems || el.originalItems.length <= 1) return state
@@ -624,6 +676,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     },
 
     mergeElements: () => {
+        saveHistory(get().pages)
         const { pages, selectedIds } = get()
         if (selectedIds.length < 2) return
 
