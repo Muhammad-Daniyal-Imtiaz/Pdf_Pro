@@ -50,6 +50,7 @@ export interface EditorElement {
     pageIndex: number
     isImported?: boolean
     isModified?: boolean
+    isAIGenerated?: boolean
     pdfX?: number
     pdfY?: number
     pdfW?: number
@@ -135,7 +136,7 @@ const DEFAULT_STYLE: ElementStyle = {
     zIndex: 1,
     opacity: 1,
     padding: 8,
-    resizeMode: 'fixed',
+    resizeMode: 'auto-width', // Changed from 'fixed' to 'auto-width' for manual elements
 }
 
 const snapToInt = (val: number) => Math.round(val)
@@ -179,7 +180,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                         height: 60,
                         fontSize: 32,
                         fontWeight: 700,
-                        resizeMode: 'fixed',
+                        resizeMode: 'auto-width',
                     },
                     pageIndex: 0
                 }
@@ -256,7 +257,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     height: 50,
                     fontSize: 24,
                     fontWeight: 700,
-                    resizeMode: 'fixed',
+                    resizeMode: 'auto-width',
                     ...itemOverrides.style
                 }
                 break
@@ -267,7 +268,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     width: 400,
                     height: 80,
                     fontSize: 14,
-                    resizeMode: 'fixed',
+                    resizeMode: 'auto-height',
                     ...itemOverrides.style
                 }
                 break
@@ -278,7 +279,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     width: 200,
                     height: 40,
                     fontSize: 14,
-                    resizeMode: 'fixed',
+                    resizeMode: 'auto-width',
                     ...itemOverrides.style
                 }
                 break
@@ -290,7 +291,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     height: 40,
                     fontSize: 14,
                     color: '#2563eb',
-                    resizeMode: 'fixed',
+                    resizeMode: 'auto-width',
                     ...itemOverrides.style
                 }
                 break
@@ -303,7 +304,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     backgroundColor: '#f3f4f6',
                     borderWidth: 1,
                     borderColor: '#d1d5db',
-                    resizeMode: 'fixed',
+                    resizeMode: 'auto-height',
                     ...itemOverrides.style
                 }
                 break
@@ -596,7 +597,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                             ...page.elements[idx],
                             ...processedChange,
                             style: { ...page.elements[idx].style, ...processedChange.style },
-                            isModified: true
+                            isModified: true,
+                            // Preserve AI-generated flag if present
+                            isAIGenerated: processedChange.isAIGenerated || page.elements[idx].isAIGenerated
                         }
                         found = true
                     }
@@ -605,15 +608,24 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 // 2. If not found, add as new to current page
                 if (!found) {
                     const currentPageIdx = updatedPages.length - 1
+                    const isTextElement = ['heading', 'paragraph', 'text', 'container'].includes(processedChange.type)
+                    
+                    // For AI-generated text elements, use auto-height to prevent truncation
+                    const resizeMode = processedChange.style?.resizeMode || 
+                        (isTextElement ? 'auto-height' : 'fixed')
+                    
                     const newEl = {
                         ...processedChange,
                         id: change.id || `ai-${crypto.randomUUID()}`,
                         pageIndex: currentPageIdx,
                         isModified: true,
+                        isAIGenerated: processedChange.isAIGenerated || true,
                         style: {
                             ...DEFAULT_STYLE,
                             width: 200,
                             height: 60,
+                            // CRITICAL: Use auto-height for AI-generated text elements
+                            resizeMode: resizeMode,
                             ...processedChange.style
                         }
                     }

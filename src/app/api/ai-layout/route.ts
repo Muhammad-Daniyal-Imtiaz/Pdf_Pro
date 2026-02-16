@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { aiService } from '@/app/lib/ai-service'
+import { processAIGeneratedElements, preventElementCollisions } from '@/app/lib/server-text-measurement'
 
 export async function POST(req: NextRequest) {
     try {
@@ -13,11 +14,18 @@ export async function POST(req: NextRequest) {
 
         const layoutChanges = await aiService.generateLayoutUpdate(prompt, context || '[]')
 
-        console.log(`✅ AI generated ${layoutChanges.length} layout changes`)
+        // Process AI-generated elements to ensure proper dimensions and no truncation
+        console.log(`📏 Processing ${layoutChanges.length} elements for optimal dimensions...`)
+        let processedChanges = processAIGeneratedElements(layoutChanges)
+        
+        // Prevent element collisions
+        processedChanges = preventElementCollisions(processedChanges)
+
+        console.log(`✅ AI generated ${processedChanges.length} layout changes with auto-height`)
 
         return NextResponse.json({
             success: true,
-            changes: layoutChanges
+            changes: processedChanges
         })
 
     } catch (error: any) {

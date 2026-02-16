@@ -156,6 +156,10 @@ export default function PDFRenderer({
     const renderTextContent = (isInsideContainer: boolean = false) => {
       const textMeasurementService = getTextMeasurementService()
       const mode = elStyle.resizeMode || 'fixed'
+      
+      // For AI-generated elements with auto-height, we need special handling
+      const isAutoHeight = mode === 'auto-height' || mode === 'auto-both'
+      const isAutoWidth = mode === 'auto-width' || mode === 'auto-both'
 
       const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
         if (!isEditing) return
@@ -173,18 +177,18 @@ export default function PDFRenderer({
             fontWeight: elStyle.fontWeight || 400,
             lineHeight: elStyle.lineHeight || 1.5
           },
-          mode === 'auto-width' || mode === 'auto-both' ? undefined : availableW
+          isAutoWidth ? undefined : availableW
         )
 
         let newW = exactW
         let newH = exactH
 
         // Logic for different resize modes
-        if (mode === 'auto-width' || mode === 'auto-both') {
+        if (isAutoWidth) {
           newW = Math.ceil(measurement.width + (padding * 2) + 12)
         }
 
-        if (mode === 'auto-height' || mode === 'auto-both') {
+        if (isAutoHeight) {
           newH = Math.ceil(measurement.height + (padding * 2))
         }
 
@@ -197,7 +201,7 @@ export default function PDFRenderer({
         }
       }
 
-      // Check overflow for fixed mode
+      // Check overflow for fixed mode only (auto-height should never overflow)
       const overflow = mode === 'fixed' ? textMeasurementService.checkOverflow(
         content,
         {
@@ -238,13 +242,15 @@ export default function PDFRenderer({
               outline: 'none',
               wordWrap: 'break-word',
               overflowWrap: 'break-word',
-              whiteSpace: mode === 'auto-width' ? 'nowrap' : 'pre-wrap',
+              whiteSpace: isAutoWidth ? 'nowrap' : 'pre-wrap',
               cursor: isEditing ? 'text' : 'inherit',
               userSelect: isEditing ? 'text' : 'none',
               boxSizing: 'border-box',
               WebkitFontSmoothing: 'antialiased',
               display: 'block',
-              overflow: mode === 'fixed' ? 'hidden' : 'visible'
+              // CRITICAL: For auto-height, use visible overflow to show all content
+              // For fixed mode, use hidden to indicate truncation
+              overflow: isAutoHeight ? 'visible' : (mode === 'fixed' ? 'hidden' : 'visible')
             }}
             onClick={(e) => isEditing && e.stopPropagation()}
             dangerouslySetInnerHTML={isEditing ? undefined : { __html: (content || '').replace(/\n/g, '<br>') }}
@@ -252,8 +258,8 @@ export default function PDFRenderer({
             {isEditing ? (content || '') : null}
           </div>
 
-          {/* OVERFLOW INDICATOR */}
-          {overflow.isOverflowing && !isEditing && (
+          {/* OVERFLOW INDICATOR - Only for fixed mode */}
+          {overflow.isOverflowing && !isEditing && mode === 'fixed' && (
             <div
               className="absolute -bottom-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center shadow-lg z-50 cursor-pointer pointer-events-auto"
               title="Content exceeds container size. Click to expand."

@@ -58,20 +58,18 @@ export const AI_PROMPTS = {
     Act as a Professional Document Architect (Production Grade).
     Your goal is to create a pixel-perfect, collision-free PDF layout.
     
-    CRITICAL CHANGE: DO NOT USE 'auto-height' or 'auto-width'. 
-    You MUST manually calculate and provide absolute 'width' and 'height' for EVERY element.
+    CRITICAL INSTRUCTIONS FOR TEXT ELEMENTS:
+    1. ALWAYS use 'resizeMode: 'auto-height'' for ALL text elements (heading, paragraph, text, container).
+    2. Calculate 'width' based on desired layout (300px for columns, 700px for full width).
+    3. Set 'height' to approximately 40-60px as initial value - it will auto-expand to fit content.
+    4. The resizeMode: 'auto-height' ensures text NEVER gets truncated.
     
-    FORMULA FOR TEXT BOXES (Estimation):
-    - Width: Fixed as defined by you (e.g., 300px for columns, 700px for full width).
-    - Height: (Length of text / (Width / 8)) * (FontSize * 1.5). 
-    - Safe spacing: Add 20-40px extra margin in 'y' between different elements.
-
     LAYOUT PRINCIPLES:
     - Manual Collision Avoidance: You are responsible for ensuring Element B's 'y' coordinate is ALWAYS greater than Element A's (y + height + margin).
     - Dimensions: A4 is 794px x 1123px.
     - Margins: 60px all sides.
 
-    ELEMENT SCHEMA (Fixed Dimensions Only):
+    ELEMENT SCHEMA (Use auto-height for all text):
     {
         id: string; 
         type: 'heading' | 'paragraph' | 'text' | 'social-icon' | 'image' | 'line' | 'container';
@@ -79,8 +77,8 @@ export const AI_PROMPTS = {
         y: number;
         content: string;
         style: {
-            width: number;  // Absolute value
-            height: number; // Absolute value
+            width: number;  // Fixed width as per layout design
+            height: number; // Initial height (40-60px), auto-height will expand it
             fontSize: number;  // Paragraph (14-16), Subheading (20-24), Heading(32+)
             fontWeight: number | string; // 400 (normal), 600 (semibold), 700 (bold)
             textAlign: 'left' | 'center' | 'right';
@@ -89,7 +87,8 @@ export const AI_PROMPTS = {
             borderRadius: number;
             borderWidth: number;
             borderColor: string;
-            resizeMode: 'fixed'; // MANDATORY: keep as fixed
+            resizeMode: 'auto-height'; // MANDATORY: Use auto-height for ALL text
+            padding: number; // Recommended: 8-12px
         }
     }
 
@@ -100,13 +99,15 @@ export const AI_PROMPTS = {
     "${prompt}"
 
     INSTRUCTIONS:
-    1. CALCULATE BOUNDS: Determine height of each text block by estimating wrap-around.
-    2. STAGGER POSITION: Set 'y' coordinates to prevent ANY overlap.
-    3. HIERARCHY: Mix Heading, Subheading (bold text), and Paragraph for professional look.
-    4. ICONS: Use 'social-icon' with matching labels (linkedin, mail, github) for contact sections.
-    5. DESIGN: Use 'line' elements for borders or section dividers.
+    1. POSITION: Set x, y coordinates for each element.
+    2. WIDTH: Determine fixed width based on layout (full width = 700px, half = 350px, etc).
+    3. HEIGHT: Set to 40-60px initially, auto-height will expand to fit content.
+    4. STAGGER: Ensure 'y' coordinates prevent overlap (previous element y + height + 20px margin).
+    5. HIERARCHY: Mix Heading, Subheading (bold text), and Paragraph for professional look.
+    6. ICONS: Use 'social-icon' with matching labels (linkedin, mail, github) for contact sections.
+    7. DESIGN: Use 'line' elements for borders or section dividers.
 
-    OUTPUT: Return ONLY a JSON array of the updated/new elements. Use exact pixels for everything.
+    OUTPUT: Return ONLY a JSON array of the updated/new elements. resizeMode MUST be 'auto-height' for all text elements.
   `,
   mcpAICanvasExport: (canvasContext: string) => `
     Act as a Professional Document Architect.
