@@ -5,6 +5,61 @@ interface RenderContext {
     isPDF?: boolean
 }
 
+// Character width estimates for text measurement (in pixels per font-size unit)
+const CHAR_WIDTH_FACTORS: Record<number, number> = {
+    300: 0.45,  // Light
+    400: 0.50,  // Normal
+    500: 0.52,  // Medium
+    600: 0.55,  // Semibold
+    700: 0.60,  // Bold
+}
+
+function getCharWidthFactor(fontWeight: number | string | undefined): number {
+    const weight = typeof fontWeight === 'string' ? parseInt(fontWeight) || 400 : fontWeight || 400
+    return CHAR_WIDTH_FACTORS[weight] || 0.50
+}
+
+/**
+ * Calculates the actual height needed for text content
+ * Used for WYSIWYG PDF generation
+ */
+function calculateTextHeight(
+    content: string,
+    style: any,
+    scale: number = 1
+): number {
+    const fontSize = (style.fontSize || 14) * scale
+    const fontWeight = style.fontWeight || 400
+    const lineHeight = style.lineHeight || 1.5
+    const padding = (style.padding || 0) * 2 * scale
+    const width = (style.width || 200) * scale
+    
+    if (!content) return fontSize * lineHeight + padding
+    
+    const charWidth = fontSize * getCharWidthFactor(fontWeight)
+    const avgCharsPerLine = Math.max(1, Math.floor(width / charWidth))
+    const lines = content.split('\n')
+    let totalLines = 0
+    
+    lines.forEach(line => {
+        const lineCount = Math.ceil(line.length / avgCharsPerLine)
+        totalLines += Math.max(1, lineCount)
+    })
+    
+    return Math.ceil(totalLines * fontSize * lineHeight + padding)
+}
+
+/**
+ * Determines if element should use auto-height behavior
+ */
+function shouldAutoHeight(el: EditorElement): boolean {
+    if (!['heading', 'paragraph', 'text', 'container'].includes(el.type)) {
+        return false
+    }
+    const resizeMode = el.style?.resizeMode
+    return resizeMode === 'auto-height' || resizeMode === 'auto-both' || el.isAIGenerated === true
+}
+
 const ICON_SVGS: Record<string, string> = {
     linkedin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#0077b5" stroke-width="2" fill="none"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>`,
     email: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#EA4335" stroke-width="2" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><path d="m22 6-10 7L2 6"/></svg>`,
@@ -33,19 +88,25 @@ export function generateElementHTML(
 ): string {
     const { scale = 1, isPDF = false } = context
     const style = el.style || {} as any
+    
+    // CRITICAL: For auto-height elements, calculate actual height based on content
+    const isAutoHeight = shouldAutoHeight(el)
+    const actualHeight = isAutoHeight 
+        ? calculateTextHeight(el.content || '', style, scale)
+        : (style.height || 40) * scale
 
     const baseStyles: any = {
         position: 'absolute',
         left: `${el.x * scale}px`,
         top: `${el.y * scale}px`,
         width: `${style.width * scale}px`,
-        height: `${style.height * scale}px`,
+        height: `${actualHeight}px`, // Use calculated height for auto-height
         fontFamily: style.fontFamily || 'Inter, Arial, sans-serif',
         fontSize: `${(style.fontSize || 14) * scale}px`,
         fontWeight: style.fontWeight || 'normal',
         fontStyle: style.fontStyle || 'normal',
         color: style.color || '#000000',
-        lineHeight: style.lineHeight || 1.5,  // CRITICAL: Same value!
+        lineHeight: style.lineHeight || 1.5,
         textAlign: style.textAlign || 'left',
         padding: `${(style.padding || 0) * scale}px`,
         zIndex: style.zIndex || 1,
@@ -56,10 +117,13 @@ export function generateElementHTML(
         border: style.borderWidth ? `${style.borderWidth * scale}px solid ${style.borderColor || '#000'}` : 'none',
         borderRadius: `${(style.borderRadius || 0) * scale}px`,
         boxSizing: 'border-box',
-        display: 'flex',
-        alignItems: 'flex-start',
+        display: 'block', // Changed from flex to block for text flow
         '-webkit-font-smoothing': 'antialiased',
         'text-rendering': 'optimizeLegibility',
+        overflow: 'visible', // Allow content to be fully visible
+        'white-space': 'pre-wrap',
+        'word-wrap': 'break-word',
+        'overflow-wrap': 'break-word',
     }
 
     // Convert styles to CSS string
@@ -75,11 +139,12 @@ export function generateElementHTML(
         case 'paragraph':
         case 'text':
         case 'container':
-            return `<div style="${styleString}">${content}</div>`
+            // For auto-height elements, render content with line breaks and proper wrapping
+            return `<div style="${styleString}">${content.replace(/\n/g, '<br>')}</div>`
 
         case 'image':
             return el.content
-                ? `<div style="${styleString}; overflow: hidden"><img src="${el.content}" style="width: 100%; height: 100%; object-fit: contain; display: block;" /></div>`
+                ? `<div style="${styleString}; overflow: hidden; height: ${(style.height || 150) * scale}px;"><img src="${el.content}" style="width: 100%; height: 100%; object-fit: contain; display: block;" /></div>`
                 : `<div style="${styleString}"></div>`
 
         case 'social-icon':

@@ -203,41 +203,102 @@ export function processAIGeneratedElements(
 }
 
 /**
- * Validates and fixes element positions to prevent overlaps
- * Staggers elements vertically if they collide
+ * Smart Layout Engine - Production Grade Collision Prevention
+ * Calculates optimal positions for new elements to prevent overlaps
  */
-export function preventElementCollisions(
-    elements: any[],
-    margin: number = 20
-): any[] {
-    const sorted = [...elements].sort((a, b) => (a.y || 0) - (b.y || 0))
-    const result: any[] = []
+export interface LayoutBounds {
+    x: number
+    y: number
+    width: number
+    height: number
+}
+
+/**
+ * Finds the next available vertical position that doesn't collide
+ */
+export function findNextAvailableY(
+    newElement: LayoutBounds,
+    existingElements: LayoutBounds[],
+    startY: number = 80,
+    minMargin: number = 30
+): number {
+    let y = Math.max(startY, newElement.y)
     
-    for (let i = 0; i < sorted.length; i++) {
-        const current = sorted[i]
-        let y = current.y || 50
+    // Sort existing elements by Y position
+    const sorted = [...existingElements].sort((a, b) => a.y - b.y)
+    
+    // Check for collisions and find next available position
+    let hasCollision = true
+    let iterations = 0
+    const maxIterations = 100
+    
+    while (hasCollision && iterations < maxIterations) {
+        hasCollision = false
+        iterations++
         
-        // Check against all previous elements
-        for (let j = 0; j < result.length; j++) {
-            const prev = result[j]
-            const prevBottom = (prev.y || 0) + (prev.style?.height || 40)
-            const currentTop = y
-            
-            // If overlapping vertically and horizontally
+        for (const existing of sorted) {
+            // Check horizontal overlap
             const horizontalOverlap = 
-                (current.x || 0) < ((prev.x || 0) + (prev.style?.width || 100)) &&
-                ((current.x || 0) + (current.style?.width || 100)) > (prev.x || 0)
+                newElement.x < (existing.x + existing.width) &&
+                (newElement.x + newElement.width) > existing.x
             
-            if (horizontalOverlap && currentTop < prevBottom + margin) {
-                y = prevBottom + margin
+            // Check vertical overlap
+            const newBottom = y + newElement.height
+            const existingTop = existing.y
+            const existingBottom = existing.y + existing.height
+            
+            if (horizontalOverlap) {
+                if (y < existingBottom + minMargin && newBottom > existingTop - minMargin) {
+                    // Collision detected - move down
+                    y = existingBottom + minMargin
+                    hasCollision = true
+                    break
+                }
             }
         }
-        
-        result.push({
-            ...current,
-            y: Math.round(y)
-        })
     }
     
-    return result
+    return Math.round(y)
+}
+
+/**
+ * Checks if an element would collide with existing elements
+ */
+export function wouldCollide(
+    element: LayoutBounds,
+    existingElements: LayoutBounds[],
+    margin: number = 20
+): boolean {
+    for (const existing of existingElements) {
+        const horizontalOverlap = 
+            element.x < (existing.x + existing.width + margin) &&
+            (element.x + element.width) > (existing.x - margin)
+        
+        const verticalOverlap = 
+            element.y < (existing.y + existing.height + margin) &&
+            (element.y + element.height) > (existing.y - margin)
+        
+        if (horizontalOverlap && verticalOverlap) {
+            return true
+        }
+    }
+    return false
+}
+
+/**
+ * Calculates the bounding box of all elements
+ */
+export function getContentBounds(elements: LayoutBounds[]): { minY: number; maxY: number; maxBottom: number } {
+    if (elements.length === 0) {
+        return { minY: 80, maxY: 80, maxBottom: 80 }
+    }
+    
+    const ys = elements.map(e => e.y)
+    const bottoms = elements.map(e => e.y + e.height)
+    
+    return {
+        minY: Math.min(...ys),
+        maxY: Math.max(...ys),
+        maxBottom: Math.max(...bottoms)
+    }
 }

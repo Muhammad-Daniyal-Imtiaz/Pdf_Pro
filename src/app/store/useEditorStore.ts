@@ -227,13 +227,34 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const { pages } = get()
         const targetPageIndex = pages.length - 1
         const id = `el-${crypto.randomUUID()}`
+        const targetPage = pages[targetPageIndex]
 
-        // Extract x, y from overrides or defaults
-        const x = itemOverrides.x ?? 100
-        const y = itemOverrides.y ?? 100
+        // Smart positioning: Calculate y position based on existing elements
+        const getSmartYPosition = (): number => {
+            // If user specified position, use that
+            if (itemOverrides.y !== undefined) return itemOverrides.y
+            
+            // Get bounds of existing elements
+            const existingElements = targetPage.elements
+            if (existingElements.length === 0) {
+                // First element - start at 80px from top
+                return 80
+            }
+            
+            // Find the bottommost element
+            const bottoms = existingElements.map(el => (el.y || 0) + (el.style?.height || 40))
+            const maxBottom = Math.max(...bottoms)
+            
+            // Add 30px margin for clean spacing
+            return maxBottom + 30
+        }
 
-        const snappedX = snapToInt(x)
-        const snappedY = snapToInt(y)
+        // Extract x, y from overrides or use smart positioning
+        const x = itemOverrides.x ?? 60  // Default left margin
+        const y = getSmartYPosition()
+
+        const snappedX = snapToInt(Math.min(Math.max(x, 10), 700)) // Keep within margins
+        const snappedY = snapToInt(Math.max(y, 80)) // Keep within top margin
         const baseStyle = { ...DEFAULT_STYLE }
 
         let newElement: EditorElement = {
@@ -253,11 +274,12 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.content = itemOverrides.content || 'Heading'
                 newElement.style = {
                     ...baseStyle,
-                    width: 300,
+                    width: 500,  // Wider for headings
                     height: 50,
-                    fontSize: 24,
+                    fontSize: 28,
                     fontWeight: 700,
                     resizeMode: 'auto-width',
+                    color: '#1a1a1a',
                     ...itemOverrides.style
                 }
                 break
@@ -265,10 +287,11 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.content = itemOverrides.content || 'Paragraph text'
                 newElement.style = {
                     ...baseStyle,
-                    width: 400,
+                    width: 500,
                     height: 80,
                     fontSize: 14,
                     resizeMode: 'auto-height',
+                    lineHeight: 1.6,
                     ...itemOverrides.style
                 }
                 break
@@ -299,8 +322,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.content = itemOverrides.content || 'Click to edit text'
                 newElement.style = {
                     ...baseStyle,
-                    width: 200,
-                    height: 200,
+                    width: 300,
+                    height: 120,
                     backgroundColor: '#f3f4f6',
                     borderWidth: 1,
                     borderColor: '#d1d5db',
@@ -312,8 +335,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.content = itemOverrides.content || ''
                 newElement.style = {
                     ...baseStyle,
-                    width: 200,
-                    height: 150,
+                    width: 250,
+                    height: 180,
                     backgroundColor: '#e5e7eb',
                     resizeMode: 'fixed',
                     ...itemOverrides.style

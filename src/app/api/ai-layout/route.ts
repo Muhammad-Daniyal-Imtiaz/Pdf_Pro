@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { aiService } from '@/app/lib/ai-service'
-import { processAIGeneratedElements, preventElementCollisions } from '@/app/lib/server-text-measurement'
+import { processAIGeneratedElements, findNextAvailableY, LayoutBounds } from '@/app/lib/server-text-measurement'
 
 export async function POST(req: NextRequest) {
     try {
@@ -18,10 +18,37 @@ export async function POST(req: NextRequest) {
         console.log(`📏 Processing ${layoutChanges.length} elements for optimal dimensions...`)
         let processedChanges = processAIGeneratedElements(layoutChanges)
         
-        // Prevent element collisions
-        processedChanges = preventElementCollisions(processedChanges)
-
-        console.log(`✅ AI generated ${processedChanges.length} layout changes with auto-height`)
+        // Prevent element collisions with smart positioning
+        // If elements overlap, find next available Y position
+        const existingElements: LayoutBounds[] = []
+        processedChanges = processedChanges.map((change, index) => {
+            const newElement: LayoutBounds = {
+                x: change.x || 60,
+                y: change.y || 80,
+                width: change.style?.width || 300,
+                height: change.style?.height || 60
+            }
+            
+            // Check if this position would collide with existing elements
+            const adjustedY = findNextAvailableY(newElement, existingElements, newElement.y, 30)
+            
+            // Add to existing elements for next iteration
+            existingElements.push({
+                ...newElement,
+                y: adjustedY
+            })
+            
+            return {
+                ...change,
+                y: adjustedY,
+                style: {
+                    ...change.style,
+                    resizeMode: 'auto-height' // Force auto-height for all AI text elements
+                }
+            }
+        })
+        
+        console.log(`✅ AI generated ${processedChanges.length} layout changes with collision prevention`)
 
         return NextResponse.json({
             success: true,

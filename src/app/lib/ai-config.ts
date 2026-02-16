@@ -55,59 +55,73 @@ export const AI_PROMPTS = {
     - Ensure the document feels like a professionally designed brochure, proposal, or report.
   `,
   layoutIntelligence: (prompt: string, currentContext: string) => `
-    Act as a Professional Document Architect (Production Grade).
-    Your goal is to create a pixel-perfect, collision-free PDF layout.
+    Act as a World-Class Document Architect & Layout Engineer (PDF Expert).
+    Your goal is to create PERFECT, collision-free PDF layouts with professional typography.
     
-    CRITICAL INSTRUCTIONS FOR TEXT ELEMENTS:
-    1. ALWAYS use 'resizeMode: 'auto-height'' for ALL text elements (heading, paragraph, text, container).
-    2. Calculate 'width' based on desired layout (300px for columns, 700px for full width).
-    3. Set 'height' to approximately 40-60px as initial value - it will auto-expand to fit content.
-    4. The resizeMode: 'auto-height' ensures text NEVER gets truncated.
+    === CRITICAL RULES ===
+    1. ABSOLUTE COLLISION PREVENTION: Each element MUST be positioned so it NEVER overlaps another.
+    2. VERTICAL SPACING FORMULA: y_position = previous_element_y + previous_element_height + 30px margin
+    3. AUTO-HEIGHT REQUIRED: ALL text elements MUST use resizeMode: 'auto-height' - NEVER use 'fixed'
+    4. HEIGHT CALCULATION: For auto-height, calculate actual needed height based on content length
     
-    LAYOUT PRINCIPLES:
-    - Manual Collision Avoidance: You are responsible for ensuring Element B's 'y' coordinate is ALWAYS greater than Element A's (y + height + margin).
-    - Dimensions: A4 is 794px x 1123px.
-    - Margins: 60px all sides.
-
-    ELEMENT SCHEMA (Use auto-height for all text):
+    === TYPOGRAPHY HIERARCHY ===
+    - Main Title (H1): fontSize 32-40, fontWeight 700, y starts at 60px from top
+    - Subtitle (H2): fontSize 24-28, fontWeight 600, margin-top 40px from previous
+    - Section Heading (H3): fontSize 18-20, fontWeight 600, margin-top 30px
+    - Body Paragraph: fontSize 14-16, fontWeight 400, lineHeight 1.6, margin-top 20px
+    - Small Text/Captions: fontSize 12, fontWeight 400, margin-top 15px
+    
+    === LAYOUT SPECIFICATIONS ===
+    - Canvas: A4 = 794px x 1123px
+    - Margins: 60px left/right, 80px top/bottom
+    - Content Width: max 674px (794 - 60 - 60)
+    - Default Text Width: 500px for paragraphs, 300px for side notes
+    - Element Spacing: Minimum 30px between elements
+    
+    === HEIGHT CALCULATION FORMULA ===
+    For text elements with auto-height:
+    - Characters per line ≈ width / (fontSize * 0.5)
+    - Estimated lines = content.length / characters_per_line
+    - Height = (estimated lines * fontSize * lineHeight) + (padding * 2) + 10px buffer
+    
+    === ELEMENT SCHEMA ===
     {
-        id: string; 
+        id: string (unique, descriptive like "main-title", "section-1-heading");
         type: 'heading' | 'paragraph' | 'text' | 'social-icon' | 'image' | 'line' | 'container';
-        x: number;
-        y: number;
-        content: string;
+        x: number (60 for left margin, or center using 397 - width/2);
+        y: number (calculated based on previous element position);
+        content: string (the actual text content);
         style: {
-            width: number;  // Fixed width as per layout design
-            height: number; // Initial height (40-60px), auto-height will expand it
-            fontSize: number;  // Paragraph (14-16), Subheading (20-24), Heading(32+)
-            fontWeight: number | string; // 400 (normal), 600 (semibold), 700 (bold)
+            width: number (max 674, typically 500 for full-width text);
+            height: number (calculated based on content - see formula above);
+            fontSize: number (follow typography hierarchy);
+            fontWeight: 400 | 600 | 700;
             textAlign: 'left' | 'center' | 'right';
-            backgroundColor: string;
-            color: string;
-            borderRadius: number;
-            borderWidth: number;
-            borderColor: string;
-            resizeMode: 'auto-height'; // MANDATORY: Use auto-height for ALL text
-            padding: number; // Recommended: 8-12px
+            color: string (use professional colors: #1a1a1a for text, #333333 for headings);
+            backgroundColor: string (transparent or subtle);
+            padding: number (recommended 8-12);
+            resizeMode: 'auto-height'; // CRITICAL: ALWAYS auto-height
+            lineHeight: 1.5-1.6;
         }
     }
 
-    CURRENT LAYOUT CONTEXT:
+    CURRENT LAYOUT CONTEXT (existing elements):
     ${currentContext}
 
     USER REQUEST:
     "${prompt}"
 
-    INSTRUCTIONS:
-    1. POSITION: Set x, y coordinates for each element.
-    2. WIDTH: Determine fixed width based on layout (full width = 700px, half = 350px, etc).
-    3. HEIGHT: Set to 40-60px initially, auto-height will expand to fit content.
-    4. STAGGER: Ensure 'y' coordinates prevent overlap (previous element y + height + 20px margin).
-    5. HIERARCHY: Mix Heading, Subheading (bold text), and Paragraph for professional look.
-    6. ICONS: Use 'social-icon' with matching labels (linkedin, mail, github) for contact sections.
-    7. DESIGN: Use 'line' elements for borders or section dividers.
+    === YOUR TASK ===
+    1. Analyze the request and create a professional document structure
+    2. Calculate EXACT y positions ensuring NO overlaps (use 30px minimum gap)
+    3. Calculate EXACT heights based on content length using the formula
+    4. Center main titles (x = 397 - width/2), left-align body text (x = 60)
+    5. Use diverse font sizes to create visual hierarchy
+    6. Add visual elements (lines as dividers) between sections
+    7. Return a complete, collision-free layout
 
-    OUTPUT: Return ONLY a JSON array of the updated/new elements. resizeMode MUST be 'auto-height' for all text elements.
+    OUTPUT: Return ONLY a valid JSON array of elements. NO markdown, NO explanation.
+    Ensure every text element has resizeMode: 'auto-height'.
   `,
   mcpAICanvasExport: (canvasContext: string) => `
     Act as a Professional Document Architect.
