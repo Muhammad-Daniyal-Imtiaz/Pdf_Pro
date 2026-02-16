@@ -76,7 +76,7 @@ interface EditorState {
     // Actions
     setTab: (tab: 'document' | 'cv' | 'contracts') => void
     setImportPrecision: (precision: 'paragraph' | 'precise' | 'raw') => void
-    addElement: (type: EditorElement['type'], x?: number, y?: number) => void
+    addElement: (type: EditorElement['type'], overrides?: Partial<EditorElement>) => void
     addSocialIcon: (iconType: string) => void
     addLine: (orientation: 'horizontal' | 'vertical') => void
     updateElement: (id: string, updates: Partial<EditorElement>) => void
@@ -221,51 +221,102 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     setTab: (tab) => set({ activeTab: tab }),
     setImportPrecision: (precision) => set({ importPrecision: precision }),
 
-    addElement: (type, x = 100, y = 100) => {
+    addElement: (type, itemOverrides = {}) => {
         saveHistory(get().pages)
         const { pages } = get()
-        // ... rest of addElement ...
         const targetPageIndex = pages.length - 1
         const id = `el-${crypto.randomUUID()}`
 
+        // Extract x, y from overrides or defaults
+        const x = itemOverrides.x ?? 100
+        const y = itemOverrides.y ?? 100
+
         const snappedX = snapToInt(x)
         const snappedY = snapToInt(y)
-        const baseStyle = { ...DEFAULT_STYLE, x: snappedX, y: snappedY }
+        const baseStyle = { ...DEFAULT_STYLE }
 
         let newElement: EditorElement = {
-            id,
             type,
             x: snappedX,
             y: snappedY,
-            content: 'New Element',
-            style: baseStyle,
+            content: itemOverrides.content || 'New Element',
+            style: { ...baseStyle, ...itemOverrides.style },
+            ...itemOverrides,
+            // Ensure ID and PageIndex are fixed for new items
+            id,
             pageIndex: targetPageIndex
         }
 
         switch (type) {
             case 'heading':
-                newElement.content = 'Heading'
-                newElement.style = { ...baseStyle, width: 300, height: 50, fontSize: 24, fontWeight: 700, resizeMode: 'auto-height' }
+                newElement.content = itemOverrides.content || 'Heading'
+                newElement.style = {
+                    ...baseStyle,
+                    width: 300,
+                    height: 50,
+                    fontSize: 24,
+                    fontWeight: 700,
+                    resizeMode: 'auto-height',
+                    ...itemOverrides.style
+                }
                 break
             case 'paragraph':
-                newElement.content = 'Paragraph text'
-                newElement.style = { ...baseStyle, width: 400, height: 80, fontSize: 14, resizeMode: 'auto-height' }
+                newElement.content = itemOverrides.content || 'Paragraph text'
+                newElement.style = {
+                    ...baseStyle,
+                    width: 400,
+                    height: 80,
+                    fontSize: 14,
+                    resizeMode: 'auto-height',
+                    ...itemOverrides.style
+                }
                 break
             case 'text':
-                newElement.content = 'Text'
-                newElement.style = { ...baseStyle, width: 200, height: 40, fontSize: 14, resizeMode: 'auto-height' }
+                newElement.content = itemOverrides.content || 'Text'
+                newElement.style = {
+                    ...baseStyle,
+                    width: 200,
+                    height: 40,
+                    fontSize: 14,
+                    resizeMode: 'auto-height',
+                    ...itemOverrides.style
+                }
                 break
             case 'link':
-                newElement.content = 'https://example.com'
-                newElement.style = { ...baseStyle, width: 250, height: 40, fontSize: 14, color: '#2563eb', resizeMode: 'fixed' }
+                newElement.content = itemOverrides.content || 'https://example.com'
+                newElement.style = {
+                    ...baseStyle,
+                    width: 250,
+                    height: 40,
+                    fontSize: 14,
+                    color: '#2563eb',
+                    resizeMode: 'fixed',
+                    ...itemOverrides.style
+                }
                 break
             case 'container':
-                newElement.content = 'Click to edit text'
-                newElement.style = { ...baseStyle, width: 200, height: 200, backgroundColor: '#f3f4f6', borderWidth: 1, borderColor: '#d1d5db', resizeMode: 'fixed' }
+                newElement.content = itemOverrides.content || 'Click to edit text'
+                newElement.style = {
+                    ...baseStyle,
+                    width: 200,
+                    height: 200,
+                    backgroundColor: '#f3f4f6',
+                    borderWidth: 1,
+                    borderColor: '#d1d5db',
+                    resizeMode: 'fixed',
+                    ...itemOverrides.style
+                }
                 break
             case 'image':
-                newElement.content = ''
-                newElement.style = { ...baseStyle, width: 200, height: 150, backgroundColor: '#e5e7eb', resizeMode: 'fixed' }
+                newElement.content = itemOverrides.content || ''
+                newElement.style = {
+                    ...baseStyle,
+                    width: 200,
+                    height: 150,
+                    backgroundColor: '#e5e7eb',
+                    resizeMode: 'fixed',
+                    ...itemOverrides.style
+                }
                 break
         }
 

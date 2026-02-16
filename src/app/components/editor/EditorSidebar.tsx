@@ -80,9 +80,15 @@ export default function EditorSidebar() {
                             <AIContentGenerator
                                 type="document"
                                 onContentGenerated={(content) => {
-                                    // Map AI content to editor elements
-                                    addElement('heading', { content: content.substring(0, 50) })
-                                    addElement('paragraph', { content })
+                                    // Map AI content to editor elements with staggered positioning
+                                    addElement('heading', {
+                                        content: content.substring(0, 60),
+                                        y: 100
+                                    })
+                                    addElement('paragraph', {
+                                        content: content,
+                                        y: 170
+                                    })
                                 }}
                             />
                         </div>
