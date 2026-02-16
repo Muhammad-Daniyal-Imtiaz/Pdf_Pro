@@ -11,6 +11,7 @@ import {
 import SocialIcons from './SocialIcons'
 import LineControls from './LineControls'
 import TextResizeModeControl from './TextResizeModeControl'
+import AIContentGenerator from '../AIContentGenerator'
 
 const IMAGE_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E"
 
@@ -74,6 +75,18 @@ export default function EditorSidebar() {
             <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 {!isSidebarCollapsed && (
                     <>
+                        {/* AI Section - High Performance MCP */}
+                        <div className="mb-8">
+                            <AIContentGenerator
+                                type="document"
+                                onContentGenerated={(content) => {
+                                    // Map AI content to editor elements
+                                    addElement('heading', { content: content.substring(0, 50) })
+                                    addElement('paragraph', { content })
+                                }}
+                            />
+                        </div>
+
                         {/* Elements Section */}
                         <div className="mb-6">
                             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">

@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { AI_CONFIG } from './ai-config'
+import { AI_CONFIG, AI_PROMPTS } from './ai-config'
 
 class AIService {
   private genAI: GoogleGenerativeAI
@@ -131,6 +131,25 @@ class AIService {
   async generateContractContent(userPrompt: string): Promise<string> {
     const prompt = `Generate contract: ${userPrompt}`
     return this.generateContent(prompt)
+  }
+
+  async generateMarkdownFromPrompt(userPrompt: string): Promise<string> {
+    const prompt = AI_PROMPTS.mcpMarkdown(userPrompt)
+    return this.generateContent(prompt)
+  }
+
+  async generateLayoutUpdate(userPrompt: string, currentContext: string): Promise<any[]> {
+    const prompt = AI_PROMPTS.layoutIntelligence(userPrompt, currentContext)
+    const result = await this.generateContent(prompt)
+
+    try {
+      // Clean the result in case the AI included markdown blocks
+      const jsonStr = result.replace(/```json/g, '').replace(/```/g, '').trim()
+      return JSON.parse(jsonStr)
+    } catch (error) {
+      console.error('Failed to parse AI layout response:', error)
+      throw new Error('AI returned an invalid layout format. Please try again.')
+    }
   }
 
   // Test all models

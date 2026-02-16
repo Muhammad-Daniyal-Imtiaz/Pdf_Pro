@@ -97,6 +97,10 @@ interface EditorState {
     setElementResizeMode: (id: string, mode: TextResizeMode) => void
     toggleResizeMode: (id: string) => void
 
+    // NEW: Layout Intelligence Actions
+    applyLayoutChanges: (changes: EditorElement[]) => void
+    getLayoutContext: () => string
+
     clearPages: () => void
     setPages: (pages: EditorPage[]) => void
 
@@ -501,6 +505,62 @@ export const useEditorStore = create<EditorState>((set, get) => ({
     setGeneratingPDF: (value) => set({ isGeneratingPDF: value }),
     setZoom: (zoom) => set({ zoom: Math.max(50, Math.min(200, zoom)) }),
     getElementJSON: () => JSON.stringify(get().pages[get().pages.length - 1].elements, null, 2),
+
+    // NEW: Layout Intelligence implementation
+    getLayoutContext: () => {
+        const { pages } = get()
+        // Simplify context to save tokens and focus on layout
+        return JSON.stringify(pages.map(p => ({
+            id: p.id,
+            elements: p.elements.map(el => ({
+                id: el.id,
+                type: el.type,
+                x: el.x,
+                y: el.y,
+                content: el.content.substring(0, 100), // Truncate content
+                width: el.style.width,
+                height: el.style.height
+            }))
+        })), null, 2)
+    },
+
+    applyLayoutChanges: (changes) => {
+        saveHistory(get().pages)
+        set((state) => {
+            const updatedPages = [...state.pages]
+
+            changes.forEach(change => {
+                let found = false
+                // 1. Try to update existing
+                updatedPages.forEach(page => {
+                    const idx = page.elements.findIndex(el => el.id === change.id)
+                    if (idx !== -1) {
+                        page.elements[idx] = {
+                            ...page.elements[idx],
+                            ...change,
+                            style: { ...page.elements[idx].style, ...change.style },
+                            isModified: true
+                        }
+                        found = true
+                    }
+                })
+
+                // 2. If not found, add as new to current page
+                if (!found) {
+                    const currentPageIdx = updatedPages.length - 1
+                    const newEl = {
+                        ...change,
+                        id: change.id || `ai-${crypto.randomUUID()}`,
+                        pageIndex: currentPageIdx,
+                        isModified: true
+                    }
+                    updatedPages[currentPageIdx].elements.push(newEl as EditorElement)
+                }
+            })
+
+            return { pages: updatedPages }
+        })
+    },
 
     clearPages: () => set({ pages: [], selectedIds: [] }),
     setPages: (newPages) => set({ pages: newPages }),
