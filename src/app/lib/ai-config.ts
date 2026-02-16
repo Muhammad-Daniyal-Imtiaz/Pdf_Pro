@@ -22,7 +22,7 @@ export const AI_CONFIG = {
     'gemma-3-4b-it': { rpm: 30, tpm: 4000000, rpd: 1500 },
   },
 
-  maxTokens: 4096,
+  maxTokens: 8192,
   temperature: 0.7,
 }
 
@@ -223,7 +223,7 @@ export const AI_PROMPTS = {
 
     === YOUR MISSION ===
     1. Understand the document type and purpose
-    2. Create 15-30+ separate elements (NEVER a single container with all text)
+    2. Create 8-12 separate elements (compact but professional - NEVER a single container with all text)
     3. Use MULTIPLE headings, paragraphs, containers, lines, icons
     4. Calculate EXACT positions ensuring ZERO collisions
     5. Make headings BOLD and properly sized
@@ -241,12 +241,12 @@ export const AI_PROMPTS = {
   `,
   fullDocumentGeneration: (documentType: string, topic: string, style: string) => `
     Act as a WORLD-CLASS Document Designer & Content Strategist.
-    Create a COMPLETE, PROFESSIONAL, PRODUCTION-GRADE ${documentType} about "${topic}".
+    Create a COMPLETE, PROFESSIONAL ${documentType} about "${topic}".
     This should be 50x better than basic templates - truly exceptional design.
     STYLE BRIEF: ${style}
     
     === MANDATORY: MULTI-ELEMENT STRUCTURE ===
-    You MUST create 15-30+ SEPARATE elements - NEVER put all content in one container.
+    You MUST create 8-12 SEPARATE elements - NEVER put all content in one container.
     Each heading, paragraph, and section must be its own element.
     
     REQUIRED ELEMENT TYPES TO USE:
@@ -298,53 +298,35 @@ export const AI_PROMPTS = {
     
     === EXAMPLE STRUCTURES ===
     
-    CV/RESUME (20+ elements):
+    CV/RESUME (8-12 elements):
     1. Full Name (heading, 40px, centered)
     2. Professional Title (text, 16px, centered)
-    3. Contact Container (with social-icons + text for email, phone, linkedin)
+    3. Contact Container (with social-icons + text)
     4. Horizontal Line
     5. "Professional Summary" (heading, 24px)
     6. Summary paragraph
     7. "Experience" (heading, 24px)
     8. Job 1 Title (heading, 18px)
-    9. Job 1 Company & Date (text)
-    10. Job 1 Description (paragraph)
-    11. Job 1 Achievements (paragraph or container with bullet points)
-    12. Horizontal Line
-    13. Job 2 Title (heading, 18px)
-    14. Job 2 Company & Date (text)
-    15. Job 2 Description (paragraph)
-    16. "Education" (heading, 24px)
-    17. Degree (heading, 18px)
-    18. University & Year (text)
-    19. "Skills" (heading, 24px)
-    20. Skills container with categories
+    9. Job 1 Description (paragraph)
+    10. "Education" (heading, 24px)
+    11. Degree info (paragraph)
+    12. Skills container
     
-    BUSINESS PROPOSAL (25+ elements):
-    1. Company Logo (image)
-    2. Document Title (heading, 32px, centered)
-    3. Subtitle (text, centered)
-    4. Date & Reference (text, right-aligned)
-    5. Line Divider
-    6. "Executive Summary" (heading, 24px)
-    7. Summary container with paragraphs
-    8. "About Us" (heading, 24px)
-    9. Company description (paragraph)
-    10. "Services" (heading, 24px)
-    11. Service 1 container (with icon + heading + description)
-    12. Service 2 container
-    13. Service 3 container
-    14. Line Divider
-    15. "Investment" (heading, 24px)
-    16. Pricing container with structured text
-    17. "Timeline" (heading, 24px)
-    18. Timeline description (paragraph)
-    19. "Next Steps" (heading, 24px)
-    20. Call-to-action (paragraph)
-    21. Contact Section (heading + social-icons + text)
+    BUSINESS PROPOSAL (8-12 elements):
+    1. Document Title (heading, 32px, centered)
+    2. Subtitle (text, centered)
+    3. Line Divider
+    4. "Executive Summary" (heading, 24px)
+    5. Summary paragraph
+    6. "Services" (heading, 24px)
+    7. Services paragraph
+    8. "Investment" (heading, 24px)
+    9. Pricing container
+    10. "Contact" (heading, 24px)
+    11. Contact info container with icons
     
     === OUTPUT ===
-    Return JSON array of 15-30+ elements. Each element must have:
+    Return JSON array of 8-12 elements. Each element must have:
     {
       id: string (descriptive),
       type: 'heading' | 'paragraph' | 'text' | 'container' | 'line' | 'social-icon' | 'image',
@@ -364,10 +346,7 @@ export const AI_PROMPTS = {
         backgroundColor?: string,
         padding?: number,
         lineHeight?: number,
-        resizeMode: 'auto-height' | 'auto-width',
-        borderRadius?: number,
-        borderWidth?: number,
-        borderColor?: string
+        resizeMode: 'auto-height' | 'auto-width'
       }
     }
     

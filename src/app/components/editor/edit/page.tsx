@@ -253,7 +253,7 @@ export default function EditPage() {
             <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Mode:</span>
             <select
               value={importPrecision}
-              onChange={(e) => setImportPrecision(e.target.value as any)}
+              onChange={(e) => setImportPrecision(e.target.value as 'paragraph' | 'precise' | 'raw')}
               className="bg-transparent text-xs font-semibold text-gray-700 outline-none cursor-pointer"
             >
               <option value="paragraph">🚀 Balanced</option>

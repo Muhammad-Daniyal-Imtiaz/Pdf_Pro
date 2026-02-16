@@ -149,7 +149,7 @@ const saveHistory = (pages: EditorPage[]) => {
     // Deep clone to avoid mutations in history
     const snapshot = JSON.parse(JSON.stringify(pages))
 
-    // If we're not at the end of history, remove future entries
+    // If we're not at end of history, remove future entries
     if (historyIndex < history.length - 1) {
         history.splice(historyIndex + 1)
     }
@@ -226,7 +226,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         saveHistory(get().pages)
         const { pages } = get()
         const targetPageIndex = pages.length - 1
-        const id = `el-${crypto.randomUUID()}`
+        const id = `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
         const targetPage = pages[targetPageIndex]
 
         // Smart positioning: Calculate y position based on existing elements
@@ -241,7 +241,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 return 80
             }
             
-            // Find the bottommost element
+            // Find bottommost element
             const bottoms = existingElements.map(el => (el.y || 0) + (el.style?.height || 40))
             const maxBottom = Math.max(...bottoms)
             
@@ -335,8 +335,8 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.content = itemOverrides.content || ''
                 newElement.style = {
                     ...baseStyle,
-                    width: 250,
-                    height: 180,
+                    width: 200,
+                    height: 150,
                     backgroundColor: '#e5e7eb',
                     resizeMode: 'fixed',
                     ...itemOverrides.style
@@ -357,20 +357,21 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         saveHistory(get().pages)
         const { pages } = get()
         const targetPageIndex = pages.length - 1
-        const id = `icon-${crypto.randomUUID()}`
-        const size = 48
-
-        const x = snapToInt(100 + (pages[targetPageIndex].elements.length * 30) % 600)
-        const y = snapToInt(100 + Math.floor(pages[targetPageIndex].elements.length / 15) * 60)
+        const id = `icon-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
         const newElement: EditorElement = {
             id,
             type: 'social-icon',
-            iconType,
-            x,
-            y,
+            x: 60,
+            y: 100,
             content: iconType,
-            style: { width: size, height: size, fontSize: 24, resizeMode: 'fixed' },
+            iconType,
+            style: {
+                ...DEFAULT_STYLE,
+                width: 24,
+                height: 24,
+                resizeMode: 'fixed'
+            },
             pageIndex: targetPageIndex
         }
 
@@ -387,7 +388,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         saveHistory(get().pages)
         const { pages } = get()
         const targetPageIndex = pages.length - 1
-        const id = `line-${crypto.randomUUID()}`
+        const id = `line-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
         const x = snapToInt(100)
         const y = snapToInt(200)
 
@@ -596,7 +597,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 width: el.style.width,
                 height: el.style.height
             }))
-        })), null, 2)
+        })))
     },
 
     applyLayoutChanges: (changes) => {
@@ -604,70 +605,94 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         set((state) => {
             const updatedPages = [...state.pages]
 
+            // Group elements by pageIndex to handle multi-page layouts
+            const elementsByPage: Record<number, any[]> = {}
+            
             changes.forEach(change => {
-                let found = false
-                // Prepare the change - if it's a social-icon and content is provided, sync iconType
-                const processedChange = { ...change }
-                if (change.type === 'social-icon' && change.content) {
-                    processedChange.iconType = change.content
+                const pageIndex = change.pageIndex || 0
+                if (!elementsByPage[pageIndex]) {
+                    elementsByPage[pageIndex] = []
+                }
+                elementsByPage[pageIndex].push(change)
+            })
+
+            // Process each page
+            Object.entries(elementsByPage).forEach(([pageIndexStr, pageChanges]) => {
+                const pageIndex = parseInt(pageIndexStr)
+                
+                // Ensure we have enough pages
+                while (updatedPages.length <= pageIndex) {
+                    updatedPages.push({
+                        id: `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                        elements: []
+                    })
                 }
 
-                // 1. Try to update existing
-                updatedPages.forEach(page => {
-                    const idx = page.elements.findIndex(el => el.id === change.id)
+                pageChanges.forEach(change => {
+                    let found = false
+                    // Prepare change - if it's a social-icon and content is provided, sync iconType
+                    const processedChange = { ...change }
+                    if (change.type === 'social-icon' && change.content) {
+                        processedChange.iconType = change.content
+                    }
+
+                    // 1. Try to update existing in the correct page
+                    const idx = updatedPages[pageIndex].elements.findIndex(el => el.id === change.id)
                     if (idx !== -1) {
-                        page.elements[idx] = {
-                            ...page.elements[idx],
+                        updatedPages[pageIndex].elements[idx] = {
+                            ...updatedPages[pageIndex].elements[idx],
                             ...processedChange,
-                            style: { ...page.elements[idx].style, ...processedChange.style },
+                            style: { ...updatedPages[pageIndex].elements[idx].style, ...processedChange.style },
                             isModified: true,
                             // Preserve AI-generated flag if present
-                            isAIGenerated: processedChange.isAIGenerated || page.elements[idx].isAIGenerated
+                            isAIGenerated: processedChange.isAIGenerated || updatedPages[pageIndex].elements[idx].isAIGenerated
                         }
                         found = true
                     }
-                })
 
-                // 2. If not found, add as new to current page
-                if (!found) {
-                    const currentPageIdx = updatedPages.length - 1
-                    const isTextElement = ['heading', 'paragraph', 'text', 'container'].includes(processedChange.type)
-                    
-                    // For AI-generated text elements, use auto-height to prevent truncation
-                    const resizeMode = processedChange.style?.resizeMode || 
-                        (isTextElement ? 'auto-height' : 'fixed')
-                    
-                    const newEl = {
-                        ...processedChange,
-                        id: change.id || `ai-${crypto.randomUUID()}`,
-                        pageIndex: currentPageIdx,
-                        isModified: true,
-                        isAIGenerated: processedChange.isAIGenerated || true,
-                        style: {
-                            ...DEFAULT_STYLE,
-                            width: 200,
-                            height: 60,
-                            // CRITICAL: Use auto-height for AI-generated text elements
-                            resizeMode: resizeMode,
-                            ...processedChange.style
+                    // 2. If not found, add as new to the correct page
+                    if (!found) {
+                        const isTextElement = ['heading', 'paragraph', 'text', 'container'].includes(processedChange.type)
+                        
+                        // For AI-generated text elements, use auto-height to prevent truncation
+                        const resizeMode = processedChange.style?.resizeMode || 
+                            (isTextElement ? 'auto-height' : 'fixed')
+                        
+                        const newEl = {
+                            ...processedChange,
+                            id: change.id || `ai-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                            pageIndex: pageIndex,
+                            isModified: true,
+                            isAIGenerated: processedChange.isAIGenerated || true,
+                            style: {
+                                ...DEFAULT_STYLE,
+                                width: 200,
+                                height: 60,
+                                // CRITICAL: Use auto-height for AI-generated text elements
+                                resizeMode: resizeMode,
+                                ...processedChange.style
+                            }
                         }
+                        updatedPages[pageIndex].elements.push(newEl as EditorElement)
                     }
-                    updatedPages[currentPageIdx].elements.push(newEl as EditorElement)
-                }
+                })
             })
 
             return { pages: updatedPages }
         })
     },
 
-    clearPages: () => set({ pages: [], selectedIds: [] }),
+    clearPages: () => set({ 
+        pages: [{ id: `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, elements: [] }], 
+        selectedIds: [] 
+    }),
     setPages: (newPages) => set({ pages: newPages }),
 
     addPage: () => {
         saveHistory(get().pages)
         const { pages } = get()
         const newPage: EditorPage = {
-            id: `page-${crypto.randomUUID()}`,
+            id: `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             elements: []
         }
         set({ pages: [...pages, newPage] })
@@ -795,7 +820,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             if (!el || !el.originalItems || el.originalItems.length <= 1) return state
 
             const newElements: EditorElement[] = el.originalItems.map(item => ({
-                id: `el-${crypto.randomUUID()}`,
+                id: `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
                 type: 'text',
                 x: item.x,
                 y: item.y,
@@ -852,7 +877,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const pdfMaxX = Math.max(...selectedEls.filter(e => e.pdfX !== undefined).map(e => e.pdfX! + e.pdfW!))
         const pdfMaxY = Math.max(...selectedEls.filter(e => e.pdfY !== undefined).map(e => e.pdfY! + e.pdfH!))
 
-        const newId = `merged-${crypto.randomUUID()}`
+        const newId = `merged-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
         const merged: EditorElement = {
             id: newId,
             type: 'text',

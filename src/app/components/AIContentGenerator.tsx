@@ -19,6 +19,7 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
   const [topic, setTopic] = useState('')
   const [documentType, setDocumentType] = useState('cv')
   const [style, setStyle] = useState('modern professional')
+  const [pageCount, setPageCount] = useState(1)
 
   // NEW: Smart Layout Generation - Full professional document with multi-element layout
   const generateSmartLayout = async () => {
@@ -29,15 +30,16 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
       clearPages()
       
       const fullPrompt = documentType === 'cv' 
-        ? `Create a professional CV/resume for a ${role} with ${experience} years experience. Use modern ${style} design with multiple sections including header, summary, experience, education, and skills.`
-        : `Create a professional ${documentType} about "${topic}". Use ${style} design with proper sections, headings, and professional layout.`
+        ? `Create a professional CV/resume for a ${role} with ${experience} years experience. Use modern ${style} design with multiple sections including header, summary, experience, education, and skills. Generate ${pageCount} page${pageCount > 1 ? 's' : ''} of content.`
+        : `Create a professional ${documentType} about "${topic}". Use ${style} design with proper sections, headings, and professional layout. Generate ${pageCount} page${pageCount > 1 ? 's' : ''} of content.`
       
       const response = await fetch('/api/ai-layout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           prompt: fullPrompt,
-          context: '[]' // Fresh canvas
+          context: '[]', // Fresh canvas
+          pageCount: pageCount // Pass page count to API
         })
       })
 
@@ -45,7 +47,7 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
       if (data.success && data.changes) {
         applyLayoutChanges(data.changes)
         // Show success feedback
-        console.log(`✅ Generated ${data.meta?.elementCount || data.changes.length} elements`)
+        console.log(`✅ Generated ${data.meta?.elementCount || data.changes.length} elements across ${pageCount} page${pageCount > 1 ? 's' : ''}`)
       }
     } catch (error) {
       console.error('Smart Layout Generation Error:', error)
@@ -143,7 +145,7 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
             </p>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Document Type</label>
               <select
@@ -170,6 +172,17 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
                 <option value="creative bold">Creative Bold</option>
                 <option value="corporate formal">Corporate Formal</option>
               </select>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Number of Pages</label>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={pageCount}
+                onChange={(e) => setPageCount(Math.max(1, Math.min(10, parseInt(e.target.value) || 1)))}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
+              />
             </div>
           </div>
 
@@ -223,13 +236,13 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-300 disabled:to-gray-300 text-white py-4 px-4 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-xl shadow-green-200"
           >
             {isGenerating ? (
-              <><div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>Creating Professional Layout...</>
+              <><div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>Creating {pageCount} Page{pageCount > 1 ? 's' : ''}...</>
             ) : (
-              <><span>🎨</span>Generate Complete Document</>
+              <><span>🎨</span>Generate {pageCount} Page{pageCount > 1 ? 's' : ''}</>
             )}
           </button>
           <p className="text-center text-[10px] text-gray-400 font-medium uppercase tracking-widest">
-            Creates 15-30+ elements automatically
+            Creates 8-12 elements per page automatically
           </p>
         </div>
       ) : mode === 'layout' ? (
