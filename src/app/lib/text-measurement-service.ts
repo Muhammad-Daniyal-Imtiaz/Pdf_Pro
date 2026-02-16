@@ -25,13 +25,12 @@ class TextMeasurementService {
     private cache: Map<string, MeasurementResult> = new Map()
     private maxCacheSize = 1000
 
-    private getCanvasContext(): CanvasRenderingContext2D {
+    private getCanvasContext(): CanvasRenderingContext2D | null {
+        if (typeof window === 'undefined') return null
         if (!this.canvas) {
             this.canvas = document.createElement('canvas')
         }
-        const ctx = this.canvas.getContext('2d')
-        if (!ctx) throw new Error('Could not get canvas context')
-        return ctx
+        return this.canvas.getContext('2d')
     }
 
     private getCacheKey(text: string, style: TextStyle, maxWidth?: number): string {
@@ -45,6 +44,18 @@ class TextMeasurementService {
         }
 
         const ctx = this.getCanvasContext()
+        if (!ctx) {
+            // Safe SSR fallback
+            return {
+                width: maxWidth || text.length * 10,
+                height: style.fontSize * style.lineHeight,
+                lines: [text],
+                actualBoundingBoxHeight: style.fontSize,
+                isOverflowing: false,
+                overflowHeight: 0
+            }
+        }
+
         const fontStr = `${style.fontStyle || 'normal'} ${style.fontWeight} ${style.fontSize}px ${style.fontFamily}`
         ctx.font = fontStr
 

@@ -179,7 +179,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                         height: 60,
                         fontSize: 32,
                         fontWeight: 700,
-                        resizeMode: 'auto-height',
+                        resizeMode: 'fixed',
                     },
                     pageIndex: 0
                 }
@@ -256,7 +256,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     height: 50,
                     fontSize: 24,
                     fontWeight: 700,
-                    resizeMode: 'auto-height',
+                    resizeMode: 'fixed',
                     ...itemOverrides.style
                 }
                 break
@@ -267,7 +267,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     width: 400,
                     height: 80,
                     fontSize: 14,
-                    resizeMode: 'auto-height',
+                    resizeMode: 'fixed',
                     ...itemOverrides.style
                 }
                 break
@@ -278,7 +278,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     width: 200,
                     height: 40,
                     fontSize: 14,
-                    resizeMode: 'auto-height',
+                    resizeMode: 'fixed',
                     ...itemOverrides.style
                 }
                 break
@@ -582,14 +582,20 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
             changes.forEach(change => {
                 let found = false
+                // Prepare the change - if it's a social-icon and content is provided, sync iconType
+                const processedChange = { ...change }
+                if (change.type === 'social-icon' && change.content) {
+                    processedChange.iconType = change.content
+                }
+
                 // 1. Try to update existing
                 updatedPages.forEach(page => {
                     const idx = page.elements.findIndex(el => el.id === change.id)
                     if (idx !== -1) {
                         page.elements[idx] = {
                             ...page.elements[idx],
-                            ...change,
-                            style: { ...page.elements[idx].style, ...change.style },
+                            ...processedChange,
+                            style: { ...page.elements[idx].style, ...processedChange.style },
                             isModified: true
                         }
                         found = true
@@ -600,10 +606,16 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 if (!found) {
                     const currentPageIdx = updatedPages.length - 1
                     const newEl = {
-                        ...change,
+                        ...processedChange,
                         id: change.id || `ai-${crypto.randomUUID()}`,
                         pageIndex: currentPageIdx,
-                        isModified: true
+                        isModified: true,
+                        style: {
+                            ...DEFAULT_STYLE,
+                            width: 200,
+                            height: 60,
+                            ...processedChange.style
+                        }
                     }
                     updatedPages[currentPageIdx].elements.push(newEl as EditorElement)
                 }

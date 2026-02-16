@@ -231,10 +231,31 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
               <><Wand2 size={20} />Apply Layout Update</>
             )}
           </button>
+          <div className="flex gap-2 flex-wrap pb-2 border-b border-gray-100">
+            <span className="w-full text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Professional Recipes</span>
+            <RecipeButton
+              label="Two-Column Resume"
+              onClick={() => setPrompt("Create a modern two-column resume layout. Left column (30%) has background color #f8fafc, containing contact info with icons. Right column (70%) has Experience and Education sections.")}
+            />
+            <RecipeButton
+              label="Modern Header"
+              onClick={() => setPrompt("Create a professional header. Large bold name at top left. Under it, a subheading for role. At top right, add contact details (email, phone, location) with matching icons and small text.")}
+            />
+            <RecipeButton
+              label="Invoice Layout"
+              onClick={() => setPrompt("Generate an invoice layout. Store name and logo at top. Below that, a horizontal line. Then 'BILL TO' section and a professional table-like structure for items.")}
+            />
+            <RecipeButton
+              label="Portfolio Grid"
+              onClick={() => setPrompt("Layout a clean portfolio grid. 3 containers across the page, each with a placeholder image element and a small heading below it. Use consistent 40px spacing.")}
+            />
+          </div>
           <div className="flex gap-2 flex-wrap">
-            <button onClick={() => setPrompt("Center all headings")} className="text-[10px] px-2 py-1 bg-gray-100 rounded-full text-gray-500 hover:bg-indigo-100 hover:text-indigo-600 transition-colors">Center Headings</button>
-            <button onClick={() => setPrompt("Move contact info to top right")} className="text-[10px] px-2 py-1 bg-gray-100 rounded-full text-gray-500 hover:bg-indigo-100 hover:text-indigo-600 transition-colors">Contact to Top-Right</button>
-            <button onClick={() => setPrompt("Make all text font Inter")} className="text-[10px] px-2 py-1 bg-gray-100 rounded-full text-gray-500 hover:bg-indigo-100 hover:text-indigo-600 transition-colors">Standardize Fonts</button>
+            <span className="w-full text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Quick Tweaks</span>
+            <button onClick={() => setPrompt("Center all headings and subheadings while keeping their positions absolute.")} className="text-[10px] px-2 py-1 bg-gray-100 rounded-full text-gray-500 hover:bg-indigo-100 hover:text-indigo-600 transition-colors border border-transparent hover:border-indigo-200">Center Text</button>
+            <button onClick={() => setPrompt("Fix element collisions: detect all overlapping text elements and stagger them vertically with 20px spacing manually.")} className="text-[10px] px-2 py-1 bg-gray-100 rounded-full text-gray-500 hover:bg-indigo-100 hover:text-indigo-600 transition-colors border border-transparent hover:border-indigo-200">Fix Collisions</button>
+            <button onClick={() => setPrompt("Update all elements to use the 'Inter' font family and set appropriate font weights for hierarchy.")} className="text-[10px] px-2 py-1 bg-gray-100 rounded-full text-gray-500 hover:bg-indigo-100 hover:text-indigo-600 transition-colors border border-transparent hover:border-indigo-200">Polish Hierarchy</button>
+            <button onClick={() => setPrompt("Standardize all text: Convert all Elements to 'fixed' resize mode and calculate absolute heights based on content.")} className="text-[10px] px-2 py-1 bg-gray-100 rounded-full text-gray-500 hover:bg-indigo-100 hover:text-indigo-600 transition-colors border border-transparent hover:border-indigo-200">Standardize Layout</button>
           </div>
         </div>
       ) : (
@@ -270,5 +291,16 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         </div>
       )}
     </div>
+  )
+}
+
+function RecipeButton({ label, onClick }: { label: string, onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="text-[10px] px-2.5 py-1.5 bg-indigo-50 text-indigo-700 rounded-lg border border-indigo-100 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all font-semibold shadow-sm"
+    >
+      {label}
+    </button>
   )
 }

@@ -35,44 +35,61 @@ export const AI_PROMPTS = {
     Create a ${type} about "${topic}". Be informative.
   `,
   mcpMarkdown: (prompt: string) => `
-    Act as a professional document generator.
-    Based on the following request, generate a high-quality, professional document in GitHub Flavored Markdown format.
+    Act as a Professional Document Architect & Expert Content Generator.
+    Your goal is to generate high-fidelity, production-grade Markdown content that will be converted into a premium PDF.
     
     Request: "${prompt}"
     
-    Requirements:
-    - Use clear headings (# ## ###).
-    - Use tables for structured data if appropriate.
-    - Use bold and italic for emphasis.
-    - Include a table of contents if long.
-    - Use callouts or blockquotes for important notes.
-    - Output ONLY the markdown content.
+    MARKDOWN LAYOUT GUIDELINES:
+    1. VISUAL HIERARCHY: Use clear headings (# for main titles, ## for sections, ### for sub-sections).
+    2. STRUCTURED DATA: Use Markdown Tables for any comparative data, pricing, or list-heavy sections.
+    3. EMPHASIS: Use **Bold** for key terms and *Italic* for secondary emphasis.
+    4. SEPARATION: Use horizontal rules (---) to separate major thematic blocks.
+    5. CALLOUTS: Use Blockquotes (>) for testimonials, quotes, or important highlights.
+    6. LISTS: Use task lists (- [ ]) or bullet points for readability.
+    7. SPACING: Ensure appropriate padding between sections for a clean, non-cluttered look.
+    
+    OUTPUT REQUIREMENTS:
+    - Output ONLY the Markdown content.
+    - DO NOT include any conversational filler.
+    - Ensure the document feels like a professionally designed brochure, proposal, or report.
   `,
   layoutIntelligence: (prompt: string, currentContext: string) => `
-    Act as a Professional Layout & PDF Design AI.
-    Your goal is to modify or generate a PDF layout based on a user request.
+    Act as a Professional Document Architect (Production Grade).
+    Your goal is to create a pixel-perfect, collision-free PDF layout.
     
-    PAGE SPECIFICATIONS:
-    - Dimensions: 794px width x 1123px height (A4).
-    - Coordinate System: (0,0) is TOP-LEFT.
+    CRITICAL CHANGE: DO NOT USE 'auto-height' or 'auto-width'. 
+    You MUST manually calculate and provide absolute 'width' and 'height' for EVERY element.
     
-    ELEMENT SCHEMA (JSON):
-    Interface EditorElement {
-        id: string; // Unique ID
-        type: 'heading' | 'paragraph' | 'text' | 'social-icon' | 'image' | 'link' | 'line' | 'container';
-        x: number; // 0 to 794
-        y: number; // 0 to 1123
-        content: string; // Text content or image/icon type
+    FORMULA FOR TEXT BOXES (Estimation):
+    - Width: Fixed as defined by you (e.g., 300px for columns, 700px for full width).
+    - Height: (Length of text / (Width / 8)) * (FontSize * 1.5). 
+    - Safe spacing: Add 20-40px extra margin in 'y' between different elements.
+
+    LAYOUT PRINCIPLES:
+    - Manual Collision Avoidance: You are responsible for ensuring Element B's 'y' coordinate is ALWAYS greater than Element A's (y + height + margin).
+    - Dimensions: A4 is 794px x 1123px.
+    - Margins: 60px all sides.
+
+    ELEMENT SCHEMA (Fixed Dimensions Only):
+    {
+        id: string; 
+        type: 'heading' | 'paragraph' | 'text' | 'social-icon' | 'image' | 'line' | 'container';
+        x: number;
+        y: number;
+        content: string;
         style: {
-            width: number;
-            height: number;
-            fontSize?: number;
-            fontFamily?: string;
-            color?: string;
-            fontWeight?: string | number;
-            textAlign?: 'left' | 'center' | 'right' | 'justify';
-            backgroundColor?: string;
-            // ... other CSS-like props
+            width: number;  // Absolute value
+            height: number; // Absolute value
+            fontSize: number;  // Paragraph (14-16), Subheading (20-24), Heading(32+)
+            fontWeight: number | string; // 400 (normal), 600 (semibold), 700 (bold)
+            textAlign: 'left' | 'center' | 'right';
+            backgroundColor: string;
+            color: string;
+            borderRadius: number;
+            borderWidth: number;
+            borderColor: string;
+            resizeMode: 'fixed'; // MANDATORY: keep as fixed
         }
     }
 
@@ -83,14 +100,30 @@ export const AI_PROMPTS = {
     "${prompt}"
 
     INSTRUCTIONS:
-    1. Analyze the current context and the request.
-    2. If the request is to ADD elements, generate new elements with appropriate coordinates.
-    3. If the request is to MODIFY elements, identify them by ID and return updated properties.
-    4. Ensure elements do not overlap messily unless intended.
-    5. Ensure all elements stay within the 794x1123 page bounds.
+    1. CALCULATE BOUNDS: Determine height of each text block by estimating wrap-around.
+    2. STAGGER POSITION: Set 'y' coordinates to prevent ANY overlap.
+    3. HIERARCHY: Mix Heading, Subheading (bold text), and Paragraph for professional look.
+    4. ICONS: Use 'social-icon' with matching labels (linkedin, mail, github) for contact sections.
+    5. DESIGN: Use 'line' elements for borders or section dividers.
+
+    OUTPUT: Return ONLY a JSON array of the updated/new elements. Use exact pixels for everything.
+  `,
+  mcpAICanvasExport: (canvasContext: string) => `
+    Act as a Professional Document Architect.
+    I will provide you with a JSON representation of a PDF document canvas.
+    Your goal is to transform this raw data into a high-fidelity, production-grade Markdown document.
     
-    OUTPUT FORMAT:
-    Return a JSON array of EditorElement objects that represent the CHANGES or NEW elements to be applied.
-    Output ONLY THE JSON ARRAY. No markdown bubbles, no explanations.
+    CANVAS CONTEXT:
+    ${canvasContext}
+    
+    INSTRUCTIONS:
+    1. EXRACT CONTENT: Identify all text elements (headings, paragraphs) and preserve their content and hierarchy.
+    2. STRUCTURE: Use # for the main document title (usually the largest heading). Use ## and ### for sections.
+    3. VISUAL ELEMENTS: Use horizontal rules (---) where the canvas has divider lines or large gaps.
+    4. TABLES: If elements are aligned in a grid-like fashion, represent them as a Markdown Table.
+    5. CALLOUTS: Use blockquotes for highlighted notes or sidebar-like info.
+    6. POLISH: Ensure the document flows naturally and looks like a top-tier professional report or CV.
+    
+    OUTPUT: Return ONLY the Markdown content.
   `,
 }

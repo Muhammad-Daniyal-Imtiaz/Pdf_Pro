@@ -6,7 +6,7 @@ import { EditorElement, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import {
   Linkedin, Mail, Phone, Twitter, Github, Globe, Instagram,
   Facebook, Youtube, MapPin, Calendar, User, Download, ExternalLink,
-  Check, X, Star, Heart, AlertCircle
+  Check, X, Star, Heart, AlertCircle, Loader2
 } from 'lucide-react'
 import { sanitizeContent } from '@/app/lib/sanitize'
 import { getTextMeasurementService } from '@/app/lib/text-measurement-service'
@@ -155,7 +155,7 @@ export default function PDFRenderer({
 
     const renderTextContent = (isInsideContainer: boolean = false) => {
       const textMeasurementService = getTextMeasurementService()
-      const mode = elStyle.resizeMode || 'auto-height'
+      const mode = elStyle.resizeMode || 'fixed'
 
       const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
         if (!isEditing) return

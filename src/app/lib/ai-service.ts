@@ -147,6 +147,11 @@ class AIService {
     }
   }
 
+  async generateMarkdownFromCanvas(canvasContext: string): Promise<string> {
+    const prompt = AI_PROMPTS.mcpAICanvasExport(canvasContext)
+    return this.generateContent(prompt)
+  }
+
   // Test all models
   async testAllModels(): Promise<{ [key: string]: boolean }> {
     const results: { [key: string]: boolean } = {}

@@ -88,7 +88,7 @@ export default function ResizableElement({
     }, [el.content, el.style.width, el.style.height, el.style.fontSize, el.style.lineHeight, el.style.padding, el.type])
 
     // Auto-grow height for text elements (when not in FIXED resize mode)
-    const resizeMode = (el.style as any).resizeMode || 'auto-height'
+    const resizeMode = (el.style as any).resizeMode || 'fixed'
     useEffect(() => {
         if (!contentRef.current) return
         if (el.type === 'image' || el.type === 'line' || el.type === 'social-icon') return
@@ -373,7 +373,10 @@ export default function ResizableElement({
                     data-html2canvas-ignore="true"
                 >
                     {el.type}
-                    {resizeMode !== 'auto-height' && <span className="opacity-75">({resizeMode})</span>}
+                    {(() => {
+                        const mode = el.style.resizeMode || 'fixed';
+                        return <span className="opacity-75">({mode})</span>;
+                    })()}
                 </div>
             )}
 

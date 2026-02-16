@@ -12,6 +12,8 @@ import SocialIcons from './SocialIcons'
 import LineControls from './LineControls'
 import TextResizeModeControl from './TextResizeModeControl'
 import AIContentGenerator from '../AIContentGenerator'
+import { useState } from 'react'
+import { Sparkles, Download, FileText as FileIcon } from 'lucide-react'
 
 const IMAGE_PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpolyline points='21 15 16 10 5 21'/%3E%3C/svg%3E"
 
@@ -32,8 +34,42 @@ export default function EditorSidebar() {
         bringToFront,
         sendToBack,
         splitElement,
-        mergeElements
+        mergeElements,
+        getLayoutContext,
+        docTitle
     } = useEditorStore()
+
+    const [isExporting, setIsExporting] = useState(false)
+
+    const handlePremiumExport = async () => {
+        setIsExporting(true)
+        try {
+            const context = getLayoutContext()
+            const response = await fetch('/api/export-mcp-canvas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ context })
+            })
+
+            const data = await response.json()
+            if (data.success && data.content) {
+                // Convert base64 to blob and download
+                const linkSource = `data:application/pdf;base64,${data.content}`
+                const downloadLink = document.createElement("a")
+                const fileName = `${(docTitle || 'premium-document').toLowerCase()}.pdf`
+                downloadLink.href = linkSource
+                downloadLink.download = fileName
+                downloadLink.click()
+            } else {
+                alert('Export failed: ' + (data.error || 'Unknown error'))
+            }
+        } catch (error) {
+            console.error('Premium Export Error:', error)
+            alert('Failed to connect to export service.')
+        } finally {
+            setIsExporting(false)
+        }
+    }
 
     // Find the selected element across all pages with memoization for stability
     const selectedElement = React.useMemo(() => {
@@ -75,7 +111,36 @@ export default function EditorSidebar() {
             <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 {!isSidebarCollapsed && (
                     <>
-                        {/* AI Section - High Performance MCP */}
+                        {/* Action Center - High Value Tasks */}
+                        <div className="mb-8">
+                            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-tight mb-3 flex items-center gap-2">
+                                <Sparkles size={12} className="text-purple-500" /> Premium Studio
+                            </h3>
+                            <button
+                                onClick={handlePremiumExport}
+                                disabled={isExporting}
+                                className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-400 text-white p-4 rounded-xl font-bold transition-all duration-200 shadow-lg shadow-purple-100 flex items-center justify-center gap-3 active:scale-95 group mb-2"
+                            >
+                                {isExporting ? (
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                ) : (
+                                    <>
+                                        <div className="p-1.5 bg-white/20 rounded-lg group-hover:scale-110 transition-transform">
+                                            <FileIcon size={18} />
+                                        </div>
+                                        <div className="flex flex-col items-start leading-tight">
+                                            <span className="text-sm">Premium AI Export</span>
+                                            <span className="text-[10px] text-purple-100 font-normal">Generate Best Layout via MCP</span>
+                                        </div>
+                                    </>
+                                )}
+                            </button>
+                            <p className="text-[10px] text-gray-400 italic text-center px-4">
+                                "Transforms your canvas into a production-grade PDF using AI reasoning & High-Fidelity MCP rendering."
+                            </p>
+                        </div>
+
+                        {/* AI Section - Layout Intelligence */}
                         <div className="mb-8">
                             <AIContentGenerator
                                 type="document"
