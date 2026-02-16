@@ -36,24 +36,25 @@ class AIService {
       this.lastResetTime = Date.now()
     }
 
-    // Check rate limits
-    const currentModel = this.models[this.currentModelIndex]
-    const limits = AI_CONFIG.rateLimits[currentModel as keyof typeof AI_CONFIG.rateLimits]
-
-    if (limits && this.requestCount >= limits.rpm) {
-      console.log(`⏳ Rate limit reached for ${currentModel}, switching model...`)
-      this.currentModelIndex = (this.currentModelIndex + 1) % this.models.length
-    }
-
-    this.requestCount++
-
-    console.log(`🤖 Request ${this.requestCount}/${limits?.rpm || '?'} - Model: ${currentModel}`)
-
-    // Try with current model
+    // Attempt loop
     for (let attempt = 0; attempt < retries; attempt++) {
+      // 1. GET MODEL NAME INSIDE THE LOOP
+      // This ensures if we switch indexes, we actually use the new name
+      const currentModelName = this.models[this.currentModelIndex]
+      const limits = AI_CONFIG.rateLimits[currentModelName as keyof typeof AI_CONFIG.rateLimits]
+
+      // Check simple local rate limiter
+      if (limits && this.requestCount >= limits.rpm) {
+        console.log(`⏳ Rate limit soft-cap for ${currentModelName}, switching...`)
+        this.currentModelIndex = (this.currentModelIndex + 1) % this.models.length
+        continue; // Skip to next iteration with new model
+      }
+
+      console.log(`🤖 Request - Attempt ${attempt + 1} - Model: ${currentModelName}`)
+
       try {
         const model = this.genAI.getGenerativeModel({
-          model: currentModel,
+          model: currentModelName,
           generationConfig: {
             maxOutputTokens: AI_CONFIG.maxTokens,
             temperature: AI_CONFIG.temperature
@@ -64,30 +65,24 @@ class AIService {
         const response = await result.response
         const text = response.text()
 
-        console.log(`✅ Success with ${currentModel}`)
+        this.requestCount++ // Increment only on success or attempt
+        console.log(`✅ Success with ${currentModelName}`)
         return text
 
       } catch (error: any) {
-        console.error(`❌ Attempt ${attempt + 1} failed:`, error.message)
+        console.error(`❌ Error with ${currentModelName}:`, error.message)
 
-        // If model not found, try next one
-        if (error.message.includes('404') || error.message.includes('not found')) {
-          this.currentModelIndex = (this.currentModelIndex + 1) % this.models.length
-          console.log(`🔄 Switching to: ${this.models[this.currentModelIndex]}`)
-          await new Promise(resolve => setTimeout(resolve, 500))
-          continue
-        }
+        // 2. SWITCH MODEL ON FAILURE
+        // Move to the next model in the list for the next loop iteration
+        this.currentModelIndex = (this.currentModelIndex + 1) % this.models.length
 
-        // If rate limited, switch model immediately
+        // If it was a 429 (Rate Limit), wait a bit before retrying
         if (error.message.includes('429') || error.message.includes('quota')) {
-          this.currentModelIndex = (this.currentModelIndex + 1) % this.models.length
-          console.log(`🚫 Rate limited, switching to: ${this.models[this.currentModelIndex]}`)
           await new Promise(resolve => setTimeout(resolve, 2000))
-          continue
+        } else {
+          // For 404s or other errors, retry faster
+          await new Promise(resolve => setTimeout(resolve, 500))
         }
-
-        // Wait before retry
-        await new Promise(resolve => setTimeout(resolve, 1000))
       }
     }
 

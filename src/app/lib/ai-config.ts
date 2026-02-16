@@ -2,22 +2,20 @@ export const AI_CONFIG = {
   // Your API key
   apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
 
-  // ✅ USE THESE MODELS FROM YOUR DASHBOARD:
+  // ✅ USE THESE EXACT MODEL NAMES:
   models: [
-    'gemini-1.5-flash-latest',  // Standard 1.5 Flash (Fastest, Free tier friendly)
-    'gemini-1.5-pro-latest',    // High quality 1.5 Pro
-    'gemini-1.0-pro-latest',    // Reliable 1.0 Pro
-    'gemini-1.5-flash',         // Base identifier fallback
-    'gemini-1.5-pro',           // Base identifier fallback
+    'gemini-1.5-flash',       // Best for speed & most free limits
+    'gemini-1.5-pro',         // Best for reasoning/complex tasks
+    'gemini-1.5-flash-8b',    // Ultra-fast, lightweight
+    'gemini-1.0-pro',         // Older, reliable fallback
   ],
 
   // Rate limits (Standard free tier limits)
   rateLimits: {
-    'gemini-1.5-flash-latest': { rpm: 15, tpm: 1000000, rpd: 1500 },
-    'gemini-1.5-pro-latest': { rpm: 2, tpm: 32000, rpd: 50 },
-    'gemini-1.0-pro-latest': { rpm: 15, tpm: 1000000, rpd: 1500 },
     'gemini-1.5-flash': { rpm: 15, tpm: 1000000, rpd: 1500 },
     'gemini-1.5-pro': { rpm: 2, tpm: 32000, rpd: 50 },
+    'gemini-1.5-flash-8b': { rpm: 15, tpm: 1000000, rpd: 1500 },
+    'gemini-1.0-pro': { rpm: 15, tpm: 1000000, rpd: 1500 },
   },
 
   maxTokens: 2048,
