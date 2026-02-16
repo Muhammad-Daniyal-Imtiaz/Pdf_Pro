@@ -65,11 +65,11 @@ export const AI_PROMPTS = {
     4. HEIGHT CALCULATION: For auto-height, calculate actual needed height based on content length
     
     === TYPOGRAPHY HIERARCHY ===
-    - Main Title (H1): fontSize 32-40, fontWeight 700, y starts at 60px from top
-    - Subtitle (H2): fontSize 24-28, fontWeight 600, margin-top 40px from previous
-    - Section Heading (H3): fontSize 18-20, fontWeight 600, margin-top 30px
-    - Body Paragraph: fontSize 14-16, fontWeight 400, lineHeight 1.6, margin-top 20px
-    - Small Text/Captions: fontSize 12, fontWeight 400, margin-top 15px
+    - Main Title (H1): fontSize 32-40, fontWeight 700, width: 674 (full width), y starts at 60px from top, resizeMode: 'auto-height'
+    - Subtitle (H2): fontSize 24-28, fontWeight 600, width: 674, margin-top 40px from previous, resizeMode: 'auto-height'
+    - Section Heading (H3): fontSize 18-20, fontWeight 600, width: 500, margin-top 30px, resizeMode: 'auto-height'
+    - Body Paragraph: fontSize 14-16, fontWeight 400, lineHeight 1.6, width: 500, margin-top 20px, resizeMode: 'auto-height'
+    - Small Text/Captions: fontSize 12, fontWeight 400, width: 300, margin-top 15px, resizeMode: 'auto-height'
     
     === LAYOUT SPECIFICATIONS ===
     - Canvas: A4 = 794px x 1123px

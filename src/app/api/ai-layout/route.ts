@@ -43,7 +43,10 @@ export async function POST(req: NextRequest) {
                 y: adjustedY,
                 style: {
                     ...change.style,
-                    resizeMode: 'auto-height' // Force auto-height for all AI text elements
+                    // Force full width for headings to allow proper text wrapping
+                    width: change.type === 'heading' ? 674 : (change.style?.width || 300),
+                    // Force auto-height for all text elements to prevent truncation
+                    resizeMode: 'auto-height'
                 }
             }
         })

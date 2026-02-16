@@ -126,7 +126,10 @@ export default function EditPage() {
         })
       }
 
-      if (!response.ok) throw new Error('Failed to generate PDF')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`)
+      }
 
       const blob = await response.blob()
       const url = URL.createObjectURL(blob)
@@ -137,8 +140,9 @@ export default function EditPage() {
       URL.revokeObjectURL(url)
 
     } catch (err) {
-      console.error(err)
-      setError('Failed to save PDF')
+      console.error('PDF Save Error:', err)
+      const errorMessage = err instanceof Error ? err.message : 'Failed to save PDF'
+      setError(`Save failed: ${errorMessage}`)
     } finally {
       setIsSaving(false)
     }

@@ -171,16 +171,16 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 {
                     id: 'el-1',
                     type: 'heading',
-                    x: 50,
-                    y: 50,
+                    x: 60,
+                    y: 60,
                     content: 'Document Title',
                     style: {
                         ...DEFAULT_STYLE,
-                        width: 400,
+                        width: 674,
                         height: 60,
                         fontSize: 32,
                         fontWeight: 700,
-                        resizeMode: 'auto-width',
+                        resizeMode: 'auto-height',
                     },
                     pageIndex: 0
                 }
@@ -274,11 +274,11 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                 newElement.content = itemOverrides.content || 'Heading'
                 newElement.style = {
                     ...baseStyle,
-                    width: 500,  // Wider for headings
-                    height: 50,
+                    width: 674,  // Full content width for proper wrapping
+                    height: 60,  // Default height, will auto-expand
                     fontSize: 28,
                     fontWeight: 700,
-                    resizeMode: 'auto-width',
+                    resizeMode: 'auto-height',  // CRITICAL: Allow text to wrap and expand
                     color: '#1a1a1a',
                     ...itemOverrides.style
                 }

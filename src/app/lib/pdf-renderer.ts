@@ -91,9 +91,11 @@ export function generateElementHTML(
     
     // CRITICAL: For auto-height elements, calculate actual height based on content
     const isAutoHeight = shouldAutoHeight(el)
-    const actualHeight = isAutoHeight 
+    const calculatedHeight = isAutoHeight 
         ? calculateTextHeight(el.content || '', style, scale)
         : (style.height || 40) * scale
+    // Ensure height is always a valid number
+    const actualHeight = Math.max(calculatedHeight, (style.fontSize || 14) * (style.lineHeight || 1.5) * scale)
 
     const baseStyles: any = {
         position: 'absolute',
@@ -140,7 +142,8 @@ export function generateElementHTML(
         case 'text':
         case 'container':
             // For auto-height elements, render content with line breaks and proper wrapping
-            return `<div style="${styleString}">${content.replace(/\n/g, '<br>')}</div>`
+            // Note: content is already escaped and newlines converted to <br> by escapeHtml
+            return `<div style="${styleString}">${content}</div>`
 
         case 'image':
             return el.content
