@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { aiService } from '@/app/lib/ai-service'
 import { processAIGeneratedElements, findNextAvailableY, LayoutBounds } from '@/app/lib/server-text-measurement'
 
+/**
+ * AI Layout API - Production Grade
+ * Processes AI-generated layouts with full component support
+ */
 export async function POST(req: NextRequest) {
     try {
         const { prompt, context } = await req.json()
@@ -10,26 +14,38 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Prompt is required' }, { status: 400 })
         }
 
-        console.log(`🧠 Processing Layout Intelligence for prompt: "${prompt.substring(0, 50)}..."`)
+        console.log(`🧠 Processing Layout Intelligence for: "${prompt.substring(0, 50)}..."`)
 
+        // Generate layout from AI
         const layoutChanges = await aiService.generateLayoutUpdate(prompt, context || '[]')
 
-        // Process AI-generated elements to ensure proper dimensions and no truncation
-        console.log(`📏 Processing ${layoutChanges.length} elements for optimal dimensions...`)
+        // Process and enhance AI-generated elements
+        console.log(`📏 Processing ${layoutChanges.length} elements for production...`)
+        
+        // First pass: ensure all elements have proper dimensions
         let processedChanges = processAIGeneratedElements(layoutChanges)
         
-        // Prevent element collisions with smart positioning
-        // If elements overlap, find next available Y position
+        // Second pass: professional styling and collision prevention
         const existingElements: LayoutBounds[] = []
         processedChanges = processedChanges.map((change, index) => {
+            const isTextElement = ['heading', 'paragraph', 'text', 'link'].includes(change.type)
+            const isContainer = change.type === 'container'
+            const isLine = change.type === 'line'
+            const isIcon = change.type === 'social-icon'
+            const isImage = change.type === 'image'
+            
+            // Calculate proper dimensions
+            const width = change.style?.width || (change.type === 'heading' ? 674 : 500)
+            const height = change.style?.height || (isTextElement ? 60 : 100)
+            
             const newElement: LayoutBounds = {
                 x: change.x || 60,
                 y: change.y || 80,
-                width: change.style?.width || 300,
-                height: change.style?.height || 60
+                width,
+                height
             }
             
-            // Check if this position would collide with existing elements
+            // Smart collision prevention
             const adjustedY = findNextAvailableY(newElement, existingElements, newElement.y, 30)
             
             // Add to existing elements for next iteration
@@ -38,24 +54,114 @@ export async function POST(req: NextRequest) {
                 y: adjustedY
             })
             
+            // Professional styling based on element type
+            let enhancedStyle = { ...change.style }
+            
+            // HEADING: Bold, centered, full width
+            if (change.type === 'heading') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    width: 674,
+                    fontWeight: 700, // BOLD heading
+                    textAlign: enhancedStyle.textAlign || 'center',
+                    resizeMode: 'auto-height',
+                    color: enhancedStyle.color || '#1a1a1a',
+                    fontSize: enhancedStyle.fontSize || 32,
+                }
+            }
+            
+            // PARAGRAPH: Body text with proper line height
+            if (change.type === 'paragraph') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    width: enhancedStyle.width || 500,
+                    resizeMode: 'auto-height',
+                    fontSize: enhancedStyle.fontSize || 14,
+                    fontWeight: 400,
+                    lineHeight: 1.6,
+                    color: enhancedStyle.color || '#374151',
+                }
+            }
+            
+            // TEXT: Small labels/metadata
+            if (change.type === 'text') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    width: enhancedStyle.width || 300,
+                    fontSize: enhancedStyle.fontSize || 12,
+                    color: enhancedStyle.color || '#64748b',
+                    resizeMode: enhancedStyle.resizeMode || 'auto-width',
+                }
+            }
+            
+            // CONTAINER: Cards with subtle styling
+            if (change.type === 'container') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    backgroundColor: enhancedStyle.backgroundColor || '#f8fafc',
+                    borderRadius: enhancedStyle.borderRadius || 8,
+                    borderWidth: enhancedStyle.borderWidth ?? 1,
+                    borderColor: enhancedStyle.borderColor || '#e2e8f0',
+                    padding: enhancedStyle.padding || 16,
+                    resizeMode: 'auto-height',
+                }
+            }
+            
+            // LINE: Dividers
+            if (change.type === 'line') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    backgroundColor: enhancedStyle.backgroundColor || '#cbd5e1',
+                    height: enhancedStyle.height || 2,
+                }
+            }
+            
+            // SOCIAL-ICON: Fixed size
+            if (change.type === 'social-icon') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    width: enhancedStyle.width || 24,
+                    height: enhancedStyle.height || 24,
+                    resizeMode: 'fixed',
+                }
+            }
+            
+            // IMAGE: Fixed size
+            if (change.type === 'image') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    resizeMode: 'fixed',
+                }
+            }
+            
+            // LINK: Colored text
+            if (change.type === 'link') {
+                enhancedStyle = {
+                    ...enhancedStyle,
+                    color: '#2563eb',
+                    resizeMode: 'auto-width',
+                }
+            }
+            
             return {
                 ...change,
                 y: adjustedY,
-                style: {
-                    ...change.style,
-                    // Force full width for headings to allow proper text wrapping
-                    width: change.type === 'heading' ? 674 : (change.style?.width || 300),
-                    // Force auto-height for all text elements to prevent truncation
-                    resizeMode: 'auto-height'
-                }
+                style: enhancedStyle
             }
         })
         
-        console.log(`✅ AI generated ${processedChanges.length} layout changes with collision prevention`)
+        console.log(`✅ Processed ${processedChanges.length} elements with professional styling`)
 
         return NextResponse.json({
             success: true,
-            changes: processedChanges
+            changes: processedChanges,
+            meta: {
+                elementCount: processedChanges.length,
+                types: processedChanges.reduce((acc, el) => {
+                    acc[el.type] = (acc[el.type] || 0) + 1
+                    return acc
+                }, {} as Record<string, number>)
+            }
         })
 
     } catch (error: any) {

@@ -92,25 +92,154 @@ class AIService {
   }
 
   private getMockResponse(prompt: string): string {
-    const mockResponses = [
-      "This is AI-generated content for demonstration.",
-      "Professional content would appear here with a valid API key.",
-      "Add your Gemini API key to get real AI responses.",
-      "Mock response - the AI service is working but rate limited.",
-      "Free tier has limits. Consider upgrading for more requests."
+    // Return a valid JSON array of layout elements for layout generation
+    // This ensures the app works even when AI API is rate limited
+    const mockLayoutElements = [
+      {
+        "id": "mock-title",
+        "type": "heading",
+        "x": 60,
+        "y": 80,
+        "content": "Professional Document",
+        "pageIndex": 0,
+        "style": {
+          "width": 674,
+          "height": 60,
+          "fontSize": 36,
+          "fontWeight": 700,
+          "textAlign": "center",
+          "color": "#1a1a1a",
+          "resizeMode": "auto-height"
+        }
+      },
+      {
+        "id": "mock-subtitle",
+        "type": "paragraph",
+        "x": 60,
+        "y": 155,
+        "content": "This is a demonstration layout generated while the AI service is temporarily unavailable due to rate limits.",
+        "pageIndex": 0,
+        "style": {
+          "width": 674,
+          "height": 50,
+          "fontSize": 16,
+          "fontWeight": 400,
+          "textAlign": "center",
+          "color": "#64748b",
+          "lineHeight": 1.6,
+          "resizeMode": "auto-height"
+        }
+      },
+      {
+        "id": "mock-line-1",
+        "type": "line",
+        "x": 60,
+        "y": 230,
+        "content": "",
+        "pageIndex": 0,
+        "lineOrientation": "horizontal",
+        "lineStyle": "solid",
+        "style": {
+          "width": 674,
+          "height": 2,
+          "backgroundColor": "#cbd5e1"
+        }
+      },
+      {
+        "id": "mock-section-1",
+        "type": "heading",
+        "x": 60,
+        "y": 260,
+        "content": "Section One",
+        "pageIndex": 0,
+        "style": {
+          "width": 674,
+          "height": 40,
+          "fontSize": 24,
+          "fontWeight": 700,
+          "textAlign": "left",
+          "color": "#1a1a1a",
+          "resizeMode": "auto-height"
+        }
+      },
+      {
+        "id": "mock-para-1",
+        "type": "paragraph",
+        "x": 60,
+        "y": 315,
+        "content": "When the AI service is available, this will be replaced with intelligent, professionally designed content based on your request. For now, this mock layout demonstrates the multi-element structure with headings, paragraphs, and dividers.",
+        "pageIndex": 0,
+        "style": {
+          "width": 674,
+          "height": 80,
+          "fontSize": 14,
+          "fontWeight": 400,
+          "textAlign": "left",
+          "color": "#374151",
+          "lineHeight": 1.6,
+          "resizeMode": "auto-height"
+        }
+      },
+      {
+        "id": "mock-section-2",
+        "type": "heading",
+        "x": 60,
+        "y": 415,
+        "content": "Section Two",
+        "pageIndex": 0,
+        "style": {
+          "width": 674,
+          "height": 40,
+          "fontSize": 24,
+          "fontWeight": 700,
+          "textAlign": "left",
+          "color": "#1a1a1a",
+          "resizeMode": "auto-height"
+        }
+      },
+      {
+        "id": "mock-para-2",
+        "type": "paragraph",
+        "x": 60,
+        "y": 470,
+        "content": "The AI can generate complete documents with 15-30+ elements including containers, icons, images, and more when the API is available. Each element is positioned to prevent collisions and styled professionally.",
+        "pageIndex": 0,
+        "style": {
+          "width": 674,
+          "height": 80,
+          "fontSize": 14,
+          "fontWeight": 400,
+          "textAlign": "left",
+          "color": "#374151",
+          "lineHeight": 1.6,
+          "resizeMode": "auto-height"
+        }
+      },
+      {
+        "id": "mock-container",
+        "type": "container",
+        "x": 60,
+        "y": 570,
+        "content": "Note: AI service is currently rate limited. Please try again in a few minutes for full AI-generated content.",
+        "pageIndex": 0,
+        "style": {
+          "width": 674,
+          "height": 80,
+          "fontSize": 13,
+          "fontWeight": 400,
+          "textAlign": "center",
+          "color": "#64748b",
+          "backgroundColor": "#f8fafc",
+          "borderRadius": 8,
+          "borderWidth": 1,
+          "borderColor": "#e2e8f0",
+          "padding": 16,
+          "resizeMode": "auto-height"
+        }
+      }
     ]
 
-    const randomResponse = mockResponses[Math.floor(Math.random() * mockResponses.length)]
-
-    if (prompt.toLowerCase().includes('cv') || prompt.includes('resume')) {
-      return `CV CONTENT\n\nRole: Professional\nExperience: 5+ years\nSkills: Leadership, Communication\nEducation: Relevant degree`
-    }
-
-    if (prompt.toLowerCase().includes('contract')) {
-      return `{"contract": "example", "status": "mock"}`
-    }
-
-    return randomResponse
+    return JSON.stringify(mockLayoutElements)
   }
 
   async generateCVContent(role: string, experience: string): Promise<string> {
@@ -138,11 +267,42 @@ class AIService {
     const result = await this.generateContent(prompt)
 
     try {
-      // Clean the result in case the AI included markdown blocks
-      const jsonStr = result.replace(/```json/g, '').replace(/```/g, '').trim()
-      return JSON.parse(jsonStr)
+      // More robust JSON cleaning
+      let jsonStr = result
+        .replace(/```json\s*/gi, '')  // Remove ```json
+        .replace(/```\s*$/gi, '')     // Remove closing ```
+        .replace(/^[\s\S]*?(\[)/, '[') // Remove everything before first [
+        .replace(/\][\s\S]*$/, ']')   // Remove everything after last ]
+        .trim()
+      
+      // Try to parse
+      const parsed = JSON.parse(jsonStr)
+      
+      // Validate it's an array
+      if (!Array.isArray(parsed)) {
+        throw new Error('AI response is not a JSON array')
+      }
+      
+      return parsed
     } catch (error) {
       console.error('Failed to parse AI layout response:', error)
+      console.log('Raw response (first 500 chars):', result.substring(0, 500))
+      
+      // Try fallback: extract JSON array using regex
+      const arrayMatch = result.match(/\[[\s\S]*\]/)
+      if (arrayMatch) {
+        try {
+          const fixed = arrayMatch[0]
+            .replace(/'/g, '"')           // Replace single quotes with double
+            .replace(/(\w+):/g, '"$1":')  // Quote unquoted property names
+            .replace(/,\s*\]/g, ']')      // Remove trailing commas
+            .replace(/,\s*\}/g, '}')      // Remove trailing commas in objects
+          return JSON.parse(fixed)
+        } catch (e) {
+          console.error('Fallback parse also failed:', e)
+        }
+      }
+      
       throw new Error('AI returned an invalid layout format. Please try again.')
     }
   }

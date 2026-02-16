@@ -10,37 +10,45 @@ interface AIContentGeneratorProps {
 }
 
 export default function AIContentGenerator({ onContentGenerated, type, defaultPrompt }: AIContentGeneratorProps) {
-  const { getLayoutContext, applyLayoutChanges } = useEditorStore()
+  const { getLayoutContext, applyLayoutChanges, clearPages } = useEditorStore()
   const [isGenerating, setIsGenerating] = useState(false)
-  const [mode, setMode] = useState<'editor' | 'direct' | 'layout'>('editor')
+  const [mode, setMode] = useState<'editor' | 'smart' | 'layout' | 'direct'>('smart')
   const [prompt, setPrompt] = useState(defaultPrompt || '')
   const [role, setRole] = useState('')
   const [experience, setExperience] = useState('')
   const [topic, setTopic] = useState('')
-  const [documentType, setDocumentType] = useState('report')
+  const [documentType, setDocumentType] = useState('cv')
+  const [style, setStyle] = useState('modern professional')
 
-  const generateToEditor = async () => {
+  // NEW: Smart Layout Generation - Full professional document with multi-element layout
+  const generateSmartLayout = async () => {
+    if (!topic && !role) return
     setIsGenerating(true)
     try {
-      const response = await fetch('/api/generate-ai-content', {
+      // Clear existing pages for fresh layout
+      clearPages()
+      
+      const fullPrompt = documentType === 'cv' 
+        ? `Create a professional CV/resume for a ${role} with ${experience} years experience. Use modern ${style} design with multiple sections including header, summary, experience, education, and skills.`
+        : `Create a professional ${documentType} about "${topic}". Use ${style} design with proper sections, headings, and professional layout.`
+      
+      const response = await fetch('/api/ai-layout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type,
-          role,
-          experience,
-          topic,
-          documentType,
-          prompt: prompt || undefined
+        body: JSON.stringify({ 
+          prompt: fullPrompt,
+          context: '[]' // Fresh canvas
         })
       })
 
       const data = await response.json()
-      if (data.content) {
-        onContentGenerated(data.content)
+      if (data.success && data.changes) {
+        applyLayoutChanges(data.changes)
+        // Show success feedback
+        console.log(`✅ Generated ${data.meta?.elementCount || data.changes.length} elements`)
       }
     } catch (error) {
-      console.error('AI Generation Error:', error)
+      console.error('Smart Layout Generation Error:', error)
     } finally {
       setIsGenerating(false)
     }
@@ -106,102 +114,124 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         </h3>
         <div className="flex bg-gray-100 p-1 rounded-lg">
           <button
-            onClick={() => setMode('editor')}
-            className={`px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${mode === 'editor' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+            onClick={() => setMode('smart')}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${mode === 'smart' ? 'bg-white shadow-sm text-green-600' : 'text-gray-500 hover:text-gray-700'}`}
           >
-            Content
+            🎨 Smart Layout
           </button>
           <button
             onClick={() => setMode('layout')}
-            className={`px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${mode === 'layout' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${mode === 'layout' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
           >
-            Layout
+            🎯 Modify
           </button>
           <button
             onClick={() => setMode('direct')}
-            className={`px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${mode === 'direct' ? 'bg-white shadow-sm text-purple-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all ${mode === 'direct' ? 'bg-white shadow-sm text-purple-600' : 'text-gray-500 hover:text-gray-700'}`}
           >
-            Direct PDF
+            ⚡ Direct PDF
           </button>
         </div>
       </div>
 
-      {mode === 'editor' ? (
-        <>
-          {type === 'cv' ? (
-            <div className="space-y-4">
+      {mode === 'smart' ? (
+        <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+          <div className="bg-green-50 p-4 rounded-xl border border-green-100 flex gap-3">
+            <div className="text-2xl">✨</div>
+            <p className="text-[13px] text-green-700 leading-relaxed font-medium">
+              Generate a complete professional document with AI. Creates multiple elements: headings, paragraphs, containers, icons, and lines - all perfectly positioned.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Document Type</label>
+              <select
+                value={documentType}
+                onChange={(e) => setDocumentType(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 bg-white"
+              >
+                <option value="cv">CV / Resume</option>
+                <option value="proposal">Business Proposal</option>
+                <option value="report">Professional Report</option>
+                <option value="letter">Cover Letter</option>
+                <option value="brochure">Company Brochure</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Design Style</label>
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 bg-white"
+              >
+                <option value="modern professional">Modern Professional</option>
+                <option value="elegant minimalist">Elegant Minimalist</option>
+                <option value="creative bold">Creative Bold</option>
+                <option value="corporate formal">Corporate Formal</option>
+              </select>
+            </div>
+          </div>
+
+          {documentType === 'cv' ? (
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Job Role / Position</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Job Role</label>
                 <input
                   type="text"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   placeholder="e.g., Senior Software Engineer"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Years of Experience</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Years Experience</label>
                 <input
                   type="text"
                   value={experience}
                   onChange={(e) => setExperience(e.target.value)}
                   placeholder="e.g., 5"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
                 />
               </div>
             </div>
           ) : (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Document Topic</label>
-                <input
-                  type="text"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
-                  placeholder="e.g., Digital Marketing Strategies"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Document Type</label>
-                <select
-                  value={documentType}
-                  onChange={(e) => setDocumentType(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="report">Report</option>
-                  <option value="proposal">Proposal</option>
-                  <option value="article">Article</option>
-                  <option value="presentation">Presentation</option>
-                </select>
-              </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Topic / Subject</label>
+              <input
+                type="text"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                placeholder="e.g., Digital Marketing Strategies for 2024"
+                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500"
+              />
             </div>
           )}
 
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Custom Instructions (Optional)</label>
-            <textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Add any specific requirements..."
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-              rows={3}
-            />
+          <div className="flex gap-2 flex-wrap pt-2 border-t border-gray-100">
+            <span className="w-full text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Quick Templates</span>
+            <RecipeButton label="🎯 Executive CV" onClick={() => { setDocumentType('cv'); setRole('Executive Director'); setExperience('15'); }} />
+            <RecipeButton label="💼 Tech Resume" onClick={() => { setDocumentType('cv'); setRole('Full Stack Developer'); setExperience('5'); }} />
+            <RecipeButton label="📊 Sales Proposal" onClick={() => { setDocumentType('proposal'); setTopic('Enterprise Software Solutions'); }} />
+            <RecipeButton label="📈 Marketing Report" onClick={() => { setDocumentType('report'); setTopic('Q4 Marketing Performance Analysis'); }} />
           </div>
 
           <button
-            onClick={generateToEditor}
-            disabled={isGenerating || (!role && !topic)}
-            className="mt-6 w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-400 text-white py-3.5 px-4 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-blue-200"
+            onClick={generateSmartLayout}
+            disabled={isGenerating || (!topic && !role)}
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-300 disabled:to-gray-300 text-white py-4 px-4 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-xl shadow-green-200"
           >
             {isGenerating ? (
-              <><div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>Processing...</>
+              <><div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>Creating Professional Layout...</>
             ) : (
-              <><Plus size={20} />Add Content to Editor</>
+              <><span>🎨</span>Generate Complete Document</>
             )}
           </button>
-        </>
+          <p className="text-center text-[10px] text-gray-400 font-medium uppercase tracking-widest">
+            Creates 15-30+ elements automatically
+          </p>
+        </div>
       ) : mode === 'layout' ? (
         <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
           <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex gap-3">
