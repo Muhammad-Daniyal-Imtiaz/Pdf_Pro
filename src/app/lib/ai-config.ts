@@ -2,20 +2,24 @@ export const AI_CONFIG = {
   // Your API key
   apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
 
-  // ✅ USE THESE EXACT MODEL NAMES:
+  // ✅ FREE MODELS FROM YOUR models.txt:
   models: [
-    'gemini-1.5-flash',       // Best for speed & most free limits
-    'gemini-1.5-pro',         // Best for reasoning/complex tasks
-    'gemini-1.5-flash-8b',    // Ultra-fast, lightweight
-    'gemini-1.0-pro',         // Older, reliable fallback
+    'gemini-flash-latest',      // Verified SUCCESS - Points to latest stable flash (1.5)
+    'gemini-2.0-flash',         // Standard 2.0 (Note: some keys have 0 quota for this)
+    'gemini-2.0-flash-lite',    // Efficient lite model
+    'gemini-pro-latest',        // Stable pro fallback
+    'gemma-3-4b-it',            // Lightweight fallback
+    'gemini-2.0-flash-exp',     // Experimental (Failed with 404 in logs)
   ],
 
-  // Rate limits (Standard free tier limits)
+  // Rate limits (Estimated for free tier)
   rateLimits: {
-    'gemini-1.5-flash': { rpm: 15, tpm: 1000000, rpd: 1500 },
-    'gemini-1.5-pro': { rpm: 2, tpm: 32000, rpd: 50 },
-    'gemini-1.5-flash-8b': { rpm: 15, tpm: 1000000, rpd: 1500 },
-    'gemini-1.0-pro': { rpm: 15, tpm: 1000000, rpd: 1500 },
+    'gemini-2.0-flash-exp': { rpm: 15, tpm: 1000000, rpd: 1500 },
+    'gemini-2.0-flash': { rpm: 15, tpm: 1000000, rpd: 1500 },
+    'gemini-flash-latest': { rpm: 15, tpm: 1000000, rpd: 1500 },
+    'gemini-2.0-flash-lite': { rpm: 15, tpm: 1000000, rpd: 1500 },
+    'gemini-pro-latest': { rpm: 2, tpm: 32000, rpd: 50 },
+    'gemma-3-4b-it': { rpm: 30, tpm: 4000000, rpd: 1500 },
   },
 
   maxTokens: 2048,
