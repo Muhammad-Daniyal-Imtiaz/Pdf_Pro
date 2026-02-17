@@ -307,6 +307,169 @@ class AIService {
     }
   }
 
+  async generateTemplateContent(templateId: string, templateName: string, userPrompt: string): Promise<any[]> {
+    const templatePrompts = {
+      // CV/Resume Templates
+      'cv-modern-blue': `Generate a professional CV/Resume based on: "${userPrompt}". Use modern blue styling. Include personal info, summary, experience, skills, education. Return as JSON array.`,
+      'cv-executive-gray': `Generate an executive-level CV/Resume based on: "${userPrompt}". Use sophisticated gray styling. Include leadership experience, achievements, skills. Return as JSON array.`,
+      'cv-creative-purple': `Generate a creative CV/Resume for designers based on: "${userPrompt}". Use vibrant purple styling. Include portfolio, creative skills, design experience. Return as JSON array.`,
+      'cv-minimalist-black': `Generate a minimalist CV/Resume based on: "${userPrompt}". Use clean black typography. Focus on essential information only. Return as JSON array.`,
+      'cv-nature-green': `Generate a fresh CV/Resume based on: "${userPrompt}". Use natural green colors. Include environmental or sustainability focus if relevant. Return as JSON array.`,
+      'cv-tech-teal': `Generate a tech-focused CV/Resume based on: "${userPrompt}". Use modern teal styling. Include technical skills, projects, experience. Return as JSON array.`,
+      'cv-elegant-rose': `Generate an elegant CV/Resume based on: "${userPrompt}". Use sophisticated rose accents. Include refined professional experience. Return as JSON array.`,
+      'cv-bold-orange': `Generate a bold CV/Resume based on: "${userPrompt}". Use eye-catching orange styling. Make it stand out visually. Return as JSON array.`,
+      'cv-clean-white': `Generate a clean CV/Resume based on: "${userPrompt}". Use pure white minimalist design. Focus on clarity and simplicity. Return as JSON array.`,
+      'cv-corporate-navy': `Generate a corporate CV/Resume based on: "${userPrompt}". Use professional navy blue theme. Include business experience. Return as JSON array.`,
+
+      // Cover Letter Templates
+      'cover-letter-professional': `Generate a professional cover letter for: "${userPrompt}". Use standard business format. Include proper salutation, introduction, body, closing. Return as JSON array.`,
+      'cover-letter-executive': `Generate an executive-level cover letter for: "${userPrompt}". Use formal styling. Include leadership experience and strategic thinking. Return as JSON array.`,
+      'cover-letter-creative': `Generate a creative cover letter for: "${userPrompt}". Use artistic design. Focus on creative skills and portfolio. Return as JSON array.`,
+      'cover-letter-minimalist': `Generate a minimalist cover letter for: "${userPrompt}". Use clean simple design. Focus on essential points only. Return as JSON array.`,
+      'cover-letter-tech': `Generate a tech-focused cover letter for: "${userPrompt}". Include technical skills and project experience. Return as JSON array.`,
+      'cover-letter-traditional': `Generate a traditional cover letter for: "${userPrompt}". Use classic formal format. Follow standard business letter conventions. Return as JSON array.`,
+      'cover-letter-modern': `Generate a modern cover letter for: "${userPrompt}". Use contemporary styling. Include current industry trends. Return as JSON array.`,
+      'cover-letter-elegant': `Generate an elegant cover letter for: "${userPrompt}". Use sophisticated refined language. Focus on professional presentation. Return as JSON array.`,
+      'cover-letter-simple': `Generate a simple cover letter for: "${userPrompt}". Use straightforward format. Focus on clarity and directness. Return as JSON array.`,
+      'cover-letter-academic': `Generate an academic cover letter for: "${userPrompt}". Include research experience, publications, academic achievements. Return as JSON array.`,
+
+      // Business Proposal Templates
+      'business-proposal-standard': `Generate a standard business proposal for: "${userPrompt}". Include executive summary, problem, solution, timeline, budget. Return as JSON array.`,
+      'business-proposal-premium': `Generate a premium business proposal for: "${userPrompt}". Use high-end formatting. Include comprehensive details and professional presentation. Return as JSON array.`,
+      'business-proposal-express': `Generate an express business proposal for: "${userPrompt}". Focus on quick turnaround. Include essential points only. Return as JSON array.`,
+      'business-proposal-corporate': `Generate a corporate business proposal for: "${userPrompt}". Use formal corporate language. Include detailed business case. Return as JSON array.`,
+      'business-proposal-startup': `Generate a startup business proposal for: "${userPrompt}". Use modern startup language. Include innovation and growth potential. Return as JSON array.`,
+      'business-proposal-tech': `Generate a tech business proposal for: "${userPrompt}". Include technical specifications, implementation details. Return as JSON array.`,
+      'business-proposal-consulting': `Generate a consulting business proposal for: "${userPrompt}". Include service offerings, methodology, deliverables. Return as JSON array.`,
+      'business-proposal-sales': `Generate a sales-focused business proposal for: "${userPrompt}". Include sales strategy, conversion tactics, ROI analysis. Return as JSON array.`,
+      'business-proposal-partnership': `Generate a partnership business proposal for: "${userPrompt}". Include collaboration benefits, shared goals, terms. Return as JSON array.`,
+      'business-proposal-template': `Generate a generic business proposal for: "${userPrompt}". Include all standard proposal sections. Return as JSON array.`,
+
+      // Professional Report Templates
+      'professional-report-annual': `Generate an annual professional report on: "${userPrompt}". Include yearly performance, trends, future outlook. Return as JSON array.`,
+      'professional-report-quarterly': `Generate a quarterly professional report on: "${userPrompt}". Include quarterly metrics, analysis, recommendations. Return as JSON array.`,
+      'professional-report-financial': `Generate a financial professional report for: "${userPrompt}". Include financial statements, analysis, forecasts. Return as JSON array.`,
+      'professional-report-project': `Generate a project status report for: "${userPrompt}". Include progress, milestones, issues, next steps. Return as JSON array.`,
+
+      // Invoice Templates
+      'invoice-standard': `Generate a standard invoice for: "${userPrompt}". Include itemized services, costs, payment terms. Return as JSON array.`,
+      'invoice-professional': `Generate a professional invoice for: "${userPrompt}". Include detailed billing information and terms. Return as JSON array.`,
+      'invoice-simple': `Generate a simple invoice for: "${userPrompt}". Include basic billing information only. Return as JSON array.`,
+      'invoice-detailed': `Generate a detailed invoice for: "${userPrompt}". Include comprehensive itemization and breakdown. Return as JSON array.`,
+      'invoice-template': `Generate a generic invoice for: "${userPrompt}". Include all standard invoice elements. Return as JSON array.`,
+
+      // Contract Templates
+      'contract-service': `Generate a service contract for: "${userPrompt}". Include scope of work, deliverables, payment terms. Return as JSON array.`,
+      'contract-employment': `Generate an employment contract for: "${userPrompt}". Include job duties, compensation, terms. Return as JSON array.`,
+      'contract-nda': `Generate an NDA contract for: "${userPrompt}". Include confidentiality terms, obligations, duration. Return as JSON array.`,
+      'contract-partnership': `Generate a partnership contract for: "${userPrompt}". Include partnership terms, responsibilities, profit sharing. Return as JSON array.`,
+      'contract-template': `Generate a generic contract for: "${userPrompt}". Include standard contract elements and clauses. Return as JSON array.`,
+
+      // Company Brochure Templates
+      'company-brochure-corporate': `Generate a corporate company brochure for: "${userPrompt}". Use professional business language. Include company overview, services. Return as JSON array.`,
+      'company-brochure-creative': `Generate a creative company brochure for: "${userPrompt}". Use artistic language. Include unique selling points. Return as JSON array.`,
+      'company-brochure-minimal': `Generate a minimal company brochure for: "${userPrompt}". Use clean design language. Focus on essential information. Return as JSON array.`,
+      'company-brochure-luxury': `Generate a luxury company brochure for: "${userPrompt}". Use premium language. Highlight exclusivity and quality. Return as JSON array.`,
+      'company-brochure-tech': `Generate a tech company brochure for: "${userPrompt}". Include technical specifications, innovation. Return as JSON array.`,
+      'company-brochure-startup': `Generate a startup company brochure for: "${userPrompt}". Use dynamic language. Include vision and mission. Return as JSON array.`,
+      'company-brochure-modern': `Generate a modern company brochure for: "${userPrompt}". Use contemporary language. Include current trends. Return as JSON array.`,
+      'company-brochure-classic': `Generate a classic company brochure for: "${userPrompt}". Use traditional business language. Include heritage and stability. Return as JSON array.`,
+      'company-brochure-professional': `Generate a professional company brochure for: "${userPrompt}". Use business-focused language. Include key benefits. Return as JSON array.`,
+      'company-brochure-template': `Generate a generic company brochure for: "${userPrompt}". Include all standard brochure sections. Return as JSON array.`
+    }
+
+    const prompt = templatePrompts[templateId as keyof typeof templatePrompts] || 
+      `Generate professional content for ${templateName} based on: "${userPrompt}". 
+      Return as JSON array of properly positioned and styled elements suitable for the document type.`
+
+    const result = await this.generateContent(prompt)
+    
+    try {
+      let jsonStr = result
+        .replace(/```json\s*/gi, '')
+        .replace(/```\s*$/gi, '')
+        .replace(/^[\s\S]*?(\[)/, '[')
+        .replace(/\][\s\S]*$/, ']')
+        .trim()
+      
+      const parsed = JSON.parse(jsonStr)
+      
+      if (!Array.isArray(parsed)) {
+        throw new Error('AI response is not a JSON array')
+      }
+      
+      return parsed
+    } catch (error) {
+      console.error('Failed to parse template AI response:', error)
+      return this.getTemplateMockContent(templateId)
+    }
+  }
+
+  private getTemplateMockContent(templateId: string): any[] {
+    const mockContents = {
+      'cv-resume': [
+        {
+          id: "mock-name",
+          type: "heading",
+          x: 60, y: 60,
+          content: "JOHN DOE",
+          pageIndex: 0,
+          style: { width: 674, height: 50, fontSize: 36, fontWeight: 700, color: "#1a1a1a", resizeMode: "auto-height" }
+        },
+        {
+          id: "mock-title",
+          type: "text",
+          x: 60, y: 115,
+          content: "Senior Software Engineer",
+          pageIndex: 0,
+          style: { width: 400, height: 30, fontSize: 18, fontWeight: 500, color: "#6b7280", resizeMode: "auto-width" }
+        }
+      ],
+      'business-proposal': [
+        {
+          id: "mock-proposal-title",
+          type: "heading",
+          x: 60, y: 60,
+          content: "BUSINESS PROPOSAL",
+          pageIndex: 0,
+          style: { width: 674, height: 40, fontSize: 28, fontWeight: 700, color: "#1e2937", resizeMode: "auto-height" }
+        }
+      ],
+      'professional-report': [
+        {
+          id: "mock-report-title",
+          type: "heading",
+          x: 60, y: 60,
+          content: "PROFESSIONAL REPORT",
+          pageIndex: 0,
+          style: { width: 674, height: 40, fontSize: 28, fontWeight: 700, color: "#1e2937", resizeMode: "auto-height" }
+        }
+      ],
+      'cover-letter': [
+        {
+          id: "mock-letter-header",
+          type: "text",
+          x: 60, y: 60,
+          content: "John Doe\n123 Main Street\nSan Francisco, CA 94102",
+          pageIndex: 0,
+          style: { width: 300, height: 60, fontSize: 14, fontWeight: 400, color: "#1f2937", resizeMode: "auto-height" }
+        }
+      ],
+      'company-brochure': [
+        {
+          id: "mock-brochure-title",
+          type: "heading",
+          x: 60, y: 60,
+          content: "INNOVATE. INSPIRE. TRANSFORM.",
+          pageIndex: 0,
+          style: { width: 674, height: 60, fontSize: 42, fontWeight: 800, color: "#ffffff", resizeMode: "auto-height" }
+        }
+      ]
+    }
+    
+    return mockContents[templateId as keyof typeof mockContents] || []
+  }
+
   async generateMarkdownFromCanvas(canvasContext: string): Promise<string> {
     const prompt = AI_PROMPTS.mcpAICanvasExport(canvasContext)
     return this.generateContent(prompt)

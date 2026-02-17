@@ -1,0 +1,1174 @@
+{
+  "id": "business-proposal-standard",
+  "name": "Standard Business Proposal",
+  "description": "Professional business proposal template for general use",
+  "category": "business",
+  "preview": "/templates/previews/business-proposal-standard.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "header-bg",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 150,
+            "backgroundColor": "#1e3a8a",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "proposal-title",
+          "type": "text",
+          "x": 60,
+          "y": 40,
+          "content": "BUSINESS PROPOSAL",
+          "style": {
+            "width": 674,
+            "height": 40,
+            "fontSize": 28,
+            "fontWeight": 700,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "proposal-subtitle",
+          "type": "text",
+          "x": 60,
+          "y": 85,
+          "content": "Prepared for [Client Company Name]",
+          "style": {
+            "width": 674,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#e0e7ff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "proposal-ref",
+          "type": "text",
+          "x": 60,
+          "y": 115,
+          "content": "Proposal #: PRO-2024-001 | Date: January 15, 2024",
+          "style": {
+            "width": 674,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "opacity": 0.8,
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "company-info",
+          "type": "container",
+          "x": 60,
+          "y": 180,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 8,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-by",
+          "type": "text",
+          "x": 80,
+          "y": 200,
+          "content": "PREPARED BY:",
+          "style": {
+            "width": 120,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-by-name",
+          "type": "text",
+          "x": 80,
+          "y": 225,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 250,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-by-title",
+          "type": "text",
+          "x": 80,
+          "y": 250,
+          "content": "Full Stack Developer, Antigravity",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-for",
+          "type": "text",
+          "x": 400,
+          "y": 200,
+          "content": "PREPARED FOR:",
+          "style": {
+            "width": 120,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-for-name",
+          "type": "text",
+          "x": 400,
+          "y": 225,
+          "content": "[Client Name]",
+          "style": {
+            "width": 250,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-for-company",
+          "type": "text",
+          "x": 400,
+          "y": 250,
+          "content": "[Client Company]",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "executive-summary-title",
+          "type": "text",
+          "x": 60,
+          "y": 320,
+          "content": "EXECUTIVE SUMMARY",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "executive-summary-content",
+          "type": "paragraph",
+          "x": 60,
+          "y": 355,
+          "content": "This proposal outlines a comprehensive solution designed to address [Client Company]'s key business challenges and opportunities. As a Full Stack Developer with extensive experience in React, Next.js, and Node.js, I bring proven expertise in building scalable, AI-powered web applications that drive business growth.",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "objectives-title",
+          "type": "text",
+          "x": 60,
+          "y": 470,
+          "content": "PROJECT OBJECTIVES",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "objectives-list",
+          "type": "paragraph",
+          "x": 60,
+          "y": 505,
+          "content": "• Increase operational efficiency by 35% through automated workflows\n• Reduce development costs by 25% with scalable architecture\n• Improve user engagement by 50% with modern UI/UX design\n• Enhance data security and compliance measures\n• Implement real-time analytics and reporting capabilities",
+          "style": {
+            "width": 674,
+            "height": 120,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-title",
+          "type": "text",
+          "x": 60,
+          "y": 640,
+          "content": "PROPOSED TIMELINE",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-1",
+          "type": "text",
+          "x": 80,
+          "y": 680,
+          "content": "Week 1-2:",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-1-desc",
+          "type": "text",
+          "x": 170,
+          "y": 680,
+          "content": "Discovery & Requirements Gathering",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-2",
+          "type": "text",
+          "x": 80,
+          "y": 710,
+          "content": "Week 3-6:",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-2-desc",
+          "type": "text",
+          "x": 170,
+          "y": 710,
+          "content": "Design & Architecture",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-3",
+          "type": "text",
+          "x": 80,
+          "y": 740,
+          "content": "Week 7-12:",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-3-desc",
+          "type": "text",
+          "x": 170,
+          "y": 740,
+          "content": "Development & Implementation",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-4",
+          "type": "text",
+          "x": 80,
+          "y": 770,
+          "content": "Week 13-14:",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-4-desc",
+          "type": "text",
+          "x": 170,
+          "y": 770,
+          "content": "Testing & Quality Assurance",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-5",
+          "type": "text",
+          "x": 80,
+          "y": 800,
+          "content": "Week 15:",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "timeline-item-5-desc",
+          "type": "text",
+          "x": 170,
+          "y": 800,
+          "content": "Deployment & Training",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "page-2",
+      "elements": [
+        {
+          "id": "investment-title",
+          "type": "text",
+          "x": 60,
+          "y": 60,
+          "content": "INVESTMENT SUMMARY",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-table",
+          "type": "container",
+          "x": 60,
+          "y": 100,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 200,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 8,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-header-1",
+          "type": "container",
+          "x": 60,
+          "y": 100,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#f1f5f9",
+            "borderWidth": 0,
+            "borderRight": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-header-1-text",
+          "type": "text",
+          "x": 80,
+          "y": 110,
+          "content": "Service / Component",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-header-2",
+          "type": "container",
+          "x": 397,
+          "y": 100,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#f1f5f9",
+            "borderWidth": 0,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-header-2-text",
+          "type": "text",
+          "x": 517,
+          "y": 110,
+          "content": "Cost (USD)",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-1",
+          "type": "container",
+          "x": 60,
+          "y": 140,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "borderRight": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-1-text",
+          "type": "text",
+          "x": 80,
+          "y": 150,
+          "content": "Discovery & Planning",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-1-value",
+          "type": "container",
+          "x": 397,
+          "y": 140,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-1-value-text",
+          "type": "text",
+          "x": 517,
+          "y": 150,
+          "content": "$5,000",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-2",
+          "type": "container",
+          "x": 60,
+          "y": 180,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "borderRight": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-2-text",
+          "type": "text",
+          "x": 80,
+          "y": 190,
+          "content": "Design & Architecture",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-2-value",
+          "type": "container",
+          "x": 397,
+          "y": 180,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-2-value-text",
+          "type": "text",
+          "x": 517,
+          "y": 190,
+          "content": "$8,000",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-3",
+          "type": "container",
+          "x": 60,
+          "y": 220,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "borderRight": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-3-text",
+          "type": "text",
+          "x": 80,
+          "y": 230,
+          "content": "Development",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-3-value",
+          "type": "container",
+          "x": 397,
+          "y": 220,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-3-value-text",
+          "type": "text",
+          "x": 517,
+          "y": 230,
+          "content": "$25,000",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-4",
+          "type": "container",
+          "x": 60,
+          "y": 260,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "borderRight": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-4-text",
+          "type": "text",
+          "x": 80,
+          "y": 270,
+          "content": "Testing & QA",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-4-value",
+          "type": "container",
+          "x": 397,
+          "y": 260,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderBottom": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-4-value-text",
+          "type": "text",
+          "x": 517,
+          "y": 270,
+          "content": "$6,000",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-5",
+          "type": "container",
+          "x": 60,
+          "y": 300,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 0,
+            "borderRight": "1px solid #e2e8f0",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-5-text",
+          "type": "text",
+          "x": 80,
+          "y": 310,
+          "content": "TOTAL INVESTMENT",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 700,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-5-value",
+          "type": "container",
+          "x": 397,
+          "y": 300,
+          "content": "",
+          "style": {
+            "width": 337,
+            "height": 40,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 0,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "investment-row-5-value-text",
+          "type": "text",
+          "x": 517,
+          "y": 310,
+          "content": "$44,000",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 700,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "roi-title",
+          "type": "text",
+          "x": 60,
+          "y": 380,
+          "content": "PROJECTED ROI",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "roi-content",
+          "type": "paragraph",
+          "x": 60,
+          "y": 415,
+          "content": "Based on similar projects and industry benchmarks, we project a return on investment of 250% within the first 18 months of implementation. This includes cost savings from operational efficiencies, increased revenue from improved user engagement, and reduced technical debt through modern architecture.",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "roi-highlight",
+          "type": "container",
+          "x": 60,
+          "y": 530,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 80,
+            "backgroundColor": "#e0f2fe",
+            "borderWidth": 1,
+            "borderColor": "#7dd3fc",
+            "borderRadius": 8,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "roi-highlight-text",
+          "type": "text",
+          "x": 80,
+          "y": 550,
+          "content": "Estimated Annual Savings: $110,000 | Payback Period: 4.8 months",
+          "style": {
+            "width": 634,
+            "height": 40,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0369a1",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "next-steps-title",
+          "type": "text",
+          "x": 60,
+          "y": 650,
+          "content": "NEXT STEPS",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "next-steps-list",
+          "type": "paragraph",
+          "x": 60,
+          "y": 690,
+          "content": "1. Review proposal with stakeholders (by Jan 22)\n2. Schedule discovery call to clarify requirements\n3. Finalize scope and deliverables\n4. Sign agreement and process initial payment\n5. Kick-off meeting and project initiation",
+          "style": {
+            "width": 674,
+            "height": 120,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "signature-section",
+          "type": "container",
+          "x": 60,
+          "y": 830,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 150,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 8,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "signature-title",
+          "type": "text",
+          "x": 80,
+          "y": 850,
+          "content": "AUTHORIZED SIGNATURE",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "signature-line",
+          "type": "container",
+          "x": 80,
+          "y": 890,
+          "content": "",
+          "style": {
+            "width": 300,
+            "height": 1,
+            "backgroundColor": "#94a3b8",
+            "borderWidth": 0,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "signature-name",
+          "type": "text",
+          "x": 80,
+          "y": 900,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "signature-title-under",
+          "type": "text",
+          "x": 80,
+          "y": 920,
+          "content": "Full Stack Developer, Antigravity",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "date-line",
+          "type": "container",
+          "x": 450,
+          "y": 890,
+          "content": "",
+          "style": {
+            "width": 150,
+            "height": 1,
+            "backgroundColor": "#94a3b8",
+            "borderWidth": 0,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "date-text",
+          "type": "text",
+          "x": 450,
+          "y": 900,
+          "content": "Date: _____________",
+          "style": {
+            "width": 150,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["business", "proposal", "standard", "professional"],
+    "colorScheme": "corporate",
+    "layout": "multi-page",
+    "pageCount": 2
+  }
+}

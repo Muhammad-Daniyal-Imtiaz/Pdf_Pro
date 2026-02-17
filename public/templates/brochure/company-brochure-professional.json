@@ -1,0 +1,158 @@
+{
+  "id": "company-brochure-professional",
+  "name": "Professional Company Brochure",
+  "description": "Clean, professional brochure for corporate communications",
+  "category": "marketing",
+  "preview": "/templates/previews/brochure-professional.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "prof-cover",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prof-header",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 200,
+            "backgroundColor": "#1e3a8a",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prof-logo",
+          "type": "text",
+          "x": 60,
+          "y": 80,
+          "content": "COMPANY NAME",
+          "style": {
+            "width": 300,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prof-title",
+          "type": "text",
+          "x": 60,
+          "y": 280,
+          "content": "Professional Services",
+          "style": {
+            "width": 500,
+            "height": 50,
+            "fontSize": 42,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prof-subtitle",
+          "type": "text",
+          "x": 60,
+          "y": 340,
+          "content": "Excellence in every detail",
+          "style": {
+            "width": 400,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prof-content",
+          "type": "container",
+          "x": 60,
+          "y": 400,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 400,
+            "backgroundColor": "#f8fafc",
+            "borderRadius": 16,
+            "padding": 30,
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prof-content-title",
+          "type": "text",
+          "x": 90,
+          "y": 450,
+          "content": "Why Choose Us",
+          "style": {
+            "width": 300,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prof-bullets",
+          "type": "paragraph",
+          "x": 90,
+          "y": 500,
+          "content": "• 5+ years industry experience\n• 50+ successful projects\n• 98% client satisfaction\n• Expert technical team\n• 24/7 support available",
+          "style": {
+            "width": 600,
+            "height": 120,
+            "fontSize": 15,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 2.2
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["brochure", "professional", "corporate"],
+    "colorScheme": "navy",
+    "layout": "single-page",
+    "pageCount": 1
+  }
+}

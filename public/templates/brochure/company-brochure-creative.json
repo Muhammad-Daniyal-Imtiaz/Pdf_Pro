@@ -1,0 +1,1061 @@
+{
+  "id": "company-brochure-creative",
+  "name": "Creative Agency Brochure",
+  "description": "Vibrant and dynamic brochure for creative agencies",
+  "category": "marketing",
+  "preview": "/templates/previews/brochure-creative.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "cover-bg",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#f97316",
+            "backgroundImage": "linear-gradient(135deg, #f97316 0%, #facc15 100%)",
+            "borderWidth": 0,
+            "borderRadius": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "creative-shape-1",
+          "type": "container",
+          "x": 500,
+          "y": 100,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 200,
+            "backgroundColor": "#ffffff",
+            "opacity": 0.1,
+            "borderRadius": "50%",
+            "transform": "rotate(45deg)",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "creative-shape-2",
+          "type": "container",
+          "x": -50,
+          "y": 800,
+          "content": "",
+          "style": {
+            "width": 300,
+            "height": 300,
+            "backgroundColor": "#ffffff",
+            "opacity": 0.1,
+            "borderRadius": "50%",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "agency-name",
+          "type": "text",
+          "x": 60,
+          "y": 150,
+          "content": "CREATIVE\nSTUDIO",
+          "style": {
+            "width": 400,
+            "height": 150,
+            "fontSize": 64,
+            "fontWeight": 900,
+            "color": "#ffffff",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "-0.02em",
+            "lineHeight": 1.1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "creative-tagline",
+          "type": "text",
+          "x": 60,
+          "y": 320,
+          "content": "where imagination meets execution",
+          "style": {
+            "width": 400,
+            "height": 30,
+            "fontSize": 18,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.5,
+            "opacity": 0.9
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "featured-work",
+          "type": "container",
+          "x": 60,
+          "y": 400,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 300,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderRadius": 24,
+            "boxShadow": "0 20px 40px rgba(0,0,0,0.2)",
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "featured-title",
+          "type": "text",
+          "x": 100,
+          "y": 440,
+          "content": "FEATURED PROJECT",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "project-name",
+          "type": "text",
+          "x": 100,
+          "y": 470,
+          "content": "Brand Evolution\n2024 Collection",
+          "style": {
+            "width": 300,
+            "height": 70,
+            "fontSize": 32,
+            "fontWeight": 700,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "project-desc",
+          "type": "paragraph",
+          "x": 100,
+          "y": 560,
+          "content": "A complete brand overhaul for a luxury fashion house, combining traditional craftsmanship with digital innovation.",
+          "style": {
+            "width": 300,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "project-image",
+          "type": "container",
+          "x": 420,
+          "y": 440,
+          "content": "",
+          "style": {
+            "width": 280,
+            "height": 220,
+            "backgroundColor": "#f97316",
+            "backgroundImage": "linear-gradient(135deg, #f97316 0%, #facc15 100%)",
+            "borderWidth": 0,
+            "borderRadius": 16,
+            "zIndex": 3
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "cta-circle",
+          "type": "container",
+          "x": 647,
+          "y": 1000,
+          "content": "",
+          "style": {
+            "width": 80,
+            "height": 80,
+            "backgroundColor": "#ffffff",
+            "borderRadius": "50%",
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "cta-arrow",
+          "type": "text",
+          "x": 672,
+          "y": 1025,
+          "content": "→",
+          "style": {
+            "width": 30,
+            "height": 30,
+            "fontSize": 32,
+            "fontWeight": 700,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1
+          },
+          "pageIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "page-2",
+      "elements": [
+        {
+          "id": "our-process",
+          "type": "heading",
+          "x": 60,
+          "y": 60,
+          "content": "Our Creative Process",
+          "style": {
+            "width": 674,
+            "height": 50,
+            "fontSize": 36,
+            "fontWeight": 800,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-timeline",
+          "type": "container",
+          "x": 60,
+          "y": 140,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 4,
+            "backgroundColor": "#f97316",
+            "borderWidth": 0,
+            "borderRadius": 2,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-1",
+          "type": "container",
+          "x": 80,
+          "y": 120,
+          "content": "",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 3,
+            "borderColor": "#f97316",
+            "borderRadius": "50%",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-1-num",
+          "type": "text",
+          "x": 93,
+          "y": 128,
+          "content": "1",
+          "style": {
+            "width": 15,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 700,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-1-title",
+          "type": "text",
+          "x": 60,
+          "y": 180,
+          "content": "DISCOVERY",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-2",
+          "type": "container",
+          "x": 257,
+          "y": 120,
+          "content": "",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 3,
+            "borderColor": "#f97316",
+            "borderRadius": "50%",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-2-num",
+          "type": "text",
+          "x": 270,
+          "y": 128,
+          "content": "2",
+          "style": {
+            "width": 15,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 700,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-2-title",
+          "type": "text",
+          "x": 242,
+          "y": 180,
+          "content": "IDEATION",
+          "style": {
+            "width": 70,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-3",
+          "type": "container",
+          "x": 434,
+          "y": 120,
+          "content": "",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 3,
+            "borderColor": "#f97316",
+            "borderRadius": "50%",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-3-num",
+          "type": "text",
+          "x": 447,
+          "y": 128,
+          "content": "3",
+          "style": {
+            "width": 15,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 700,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-3-title",
+          "type": "text",
+          "x": 422,
+          "y": 180,
+          "content": "CREATION",
+          "style": {
+            "width": 65,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-4",
+          "type": "container",
+          "x": 611,
+          "y": 120,
+          "content": "",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 3,
+            "borderColor": "#f97316",
+            "borderRadius": "50%",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-4-num",
+          "type": "text",
+          "x": 624,
+          "y": 128,
+          "content": "4",
+          "style": {
+            "width": 15,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 700,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "process-4-title",
+          "type": "text",
+          "x": 604,
+          "y": 180,
+          "content": "DELIVERY",
+          "style": {
+            "width": 55,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "services-grid",
+          "type": "container",
+          "x": 60,
+          "y": 250,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 400,
+            "backgroundColor": "transparent",
+            "borderWidth": 0,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-card-1",
+          "type": "container",
+          "x": 60,
+          "y": 250,
+          "content": "",
+          "style": {
+            "width": 320,
+            "height": 180,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#f1f5f9",
+            "borderRadius": 24,
+            "boxShadow": "0 10px 30px rgba(249,115,22,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-icon-1",
+          "type": "text",
+          "x": 100,
+          "y": 280,
+          "content": "✺",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "fontSize": 36,
+            "fontWeight": 400,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-title-1",
+          "type": "text",
+          "x": 80,
+          "y": 330,
+          "content": "Brand Strategy",
+          "style": {
+            "width": 280,
+            "height": 25,
+            "fontSize": 20,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-desc-1",
+          "type": "paragraph",
+          "x": 80,
+          "y": 365,
+          "content": "Strategic brand development that resonates with your audience and stands out in the market.",
+          "style": {
+            "width": 280,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-card-2",
+          "type": "container",
+          "x": 414,
+          "y": 250,
+          "content": "",
+          "style": {
+            "width": 320,
+            "height": 180,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#f1f5f9",
+            "borderRadius": 24,
+            "boxShadow": "0 10px 30px rgba(249,115,22,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-icon-2",
+          "type": "text",
+          "x": 454,
+          "y": 280,
+          "content": "✦",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "fontSize": 36,
+            "fontWeight": 400,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-title-2",
+          "type": "text",
+          "x": 434,
+          "y": 330,
+          "content": "Visual Identity",
+          "style": {
+            "width": 280,
+            "height": 25,
+            "fontSize": 20,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-desc-2",
+          "type": "paragraph",
+          "x": 434,
+          "y": 365,
+          "content": "Compelling visual systems that communicate your brand's essence and captivate your audience.",
+          "style": {
+            "width": 280,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-card-3",
+          "type": "container",
+          "x": 60,
+          "y": 460,
+          "content": "",
+          "style": {
+            "width": 320,
+            "height": 180,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#f1f5f9",
+            "borderRadius": 24,
+            "boxShadow": "0 10px 30px rgba(249,115,22,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-icon-3",
+          "type": "text",
+          "x": 100,
+          "y": 490,
+          "content": "⬩",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "fontSize": 36,
+            "fontWeight": 400,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-title-3",
+          "type": "text",
+          "x": 80,
+          "y": 540,
+          "content": "Digital Design",
+          "style": {
+            "width": 280,
+            "height": 25,
+            "fontSize": 20,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-desc-3",
+          "type": "paragraph",
+          "x": 80,
+          "y": 575,
+          "content": "Immersive digital experiences that engage users and drive results across all platforms.",
+          "style": {
+            "width": 280,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-card-4",
+          "type": "container",
+          "x": 414,
+          "y": 460,
+          "content": "",
+          "style": {
+            "width": 320,
+            "height": 180,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#f1f5f9",
+            "borderRadius": 24,
+            "boxShadow": "0 10px 30px rgba(249,115,22,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-icon-4",
+          "type": "text",
+          "x": 454,
+          "y": 490,
+          "content": "◈",
+          "style": {
+            "width": 40,
+            "height": 40,
+            "fontSize": 36,
+            "fontWeight": 400,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-title-4",
+          "type": "text",
+          "x": 434,
+          "y": 540,
+          "content": "Content Creation",
+          "style": {
+            "width": 280,
+            "height": 25,
+            "fontSize": 20,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-desc-4",
+          "type": "paragraph",
+          "x": 434,
+          "y": 575,
+          "content": "Storytelling and content that connects with your audience and amplifies your brand message.",
+          "style": {
+            "width": 280,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "page-3",
+      "elements": [
+        {
+          "id": "portfolio-title",
+          "type": "heading",
+          "x": 60,
+          "y": 60,
+          "content": "Selected Work",
+          "style": {
+            "width": 674,
+            "height": 50,
+            "fontSize": 36,
+            "fontWeight": 800,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-grid",
+          "type": "container",
+          "x": 60,
+          "y": 140,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 500,
+            "backgroundColor": "transparent",
+            "display": "grid",
+            "gridTemplateColumns": "1fr 1fr",
+            "gap": "20px",
+            "zIndex": 1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-1",
+          "type": "container",
+          "x": 60,
+          "y": 140,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 240,
+            "backgroundColor": "#f97316",
+            "backgroundImage": "linear-gradient(135deg, #f97316 0%, #facc15 100%)",
+            "borderWidth": 0,
+            "borderRadius": 16,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-1-title",
+          "type": "text",
+          "x": 100,
+          "y": 180,
+          "content": "LUXURY\nBRAND",
+          "style": {
+            "width": 250,
+            "height": 80,
+            "fontSize": 28,
+            "fontWeight": 800,
+            "color": "#ffffff",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.1,
+            "opacity": 0.9
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-2",
+          "type": "container",
+          "x": 407,
+          "y": 140,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 240,
+            "backgroundColor": "#1f2937",
+            "borderWidth": 0,
+            "borderRadius": 16,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-2-title",
+          "type": "text",
+          "x": 447,
+          "y": 180,
+          "content": "TECH\nSTARTUP",
+          "style": {
+            "width": 250,
+            "height": 80,
+            "fontSize": 28,
+            "fontWeight": 800,
+            "color": "#f97316",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-3",
+          "type": "container",
+          "x": 60,
+          "y": 400,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 240,
+            "backgroundColor": "#4b5563",
+            "borderWidth": 0,
+            "borderRadius": 16,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-3-title",
+          "type": "text",
+          "x": 100,
+          "y": 440,
+          "content": "FASHION\nHOUSE",
+          "style": {
+            "width": 250,
+            "height": 80,
+            "fontSize": 28,
+            "fontWeight": 800,
+            "color": "#facc15",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-4",
+          "type": "container",
+          "x": 407,
+          "y": 400,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 240,
+            "backgroundColor": "#facc15",
+            "borderWidth": 0,
+            "borderRadius": 16,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "portfolio-4-title",
+          "type": "text",
+          "x": 447,
+          "y": 440,
+          "content": "FOOD &\nBEVERAGE",
+          "style": {
+            "width": 250,
+            "height": 80,
+            "fontSize": 28,
+            "fontWeight": 800,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-creative",
+          "type": "container",
+          "x": 60,
+          "y": 680,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 200,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#f1f5f9",
+            "borderRadius": 32,
+            "boxShadow": "0 20px 40px rgba(249,115,22,0.1)",
+            "zIndex": 3
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-title-creative",
+          "type": "text",
+          "x": 100,
+          "y": 720,
+          "content": "Let's create something amazing together",
+          "style": {
+            "width": 474,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Poppins, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.3
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-email-creative",
+          "type": "text",
+          "x": 100,
+          "y": 770,
+          "content": "hello@creativestudio.com",
+          "style": {
+            "width": 474,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 500,
+            "color": "#f97316",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-phone-creative",
+          "type": "text",
+          "x": 100,
+          "y": 800,
+          "content": "+1 (555) 987-6543",
+          "style": {
+            "width": 474,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "social-creative",
+          "type": "text",
+          "x": 347,
+          "y": 840,
+          "content": "⚡ IG  ⚡  BE  ⚡  LI",
+          "style": {
+            "width": 100,
+            "height": 25,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#9ca3af",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "letterSpacing": "0.2em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["brochure", "creative", "agency", "portfolio"],
+    "colorScheme": "creative",
+    "layout": "multi-page",
+    "pageCount": 3
+  }
+}

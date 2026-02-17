@@ -7,8 +7,9 @@ import EditorSidebar from '../../../components/editor/EditorSidebar'
 import PDFRenderer from '../../../components/editor/PDFRenderer'
 import TextToPDFGenerator from '../../../components/TextToPDFGenerator'
 import { extractPDFElements } from '../../../lib/pdf-import-service'
-import { Upload, Download, Loader2, ArrowLeft, ZoomIn, ZoomOut, RotateCcw, Eye, EyeOff, Plus, FileText, Sparkles } from 'lucide-react'
+import { Upload, Download, Loader2, ArrowLeft, ZoomIn, ZoomOut, RotateCcw, Eye, EyeOff, Plus, FileText, Sparkles, Grid3X3 } from 'lucide-react'
 import Link from 'next/link'
+import TemplateSelector from '../../../components/TemplateSelector'
 
 export default function EditPage() {
   const {
@@ -37,6 +38,7 @@ export default function EditPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [showBackground, setShowBackground] = useState(true) // Default to Visible
   const [showTextToPDF, setShowTextToPDF] = useState(false)
+  const [showTemplates, setShowTemplates] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Drag State
@@ -82,6 +84,70 @@ export default function EditPage() {
       setIsProcessing(false)
     }
   }, [clearPages, setDocTitle, setPages, importPrecision])
+
+  const loadTemplate = async (template: any) => {
+    try {
+      setIsProcessing(true)
+      setError(null)
+      clearPages()
+      
+      const response = await fetch(`/templates/${template.file}`)
+      const templateData = await response.json()
+      
+      setPages(templateData.pages)
+      setDocTitle(template.name)
+      setShowTemplates(false)
+      setOriginalPdfBase64(null) // Clear any imported PDF
+    } catch (err: any) {
+      console.error('Failed to load template:', err)
+      setError('Failed to load template: ' + err.message)
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const generateWithAI = async (template: any, prompt: string) => {
+    try {
+      setIsProcessing(true)
+      setError(null)
+      
+      const response = await fetch('/api/generate-ai-content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          templateId: template.id,
+          templateName: template.name,
+          prompt: prompt,
+          existingContent: ''
+        })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate content')
+      }
+      
+      const result = await response.json()
+      
+      // Load the template first
+      await loadTemplate(template)
+      
+      // Apply AI-generated content if it's template elements
+      if (result.type === 'template-elements' && result.content && Array.isArray(result.content)) {
+        // Map AI elements to the current template structure
+        const { applyLayoutChanges } = useEditorStore.getState()
+        applyLayoutChanges(result.content)
+      } else if (result.type === 'text-content' && result.content) {
+        // Handle legacy text content
+        console.log('Generated text content:', result.content)
+      }
+      
+    } catch (err: any) {
+      console.error('AI generation failed:', err)
+      setError('AI generation failed: ' + err.message)
+    } finally {
+      setIsProcessing(false)
+    }
+  }
 
   const handleSave = useCallback(async () => {
     setIsSaving(true)
@@ -277,6 +343,12 @@ export default function EditPage() {
           >
             <Sparkles size={16} /> AI Text to PDF
           </button>
+          <button 
+            onClick={() => setShowTemplates(!showTemplates)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded text-sm font-medium transition-colors"
+          >
+            <Grid3X3 size={16} /> Templates
+          </button>
           <button onClick={handleSave} disabled={pages.length === 0 || isSaving} className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white rounded text-sm font-medium shadow-sm transition-colors">
             {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
             Save PDF
@@ -285,6 +357,32 @@ export default function EditPage() {
       </header>
 
       <div className="flex-1 flex overflow-hidden">
+        {/* Templates Sidebar */}
+        {showTemplates && (
+          <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                  <Grid3X3 size={18} className="text-indigo-600" />
+                  Templates
+                </h3>
+                <button
+                  onClick={() => setShowTemplates(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="p-4">
+              <TemplateSelector 
+                onTemplateSelect={loadTemplate}
+                onAIGenerate={generateWithAI}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Text to PDF Sidebar */}
         {showTextToPDF && (
           <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto">

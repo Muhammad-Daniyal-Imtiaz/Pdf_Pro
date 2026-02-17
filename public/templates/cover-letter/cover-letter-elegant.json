@@ -1,0 +1,393 @@
+{
+  "id": "cover-letter-elegant",
+  "name": "Elegant Cover Letter",
+  "description": "Sophisticated cover letter with refined typography and design",
+  "category": "career",
+  "preview": "/templates/previews/cover-letter-elegant.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "elegant-bg",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#fcf9f7",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-border-top",
+          "type": "container",
+          "x": 60,
+          "y": 60,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 2,
+            "backgroundColor": "#b76e79",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-border-bottom",
+          "type": "container",
+          "x": 60,
+          "y": 1000,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 1,
+            "backgroundColor": "#d4af37",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-name",
+          "type": "text",
+          "x": 60,
+          "y": 90,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 400,
+            "height": 45,
+            "fontSize": 38,
+            "fontWeight": 300,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "letterSpacing": "0.02em",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-title",
+          "type": "text",
+          "x": 60,
+          "y": 140,
+          "content": "Full Stack Developer",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#b76e79",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "fontStyle": "italic",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-contact",
+          "type": "text",
+          "x": 450,
+          "y": 90,
+          "content": "muhammad.daniyal@elegant.com",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 13,
+            "fontWeight": 300,
+            "color": "#5d5a5e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-phone",
+          "type": "text",
+          "x": 450,
+          "y": 115,
+          "content": "+1 (555) 123-4567",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 13,
+            "fontWeight": 300,
+            "color": "#5d5a5e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-location",
+          "type": "text",
+          "x": 450,
+          "y": 140,
+          "content": "San Francisco",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 13,
+            "fontWeight": 300,
+            "color": "#5d5a5e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-date",
+          "type": "text",
+          "x": 450,
+          "y": 170,
+          "content": "15 January 2024",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#b76e79",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "right",
+            "fontStyle": "italic",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-recipient",
+          "type": "text",
+          "x": 60,
+          "y": 220,
+          "content": "Ms. Victoria Sterling",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-recipient-title",
+          "type": "text",
+          "x": 60,
+          "y": 245,
+          "content": "Director of Talent Acquisition",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#5d5a5e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-company",
+          "type": "text",
+          "x": 60,
+          "y": 270,
+          "content": "Antigravity",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-company-address",
+          "type": "text",
+          "x": 60,
+          "y": 295,
+          "content": "456 Tech Plaza, San Francisco, California",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#5d5a5e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-salutation",
+          "type": "text",
+          "x": 60,
+          "y": 350,
+          "content": "Dear Ms. Sterling,",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-opening",
+          "type": "paragraph",
+          "x": 60,
+          "y": 390,
+          "content": "It is with great enthusiasm that I submit my application for the Full Stack Developer position at Antigravity. With over five years of experience crafting sophisticated web solutions and a deep appreciation for elegant code, I am drawn to Antigravity's reputation for excellence and innovation.",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-body-1",
+          "type": "paragraph",
+          "x": 60,
+          "y": 510,
+          "content": "In my current role, I have had the privilege of leading the development of sophisticated web applications that serve millions of users. My approach combines technical precision with aesthetic sensibility – I believe that great software should be as beautiful as it is functional. I have particular expertise in React, Next.js, and Node.js, and I take pride in writing code that is both elegant and maintainable.",
+          "style": {
+            "width": 674,
+            "height": 120,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-body-2",
+          "type": "paragraph",
+          "x": 60,
+          "y": 650,
+          "content": "One of my most significant achievements was architecting a microservices platform that improved system performance by 40% while reducing technical debt. I have also integrated AI capabilities into applications, creating intelligent features that enhance user experience. My academic background includes a Bachelor's degree in Software Engineering from NUST, where I graduated with distinction.",
+          "style": {
+            "width": 674,
+            "height": 120,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-body-3",
+          "type": "paragraph",
+          "x": 60,
+          "y": 790,
+          "content": "I am particularly drawn to Antigravity's commitment to pushing boundaries and creating products that make a difference. I would welcome the opportunity to contribute my skills and sensibilities to your esteemed organization.",
+          "style": {
+            "width": 674,
+            "height": 70,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-closing",
+          "type": "text",
+          "x": 60,
+          "y": 890,
+          "content": "I look forward to the possibility of discussing this opportunity with you.",
+          "style": {
+            "width": 500,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-signature",
+          "type": "text",
+          "x": 60,
+          "y": 930,
+          "content": "Yours sincerely,",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 300,
+            "color": "#2d2a2e",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "elegant-name-signature",
+          "type": "text",
+          "x": 60,
+          "y": 960,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 400,
+            "color": "#b76e79",
+            "fontFamily": "Cormorant Garamond, serif",
+            "textAlign": "left",
+            "fontStyle": "italic",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["cover-letter", "elegant", "sophisticated", "refined"],
+    "colorScheme": "rose-gold",
+    "layout": "single-page"
+  }
+}

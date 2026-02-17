@@ -5,7 +5,7 @@ const userRequests = new Map<string, { count: number; timestamp: number }>()
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { type, role, experience, topic, documentType, prompt } = body
+    const { type, role, experience, topic, documentType, prompt, templateId, templateName } = body
 
     const ip = request.headers.get('x-forwarded-for') || 'unknown'
     const now = Date.now()
@@ -31,6 +31,18 @@ export async function POST(request: NextRequest) {
 
     let result = ''
 
+    // Template-based AI generation
+    if (templateId && templateName && prompt) {
+      const elements = await aiService.generateTemplateContent(templateId, templateName, prompt)
+      return NextResponse.json({
+        success: true,
+        content: elements,
+        type: 'template-elements',
+        timestamp: new Date().toISOString(),
+      })
+    }
+
+    // Legacy generation methods
     if (type === 'cv') {
       result = await aiService.generateCVContent(role, experience)
     }
@@ -49,6 +61,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       content: result,
+      type: 'text-content',
       timestamp: new Date().toISOString(),
     })
   } catch (err: any) {

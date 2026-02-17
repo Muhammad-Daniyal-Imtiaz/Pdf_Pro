@@ -1,0 +1,1035 @@
+{
+  "id": "company-brochure-startup",
+  "name": "Startup Company Brochure",
+  "description": "Energetic and modern brochure for startups",
+  "category": "marketing",
+  "preview": "/templates/previews/brochure-startup.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "cover-bg-startup",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "startup-shape-1",
+          "type": "container",
+          "x": 600,
+          "y": 50,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 200,
+            "backgroundColor": "#8b5cf6",
+            "opacity": 0.1,
+            "borderRadius": "50%",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "startup-shape-2",
+          "type": "container",
+          "x": -50,
+          "y": 800,
+          "content": "",
+          "style": {
+            "width": 300,
+            "height": 300,
+            "backgroundColor": "#ec4899",
+            "opacity": 0.1,
+            "borderRadius": "50%",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "logo-startup",
+          "type": "text",
+          "x": 60,
+          "y": 60,
+          "content": "STARTUP",
+          "style": {
+            "width": 200,
+            "height": 40,
+            "fontSize": 32,
+            "fontWeight": 800,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "-0.02em",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "logo-dot",
+          "type": "container",
+          "x": 240,
+          "y": 75,
+          "content": "",
+          "style": {
+            "width": 10,
+            "height": 10,
+            "backgroundColor": "#8b5cf6",
+            "borderRadius": "50%",
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "hero-startup",
+          "type": "text",
+          "x": 60,
+          "y": 200,
+          "content": "Build\nSomething\nGreat",
+          "style": {
+            "width": 500,
+            "height": 200,
+            "fontSize": 64,
+            "fontWeight": 800,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "-0.02em",
+            "lineHeight": 1.1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "hero-sub-startup",
+          "type": "text",
+          "x": 60,
+          "y": 420,
+          "content": "From idea to impact — faster than ever",
+          "style": {
+            "width": 400,
+            "height": 30,
+            "fontSize": 18,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "cta-startup",
+          "type": "container",
+          "x": 60,
+          "y": 500,
+          "content": "",
+          "style": {
+            "width": 160,
+            "height": 48,
+            "backgroundColor": "#8b5cf6",
+            "borderWidth": 0,
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "cta-text-startup",
+          "type": "text",
+          "x": 100,
+          "y": 515,
+          "content": "GET STARTED",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "metrics-startup",
+          "type": "container",
+          "x": 60,
+          "y": 600,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "boxShadow": "0 10px 25px -5px rgba(0,0,0,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "metric-1-startup",
+          "type": "text",
+          "x": 120,
+          "y": 630,
+          "content": "$10M+",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 700,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "metric-1-label-startup",
+          "type": "text",
+          "x": 120,
+          "y": 660,
+          "content": "Funding",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "metric-2-startup",
+          "type": "text",
+          "x": 347,
+          "y": 630,
+          "content": "50+",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 700,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "metric-2-label-startup",
+          "type": "text",
+          "x": 347,
+          "y": 660,
+          "content": "Team Members",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "metric-3-startup",
+          "type": "text",
+          "x": 574,
+          "y": 630,
+          "content": "3x",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 700,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "metric-3-label-startup",
+          "type": "text",
+          "x": 574,
+          "y": 660,
+          "content": "Growth Rate",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "page-2",
+      "elements": [
+        {
+          "id": "features-title",
+          "type": "text",
+          "x": 60,
+          "y": 80,
+          "content": "Why Startups Love Us",
+          "style": {
+            "width": 400,
+            "height": 40,
+            "fontSize": 32,
+            "fontWeight": 700,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "features-grid",
+          "type": "container",
+          "x": 60,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 700,
+            "display": "grid",
+            "gridTemplateColumns": "1fr 1fr",
+            "gap": "20px",
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-1",
+          "type": "container",
+          "x": 60,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 160,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "padding": 20,
+            "boxShadow": "0 4px 6px -1px rgba(0,0,0,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-1-icon",
+          "type": "text",
+          "x": 100,
+          "y": 180,
+          "content": "⚡",
+          "style": {
+            "width": 30,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 400,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-1-title",
+          "type": "text",
+          "x": 140,
+          "y": 180,
+          "content": "Lightning Fast",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-1-desc",
+          "type": "paragraph",
+          "x": 100,
+          "y": 210,
+          "content": "Deploy in minutes, not months. Our platform gets you to market faster.",
+          "style": {
+            "width": 250,
+            "height": 50,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.5
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-2",
+          "type": "container",
+          "x": 407,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 160,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "padding": 20,
+            "boxShadow": "0 4px 6px -1px rgba(0,0,0,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-2-icon",
+          "type": "text",
+          "x": 447,
+          "y": 180,
+          "content": "💰",
+          "style": {
+            "width": 30,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 400,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-2-title",
+          "type": "text",
+          "x": 487,
+          "y": 180,
+          "content": "Cost Effective",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-2-desc",
+          "type": "paragraph",
+          "x": 447,
+          "y": 210,
+          "content": "Startup-friendly pricing with no hidden fees. Scale as you grow.",
+          "style": {
+            "width": 250,
+            "height": 50,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.5
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-3",
+          "type": "container",
+          "x": 60,
+          "y": 340,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 160,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "padding": 20,
+            "boxShadow": "0 4px 6px -1px rgba(0,0,0,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-3-icon",
+          "type": "text",
+          "x": 100,
+          "y": 370,
+          "content": "🤝",
+          "style": {
+            "width": 30,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 400,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-3-title",
+          "type": "text",
+          "x": 140,
+          "y": 370,
+          "content": "Expert Support",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-3-desc",
+          "type": "paragraph",
+          "x": 100,
+          "y": 400,
+          "content": "Dedicated success managers to help you navigate every step.",
+          "style": {
+            "width": 250,
+            "height": 50,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.5
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-4",
+          "type": "container",
+          "x": 407,
+          "y": 340,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 160,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "padding": 20,
+            "boxShadow": "0 4px 6px -1px rgba(0,0,0,0.1)",
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-4-icon",
+          "type": "text",
+          "x": 447,
+          "y": 370,
+          "content": "📈",
+          "style": {
+            "width": 30,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 400,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-4-title",
+          "type": "text",
+          "x": 487,
+          "y": 370,
+          "content": "Scalable",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-4-desc",
+          "type": "paragraph",
+          "x": 447,
+          "y": 400,
+          "content": "Built to grow with you from seed stage to Series C and beyond.",
+          "style": {
+            "width": 250,
+            "height": 50,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.5
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "testimonial-startup",
+          "type": "container",
+          "x": 60,
+          "y": 540,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 200,
+            "backgroundColor": "#8b5cf6",
+            "borderRadius": 24,
+            "padding": 40,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "testimonial-text",
+          "type": "paragraph",
+          "x": 100,
+          "y": 580,
+          "content": ""Startup helped us launch in half the time and with twice the impact. Their platform is absolutely essential for any early-stage company."",
+          "style": {
+            "width": 600,
+            "height": 80,
+            "fontSize": 18,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6,
+            "fontStyle": "italic"
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "testimonial-author",
+          "type": "text",
+          "x": 100,
+          "y": 680,
+          "content": "— Sarah Chen, Founder of TechFlow",
+          "style": {
+            "width": 600,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4,
+            "opacity": 0.9
+          },
+          "pageIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "page-3",
+      "elements": [
+        {
+          "id": "founders-title",
+          "type": "text",
+          "x": 60,
+          "y": 80,
+          "content": "Meet the Team",
+          "style": {
+            "width": 300,
+            "height": 40,
+            "fontSize": 32,
+            "fontWeight": 700,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-grid",
+          "type": "container",
+          "x": 60,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 500,
+            "display": "grid",
+            "gridTemplateColumns": "1fr 1fr 1fr",
+            "gap": "20px",
+            "zIndex": 1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-1",
+          "type": "container",
+          "x": 60,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 210,
+            "height": 240,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-1-avatar",
+          "type": "container",
+          "x": 105,
+          "y": 170,
+          "content": "",
+          "style": {
+            "width": 80,
+            "height": 80,
+            "backgroundColor": "#8b5cf6",
+            "borderRadius": "50%",
+            "zIndex": 3
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-1-name",
+          "type": "text",
+          "x": 90,
+          "y": 260,
+          "content": "Alex Rivera",
+          "style": {
+            "width": 150,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-1-role",
+          "type": "text",
+          "x": 90,
+          "y": 285,
+          "content": "CEO & Founder",
+          "style": {
+            "width": 150,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#8b5cf6",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-2",
+          "type": "container",
+          "x": 292,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 210,
+            "height": 240,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-2-avatar",
+          "type": "container",
+          "x": 337,
+          "y": 170,
+          "content": "",
+          "style": {
+            "width": 80,
+            "height": 80,
+            "backgroundColor": "#ec4899",
+            "borderRadius": "50%",
+            "zIndex": 3
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-2-name",
+          "type": "text",
+          "x": 322,
+          "y": 260,
+          "content": "Maya Patel",
+          "style": {
+            "width": 150,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-2-role",
+          "type": "text",
+          "x": 322,
+          "y": 285,
+          "content": "CTO",
+          "style": {
+            "width": 150,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#ec4899",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-3",
+          "type": "container",
+          "x": 524,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 210,
+            "height": 240,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 16,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-3-avatar",
+          "type": "container",
+          "x": 569,
+          "y": 170,
+          "content": "",
+          "style": {
+            "width": 80,
+            "height": 80,
+            "backgroundColor": "#f97316",
+            "borderRadius": "50%",
+            "zIndex": 3
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-3-name",
+          "type": "text",
+          "x": 554,
+          "y": 260,
+          "content": "James Kim",
+          "style": {
+            "width": 150,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "team-3-role",
+          "type": "text",
+          "x": 554,
+          "y": 285,
+          "content": "Head of Product",
+          "style": {
+            "width": 150,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#f97316",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-startup",
+          "type": "container",
+          "x": 60,
+          "y": 450,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 300,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 24,
+            "padding": 40,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-title-startup",
+          "type": "text",
+          "x": 100,
+          "y": 510,
+          "content": "Ready to accelerate your startup?",
+          "style": {
+            "width": 600,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.3
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-desc-startup",
+          "type": "text",
+          "x": 100,
+          "y": 550,
+          "content": "Join 500+ startups already building with us",
+          "style": {
+            "width": 600,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-button",
+          "type": "container",
+          "x": 297,
+          "y": 600,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 48,
+            "backgroundColor": "#8b5cf6",
+            "borderWidth": 0,
+            "borderRadius": 8,
+            "zIndex": 3
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-button-text",
+          "type": "text",
+          "x": 357,
+          "y": 615,
+          "content": "SCHEDULE A DEMO",
+          "style": {
+            "width": 80,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "contact-email-startup",
+          "type": "text",
+          "x": 100,
+          "y": 670,
+          "content": "hello@startup.com | +1 (555) 234-5678",
+          "style": {
+            "width": 600,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["brochure", "startup", "modern", "energetic"],
+    "colorScheme": "vibrant",
+    "layout": "multi-page",
+    "pageCount": 3
+  }
+}

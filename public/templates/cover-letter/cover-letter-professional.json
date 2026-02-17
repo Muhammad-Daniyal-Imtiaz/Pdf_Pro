@@ -1,0 +1,343 @@
+{
+  "id": "cover-letter-professional",
+  "name": "Professional Cover Letter",
+  "description": "Standard professional cover letter for corporate applications",
+  "category": "career",
+  "preview": "/templates/previews/cover-letter-professional.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "header-line",
+          "type": "container",
+          "x": 60,
+          "y": 40,
+          "content": "",
+          "style": {
+            "width": 100,
+            "height": 3,
+            "backgroundColor": "#1e3a8a",
+            "borderWidth": 0,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-name",
+          "type": "text",
+          "x": 60,
+          "y": 60,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 300,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#1e293b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-title",
+          "type": "text",
+          "x": 60,
+          "y": 90,
+          "content": "Full Stack Developer",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-address",
+          "type": "text",
+          "x": 60,
+          "y": 120,
+          "content": "123 Business Avenue, Suite 400",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-city",
+          "type": "text",
+          "x": 60,
+          "y": 140,
+          "content": "San Francisco, CA 94105",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-contact",
+          "type": "text",
+          "x": 60,
+          "y": 170,
+          "content": "muhammad.daniyal@email.com | +1 (555) 123-4567",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "date",
+          "type": "text",
+          "x": 500,
+          "y": 60,
+          "content": "January 15, 2024",
+          "style": {
+            "width": 150,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-name",
+          "type": "text",
+          "x": 60,
+          "y": 230,
+          "content": "Hiring Manager",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1e293b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-company",
+          "type": "text",
+          "x": 60,
+          "y": 250,
+          "content": "Antigravity",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1e293b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-address",
+          "type": "text",
+          "x": 60,
+          "y": 270,
+          "content": "456 Tech Plaza, Silicon Valley, CA 94043",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "salutation",
+          "type": "text",
+          "x": 60,
+          "y": 320,
+          "content": "Dear Hiring Manager,",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1e293b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "opening-paragraph",
+          "type": "paragraph",
+          "x": 60,
+          "y": 360,
+          "content": "I am writing to express my strong interest in the Full Stack Developer position at Antigravity. With over 5 years of experience in developing scalable web applications and a proven track record of delivering high-quality solutions, I am confident in my ability to contribute effectively to your engineering team.",
+          "style": {
+            "width": 674,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "body-paragraph-1",
+          "type": "paragraph",
+          "x": 60,
+          "y": 460,
+          "content": "In my current role at Antigravity, I have successfully led the development of multiple full-stack applications using React, Next.js, and Node.js. One of my key achievements includes architecting a microservices-based platform that improved system performance by 40% and reduced deployment time by 60%. I have extensive experience with TypeScript, PostgreSQL, and cloud services including AWS and Vercel.",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "body-paragraph-2",
+          "type": "paragraph",
+          "x": 60,
+          "y": 580,
+          "content": "I am particularly drawn to Antigravity's commitment to innovation and its reputation for developing cutting-edge solutions. Your work in AI-powered applications aligns perfectly with my expertise in integrating LLMs and creating intelligent features that deliver real business value. I am excited about the opportunity to bring my technical skills and collaborative mindset to your team.",
+          "style": {
+            "width": 674,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "closing-paragraph",
+          "type": "paragraph",
+          "x": 60,
+          "y": 680,
+          "content": "I would welcome the opportunity to discuss how my experience and skills can benefit Antigravity. Thank you for considering my application. I look forward to hearing from you soon.",
+          "style": {
+            "width": 674,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "closing",
+          "type": "text",
+          "x": 60,
+          "y": 770,
+          "content": "Sincerely,",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1e293b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "signature",
+          "type": "text",
+          "x": 60,
+          "y": 800,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1e3a8a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "enclosure",
+          "type": "text",
+          "x": 60,
+          "y": 840,
+          "content": "Enclosure: Resume",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["cover-letter", "professional", "corporate"],
+    "colorScheme": "blue",
+    "layout": "single-page"
+  }
+}

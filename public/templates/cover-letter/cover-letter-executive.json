@@ -1,0 +1,360 @@
+{
+  "id": "cover-letter-executive",
+  "name": "Executive Cover Letter",
+  "description": "Formal cover letter for executive and senior-level positions",
+  "category": "career",
+  "preview": "/templates/previews/cover-letter-executive.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "executive-border",
+          "type": "container",
+          "x": 40,
+          "y": 40,
+          "content": "",
+          "style": {
+            "width": 714,
+            "height": 1043,
+            "backgroundColor": "transparent",
+            "borderWidth": 2,
+            "borderColor": "#2c3e50",
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "executive-header",
+          "type": "container",
+          "x": 60,
+          "y": 60,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "backgroundColor": "#f8fafc",
+            "borderBottom": "3px solid #c6a43f",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-name-exec",
+          "type": "text",
+          "x": 80,
+          "y": 80,
+          "content": "MUHAMMAD DANIYAL",
+          "style": {
+            "width": 400,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#2c3e50",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-title-exec",
+          "type": "text",
+          "x": 80,
+          "y": 115,
+          "content": "Full Stack Developer | Technology Leader",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#c6a43f",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-address-exec",
+          "type": "text",
+          "x": 450,
+          "y": 80,
+          "content": "San Francisco, CA",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-contact-exec",
+          "type": "text",
+          "x": 450,
+          "y": 105,
+          "content": "m.daniyal@executive.com",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#c6a43f",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "date-exec",
+          "type": "text",
+          "x": 450,
+          "y": 130,
+          "content": "January 15, 2024",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-exec",
+          "type": "text",
+          "x": 80,
+          "y": 190,
+          "content": "Ms. Sarah Johnson",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#2c3e50",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-title-exec",
+          "type": "text",
+          "x": 80,
+          "y": 215,
+          "content": "Chief Technology Officer",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-company-exec",
+          "type": "text",
+          "x": 80,
+          "y": 240,
+          "content": "Antigravity",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#2c3e50",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-address-exec",
+          "type": "text",
+          "x": 80,
+          "y": 265,
+          "content": "456 Tech Plaza, Silicon Valley, CA 94043",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "salutation-exec",
+          "type": "text",
+          "x": 80,
+          "y": 320,
+          "content": "Dear Ms. Johnson,",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#2c3e50",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "opening-exec",
+          "type": "paragraph",
+          "x": 80,
+          "y": 360,
+          "content": "I am writing to express my interest in the Senior Full Stack Developer position at Antigravity. With over 5 years of progressive experience in software development and a demonstrated history of leading high-performance teams, I am confident in my ability to drive technical excellence and innovation at your organization.",
+          "style": {
+            "width": 634,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "achievement-1",
+          "type": "paragraph",
+          "x": 80,
+          "y": 460,
+          "content": "Throughout my career, I have consistently delivered results that exceed expectations. At Antigravity, I led the architecture and development of a microservices platform that serves over 1 million users, resulting in a 40% improvement in system performance and a 25% reduction in operational costs. My expertise in React, Next.js, Node.js, and cloud infrastructure has been instrumental in driving these outcomes.",
+          "style": {
+            "width": 634,
+            "height": 100,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "achievement-2",
+          "type": "paragraph",
+          "x": 80,
+          "y": 580,
+          "content": "I have also mentored junior developers, established coding standards, and implemented agile methodologies that increased team productivity by 35%. My ability to bridge the gap between technical requirements and business objectives has made me a trusted advisor to stakeholders at all levels.",
+          "style": {
+            "width": 634,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "closing-exec",
+          "type": "paragraph",
+          "x": 80,
+          "y": 680,
+          "content": "I would welcome the opportunity to discuss how my leadership and technical expertise can contribute to Antigravity's continued success. Thank you for your time and consideration.",
+          "style": {
+            "width": 634,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#334155",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "closing-exec",
+          "type": "text",
+          "x": 80,
+          "y": 770,
+          "content": "Respectfully yours,",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#2c3e50",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "signature-exec",
+          "type": "text",
+          "x": 80,
+          "y": 800,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#2c3e50",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "title-exec",
+          "type": "text",
+          "x": 80,
+          "y": 830,
+          "content": "Full Stack Developer",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#c6a43f",
+            "fontFamily": "Times New Roman, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["cover-letter", "executive", "formal", "senior"],
+    "colorScheme": "gold",
+    "layout": "single-page"
+  }
+}

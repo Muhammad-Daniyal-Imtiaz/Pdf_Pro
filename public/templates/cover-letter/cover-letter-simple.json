@@ -1,0 +1,307 @@
+{
+  "id": "cover-letter-simple",
+  "name": "Simple Cover Letter",
+  "description": "Straightforward, no-frills cover letter for quick applications",
+  "category": "career",
+  "preview": "/templates/previews/cover-letter-simple.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "simple-container",
+          "type": "container",
+          "x": 60,
+          "y": 60,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 1000,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-name",
+          "type": "text",
+          "x": 60,
+          "y": 60,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 300,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#000000",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-contact",
+          "type": "text",
+          "x": 60,
+          "y": 95,
+          "content": "muhammad.daniyal@email.com | (555) 123-4567",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-location",
+          "type": "text",
+          "x": 60,
+          "y": 120,
+          "content": "San Francisco, CA",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-date",
+          "type": "text",
+          "x": 550,
+          "y": 60,
+          "content": "1/15/2024",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-recipient",
+          "type": "text",
+          "x": 60,
+          "y": 170,
+          "content": "Hiring Manager",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#000000",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-company",
+          "type": "text",
+          "x": 60,
+          "y": 195,
+          "content": "Antigravity",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#000000",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-address",
+          "type": "text",
+          "x": 60,
+          "y": 220,
+          "content": "456 Tech Plaza, San Francisco, CA 94043",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-salutation",
+          "type": "text",
+          "x": 60,
+          "y": 270,
+          "content": "Dear Hiring Manager,",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#000000",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-opening",
+          "type": "paragraph",
+          "x": 60,
+          "y": 310,
+          "content": "I am writing to apply for the Full Stack Developer position at Antigravity. I have 5 years of experience in web development and a strong background in React, Next.js, and Node.js.",
+          "style": {
+            "width": 674,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-body-1",
+          "type": "paragraph",
+          "x": 60,
+          "y": 390,
+          "content": "Currently, I work as a Full Stack Developer where I build and maintain web applications. I recently led a project that improved system performance by 40% and reduced deployment time. My daily work involves TypeScript, PostgreSQL, and cloud services like AWS.",
+          "style": {
+            "width": 674,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-body-2",
+          "type": "paragraph",
+          "x": 60,
+          "y": 490,
+          "content": "I have a Bachelor's degree in Software Engineering from NUST. I'm looking for a new challenge and believe Antigravity would be a great fit for my skills and career goals.",
+          "style": {
+            "width": 674,
+            "height": 60,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-closing",
+          "type": "paragraph",
+          "x": 60,
+          "y": 570,
+          "content": "Thank you for considering my application. I am available for an interview at your convenience.",
+          "style": {
+            "width": 674,
+            "height": 40,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-signature",
+          "type": "text",
+          "x": 60,
+          "y": 640,
+          "content": "Sincerely,",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#000000",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-name-signature",
+          "type": "text",
+          "x": 60,
+          "y": 670,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#000000",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "simple-resume",
+          "type": "text",
+          "x": 60,
+          "y": 710,
+          "content": "Resume attached",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#6b7280",
+            "fontFamily": "Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["cover-letter", "simple", "basic", "quick"],
+    "colorScheme": "basic",
+    "layout": "single-page"
+  }
+}

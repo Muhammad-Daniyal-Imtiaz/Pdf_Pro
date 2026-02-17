@@ -1,0 +1,1479 @@
+{
+  "id": "business-proposal-tech",
+  "name": "Tech Business Proposal",
+  "description": "Modern tech-focused proposal for software and IT services",
+  "category": "business",
+  "preview": "/templates/previews/business-proposal-tech.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "tech-bg",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#0f172a",
+            "backgroundImage": "radial-gradient(circle at 100% 0%, #1e293b 0%, #0f172a 70%)",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-grid",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundImage": "linear-gradient(0deg, transparent 24%, rgba(56, 189, 248, 0.05) 25%, rgba(56, 189, 248, 0.05) 26%, transparent 27%), linear-gradient(90deg, transparent 24%, rgba(56, 189, 248, 0.05) 25%, rgba(56, 189, 248, 0.05) 26%, transparent 27%)",
+            "backgroundSize": "50px 50px",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-logo",
+          "type": "text",
+          "x": 60,
+          "y": 60,
+          "content": "{ code }",
+          "style": {
+            "width": 150,
+            "height": 30,
+            "fontSize": 20,
+            "fontWeight": 500,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-proposal",
+          "type": "text",
+          "x": 60,
+          "y": 200,
+          "content": "TECH PROPOSAL",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "left",
+            "letterSpacing": "0.2em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-title",
+          "type": "text",
+          "x": 60,
+          "y": 240,
+          "content": "Modern Web\nDevelopment",
+          "style": {
+            "width": 500,
+            "height": 120,
+            "fontSize": 56,
+            "fontWeight": 600,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-subtitle",
+          "type": "text",
+          "x": 60,
+          "y": 380,
+          "content": "For [Client Name]",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-stack-display",
+          "type": "container",
+          "x": 60,
+          "y": 460,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 80,
+            "backgroundColor": "rgba(56, 189, 248, 0.1)",
+            "borderWidth": 1,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "padding": 15,
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-stack-text",
+          "type": "text",
+          "x": 80,
+          "y": 485,
+          "content": "React • Next.js • TypeScript • Node.js • Python • PostgreSQL • AWS • Vercel",
+          "style": {
+            "width": 634,
+            "height": 25,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-by-tech",
+          "type": "text",
+          "x": 60,
+          "y": 600,
+          "content": "Prepared by:",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "prepared-by-name-tech",
+          "type": "text",
+          "x": 170,
+          "y": 600,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#38bdf8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "date-tech",
+          "type": "text",
+          "x": 60,
+          "y": 630,
+          "content": "January 15, 2024",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "version-tech",
+          "type": "text",
+          "x": 600,
+          "y": 630,
+          "content": "v2.0.1",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-badge",
+          "type": "container",
+          "x": 600,
+          "y": 800,
+          "content": "",
+          "style": {
+            "width": 120,
+            "height": 120,
+            "backgroundColor": "transparent",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": "50%",
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-badge-text",
+          "type": "text",
+          "x": 630,
+          "y": 845,
+          "content": "AI-POWERED",
+          "style": {
+            "width": 60,
+            "height": 30,
+            "fontSize": 10,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4,
+            "transform": "rotate(15deg)"
+          },
+          "pageIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "page-2",
+      "elements": [
+        {
+          "id": "page2-bg-tech",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "architecture-title",
+          "type": "text",
+          "x": 60,
+          "y": 60,
+          "content": "SYSTEM ARCHITECTURE",
+          "style": {
+            "width": 400,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "left",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "architecture-line",
+          "type": "container",
+          "x": 60,
+          "y": 95,
+          "content": "",
+          "style": {
+            "width": 50,
+            "height": 2,
+            "backgroundColor": "#38bdf8",
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "architecture-diagram",
+          "type": "container",
+          "x": 60,
+          "y": 130,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 250,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 12,
+            "padding": 20,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "frontend-box",
+          "type": "container",
+          "x": 80,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 150,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "frontend-text",
+          "type": "text",
+          "x": 115,
+          "y": 185,
+          "content": "FRONTEND",
+          "style": {
+            "width": 80,
+            "height": 15,
+            "fontSize": 10,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "frontend-tech",
+          "type": "text",
+          "x": 100,
+          "y": 210,
+          "content": "React/Next.js",
+          "style": {
+            "width": 110,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "arrow-1",
+          "type": "text",
+          "x": 235,
+          "y": 190,
+          "content": "→",
+          "style": {
+            "width": 30,
+            "height": 20,
+            "fontSize": 20,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "api-box",
+          "type": "container",
+          "x": 270,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 150,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "api-text",
+          "type": "text",
+          "x": 315,
+          "y": 185,
+          "content": "API LAYER",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 10,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "api-tech",
+          "type": "text",
+          "x": 290,
+          "y": 210,
+          "content": "Node.js/Express",
+          "style": {
+            "width": 110,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "arrow-2",
+          "type": "text",
+          "x": 425,
+          "y": 190,
+          "content": "→",
+          "style": {
+            "width": 30,
+            "height": 20,
+            "fontSize": 20,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "database-box",
+          "type": "container",
+          "x": 460,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 150,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "database-text",
+          "type": "text",
+          "x": 495,
+          "y": 185,
+          "content": "DATABASE",
+          "style": {
+            "width": 80,
+            "height": 15,
+            "fontSize": 10,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "database-tech",
+          "type": "text",
+          "x": 485,
+          "y": 210,
+          "content": "PostgreSQL",
+          "style": {
+            "width": 100,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "cloud-title",
+          "type": "text",
+          "x": 60,
+          "y": 410,
+          "content": "CLOUD INFRASTRUCTURE",
+          "style": {
+            "width": 400,
+            "height": 25,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "cloud-icons",
+          "type": "container",
+          "x": 60,
+          "y": 460,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 100,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 12,
+            "padding": 20,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "aws",
+          "type": "text",
+          "x": 100,
+          "y": 500,
+          "content": "AWS",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "vercel",
+          "type": "text",
+          "x": 250,
+          "y": 500,
+          "content": "Vercel",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "docker",
+          "type": "text",
+          "x": 400,
+          "y": 500,
+          "content": "Docker",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "github",
+          "type": "text",
+          "x": 550,
+          "y": 500,
+          "content": "GitHub",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "features-title",
+          "type": "text",
+          "x": 60,
+          "y": 600,
+          "content": "KEY FEATURES",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "features-grid-tech",
+          "type": "container",
+          "x": 60,
+          "y": 650,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 200,
+            "display": "grid",
+            "gridTemplateColumns": "1fr 1fr",
+            "gap": "15px",
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-1",
+          "type": "container",
+          "x": 60,
+          "y": 650,
+          "content": "",
+          "style": {
+            "width": 329,
+            "height": 90,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 8,
+            "padding": 12,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-1-title",
+          "type": "text",
+          "x": 80,
+          "y": 670,
+          "content": "Server-Side Rendering",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-1-desc",
+          "type": "text",
+          "x": 80,
+          "y": 695,
+          "content": "Next.js SSR for optimal SEO and performance",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-2",
+          "type": "container",
+          "x": 405,
+          "y": 650,
+          "content": "",
+          "style": {
+            "width": 329,
+            "height": 90,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 8,
+            "padding": 12,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-2-title",
+          "type": "text",
+          "x": 425,
+          "y": 670,
+          "content": "AI Integration",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-2-desc",
+          "type": "text",
+          "x": 425,
+          "y": 695,
+          "content": "LLM integration for intelligent features",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-3",
+          "type": "container",
+          "x": 60,
+          "y": 755,
+          "content": "",
+          "style": {
+            "width": 329,
+            "height": 90,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 8,
+            "padding": 12,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-3-title",
+          "type": "text",
+          "x": 80,
+          "y": 775,
+          "content": "Real-time Updates",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-3-desc",
+          "type": "text",
+          "x": 80,
+          "y": 800,
+          "content": "WebSocket integration for live data",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-4",
+          "type": "container",
+          "x": 405,
+          "y": 755,
+          "content": "",
+          "style": {
+            "width": 329,
+            "height": 90,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 8,
+            "padding": 12,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-4-title",
+          "type": "text",
+          "x": 425,
+          "y": 775,
+          "content": "TypeScript",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "feature-tech-4-desc",
+          "type": "text",
+          "x": 425,
+          "y": 800,
+          "content": "Type-safe code for better reliability",
+          "style": {
+            "width": 280,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        }
+      ]
+    },
+    {
+      "id": "page-3",
+      "elements": [
+        {
+          "id": "page3-bg-tech",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "investment-tech-title",
+          "type": "text",
+          "x": 60,
+          "y": 60,
+          "content": "INVESTMENT & TIMELINE",
+          "style": {
+            "width": 400,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "investment-tech-line",
+          "type": "container",
+          "x": 60,
+          "y": 95,
+          "content": "",
+          "style": {
+            "width": 50,
+            "height": 2,
+            "backgroundColor": "#38bdf8",
+            "zIndex": 1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-timeline",
+          "type": "container",
+          "x": 60,
+          "y": 130,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 150,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 12,
+            "padding": 20,
+            "zIndex": 1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-1",
+          "type": "container",
+          "x": 80,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 100,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-1-text",
+          "type": "text",
+          "x": 105,
+          "y": 175,
+          "content": "SPRINT 1",
+          "style": {
+            "width": 50,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-1-desc",
+          "type": "text",
+          "x": 100,
+          "y": 200,
+          "content": "Discovery",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-2",
+          "type": "container",
+          "x": 200,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 100,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-2-text",
+          "type": "text",
+          "x": 225,
+          "y": 175,
+          "content": "SPRINT 2",
+          "style": {
+            "width": 50,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-2-desc",
+          "type": "text",
+          "x": 220,
+          "y": 200,
+          "content": "Design",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-3",
+          "type": "container",
+          "x": 320,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 100,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-3-text",
+          "type": "text",
+          "x": 345,
+          "y": 175,
+          "content": "SPRINT 3",
+          "style": {
+            "width": 50,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-3-desc",
+          "type": "text",
+          "x": 340,
+          "y": 200,
+          "content": "Development",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-4",
+          "type": "container",
+          "x": 440,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 100,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-4-text",
+          "type": "text",
+          "x": 465,
+          "y": 175,
+          "content": "SPRINT 4",
+          "style": {
+            "width": 50,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-4-desc",
+          "type": "text",
+          "x": 460,
+          "y": 200,
+          "content": "Testing",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-5",
+          "type": "container",
+          "x": 560,
+          "y": 160,
+          "content": "",
+          "style": {
+            "width": 100,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-5-text",
+          "type": "text",
+          "x": 585,
+          "y": 175,
+          "content": "SPRINT 5",
+          "style": {
+            "width": 50,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "sprint-5-desc",
+          "type": "text",
+          "x": 580,
+          "y": 200,
+          "content": "Deploy",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 9,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "timeline-note",
+          "type": "text",
+          "x": 80,
+          "y": 260,
+          "content": "Total timeline: 10 weeks (2 weeks per sprint)",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "investment-calc",
+          "type": "container",
+          "x": 60,
+          "y": 320,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 200,
+            "backgroundColor": "#0f172a",
+            "borderRadius": 16,
+            "padding": 25,
+            "zIndex": 1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "investment-calc-title",
+          "type": "text",
+          "x": 85,
+          "y": 360,
+          "content": "TOTAL INVESTMENT",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "left",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "investment-amount-tech",
+          "type": "text",
+          "x": 85,
+          "y": 390,
+          "content": "$75,000",
+          "style": {
+            "width": 300,
+            "height": 60,
+            "fontSize": 48,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "payment-breakdown",
+          "type": "text",
+          "x": 85,
+          "y": 460,
+          "content": "30% upfront | 40% milestone | 30% completion",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "roi-tech",
+          "type": "text",
+          "x": 450,
+          "y": 390,
+          "content": "250%",
+          "style": {
+            "width": 150,
+            "height": 40,
+            "fontSize": 36,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "right",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "roi-label-tech",
+          "type": "text",
+          "x": 450,
+          "y": 440,
+          "content": "Projected ROI",
+          "style": {
+            "width": 150,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "cta-tech",
+          "type": "container",
+          "x": 60,
+          "y": 570,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 150,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#38bdf8",
+            "borderRadius": 12,
+            "padding": 25,
+            "zIndex": 1
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "cta-tech-title",
+          "type": "text",
+          "x": 85,
+          "y": 610,
+          "content": "Ready to build?",
+          "style": {
+            "width": 300,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 600,
+            "color": "#0f172a",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "cta-tech-desc",
+          "type": "text",
+          "x": 85,
+          "y": 650,
+          "content": "Let's discuss your project requirements",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#64748b",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "tech-contact",
+          "type": "text",
+          "x": 85,
+          "y": 680,
+          "content": "📧 muhammad.daniyal@email.com",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "qr-tech",
+          "type": "container",
+          "x": 550,
+          "y": 600,
+          "content": "",
+          "style": {
+            "width": 80,
+            "height": 80,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 2,
+            "borderColor": "#38bdf8",
+            "zIndex": 2
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "qr-tech-text",
+          "type": "text",
+          "x": 560,
+          "y": 625,
+          "content": "SCAN",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 10,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        },
+        {
+          "id": "qr-tech-text2",
+          "type": "text",
+          "x": 560,
+          "y": 645,
+          "content": "MEET",
+          "style": {
+            "width": 60,
+            "height": 15,
+            "fontSize": 10,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Monaco, monospace",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 2
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["business", "proposal", "tech", "software"],
+    "colorScheme": "blue",
+    "layout": "multi-page",
+    "pageCount": 3
+  }
+}

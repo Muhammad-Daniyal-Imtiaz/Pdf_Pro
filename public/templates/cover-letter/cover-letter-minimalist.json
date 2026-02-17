@@ -1,0 +1,301 @@
+{
+  "id": "cover-letter-minimalist",
+  "name": "Minimalist Cover Letter",
+  "description": "Clean, minimalist cover letter with plenty of white space",
+  "category": "career",
+  "preview": "/templates/previews/cover-letter-minimalist.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "minimal-container",
+          "type": "container",
+          "x": 97,
+          "y": 97,
+          "content": "",
+          "style": {
+            "width": 600,
+            "height": 900,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#e5e7eb",
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "minimal-line",
+          "type": "container",
+          "x": 117,
+          "y": 127,
+          "content": "",
+          "style": {
+            "width": 50,
+            "height": 1,
+            "backgroundColor": "#9ca3af",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 140,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 400,
+            "color": "#111827",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "letterSpacing": "0.05em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-contact-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 170,
+          "content": "m@daniyal.com",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 300,
+            "color": "#6b7280",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-location-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 195,
+          "content": "San Francisco, CA",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 300,
+            "color": "#6b7280",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "date-minimal",
+          "type": "text",
+          "x": 520,
+          "y": 140,
+          "content": "2024.01.15",
+          "style": {
+            "width": 150,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 300,
+            "color": "#6b7280",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 250,
+          "content": "Hiring Team",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#111827",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-company-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 275,
+          "content": "Antigravity",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#111827",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "salutation-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 320,
+          "content": "Dear Hiring Team,",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#111827",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "opening-minimal",
+          "type": "paragraph",
+          "x": 117,
+          "y": 360,
+          "content": "I am writing to apply for the Full Stack Developer position at Antigravity. With five years of experience building web applications, I focus on clean code and functional design.",
+          "style": {
+            "width": 560,
+            "height": 60,
+            "fontSize": 13,
+            "fontWeight": 300,
+            "color": "#374151",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "body-minimal-1",
+          "type": "paragraph",
+          "x": 117,
+          "y": 440,
+          "content": "My technical toolkit includes React, Next.js, Node.js, and TypeScript. I've built applications that are used by thousands of people, and I approach each project with the same philosophy: clarity over complexity, purpose over perfection.",
+          "style": {
+            "width": 560,
+            "height": 80,
+            "fontSize": 13,
+            "fontWeight": 300,
+            "color": "#374151",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "body-minimal-2",
+          "type": "paragraph",
+          "x": 117,
+          "y": 540,
+          "content": "I value clear communication and sustainable development practices. I believe good code should be readable, maintainable, and serve a clear purpose.",
+          "style": {
+            "width": 560,
+            "height": 50,
+            "fontSize": 13,
+            "fontWeight": 300,
+            "color": "#374151",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "closing-minimal",
+          "type": "paragraph",
+          "x": 117,
+          "y": 610,
+          "content": "I would welcome the opportunity to discuss how I might contribute to the work at Antigravity.",
+          "style": {
+            "width": 560,
+            "height": 40,
+            "fontSize": 13,
+            "fontWeight": 300,
+            "color": "#374151",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "signature-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 680,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#111827",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "minimal-footer",
+          "type": "container",
+          "x": 117,
+          "y": 820,
+          "content": "",
+          "style": {
+            "width": 560,
+            "height": 1,
+            "backgroundColor": "#e5e7eb",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "portfolio-minimal",
+          "type": "text",
+          "x": 117,
+          "y": 840,
+          "content": "github.com/mdaniyal  |  linkedin.com/in/muhammaddaniyal",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 10,
+            "fontWeight": 300,
+            "color": "#9ca3af",
+            "fontFamily": "Helvetica, Arial, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["cover-letter", "minimalist", "clean", "simple"],
+    "colorScheme": "monochrome",
+    "layout": "single-page"
+  }
+}

@@ -1,0 +1,413 @@
+{
+  "id": "cover-letter-tech",
+  "name": "Tech Cover Letter",
+  "description": "Modern tech-focused cover letter for software roles",
+  "category": "career",
+  "preview": "/templates/previews/cover-letter-tech.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "tech-bg-grid",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#0b1120",
+            "backgroundImage": "linear-gradient(0deg, transparent 24%, rgba(56, 189, 248, 0.03) 25%, rgba(56, 189, 248, 0.03) 26%, transparent 27%), linear-gradient(90deg, transparent 24%, rgba(56, 189, 248, 0.03) 25%, rgba(56, 189, 248, 0.03) 26%, transparent 27%)",
+            "backgroundSize": "50px 50px",
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-card",
+          "type": "container",
+          "x": 60,
+          "y": 60,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 980,
+            "backgroundColor": "#1e293b",
+            "borderWidth": 1,
+            "borderColor": "#38bdf8",
+            "borderRadius": 16,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-header",
+          "type": "container",
+          "x": 80,
+          "y": 80,
+          "content": "",
+          "style": {
+            "width": 634,
+            "height": 80,
+            "backgroundColor": "transparent",
+            "borderBottom": "2px solid #38bdf8",
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-name",
+          "type": "text",
+          "x": 100,
+          "y": 100,
+          "content": "MUHAMMAD DANIYAL",
+          "style": {
+            "width": 400,
+            "height": 25,
+            "fontSize": 20,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "left",
+            "letterSpacing": "0.1em",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-role",
+          "type": "text",
+          "x": 100,
+          "y": 130,
+          "content": "<Full_Stack_Developer />",
+          "style": {
+            "width": 400,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-contact",
+          "type": "text",
+          "x": 450,
+          "y": 100,
+          "content": "m.daniyal@dev.io",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-github",
+          "type": "text",
+          "x": 450,
+          "y": 125,
+          "content": "github: @mdaniyal",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-date",
+          "type": "text",
+          "x": 450,
+          "y": 150,
+          "content": "2024-01-15",
+          "style": {
+            "width": 250,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#94a3b8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-recipient",
+          "type": "text",
+          "x": 100,
+          "y": 200,
+          "content": "Hiring Manager",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-company",
+          "type": "text",
+          "x": 100,
+          "y": 225,
+          "content": "Antigravity",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#38bdf8",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-salutation",
+          "type": "text",
+          "x": 100,
+          "y": 280,
+          "content": "Dear Hiring Manager,",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-opening",
+          "type": "paragraph",
+          "x": 100,
+          "y": 320,
+          "content": "I'm writing to apply for the Full Stack Developer role at Antigravity. With 5+ years of experience building scalable applications and a deep focus on modern web technologies, I'm excited about the opportunity to contribute to your engineering team.",
+          "style": {
+            "width": 594,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#cbd5e1",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-stack-title",
+          "type": "text",
+          "x": 100,
+          "y": 420,
+          "content": "$ tech_stack = [",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-stack-items",
+          "type": "text",
+          "x": 120,
+          "y": 450,
+          "content": "'React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'PostgreSQL', 'AWS'",
+          "style": {
+            "width": 550,
+            "height": 20,
+            "fontSize": 13,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-stack-close",
+          "type": "text",
+          "x": 100,
+          "y": 475,
+          "content": "]",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-achievement",
+          "type": "container",
+          "x": 100,
+          "y": 520,
+          "content": "",
+          "style": {
+            "width": 594,
+            "height": 100,
+            "backgroundColor": "#0f172a",
+            "borderWidth": 1,
+            "borderColor": "#38bdf8",
+            "borderRadius": 8,
+            "padding": 15,
+            "zIndex": 3
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-achievement-title",
+          "type": "text",
+          "x": 120,
+          "y": 545,
+          "content": "// Key Achievement",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#38bdf8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-achievement-text",
+          "type": "paragraph",
+          "x": 120,
+          "y": 575,
+          "content": "Architected a microservices platform serving 1M+ users, improving performance by 40% and reducing deployment time by 60%.",
+          "style": {
+            "width": 550,
+            "height": 50,
+            "fontSize": 13,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-body",
+          "type": "paragraph",
+          "x": 100,
+          "y": 645,
+          "content": "I've built production applications using React and Next.js, integrated AI/LLM features, and deployed scalable solutions on AWS and Vercel. I'm passionate about clean code, performance optimization, and creating seamless user experiences.",
+          "style": {
+            "width": 594,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#cbd5e1",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-closing",
+          "type": "paragraph",
+          "x": 100,
+          "y": 745,
+          "content": "I'd welcome the opportunity to discuss how my technical skills and experience align with Antigravity's goals. Thank you for your consideration.",
+          "style": {
+            "width": 594,
+            "height": 50,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#cbd5e1",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-signature",
+          "type": "text",
+          "x": 100,
+          "y": 820,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#38bdf8",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "tech-version",
+          "type": "text",
+          "x": 500,
+          "y": 820,
+          "content": "v1.0.0",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#475569",
+            "fontFamily": "Space Grotesk, monospace",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["cover-letter", "tech", "developer", "software"],
+    "colorScheme": "dark",
+    "layout": "single-page"
+  }
+}

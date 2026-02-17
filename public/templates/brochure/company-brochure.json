@@ -1,0 +1,788 @@
+{
+  "id": "company-brochure",
+  "name": "Company Brochure",
+  "description": "Modern company brochure with visual elements and marketing sections",
+  "category": "marketing",
+  "preview": "/templates/previews/company-brochure.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "cover-bg",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            "borderWidth": 0,
+            "borderRadius": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "company-logo-placeholder",
+          "type": "container",
+          "x": 297,
+          "y": 80,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 80,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 2,
+            "borderColor": "#ffffff",
+            "borderRadius": 12,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "logo-text",
+          "type": "text",
+          "x": 347,
+          "y": 105,
+          "content": "LOGO",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 20,
+            "fontWeight": 700,
+            "color": "#667eea",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "main-title",
+          "type": "heading",
+          "x": 60,
+          "y": 200,
+          "content": "INNOVATE. INSPIRE. TRANSFORM.",
+          "style": {
+            "width": 674,
+            "height": 60,
+            "fontSize": 42,
+            "fontWeight": 800,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "subtitle",
+          "type": "text",
+          "x": 60,
+          "y": 270,
+          "content": "Leading the Future of Digital Transformation",
+          "style": {
+            "width": 674,
+            "height": 30,
+            "fontSize": 20,
+            "fontWeight": 500,
+            "color": "#e0e7ff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "hero-image-placeholder",
+          "type": "container",
+          "x": 97,
+          "y": 330,
+          "content": "",
+          "style": {
+            "width": 600,
+            "height": 300,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 3,
+            "borderColor": "#ffffff",
+            "borderRadius": 16,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "hero-image-text",
+          "type": "text",
+          "x": 347,
+          "y": 465,
+          "content": "HERO IMAGE",
+          "style": {
+            "width": 100,
+            "height": 30,
+            "fontSize": 16,
+            "fontWeight": 600,
+            "color": "#667eea",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "intro-text",
+          "type": "paragraph",
+          "x": 97,
+          "y": 660,
+          "content": "Welcome to the future of business innovation. We are a pioneering technology company dedicated to transforming industries through cutting-edge solutions, exceptional service, and unwavering commitment to excellence.",
+          "style": {
+            "width": 600,
+            "height": 60,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "cta-button",
+          "type": "container",
+          "x": 297,
+          "y": 740,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 50,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "borderRadius": 25,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "cta-text",
+          "type": "text",
+          "x": 347,
+          "y": 755,
+          "content": "GET STARTED",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 700,
+            "color": "#667eea",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "contact-info-footer",
+          "type": "text",
+          "x": 60,
+          "y": 820,
+          "content": "📧 info@company.com | 📱 +1 (555) 123-4567 | 🌐 www.company.com",
+          "style": {
+            "width": 674,
+            "height": 25,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "social-icons",
+          "type": "container",
+          "x": 322,
+          "y": 860,
+          "content": "",
+          "style": {
+            "width": 150,
+            "height": 40,
+            "backgroundColor": "transparent",
+            "borderWidth": 0,
+            "borderRadius": 0,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "social-text",
+          "type": "text",
+          "x": 347,
+          "y": 875,
+          "content": "SOCIAL ICONS",
+          "style": {
+            "width": 100,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 600,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 2
+          },
+          "pageIndex": 0
+        }
+      ]
+    },
+    {
+      "id": "page-2",
+      "elements": [
+        {
+          "id": "services-title",
+          "type": "heading",
+          "x": 60,
+          "y": 60,
+          "content": "Our Services",
+          "style": {
+            "width": 674,
+            "height": 40,
+            "fontSize": 32,
+            "fontWeight": 700,
+            "color": "#1f2937",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "services-subtitle",
+          "type": "text",
+          "x": 60,
+          "y": 105,
+          "content": "Comprehensive solutions tailored to your business needs",
+          "style": {
+            "width": 674,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 400,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-1",
+          "type": "container",
+          "x": 60,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 280,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 12,
+            "padding": 20,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-1-icon",
+          "type": "container",
+          "x": 130,
+          "y": 170,
+          "content": "",
+          "style": {
+            "width": 60,
+            "height": 60,
+            "backgroundColor": "#667eea",
+            "borderWidth": 0,
+            "borderRadius": 30,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-1-icon-text",
+          "type": "text",
+          "x": 145,
+          "y": 190,
+          "content": "ICON",
+          "style": {
+            "width": 30,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 700,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 3
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-1-title",
+          "type": "text",
+          "x": 80,
+          "y": 250,
+          "content": "Digital Strategy",
+          "style": {
+            "width": 160,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.3,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-1-description",
+          "type": "paragraph",
+          "x": 80,
+          "y": 280,
+          "content": "Strategic planning and roadmap development to accelerate your digital transformation journey.",
+          "style": {
+            "width": 160,
+            "height": 60,
+            "fontSize": 13,
+            "fontWeight": 400,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.5,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-2",
+          "type": "container",
+          "x": 297,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 280,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 12,
+            "padding": 20,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-2-icon",
+          "type": "container",
+          "x": 367,
+          "y": 170,
+          "content": "",
+          "style": {
+            "width": 60,
+            "height": 60,
+            "backgroundColor": "#764ba2",
+            "borderWidth": 0,
+            "borderRadius": 30,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-2-icon-text",
+          "type": "text",
+          "x": 382,
+          "y": 190,
+          "content": "ICON",
+          "style": {
+            "width": 30,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 700,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 3
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-2-title",
+          "type": "text",
+          "x": 317,
+          "y": 250,
+          "content": "Cloud Solutions",
+          "style": {
+            "width": 160,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.3,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-2-description",
+          "type": "paragraph",
+          "x": 317,
+          "y": 280,
+          "content": "Scalable cloud infrastructure and migration services for modern enterprises.",
+          "style": {
+            "width": 160,
+            "height": 60,
+            "fontSize": 13,
+            "fontWeight": 400,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.5,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-3",
+          "type": "container",
+          "x": 534,
+          "y": 150,
+          "content": "",
+          "style": {
+            "width": 200,
+            "height": 280,
+            "backgroundColor": "#f8fafc",
+            "borderWidth": 1,
+            "borderColor": "#e2e8f0",
+            "borderRadius": 12,
+            "padding": 20,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-3-icon",
+          "type": "container",
+          "x": 604,
+          "y": 170,
+          "content": "",
+          "style": {
+            "width": 60,
+            "height": 60,
+            "backgroundColor": "#f59e0b",
+            "borderWidth": 0,
+            "borderRadius": 30,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-3-icon-text",
+          "type": "text",
+          "x": 619,
+          "y": 190,
+          "content": "ICON",
+          "style": {
+            "width": 30,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 700,
+            "color": "#ffffff",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 3
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-3-title",
+          "type": "text",
+          "x": 554,
+          "y": 250,
+          "content": "AI Integration",
+          "style": {
+            "width": 160,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.3,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "service-3-description",
+          "type": "paragraph",
+          "x": 554,
+          "y": 280,
+          "content": "Advanced AI and machine learning solutions to drive business intelligence.",
+          "style": {
+            "width": 160,
+            "height": 60,
+            "fontSize": 13,
+            "fontWeight": 400,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.5,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "about-title",
+          "type": "heading",
+          "x": 60,
+          "y": 470,
+          "content": "About Us",
+          "style": {
+            "width": 674,
+            "height": 35,
+            "fontSize": 28,
+            "fontWeight": 700,
+            "color": "#1f2937",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "about-content",
+          "type": "paragraph",
+          "x": 60,
+          "y": 515,
+          "content": "With over a decade of excellence in technology innovation, we have helped hundreds of businesses transform their operations and achieve unprecedented growth. Our team of expert engineers, designers, and strategists work collaboratively to deliver solutions that not only meet but exceed expectations.",
+          "style": {
+            "width": 674,
+            "height": 60,
+            "fontSize": 15,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "stats-container",
+          "type": "container",
+          "x": 60,
+          "y": 600,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 120,
+            "backgroundColor": "#f1f5f9",
+            "borderWidth": 0,
+            "borderRadius": 12,
+            "padding": 30,
+            "zIndex": 1
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "stat-1",
+          "type": "text",
+          "x": 120,
+          "y": 630,
+          "content": "500+",
+          "style": {
+            "width": 80,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 700,
+            "color": "#667eea",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "stat-1-label",
+          "type": "text",
+          "x": 100,
+          "y": 660,
+          "content": "Clients",
+          "style": {
+            "width": 120,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "stat-2",
+          "type": "text",
+          "x": 307,
+          "y": 630,
+          "content": "10+",
+          "style": {
+            "width": 80,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 700,
+            "color": "#764ba2",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "stat-2-label",
+          "type": "text",
+          "x": 287,
+          "y": 660,
+          "content": "Years Experience",
+          "style": {
+            "width": 120,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "stat-3",
+          "type": "text",
+          "x": 507,
+          "y": 630,
+          "content": "98%",
+          "style": {
+            "width": 80,
+            "height": 30,
+            "fontSize": 24,
+            "fontWeight": 700,
+            "color": "#f59e0b",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2,
+            "zIndex": 2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "stat-3-label",
+          "type": "text",
+          "x": 487,
+          "y": 660,
+          "content": "Satisfaction",
+          "style": {
+            "width": 120,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "contact-title",
+          "type": "heading",
+          "x": 60,
+          "y": 760,
+          "content": "Get In Touch",
+          "style": {
+            "width": 674,
+            "height": 35,
+            "fontSize": 28,
+            "fontWeight": 700,
+            "color": "#1f2937",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "contact-content",
+          "type": "paragraph",
+          "x": 60,
+          "y": 805,
+          "content": "Ready to transform your business? Contact us today for a free consultation and discover how we can help you achieve your goals.",
+          "style": {
+            "width": "674",
+            "height": 40,
+            "fontSize": 15,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 1
+        },
+        {
+          "id": "contact-details",
+          "type": "paragraph",
+          "x": 60,
+          "y": 860,
+          "content": "📧 info@company.com\n📱 +1 (555) 123-4567\n🌐 www.company.com\n📍 123 Business Ave, Suite 100, San Francisco, CA 94102",
+          "style": {
+            "width": 674,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 500,
+            "color": "#6b7280",
+            "fontFamily": "Inter, system-ui, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.6
+          },
+          "pageIndex": 1
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["brochure", "marketing", "company", "business"],
+    "colorScheme": "modern",
+    "layout": "visual"
+  }
+}

@@ -1,0 +1,413 @@
+{
+  "id": "cover-letter-traditional",
+  "name": "Traditional Cover Letter",
+  "description": "Classic, formal cover letter for conservative industries",
+  "category": "career",
+  "preview": "/templates/previews/cover-letter-traditional.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "traditional-border",
+          "type": "container",
+          "x": 50,
+          "y": 50,
+          "content": "",
+          "style": {
+            "width": 694,
+            "height": 1023,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 1,
+            "borderColor": "#d4d4d4",
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "traditional-header",
+          "type": "container",
+          "x": 80,
+          "y": 80,
+          "content": "",
+          "style": {
+            "width": 634,
+            "height": 100,
+            "backgroundColor": "transparent",
+            "borderBottom": "2px solid #b91c1c",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-name-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 100,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 300,
+            "height": 30,
+            "fontSize": 22,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.2
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-address-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 135,
+          "content": "1234 Elm Street, Apartment 5B",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-city-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 155,
+          "content": "San Francisco, California 94105",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-phone-traditional",
+          "type": "text",
+          "x": 450,
+          "y": 100,
+          "content": "(555) 123-4567",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "sender-email-traditional",
+          "type": "text",
+          "x": 450,
+          "y": 125,
+          "content": "muhammad.daniyal@email.com",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#b91c1c",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "date-traditional",
+          "type": "text",
+          "x": 450,
+          "y": 155,
+          "content": "January 15, 2024",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "right",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-name-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 220,
+          "content": "Mr. Robert Anderson",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1f2937",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-title-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 245,
+          "content": "Director of Engineering",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-company-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 270,
+          "content": "Antigravity Corporation",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1f2937",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-address-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 295,
+          "content": "456 Market Street, Suite 1200",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "recipient-city-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 315,
+          "content": "San Francisco, California 94105",
+          "style": {
+            "width": 300,
+            "height": 20,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#4b5563",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "salutation-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 370,
+          "content": "Dear Mr. Anderson:",
+          "style": {
+            "width": 300,
+            "height": 25,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1f2937",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "opening-traditional",
+          "type": "paragraph",
+          "x": 100,
+          "y": 410,
+          "content": "Please accept this letter as formal application for the Full Stack Developer position at Antigravity, as advertised on your company website. With over five years of professional experience in software development and a Bachelor's degree in Software Engineering from NUST, I believe I am an excellent candidate for this role.",
+          "style": {
+            "width": 594,
+            "height": 100,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "body-traditional-1",
+          "type": "paragraph",
+          "x": 100,
+          "y": 530,
+          "content": "In my current position as Full Stack Developer at Antigravity, I have been responsible for designing and implementing scalable web applications using React, Next.js, and Node.js. I have successfully led multiple projects from conception to deployment, consistently meeting deadlines and exceeding performance targets. One notable achievement includes the development of a microservices architecture that improved system efficiency by 40%.",
+          "style": {
+            "width": 594,
+            "height": 120,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "body-traditional-2",
+          "type": "paragraph",
+          "x": 100,
+          "y": 670,
+          "content": "Prior to my current role, I gained valuable experience working with various technologies including TypeScript, Python, PostgreSQL, and cloud platforms such as AWS and Vercel. My academic background in Software Engineering from NUST provided a strong foundation in computer science principles and software development methodologies.",
+          "style": {
+            "width": 594,
+            "height": 100,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "body-traditional-3",
+          "type": "paragraph",
+          "x": 100,
+          "y": 790,
+          "content": "I have long admired Antigravity's reputation for innovation and excellence in the technology sector. I am confident that my technical skills, combined with my strong work ethic and collaborative nature, would make me a valuable addition to your engineering team.",
+          "style": {
+            "width": 594,
+            "height": 80,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "closing-traditional",
+          "type": "paragraph",
+          "x": 100,
+          "y": 890,
+          "content": "I welcome the opportunity to discuss my qualifications further at your convenience. Thank you for your time and consideration.",
+          "style": {
+            "width": 594,
+            "height": 50,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#374151",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.7
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "closing-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 960,
+          "content": "Respectfully yours,",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 16,
+            "fontWeight": 500,
+            "color": "#1f2937",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "signature-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 990,
+          "content": "Muhammad Daniyal",
+          "style": {
+            "width": 200,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 600,
+            "color": "#1f2937",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "enclosure-traditional",
+          "type": "text",
+          "x": 100,
+          "y": 1020,
+          "content": "Enclosure: Resume",
+          "style": {
+            "width": 200,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#6b7280",
+            "fontFamily": "Georgia, serif",
+            "textAlign": "left",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["cover-letter", "traditional", "formal", "classic"],
+    "colorScheme": "classic",
+    "layout": "single-page"
+  }
+}

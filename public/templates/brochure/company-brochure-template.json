@@ -1,0 +1,179 @@
+{
+  "id": "company-brochure-template",
+  "name": "Blank Brochure Template",
+  "description": "Customizable brochure template with placeholder sections",
+  "category": "marketing",
+  "preview": "/templates/previews/brochure-template.png",
+  "pages": [
+    {
+      "id": "page-1",
+      "elements": [
+        {
+          "id": "template-cover",
+          "type": "container",
+          "x": 0,
+          "y": 0,
+          "content": "",
+          "style": {
+            "width": 794,
+            "height": 1123,
+            "backgroundColor": "#ffffff",
+            "borderWidth": 0,
+            "zIndex": 0
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-placeholder-1",
+          "type": "container",
+          "x": 60,
+          "y": 100,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 200,
+            "backgroundColor": "#f3f4f6",
+            "borderWidth": 2,
+            "borderColor": "#d1d5db",
+            "borderStyle": "dashed",
+            "borderRadius": 8,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-placeholder-text-1",
+          "type": "text",
+          "x": 60,
+          "y": 190,
+          "content": "[COMPANY LOGO / TITLE]",
+          "style": {
+            "width": 674,
+            "height": 25,
+            "fontSize": 18,
+            "fontWeight": 400,
+            "color": "#9ca3af",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-placeholder-2",
+          "type": "container",
+          "x": 60,
+          "y": 350,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 250,
+            "backgroundColor": "#f3f4f6",
+            "borderWidth": 2,
+            "borderColor": "#d1d5db",
+            "borderStyle": "dashed",
+            "borderRadius": 8,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-placeholder-text-2",
+          "type": "text",
+          "x": 60,
+          "y": 465,
+          "content": "[IMAGE/GRAPHIC]",
+          "style": {
+            "width": 327,
+            "height": 25,
+            "fontSize": 14,
+            "fontWeight": 400,
+            "color": "#9ca3af",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-placeholder-3",
+          "type": "container",
+          "x": 407,
+          "y": 350,
+          "content": "",
+          "style": {
+            "width": 327,
+            "height": 250,
+            "backgroundColor": "#f3f4f6",
+            "borderWidth": 2,
+            "borderColor": "#d1d5db",
+            "borderStyle": "dashed",
+            "borderRadius": 8,
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-placeholder-text-3",
+          "type": "paragraph",
+          "x": 427,
+          "y": 430,
+          "content": "[SERVICE/CONTENT SECTION]\n\nAdd your text here.\nDescribe your offerings.\nInclude key benefits.",
+          "style": {
+            "width": 287,
+            "height": 100,
+            "fontSize": 13,
+            "fontWeight": 400,
+            "color": "#9ca3af",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.8
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-footer",
+          "type": "container",
+          "x": 60,
+          "y": 900,
+          "content": "",
+          "style": {
+            "width": 674,
+            "height": 80,
+            "backgroundColor": "transparent",
+            "borderTop": "1px solid #e5e7eb",
+            "zIndex": 1
+          },
+          "pageIndex": 0
+        },
+        {
+          "id": "template-footer-text",
+          "type": "text",
+          "x": 60,
+          "y": 930,
+          "content": "[CONTACT INFORMATION] | [WEBSITE] | [EMAIL] | [PHONE]",
+          "style": {
+            "width": 674,
+            "height": 20,
+            "fontSize": 12,
+            "fontWeight": 400,
+            "color": "#9ca3af",
+            "fontFamily": "Inter, sans-serif",
+            "textAlign": "center",
+            "lineHeight": 1.4
+          },
+          "pageIndex": 0
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-01",
+    "version": "1.0",
+    "author": "PDF Pro Templates",
+    "tags": ["brochure", "template", "blank"],
+    "colorScheme": "gray",
+    "layout": "single-page",
+    "isTemplate": true
+  }
+}
