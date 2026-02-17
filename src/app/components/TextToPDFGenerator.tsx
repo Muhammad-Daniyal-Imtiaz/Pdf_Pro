@@ -53,20 +53,37 @@ export default function TextToPDFGenerator({ onPDFGenerated, className = '' }: T
 
             const data = await response.json()
             
-            // Create download link
-            const blob = new Blob([atob(data.content)], { type: 'application/pdf' })
-            const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `generated-${Date.now()}.pdf`
-            a.click()
-            URL.revokeObjectURL(url)
-
-            // Callback for parent component
-            if (onPDFGenerated) {
-                onPDFGenerated(data.content)
+            if (data.success) {
+                // Check if this is a fallback response
+                if (data.fallback) {
+                    console.log('📄 Using fallback PDF generation')
+                }
+                
+                // Create download link
+                let pdfContent: string
+                try {
+                    // Try to decode as base64
+                    pdfContent = atob(data.content)
+                } catch (decodeError) {
+                    console.log('🔄 Content might not be base64, using as-is')
+                    pdfContent = data.content
+                }
+                
+                const blob = new Blob([pdfContent], { type: 'application/pdf' })
+                const url = URL.createObjectURL(blob)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `generated-${Date.now()}.pdf`
+                a.click()
+                URL.revokeObjectURL(url)
+                
+                // Callback for parent component
+                if (onPDFGenerated) {
+                    onPDFGenerated(data.content)
+                }
+            } else {
+                throw new Error(data.error || 'Failed to generate PDF')
             }
-
         } catch (err: any) {
             console.error('PDF Generation Error:', err)
             setError(err.message || 'Failed to generate PDF')
