@@ -5,8 +5,9 @@ import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { useEditorStore, A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
 import EditorSidebar from '../../../components/editor/EditorSidebar'
 import PDFRenderer from '../../../components/editor/PDFRenderer'
+import TextToPDFGenerator from '../../../components/TextToPDFGenerator'
 import { extractPDFElements } from '../../../lib/pdf-import-service'
-import { Upload, Download, Loader2, ArrowLeft, ZoomIn, ZoomOut, RotateCcw, Eye, EyeOff } from 'lucide-react'
+import { Upload, Download, Loader2, ArrowLeft, ZoomIn, ZoomOut, RotateCcw, Eye, EyeOff, Plus, FileText, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
 export default function EditPage() {
@@ -25,7 +26,8 @@ export default function EditPage() {
     zoom,
     setZoom,
     importPrecision,
-    setImportPrecision
+    setImportPrecision,
+    addPage
   } = useEditorStore()
 
   const [originalPdfBase64, setOriginalPdfBase64] = useState<string | null>(null)
@@ -34,6 +36,7 @@ export default function EditPage() {
   const [error, setError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [showBackground, setShowBackground] = useState(true) // Default to Visible
+  const [showTextToPDF, setShowTextToPDF] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Drag State
@@ -67,7 +70,7 @@ export default function EditPage() {
       setOriginalPdfBase64(base64)
       setDocTitle(file.name.replace('.pdf', ''))
 
-      // Use the new Import Service
+      // Use new Import Service
       const { pages: importedPages } = await extractPDFElements(file, importPrecision)
       setPages(importedPages)
       setShowBackground(true) // Ensure visible on new import
@@ -159,7 +162,7 @@ export default function EditPage() {
     if (!el) return
 
     // CRITICAL FIX: Always allow selection, even for imported elements
-    // This ensures the sidebar opens when clicking ANY part of the PDF
+    // This ensures sidebar opens when clicking ANY part of PDF
     selectElement(id)
 
     // Prevent dragging the main PDF background image to keep things stable
@@ -265,6 +268,15 @@ export default function EditPage() {
           <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors">
             <Upload size={16} /> Import PDF
           </button>
+          <button onClick={addPage} className="flex items-center gap-2 px-3 py-1.5 bg-green-100 hover:bg-green-200 text-green-700 rounded text-sm font-medium transition-colors">
+            <Plus size={16} /> Add Page
+          </button>
+          <button 
+            onClick={() => setShowTextToPDF(!showTextToPDF)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded text-sm font-medium transition-colors"
+          >
+            <Sparkles size={16} /> AI Text to PDF
+          </button>
           <button onClick={handleSave} disabled={pages.length === 0 || isSaving} className="flex items-center gap-2 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white rounded text-sm font-medium shadow-sm transition-colors">
             {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
             Save PDF
@@ -273,6 +285,33 @@ export default function EditPage() {
       </header>
 
       <div className="flex-1 flex overflow-hidden">
+        {/* Text to PDF Sidebar */}
+        {showTextToPDF && (
+          <div className="w-96 bg-white border-r border-gray-200 overflow-y-auto">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                  <Sparkles size={18} className="text-purple-600" />
+                  AI Text to PDF
+                </h3>
+                <button
+                  onClick={() => setShowTextToPDF(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="p-4">
+              <TextToPDFGenerator 
+                onPDFGenerated={(pdfData) => {
+                  console.log('PDF generated via Text to PDF')
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         <EditorSidebar />
 
         {/* Main Editor Area with Zoom Support */}
