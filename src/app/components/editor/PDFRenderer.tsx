@@ -203,7 +203,7 @@ export default function PDFRenderer({
 
       // Check overflow for fixed mode only (auto-height should never overflow)
       const overflow = mode === 'fixed' ? textMeasurementService.checkOverflow(
-        content,
+        content || '',
         {
           fontFamily: elStyle.fontFamily || 'Inter, sans-serif',
           fontSize: elStyle.fontSize || 14,
@@ -266,7 +266,7 @@ export default function PDFRenderer({
               onClick={(e) => {
                 e.stopPropagation()
                 const measurement = textMeasurementService.measureText(
-                  content,
+                  content || '',
                   {
                     fontFamily: elStyle.fontFamily || 'Inter, sans-serif',
                     fontSize: elStyle.fontSize || 14,

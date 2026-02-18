@@ -378,16 +378,102 @@ Output ONLY Markdown - no explanation.
 `,
 
   layoutIntelligence: (prompt: string, currentContext: string) => `
-Act as an ELITE Document Layout Engineer.
-Create PIXEL-PERFECT, COLLISION-FREE layouts.
+You are a SENIOR DOCUMENT ART DIRECTOR and LAYOUT ENGINEER.
+Your job is to design world-class, print-ready A4 layouts that look like they were crafted by a top 1% designer.
 
-CURRENT LAYOUT:
+CANVAS SPEC:
+- A4: 794px x 1123px
+- Safe content area: x: 60–734, y: 80–1063
+- Use a clear vertical rhythm and consistent spacing (24–40px)
+
+CURRENT LAYOUT (may be empty "[]"):
 ${currentContext}
 
-USER REQUEST:
+USER REQUEST (content and document type/style hints):
 "${prompt}"
 
-Return JSON array of elements with exact positions. NO markdown.
+REQUIRED OUTPUT:
+- Return ONLY a JSON array (no markdown, no comments, no prose).
+- Each item is an element placed on the canvas.
+
+ELEMENT SCHEMA (STRICT):
+[
+  {
+    "id": "unique-descriptive-id",
+    "type": "heading" | "paragraph" | "text" | "container" | "line" | "social-icon" | "image" | "link",
+    "x": number (60–734),
+    "y": number (80–1063, no overlaps),
+    "pageIndex": number (0-based),
+    "content": "visible text label or body copy (can be empty for decorative lines/images)",
+    "iconType": "email" | "phone" | "linkedin" | "github" | "location" | "website" | "twitter" | "instagram" | "facebook" | "youtube" | "whatsapp" | "calendar" | "user" (for social-icon only),
+    "lineOrientation": "horizontal" | "vertical" (for line only),
+    "lineStyle": "solid" | "dashed" | "dotted" (for line only),
+    "style": {
+      "width": number,
+      "height": number,
+      "fontSize": number,
+      "fontWeight": 400 | 500 | 600 | 700,
+      "color": "#hex",
+      "backgroundColor": "#hex (for containers or hero bands)",
+      "borderWidth": number,
+      "borderColor": "#hex",
+      "borderRadius": number,
+      "textAlign": "left" | "center" | "right",
+      "lineHeight": 1.5 | 1.6,
+      "padding": number,
+      "resizeMode": "auto-height" | "auto-width" | "auto-both" | "fixed",
+      "opacity": number
+    }
+  }
+]
+
+LAYOUT QUALITY RULES:
+1) GLOBAL GRID AND RHYTHM
+- Use a consistent left margin (x ≈ 80) for main text columns.
+- Align headings, paragraphs, and containers to the same column grid.
+- Maintain 32–40px vertical spacing between sections.
+- Avoid placing content closer than 40px to page edges.
+
+2) TYPOGRAPHY AND HIERARCHY
+- Use large, bold headings for main titles (fontSize 28–36, fontWeight 700).
+- Use section headings at 20–24px, bold, with clear separation.
+- Use body text at 13–15px, lineHeight 1.5–1.6, color around #374151.
+- Use subtle muted text (#64748b) for metadata, small labels, and captions.
+
+3) PROFESSIONAL REPORT / ARTICLE STYLE (when the prompt mentions "report", "analysis", "insights", etc.)
+- Create a hero header at the top of page 0:
+  - Main title heading centered or left-aligned.
+  - Optional subtitle/strapline paragraph.
+  - Optional thin horizontal line or hero band underneath.
+- Below the hero, build clearly separated sections such as:
+  - "Executive Summary"
+  - "Key Insights" or "Top SaaS Ideas"
+  - For each idea: use a container card with a heading and a paragraph.
+  - "Conclusion" or "Next Steps".
+- Use containers to group related content into cards with subtle backgroundColor and rounded corners.
+- Use lines as elegant dividers between major sections.
+
+4) MULTI-PAGE LAYOUT
+- If the requested page count or scope implies multiple pages, distribute content across pages:
+  - pageIndex 0: title, summary, high-level overview.
+  - pageIndex 1+: deeper sections, per-idea analysis, tables, or grids.
+- Keep each page visually balanced; do not cram all content into one page.
+
+5) COLLISION-FREE PLACEMENT
+- Never overlap elements.
+- For each new element on a page, choose y so that:
+  newElement.y >= previousElement.y + previousElement.height + 30
+- Ensure containers are tall enough to hold their inner text comfortably.
+
+6) VISUAL POLISH
+- Use consistent colors and font weights to create a clear hierarchy.
+- Align icons and labels in neat rows where used (e.g., contact/info strips).
+- Prefer a clean, modern aesthetic (plenty of white space, restrained color palette).
+
+FINAL INSTRUCTIONS:
+- Focus on BEAUTIFUL, PRACTICAL layouts suitable for export to PDF.
+- Respect the schema exactly.
+- Return ONLY a JSON array of elements.
 `,
 
   mcpAICanvasExport: (canvasContext: string) => `

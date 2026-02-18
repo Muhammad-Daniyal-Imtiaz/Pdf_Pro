@@ -41,8 +41,21 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
       setStatusMessage('Generating professional layout structure...')
       
       const fullPrompt = documentType === 'cv' 
-        ? `Create a professional CV/resume for a ${role} with ${experience} years experience. Use modern ${style} design with multiple sections including header, summary, experience, education, and skills. Generate ${pageCount} page${pageCount > 1 ? 's' : ''} of content.`
-        : `Create a professional ${documentType} about "${topic}". Use ${style} design with proper sections, headings, and professional layout. Generate ${pageCount} page${pageCount > 1 ? 's' : ''} of content.`
+        ? [
+            `Design a world-class CV/resume for a ${role} with ${experience} years of experience.`,
+            `Use a ${style} layout with a strong hero header, clear section headings,`,
+            `two-column information where appropriate, and perfectly aligned typography.`,
+            `Include sections for Professional Summary, Experience, Education, Skills, and optional Extras.`,
+            `Generate ${pageCount} full A4 page${pageCount > 1 ? 's' : ''} of content with 8–12 elements per page.`
+          ].join(' ')
+        : [
+            `Design a premium ${documentType} about "${topic}".`,
+            `Use a ${style} layout similar to a top-tier editorial or consulting report:`,
+            `hero title, subtitle, executive summary, multiple well-separated sections,`,
+            `and card-style containers for each key idea or chapter.`,
+            `Use clear hierarchy (hero, section headings, body text, callouts) and`,
+            `generate ${pageCount} A4 page${pageCount > 1 ? 's' : ''} with 8–12 high-quality elements per page.`
+          ].join(' ')
       
       setStatusMessage('Processing AI layout intelligence...')
       

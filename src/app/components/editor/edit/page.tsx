@@ -240,12 +240,43 @@ export default function EditPage() {
         })
 
       } else {
-        // RECONSTRUCTION MODE (Clean PDF from Elements)
-        // Use generate-pdf which creates PDF from scratch
-        // Filter out background images
         const pagesToExport = pages.map(p => ({
-          ...p,
-          elements: p.elements.filter(el => !el.isImported)
+          id: String(p.id),
+          elements: p.elements
+            .filter(el => !el.isImported)
+            .map(el => {
+              const style = el.style || ({} as any)
+              const safeContent =
+                typeof el.content === 'string'
+                  ? el.content
+                  : el.content == null
+                  ? ''
+                  : String(el.content)
+
+              return {
+                id: String(el.id),
+                type: el.type,
+                x: typeof el.x === 'number' ? el.x : Number(el.x) || 0,
+                y: typeof el.y === 'number' ? el.y : Number(el.y) || 0,
+                pageIndex: typeof el.pageIndex === 'number' ? el.pageIndex : 0,
+                content: safeContent.slice(0, 50000),
+                style: {
+                  ...style,
+                  width:
+                    typeof style.width === 'number' || typeof style.width === 'string'
+                      ? style.width
+                      : A4_WIDTH - 120,
+                  height:
+                    typeof style.height === 'number' || typeof style.height === 'string'
+                      ? style.height
+                      : 40,
+                },
+                iconType: el.iconType,
+                url: el.url,
+                lineOrientation: el.lineOrientation,
+                lineStyle: el.lineStyle,
+              }
+            }),
         }))
 
         response = await fetch('/api/generate-pdf', {

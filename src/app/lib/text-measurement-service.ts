@@ -38,7 +38,8 @@ class TextMeasurementService {
     }
 
     public measureText(text: string, style: TextStyle, maxWidth?: number): MeasurementResult {
-        const cacheKey = this.getCacheKey(text, style, maxWidth)
+        const safeText = typeof text === 'string' ? text : (text ?? '').toString()
+        const cacheKey = this.getCacheKey(safeText, style, maxWidth)
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey)!
         }
@@ -47,9 +48,9 @@ class TextMeasurementService {
         if (!ctx) {
             // Safe SSR fallback
             return {
-                width: maxWidth || text.length * 10,
+                width: maxWidth || safeText.length * 10,
                 height: style.fontSize * style.lineHeight,
-                lines: [text],
+                lines: [safeText],
                 actualBoundingBoxHeight: style.fontSize,
                 isOverflowing: false,
                 overflowHeight: 0
@@ -65,7 +66,7 @@ class TextMeasurementService {
 
         if (!maxWidth || maxWidth <= 0) {
             // No wrapping
-            const words = text.split('\n')
+            const words = safeText.split('\n')
             words.forEach(line => {
                 lines.push(line)
                 const metrics = ctx.measureText(line)
@@ -74,7 +75,7 @@ class TextMeasurementService {
             totalHeight = lines.length * style.fontSize * style.lineHeight
         } else {
             // Word wrapping
-            const paragraphs = text.split('\n')
+            const paragraphs = safeText.split('\n')
             paragraphs.forEach(paragraph => {
                 if (paragraph === '') {
                     lines.push('')
@@ -125,8 +126,9 @@ class TextMeasurementService {
         containerHeight: number,
         padding: number = 8
     ) {
+        const safeText = typeof text === 'string' ? text : (text ?? '').toString()
         const availableWidth = containerWidth - (padding * 2)
-        const measurement = this.measureText(text, style, availableWidth)
+        const measurement = this.measureText(safeText, style, availableWidth)
 
         const isOverflowing = measurement.height > (containerHeight - (padding * 2))
         const overflowHeight = Math.max(0, measurement.height - (containerHeight - (padding * 2)))

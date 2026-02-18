@@ -68,7 +68,6 @@ export async function POST(req: NextRequest) {
             const endIndex = Math.min(startIndex + elementsPerPage, processedChanges.length)
             const pageElements = processedChanges.slice(startIndex, endIndex)
             
-            // Second pass: professional styling and collision prevention
             const existingElements: LayoutBounds[] = []
             const processedPageElements = pageElements.map((change, index) => {
                 const isTextElement = ['heading', 'paragraph', 'text', 'link'].includes(change.type)
