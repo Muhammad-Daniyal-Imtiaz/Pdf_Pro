@@ -106,44 +106,109 @@ export default function EditPage() {
     }
   }
 
-  const generateWithAI = async (template: any, prompt: string) => {
+  const generateWithAI = async (template: any, prompt: string, templateData?: any) => {
     try {
       setIsProcessing(true)
       setError(null)
+      clearPages()
       
+      // If templateData is provided (from new TemplateSelector), use it directly
+      // Otherwise, load the template first
+      let loadedTemplateData = templateData
+      
+      if (!loadedTemplateData) {
+        try {
+          const templateResponse = await fetch(`/templates/${template.file}`)
+          if (templateResponse.ok) {
+            loadedTemplateData = await templateResponse.json()
+          }
+        } catch (err) {
+          console.warn('Could not load template data, proceeding without it')
+        }
+      }
+      
+      // Call AI API with full template data for intelligent content replacement
       const response = await fetch('/api/generate-ai-content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           templateId: template.id,
           templateName: template.name,
+          templateData: loadedTemplateData, // Pass full template structure
           prompt: prompt,
-          existingContent: ''
         })
       })
       
       if (!response.ok) {
-        throw new Error('Failed to generate content')
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+        throw new Error(errorData.error || `HTTP ${response.status}`)
       }
       
       const result = await response.json()
       
-      // Load the template first
-      await loadTemplate(template)
-      
-      // Apply AI-generated content if it's template elements
+      // Handle the AI-generated content
       if (result.type === 'template-elements' && result.content && Array.isArray(result.content)) {
-        // Map AI elements to the current template structure
-        const { applyLayoutChanges } = useEditorStore.getState()
-        applyLayoutChanges(result.content)
-      } else if (result.type === 'text-content' && result.content) {
-        // Handle legacy text content
-        console.log('Generated text content:', result.content)
+        // AI returned updated elements - apply them directly
+        const aiElements = result.content
+        
+        // Group elements by pageIndex
+        const elementsByPage: Record<number, any[]> = {}
+        aiElements.forEach((el: any) => {
+          const pageIdx = el.pageIndex || 0
+          if (!elementsByPage[pageIdx]) elementsByPage[pageIdx] = []
+          elementsByPage[pageIdx].push(el)
+        })
+        
+        // Build pages array
+        const newPages = Object.entries(elementsByPage).map(([pageIdx, elements]) => ({
+          id: `page-${pageIdx}-${Date.now()}`,
+          elements: elements.map((el: any) => ({
+            ...el,
+            isAIGenerated: true,
+            isModified: true,
+            style: {
+              ...el.style,
+              // Ensure numeric values
+              width: typeof el.style?.width === 'number' ? el.style.width : 674,
+              height: typeof el.style?.height === 'number' ? el.style.height : 40,
+              fontSize: el.style?.fontSize || 14,
+              resizeMode: el.style?.resizeMode || 'auto-height',
+            }
+          }))
+        }))
+        
+        // Set pages with AI-generated content
+        if (newPages.length > 0) {
+          setPages(newPages)
+          setDocTitle(template.name)
+        } else {
+          // Fallback: load template and apply changes via applyLayoutChanges
+          await loadTemplate(template)
+          const { applyLayoutChanges } = useEditorStore.getState()
+          applyLayoutChanges(aiElements)
+        }
+      } else if (result.success && loadedTemplateData) {
+        // Fallback: Just load the template if no AI elements returned
+        setPages(loadedTemplateData.pages || [])
+        setDocTitle(template.name)
       }
+      
+      setShowTemplates(false)
+      setOriginalPdfBase64(null)
+      
+      console.log('✅ AI generation complete!')
       
     } catch (err: any) {
       console.error('AI generation failed:', err)
       setError('AI generation failed: ' + err.message)
+      
+      // Fallback: try to load just the template without AI
+      try {
+        await loadTemplate(template)
+        setError('AI generation failed, loaded template without AI content')
+      } catch (loadErr) {
+        setError('Failed to generate content. Please try again.')
+      }
     } finally {
       setIsProcessing(false)
     }

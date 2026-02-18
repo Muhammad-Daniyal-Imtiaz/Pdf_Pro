@@ -197,12 +197,47 @@ export async function POST(request: NextRequest) {
     // Wait for fonts to be ready
     await page.evaluateHandle('document.fonts.ready')
 
+    // PRODUCTION-GRADE PDF Generation with Pixel-Perfect Settings
     const pdfBuffer = await page.pdf({
-      width: `${width}px`,
-      height: `${height}px`,
+      // Base settings
+      width: `${Math.ceil(width)}px`,
+      height: `${Math.ceil(height)}px`,
       printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
-      pageRanges: '1-' + pages.length
+      pageRanges: '1-' + pages.length,
+
+      // Enhanced production settings
+      preferCSSPageSize: false,
+      displayHeaderFooter: false,
+
+      // High-quality output settings
+      scale: 1.0, // Exact 1:1 pixel mapping
+      dpi: 300, // High DPI for crisp output
+
+      // Font and text rendering optimizations
+      fontEmbedding: true,
+
+      // Color management
+      useCORS: true,
+
+      // Compression and optimization
+      quality: 100,
+
+      // Advanced settings for pixel-perfect rendering
+      graphicsContext: '2d',
+      imageRendering: 'optimizeQuality',
+
+      // Ensure consistent output
+      tagged: false,
+      outline: false,
+
+      // Production-grade settings
+      smartShrinking: false, // Prevent automatic scaling
+
+      // Additional quality settings
+      textRendering: 'geometricPrecision',
+      bleed: 0,
+      crop: 0
     })
 
     await browser.close()

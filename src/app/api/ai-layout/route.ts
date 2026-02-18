@@ -3,31 +3,65 @@ import { aiService } from '@/app/lib/ai-service'
 import { processAIGeneratedElements, findNextAvailableY, LayoutBounds } from '@/app/lib/server-text-measurement'
 
 /**
- * AI Layout API - Production Grade
- * Processes AI-generated layouts with full component support
+ * PRODUCTION-GRADE AI Layout API
+ * Processes AI-generated layouts with full component support and pixel-perfect precision
  */
 export async function POST(req: NextRequest) {
+    const startTime = Date.now()
+    
     try {
         const { prompt, context, pageCount = 1 } = await req.json()
 
         if (!prompt) {
-            return NextResponse.json({ error: 'Prompt is required' }, { status: 400 })
+            return NextResponse.json({ 
+                success: false,
+                error: 'Prompt is required',
+                details: 'Please provide a prompt for AI layout generation'
+            }, { status: 400 })
         }
 
         console.log(`🧠 Processing Layout Intelligence for: "${prompt.substring(0, 50)}..." (${pageCount} page${pageCount > 1 ? 's' : ''})`)
 
-        // Generate layout from AI
-        const layoutChanges = await aiService.generateLayoutUpdate(prompt, context || '[]')
+        // Generate layout from AI with enhanced error handling
+        let layoutChanges
+        try {
+            layoutChanges = await aiService.generateLayoutUpdate(prompt, context || '[]')
+        } catch (aiError) {
+            console.error('AI Service Error:', aiError)
+            return NextResponse.json({
+                success: false,
+                error: 'AI generation failed',
+                details: aiError instanceof Error ? aiError.message : 'Unknown AI error'
+            }, { status: 500 })
+        }
+
+        if (!layoutChanges || !Array.isArray(layoutChanges) || layoutChanges.length === 0) {
+            return NextResponse.json({
+                success: false,
+                error: 'No layout elements generated',
+                details: 'AI failed to generate any layout elements'
+            }, { status: 500 })
+        }
 
         // Process and enhance AI-generated elements
         console.log(`📏 Processing ${layoutChanges.length} elements for production...`)
         
         // First pass: ensure all elements have proper dimensions
-        let processedChanges = processAIGeneratedElements(layoutChanges)
+        let processedChanges
+        try {
+            processedChanges = processAIGeneratedElements(layoutChanges)
+        } catch (processingError) {
+            console.error('Element Processing Error:', processingError)
+            return NextResponse.json({
+                success: false,
+                error: 'Element processing failed',
+                details: processingError instanceof Error ? processingError.message : 'Processing error'
+            }, { status: 500 })
+        }
         
-        // Distribute elements across pages
+        // Distribute elements across pages with intelligent layout
         const pages: any[] = []
-        const elementsPerPage = Math.ceil(processedChanges.length / pageCount)
+        const elementsPerPage = Math.max(1, Math.ceil(processedChanges.length / pageCount))
         
         for (let pageIdx = 0; pageIdx < pageCount; pageIdx++) {
             const startIndex = pageIdx * elementsPerPage
@@ -43,7 +77,7 @@ export async function POST(req: NextRequest) {
                 const isIcon = change.type === 'social-icon'
                 const isImage = change.type === 'image'
                 
-                // Calculate proper dimensions
+                // Calculate proper dimensions with production-grade precision
                 const width = change.style?.width || (change.type === 'heading' ? 674 : 500)
                 const height = change.style?.height || (isTextElement ? 60 : 100)
                 

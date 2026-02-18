@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Sparkles, FileText, Zap, Layout, Wand2 } from 'lucide-react'
+import { Plus, Sparkles, FileText, Zap, Layout, Wand2, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import { AI_PROMPTS } from '../lib/ai-config'
 import { useEditorStore } from '@/app/store/useEditorStore'
 
@@ -20,18 +20,31 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
   const [documentType, setDocumentType] = useState('cv')
   const [style, setStyle] = useState('modern professional')
   const [pageCount, setPageCount] = useState(1)
+  const [generationStatus, setGenerationStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle')
+  const [statusMessage, setStatusMessage] = useState('')
 
-  // NEW: Smart Layout Generation - Full professional document with multi-element layout
+  // ENHANCED: Production-grade Smart Layout Generation with comprehensive error handling
   const generateSmartLayout = async () => {
-    if (!topic && !role) return
+    if (!topic && !role) {
+      setGenerationStatus('error')
+      setStatusMessage('Please provide either a topic or role information')
+      return
+    }
+    
     setIsGenerating(true)
+    setGenerationStatus('processing')
+    setStatusMessage('Initializing AI layout generation...')
+    
     try {
       // Clear existing pages for fresh layout
       clearPages()
+      setStatusMessage('Generating professional layout structure...')
       
       const fullPrompt = documentType === 'cv' 
         ? `Create a professional CV/resume for a ${role} with ${experience} years experience. Use modern ${style} design with multiple sections including header, summary, experience, education, and skills. Generate ${pageCount} page${pageCount > 1 ? 's' : ''} of content.`
         : `Create a professional ${documentType} about "${topic}". Use ${style} design with proper sections, headings, and professional layout. Generate ${pageCount} page${pageCount > 1 ? 's' : ''} of content.`
+      
+      setStatusMessage('Processing AI layout intelligence...')
       
       const response = await fetch('/api/ai-layout', {
         method: 'POST',
@@ -43,14 +56,41 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         })
       })
 
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`)
+      }
+
       const data = await response.json()
+      
       if (data.success && data.changes) {
+        setStatusMessage('Applying layout changes...')
         applyLayoutChanges(data.changes)
-        // Show success feedback
-        console.log(`✅ Generated ${data.meta?.elementCount || data.changes.length} elements across ${pageCount} page${pageCount > 1 ? 's' : ''}`)
+        
+        // Success feedback
+        const elementCount = data.meta?.elementCount || data.changes.length
+        setStatusMessage(`✅ Successfully generated ${elementCount} elements across ${pageCount} page${pageCount > 1 ? 's' : ''}`)
+        setGenerationStatus('success')
+        
+        console.log(`✅ Generated ${elementCount} elements across ${pageCount} page${pageCount > 1 ? 's' : ''}`)
+        
+        // Reset status after delay
+        setTimeout(() => {
+          setGenerationStatus('idle')
+          setStatusMessage('')
+        }, 3000)
+      } else {
+        throw new Error(data.error || 'Failed to generate layout')
       }
     } catch (error) {
-      console.error('Smart Layout Generation Error:', error)
+      console.error('Layout generation error:', error)
+      setGenerationStatus('error')
+      setStatusMessage(error instanceof Error ? error.message : 'Failed to generate layout')
+      
+      // Reset error status after delay
+      setTimeout(() => {
+        setGenerationStatus('idle')
+        setStatusMessage('')
+      }, 5000)
     } finally {
       setIsGenerating(false)
     }
@@ -70,7 +110,7 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         // Convert base64 to blob and download
         const linkSource = `data:application/pdf;base64,${data.content}`
         const downloadLink = document.createElement("a")
-        const fileName = `${(topic || docTitle || 'generated').toLowerCase()}.pdf`
+        const fileName = `${(topic || prompt || 'generated').toLowerCase()}.pdf`
         downloadLink.href = linkSource
         downloadLink.download = fileName
         downloadLink.click()
