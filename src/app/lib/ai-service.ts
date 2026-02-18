@@ -416,16 +416,172 @@ class AIService {
       
       const parsed = JSON.parse(jsonStr)
       
-      if (!Array.isArray(parsed)) {
-        throw new Error('AI response is not a JSON array')
+      // Handle nested structure - convert to flat array if needed
+      let elements: any[] = []
+      
+      if (Array.isArray(parsed)) {
+        // Check if it's already an array of elements
+        if (parsed.length > 0 && parsed[0].id && parsed[0].type) {
+          elements = parsed
+        } else {
+          // It's an array of objects, need to transform
+          elements = this.transformNestedToElements(parsed, templateId)
+        }
+      } else if (parsed.personal_info || parsed.styling_theme) {
+        // It's a nested object structure
+        elements = this.transformNestedToElements([parsed], templateId)
+      } else {
+        throw new Error('AI response is not a valid structure')
       }
       
-      return parsed
+      if (!Array.isArray(elements) || elements.length === 0) {
+        throw new Error('Could not transform AI response to elements array')
+      }
+      
+      return elements
     } catch (error) {
       console.error('Failed to parse template AI response:', error)
       console.error('Raw AI response:', result.substring(0, 500) + '...')
       return this.getTemplateMockContent(templateId)
     }
+  }
+
+  private transformNestedToElements(nested: any[], templateId: string): any[] {
+    const elements: any[] = []
+    let currentY = 60
+    
+    for (const item of nested) {
+      // Handle CV template structure
+      if (item.personal_info) {
+        const info = item.personal_info
+        const theme = item.styling_theme || {}
+        
+        // Name header
+        elements.push({
+          id: "header-name",
+          type: "heading",
+          x: 60, y: currentY,
+          content: info.full_name || "YOUR NAME",
+          pageIndex: 0,
+          style: {
+            width: "auto", height: "auto", resize: "both",
+            fontSize: 36, fontWeight: 700,
+            color: theme.primary_color || "#1E3A8A"
+          }
+        })
+        currentY += 60
+        
+        // Job title
+        elements.push({
+          id: "header-title",
+          type: "text",
+          x: 60, y: currentY,
+          content: info.job_title || "Job Title",
+          pageIndex: 0,
+          style: {
+            width: "auto", height: "auto", resize: "both",
+            fontSize: 18, fontWeight: 500,
+            color: "#6b7280"
+          }
+        })
+        currentY += 40
+        
+        // Contact info
+        const contact = [info.email, info.phone, info.location].filter(Boolean).join(" | ")
+        if (contact) {
+          elements.push({
+            id: "contact-info",
+            type: "text",
+            x: 60, y: currentY,
+            content: contact,
+            pageIndex: 0,
+            style: {
+              width: "auto", height: "auto", resize: "both",
+              fontSize: 12, fontWeight: 400,
+              color: "#6b7280"
+            }
+          })
+          currentY += 35
+        }
+        
+        // Divider
+        elements.push({
+          id: "section-divider",
+          type: "line",
+          x: 60, y: currentY,
+          content: "",
+          pageIndex: 0,
+          lineOrientation: "horizontal",
+          lineStyle: "solid",
+          style: { width: 674, height: 2, backgroundColor: "#e5e7eb" }
+        })
+        currentY += 25
+      }
+      
+      // Handle sections
+      if (item.sections) {
+        for (const section of item.sections) {
+          // Section title
+          elements.push({
+            id: `${section.title.toLowerCase().replace(/\s+/g, '-')}-title`,
+            type: "heading",
+            x: 60, y: currentY,
+            content: section.title,
+            pageIndex: 0,
+            style: {
+              width: "auto", height: "auto", resize: "both",
+              fontSize: 16, fontWeight: 700,
+              color: item.styling_theme?.primary_color || "#1E3A8A"
+            }
+          })
+          currentY += 40
+          
+          // Section content
+          if (section.content) {
+            elements.push({
+              id: `${section.title.toLowerCase().replace(/\s+/g, '-')}-content`,
+              type: "paragraph",
+              x: 60, y: currentY,
+              content: Array.isArray(section.content) ? section.content.join('\n') : section.content,
+              pageIndex: 0,
+              style: {
+                width: "auto", height: "auto", resize: "both",
+                fontSize: 14, fontWeight: 400,
+                color: "#374151", lineHeight: 1.6,
+                whiteSpace: "pre-wrap"
+              }
+            })
+            currentY += 80
+          }
+          
+          // Handle bullet points
+          if (section.bullets) {
+            const bulletContent = section.bullets.map((bullet: string) => `• ${bullet}`).join('\n')
+            elements.push({
+              id: `${section.title.toLowerCase().replace(/\s+/g, '-')}-bullets`,
+              type: "paragraph",
+              x: 60, y: currentY,
+              content: bulletContent,
+              pageIndex: 0,
+              style: {
+                width: "auto", height: "auto", resize: "both",
+                fontSize: 13, fontWeight: 400,
+                color: "#374151", lineHeight: 1.5,
+                whiteSpace: "pre-wrap"
+              }
+            })
+            currentY += 100
+          }
+        }
+      }
+      
+      // Handle direct elements
+      else if (item.id && item.type) {
+        elements.push(item)
+      }
+    }
+    
+    return elements
   }
 
   private getTemplateMockContent(templateId: string): any[] {
