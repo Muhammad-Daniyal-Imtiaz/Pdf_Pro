@@ -1,1478 +1,1795 @@
-{
-  "id": "business-proposal-corporate",
-  "name": "Corporate Business Proposal",
-  "description": "Formal corporate proposal template for large organizations",
-  "category": "business",
-  "preview": "/templates/previews/business-proposal-corporate.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "corporate-header",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 120,
-            "backgroundColor": "#0b1e33",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "corporate-logo",
-          "type": "text",
-          "x": 60,
-          "y": 25,
-          "content": "ANTIGRAVITY",
-          "style": {
-            "width": 300,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "letterSpacing": "0.05em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "corporate-tagline",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "Enterprise Solutions Division",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "corporate-ref",
-          "type": "text",
-          "x": 600,
-          "y": 40,
-          "content": "RFP-2024-0892",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "corporate-date",
-          "type": "text",
-          "x": 600,
-          "y": 65,
-          "content": "January 15, 2024",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "corporate-title",
-          "type": "text",
-          "x": 60,
-          "y": 180,
-          "content": "CORPORATE PROPOSAL",
-          "style": {
-            "width": 400,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "corporate-project",
-          "type": "text",
-          "x": 60,
-          "y": 225,
-          "content": "Digital Transformation Initiative",
-          "style": {
-            "width": 500,
-            "height": 50,
-            "fontSize": 40,
-            "fontWeight": 300,
-            "color": "#0b1e33",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "corporate-client",
-          "type": "container",
-          "x": 60,
-          "y": 320,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 100,
-            "backgroundColor": "#f8fafc",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "client-label",
-          "type": "text",
-          "x": 80,
-          "y": 345,
-          "content": "TO:",
-          "style": {
-            "width": 40,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "client-name-corporate",
-          "type": "text",
-          "x": 130,
-          "y": 345,
-          "content": "[Client Name]",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 500,
-            "color": "#1f2937",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "client-title",
-          "type": "text",
-          "x": 130,
-          "y": 370,
-          "content": "[Title], [Company Name]",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "client-address",
-          "type": "text",
-          "x": 130,
-          "y": 395,
-          "content": "[Address], [City, State ZIP]",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "from-label",
-          "type": "text",
-          "x": 500,
-          "y": 345,
-          "content": "FROM:",
-          "style": {
-            "width": 50,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "from-name",
-          "type": "text",
-          "x": 560,
-          "y": 345,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 500,
-            "color": "#1f2937",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "from-title",
-          "type": "text",
-          "x": 560,
-          "y": 370,
-          "content": "Full Stack Developer",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "from-company",
-          "type": "text",
-          "x": 560,
-          "y": 395,
-          "content": "Antigravity",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "executive-summary-corporate",
-          "type": "text",
-          "x": 60,
-          "y": 460,
-          "content": "EXECUTIVE SUMMARY",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "executive-summary-corporate-text",
-          "type": "paragraph",
-          "x": 60,
-          "y": 500,
-          "content": "In response to your request for proposal regarding digital transformation initiatives, Antigravity is pleased to submit this comprehensive proposal. With over 5 years of enterprise experience and a proven track record of delivering scalable, secure solutions for Fortune 500 companies, we are uniquely positioned to meet and exceed your requirements.",
-          "style": {
-            "width": 674,
-            "height": 120,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "qualifications",
-          "type": "container",
-          "x": 60,
-          "y": 650,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "backgroundColor": "#f1f5f9",
-            "borderLeft": "4px solid #0b1e33",
-            "padding": 15,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "qualifications-text",
-          "type": "paragraph",
-          "x": 80,
-          "y": 670,
-          "content": "Key Qualifications: 5+ years full-stack development | React/Next.js expert | AI/LLM integration specialist | PostgreSQL | AWS/Vercel | 50+ successful enterprise deployments",
-          "style": {
-            "width": 634,
-            "height": 50,
-            "fontSize": 13,
-            "fontWeight": 500,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        }
-      ]
-    },
-    {
-      "id": "page-2",
-      "elements": [
-        {
-          "id": "approach-title",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "PROPOSED APPROACH",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-grid",
-          "type": "container",
-          "x": 60,
-          "y": 110,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 400,
-            "display": "grid",
-            "gridTemplateColumns": "1fr 1fr",
-            "gap": "20px",
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-1",
-          "type": "container",
-          "x": 60,
-          "y": 110,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 180,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "padding": 20,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-1-title",
-          "type": "text",
-          "x": 80,
-          "y": 140,
-          "content": "Phase 1: Discovery",
-          "style": {
-            "width": 287,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 500,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-1-desc",
-          "type": "paragraph",
-          "x": 80,
-          "y": 175,
-          "content": "Comprehensive requirements analysis, stakeholder interviews, and technical feasibility assessment.",
-          "style": {
-            "width": 287,
-            "height": 70,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-2",
-          "type": "container",
-          "x": 407,
-          "y": 110,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 180,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "padding": 20,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-2-title",
-          "type": "text",
-          "x": 427,
-          "y": 140,
-          "content": "Phase 2: Architecture",
-          "style": {
-            "width": 287,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 500,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-2-desc",
-          "type": "paragraph",
-          "x": 427,
-          "y": 175,
-          "content": "Scalable system design, technology selection, and architecture documentation with security considerations.",
-          "style": {
-            "width": 287,
-            "height": 70,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-3",
-          "type": "container",
-          "x": 60,
-          "y": 310,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 180,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "padding": 20,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-3-title",
-          "type": "text",
-          "x": 80,
-          "y": 340,
-          "content": "Phase 3: Development",
-          "style": {
-            "width": 287,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 500,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-3-desc",
-          "type": "paragraph",
-          "x": 80,
-          "y": 375,
-          "content": "Agile development with React/Next.js, comprehensive testing, and regular stakeholder demos.",
-          "style": {
-            "width": 287,
-            "height": 70,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-4",
-          "type": "container",
-          "x": 407,
-          "y": 310,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 180,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "padding": 20,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-4-title",
-          "type": "text",
-          "x": 427,
-          "y": 340,
-          "content": "Phase 4: Deployment",
-          "style": {
-            "width": 287,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 500,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "approach-4-desc",
-          "type": "paragraph",
-          "x": 427,
-          "y": 375,
-          "content": "Production deployment, performance optimization, documentation, and team training.",
-          "style": {
-            "width": 287,
-            "height": 70,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "timeline-corporate",
-          "type": "container",
-          "x": 60,
-          "y": 540,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 200,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "padding": 20,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "timeline-corporate-title",
-          "type": "text",
-          "x": 80,
-          "y": 570,
-          "content": "PROJECT TIMELINE",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "timeline-months",
-          "type": "container",
-          "x": 80,
-          "y": 620,
-          "content": "",
-          "style": {
-            "width": 634,
-            "height": 80,
-            "display": "grid",
-            "gridTemplateColumns": "repeat(6, 1fr)",
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-1",
-          "type": "container",
-          "x": 80,
-          "y": 620,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 60,
-            "backgroundColor": "#0b1e33",
-            "borderRadius": 4,
-            "zIndex": 3
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-1-text",
-          "type": "text",
-          "x": 115,
-          "y": 640,
-          "content": "Month 1",
-          "style": {
-            "width": 60,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-2",
-          "type": "container",
-          "x": 190,
-          "y": 620,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 40,
-            "backgroundColor": "#94a3b8",
-            "borderRadius": 4,
-            "zIndex": 3
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-2-text",
-          "type": "text",
-          "x": 225,
-          "y": 635,
-          "content": "Month 2",
-          "style": {
-            "width": 60,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-3",
-          "type": "container",
-          "x": 300,
-          "y": 620,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 60,
-            "backgroundColor": "#0b1e33",
-            "borderRadius": 4,
-            "zIndex": 3
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-3-text",
-          "type": "text",
-          "x": 335,
-          "y": 640,
-          "content": "Month 3",
-          "style": {
-            "width": 60,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-4",
-          "type": "container",
-          "x": 410,
-          "y": 620,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 40,
-            "backgroundColor": "#94a3b8",
-            "borderRadius": 4,
-            "zIndex": 3
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-4-text",
-          "type": "text",
-          "x": 445,
-          "y": 635,
-          "content": "Month 4",
-          "style": {
-            "width": 60,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-5",
-          "type": "container",
-          "x": 520,
-          "y": 620,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 60,
-            "backgroundColor": "#0b1e33",
-            "borderRadius": 4,
-            "zIndex": 3
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-5-text",
-          "type": "text",
-          "x": 555,
-          "y": 640,
-          "content": "Month 5",
-          "style": {
-            "width": 60,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-6",
-          "type": "container",
-          "x": 630,
-          "y": 620,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 40,
-            "backgroundColor": "#94a3b8",
-            "borderRadius": 4,
-            "zIndex": 3
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "month-6-text",
-          "type": "text",
-          "x": 665,
-          "y": 635,
-          "content": "Month 6",
-          "style": {
-            "width": 60,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        }
-      ]
-    },
-    {
-      "id": "page-3",
-      "elements": [
-        {
-          "id": "investment-corporate",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "INVESTMENT SUMMARY",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "investment-table-corporate",
-          "type": "container",
-          "x": 60,
-          "y": 110,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 200,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "table-header-1",
-          "type": "container",
-          "x": 60,
-          "y": 110,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "backgroundColor": "#f1f5f9",
-            "borderBottom": "1px solid #e2e8f0",
-            "borderRight": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "table-header-1-text",
-          "type": "text",
-          "x": 80,
-          "y": 120,
-          "content": "Deliverable",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "table-header-2",
-          "type": "container",
-          "x": 397,
-          "y": 110,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "backgroundColor": "#f1f5f9",
-            "borderBottom": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "table-header-2-text",
-          "type": "text",
-          "x": 517,
-          "y": 120,
-          "content": "Investment",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-1",
-          "type": "container",
-          "x": 60,
-          "y": 150,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "borderBottom": "1px solid #e2e8f0",
-            "borderRight": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-1-text",
-          "type": "text",
-          "x": 80,
-          "y": 160,
-          "content": "Discovery & Planning",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-1-value",
-          "type": "container",
-          "x": 397,
-          "y": 150,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "borderBottom": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-1-value-text",
-          "type": "text",
-          "x": 517,
-          "y": 160,
-          "content": "$8,500",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-2",
-          "type": "container",
-          "x": 60,
-          "y": 190,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "borderBottom": "1px solid #e2e8f0",
-            "borderRight": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-2-text",
-          "type": "text",
-          "x": 80,
-          "y": 200,
-          "content": "Architecture & Design",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-2-value",
-          "type": "container",
-          "x": 397,
-          "y": 190,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "borderBottom": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-2-value-text",
-          "type": "text",
-          "x": 517,
-          "y": 200,
-          "content": "$12,000",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-3",
-          "type": "container",
-          "x": 60,
-          "y": 230,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "borderBottom": "1px solid #e2e8f0",
-            "borderRight": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-3-text",
-          "type": "text",
-          "x": 80,
-          "y": 240,
-          "content": "Development",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-3-value",
-          "type": "container",
-          "x": 397,
-          "y": 230,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "borderBottom": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-3-value-text",
-          "type": "text",
-          "x": 517,
-          "y": 240,
-          "content": "$45,000",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-4",
-          "type": "container",
-          "x": 60,
-          "y": 270,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "borderRight": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-4-text",
-          "type": "text",
-          "x": 80,
-          "y": 280,
-          "content": "Testing & Deployment",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-4-value",
-          "type": "container",
-          "x": 397,
-          "y": 270,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "row-4-value-text",
-          "type": "text",
-          "x": 517,
-          "y": 280,
-          "content": "$15,500",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "total-row",
-          "type": "container",
-          "x": 60,
-          "y": 310,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "backgroundColor": "#f1f5f9",
-            "borderTop": "2px solid #0b1e33",
-            "borderRight": "1px solid #e2e8f0",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "total-row-text",
-          "type": "text",
-          "x": 80,
-          "y": 322,
-          "content": "TOTAL INVESTMENT",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 700,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "total-value",
-          "type": "container",
-          "x": 397,
-          "y": 310,
-          "content": "",
-          "style": {
-            "width": 337,
-            "height": 40,
-            "backgroundColor": "#f1f5f9",
-            "borderTop": "2px solid #0b1e33",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "total-value-text",
-          "type": "text",
-          "x": 517,
-          "y": 322,
-          "content": "$81,000",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 700,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "terms-corporate",
-          "type": "container",
-          "x": 60,
-          "y": 380,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 150,
-            "backgroundColor": "#f8fafc",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "padding": 20,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "terms-title",
-          "type": "text",
-          "x": 80,
-          "y": 410,
-          "content": "TERMS & CONDITIONS",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "terms-list",
-          "type": "paragraph",
-          "x": 80,
-          "y": 445,
-          "content": "• Payment terms: 30% upfront, 40% at midpoint, 30% upon completion\n• Includes 6 months of maintenance and support\n• Source code and IP rights transferred upon final payment\n• NDA and standard enterprise agreements apply\n• Valid for 60 days from proposal date",
-          "style": {
-            "width": 634,
-            "height": 100,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.8
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "acceptance",
-          "type": "container",
-          "x": 60,
-          "y": 570,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 150,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "padding": 20,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "acceptance-title",
-          "type": "text",
-          "x": 80,
-          "y": 600,
-          "content": "ACCEPTANCE",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#0b1e33",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "acceptance-text",
-          "type": "paragraph",
-          "x": 80,
-          "y": 635,
-          "content": "By signing below, the client agrees to the terms and conditions outlined in this proposal and authorizes the work to begin upon receipt of the initial payment.",
-          "style": {
-            "width": 634,
-            "height": 50,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "signature-line-1",
-          "type": "container",
-          "x": 80,
-          "y": 700,
-          "content": "",
-          "style": {
-            "width": 250,
-            "height": 1,
-            "backgroundColor": "#0b1e33",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "signature-label-1",
-          "type": "text",
-          "x": 80,
-          "y": 710,
-          "content": "Authorized Signature",
-          "style": {
-            "width": 150,
-            "height": 15,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "date-line-1",
-          "type": "container",
-          "x": 400,
-          "y": 700,
-          "content": "",
-          "style": {
-            "width": 150,
-            "height": 1,
-            "backgroundColor": "#0b1e33",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "date-label-1",
-          "type": "text",
-          "x": 400,
-          "y": 710,
-          "content": "Date",
-          "style": {
-            "width": 100,
-            "height": 15,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["business", "proposal", "corporate", "enterprise"],
-    "colorScheme": "corporate",
-    "layout": "multi-page",
-    "pageCount": 3
-  }
+﻿{
+    "id":  "business-proposal-corporate",
+    "name":  "Corporate Business Proposal",
+    "description":  "Formal corporate proposal template for large organizations",
+    "category":  "business",
+    "preview":  "/templates/previews/business-proposal-corporate.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "corporate-header",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  120,
+                                                         "backgroundColor":  "#0b1e33",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "corporate-logo",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  25,
+                                           "content":  "ANTIGRAVITY",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.05em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "corporate-tagline",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "Enterprise Solutions Division",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "corporate-ref",
+                                           "type":  "text",
+                                           "x":  600,
+                                           "y":  40,
+                                           "content":  "RFP-2024-0892",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "corporate-date",
+                                           "type":  "text",
+                                           "x":  600,
+                                           "y":  65,
+                                           "content":  "January 15, 2024",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "corporate-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  180,
+                                           "content":  "CORPORATE PROPOSAL",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "corporate-project",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  225,
+                                           "content":  "Digital Transformation Initiative",
+                                           "style":  {
+                                                         "fontSize":  40,
+                                                         "fontWeight":  300,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "corporate-client",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  320,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  100,
+                                                         "backgroundColor":  "#f8fafc",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "client-label",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  345,
+                                           "content":  "TO:",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "client-name-corporate",
+                                           "type":  "text",
+                                           "x":  130,
+                                           "y":  345,
+                                           "content":  "[Client Name]",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  500,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "client-title",
+                                           "type":  "text",
+                                           "x":  130,
+                                           "y":  370,
+                                           "content":  "[Title], [Company Name]",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "client-address",
+                                           "type":  "text",
+                                           "x":  130,
+                                           "y":  395,
+                                           "content":  "[Address], [City, State ZIP]",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "from-label",
+                                           "type":  "text",
+                                           "x":  500,
+                                           "y":  345,
+                                           "content":  "FROM:",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "from-name",
+                                           "type":  "text",
+                                           "x":  560,
+                                           "y":  345,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  500,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "from-title",
+                                           "type":  "text",
+                                           "x":  560,
+                                           "y":  370,
+                                           "content":  "Full Stack Developer",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "from-company",
+                                           "type":  "text",
+                                           "x":  560,
+                                           "y":  395,
+                                           "content":  "Antigravity",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "executive-summary-corporate",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  460,
+                                           "content":  "EXECUTIVE SUMMARY",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "executive-summary-corporate-text",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  500,
+                                           "content":  "In response to your request for proposal regarding digital transformation initiatives, Antigravity is pleased to submit this comprehensive proposal. With over 5 years of enterprise experience and a proven track record of delivering scalable, secure solutions for Fortune 500 companies, we are uniquely positioned to meet and exceed your requirements.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "qualifications",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  650,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  80,
+                                                         "backgroundColor":  "#f1f5f9",
+                                                         "borderLeft":  "4px solid #0b1e33",
+                                                         "padding":  15,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "qualifications-text",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  670,
+                                           "content":  "Key Qualifications: 5+ years full-stack development | React/Next.js expert | AI/LLM integration specialist | PostgreSQL | AWS/Vercel | 50+ successful enterprise deployments",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  500,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-2",
+                      "elements":  [
+                                       {
+                                           "id":  "approach-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "PROPOSED APPROACH",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-grid",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  110,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  400,
+                                                         "display":  "grid",
+                                                         "gridTemplateColumns":  "1fr 1fr",
+                                                         "gap":  "20px",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  110,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  180,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "padding":  20,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-1-title",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  140,
+                                           "content":  "Phase 1: Discovery",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  500,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-1-desc",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  175,
+                                           "content":  "Comprehensive requirements analysis, stakeholder interviews, and technical feasibility assessment.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-2",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  110,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  180,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "padding":  20,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-2-title",
+                                           "type":  "text",
+                                           "x":  427,
+                                           "y":  140,
+                                           "content":  "Phase 2: Architecture",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  500,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-2-desc",
+                                           "type":  "paragraph",
+                                           "x":  427,
+                                           "y":  175,
+                                           "content":  "Scalable system design, technology selection, and architecture documentation with security considerations.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-3",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  310,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  180,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "padding":  20,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-3-title",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  340,
+                                           "content":  "Phase 3: Development",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  500,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-3-desc",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  375,
+                                           "content":  "Agile development with React/Next.js, comprehensive testing, and regular stakeholder demos.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-4",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  310,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  180,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "padding":  20,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-4-title",
+                                           "type":  "text",
+                                           "x":  427,
+                                           "y":  340,
+                                           "content":  "Phase 4: Deployment",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  500,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "approach-4-desc",
+                                           "type":  "paragraph",
+                                           "x":  427,
+                                           "y":  375,
+                                           "content":  "Production deployment, performance optimization, documentation, and team training.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "timeline-corporate",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  540,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  200,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "padding":  20,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "timeline-corporate-title",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  570,
+                                           "content":  "PROJECT TIMELINE",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "timeline-months",
+                                           "type":  "container",
+                                           "x":  80,
+                                           "y":  620,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  634,
+                                                         "height":  80,
+                                                         "display":  "grid",
+                                                         "gridTemplateColumns":  "repeat(6, 1fr)",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-1",
+                                           "type":  "container",
+                                           "x":  80,
+                                           "y":  620,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  60,
+                                                         "backgroundColor":  "#0b1e33",
+                                                         "borderRadius":  4,
+                                                         "zIndex":  3
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-1-text",
+                                           "type":  "text",
+                                           "x":  115,
+                                           "y":  640,
+                                           "content":  "Month 1",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-2",
+                                           "type":  "container",
+                                           "x":  190,
+                                           "y":  620,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  40,
+                                                         "backgroundColor":  "#94a3b8",
+                                                         "borderRadius":  4,
+                                                         "zIndex":  3
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-2-text",
+                                           "type":  "text",
+                                           "x":  225,
+                                           "y":  635,
+                                           "content":  "Month 2",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-3",
+                                           "type":  "container",
+                                           "x":  300,
+                                           "y":  620,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  60,
+                                                         "backgroundColor":  "#0b1e33",
+                                                         "borderRadius":  4,
+                                                         "zIndex":  3
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-3-text",
+                                           "type":  "text",
+                                           "x":  335,
+                                           "y":  640,
+                                           "content":  "Month 3",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-4",
+                                           "type":  "container",
+                                           "x":  410,
+                                           "y":  620,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  40,
+                                                         "backgroundColor":  "#94a3b8",
+                                                         "borderRadius":  4,
+                                                         "zIndex":  3
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-4-text",
+                                           "type":  "text",
+                                           "x":  445,
+                                           "y":  635,
+                                           "content":  "Month 4",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-5",
+                                           "type":  "container",
+                                           "x":  520,
+                                           "y":  620,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  60,
+                                                         "backgroundColor":  "#0b1e33",
+                                                         "borderRadius":  4,
+                                                         "zIndex":  3
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-5-text",
+                                           "type":  "text",
+                                           "x":  555,
+                                           "y":  640,
+                                           "content":  "Month 5",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-6",
+                                           "type":  "container",
+                                           "x":  630,
+                                           "y":  620,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  40,
+                                                         "backgroundColor":  "#94a3b8",
+                                                         "borderRadius":  4,
+                                                         "zIndex":  3
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "month-6-text",
+                                           "type":  "text",
+                                           "x":  665,
+                                           "y":  635,
+                                           "content":  "Month 6",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-3",
+                      "elements":  [
+                                       {
+                                           "id":  "investment-corporate",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "INVESTMENT SUMMARY",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "investment-table-corporate",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  110,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  200,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "table-header-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  110,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "backgroundColor":  "#f1f5f9",
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "borderRight":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "table-header-1-text",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  120,
+                                           "content":  "Deliverable",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "table-header-2",
+                                           "type":  "container",
+                                           "x":  397,
+                                           "y":  110,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "backgroundColor":  "#f1f5f9",
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "table-header-2-text",
+                                           "type":  "text",
+                                           "x":  517,
+                                           "y":  120,
+                                           "content":  "Investment",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  150,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "borderRight":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-1-text",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  160,
+                                           "content":  "Discovery \u0026 Planning",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-1-value",
+                                           "type":  "container",
+                                           "x":  397,
+                                           "y":  150,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-1-value-text",
+                                           "type":  "text",
+                                           "x":  517,
+                                           "y":  160,
+                                           "content":  "$8,500",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-2",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  190,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "borderRight":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-2-text",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  200,
+                                           "content":  "Architecture \u0026 Design",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-2-value",
+                                           "type":  "container",
+                                           "x":  397,
+                                           "y":  190,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-2-value-text",
+                                           "type":  "text",
+                                           "x":  517,
+                                           "y":  200,
+                                           "content":  "$12,000",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-3",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  230,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "borderRight":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-3-text",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  240,
+                                           "content":  "Development",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-3-value",
+                                           "type":  "container",
+                                           "x":  397,
+                                           "y":  230,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "borderBottom":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-3-value-text",
+                                           "type":  "text",
+                                           "x":  517,
+                                           "y":  240,
+                                           "content":  "$45,000",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-4",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  270,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "borderRight":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-4-text",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  280,
+                                           "content":  "Testing \u0026 Deployment",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-4-value",
+                                           "type":  "container",
+                                           "x":  397,
+                                           "y":  270,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "row-4-value-text",
+                                           "type":  "text",
+                                           "x":  517,
+                                           "y":  280,
+                                           "content":  "$15,500",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "total-row",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  310,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "backgroundColor":  "#f1f5f9",
+                                                         "borderTop":  "2px solid #0b1e33",
+                                                         "borderRight":  "1px solid #e2e8f0",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "total-row-text",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  322,
+                                           "content":  "TOTAL INVESTMENT",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  700,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "total-value",
+                                           "type":  "container",
+                                           "x":  397,
+                                           "y":  310,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  337,
+                                                         "height":  40,
+                                                         "backgroundColor":  "#f1f5f9",
+                                                         "borderTop":  "2px solid #0b1e33",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "total-value-text",
+                                           "type":  "text",
+                                           "x":  517,
+                                           "y":  322,
+                                           "content":  "$81,000",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  700,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "terms-corporate",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  380,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#f8fafc",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "padding":  20,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "terms-title",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  410,
+                                           "content":  "TERMS \u0026 CONDITIONS",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "terms-list",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  445,
+                                           "content":  "â€¢ Payment terms: 30% upfront, 40% at midpoint, 30% upon completion\nâ€¢ Includes 6 months of maintenance and support\nâ€¢ Source code and IP rights transferred upon final payment\nâ€¢ NDA and standard enterprise agreements apply\nâ€¢ Valid for 60 days from proposal date",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.8,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "acceptance",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  570,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "padding":  20,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "acceptance-title",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  600,
+                                           "content":  "ACCEPTANCE",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0b1e33",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "acceptance-text",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  635,
+                                           "content":  "By signing below, the client agrees to the terms and conditions outlined in this proposal and authorizes the work to begin upon receipt of the initial payment.",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "signature-line-1",
+                                           "type":  "container",
+                                           "x":  80,
+                                           "y":  700,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  250,
+                                                         "height":  1,
+                                                         "backgroundColor":  "#0b1e33",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "signature-label-1",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  710,
+                                           "content":  "Authorized Signature",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "date-line-1",
+                                           "type":  "container",
+                                           "x":  400,
+                                           "y":  700,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  150,
+                                                         "height":  1,
+                                                         "backgroundColor":  "#0b1e33",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "date-label-1",
+                                           "type":  "text",
+                                           "x":  400,
+                                           "y":  710,
+                                           "content":  "Date",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "business",
+                                  "proposal",
+                                  "corporate",
+                                  "enterprise"
+                              ],
+                     "colorScheme":  "corporate",
+                     "layout":  "multi-page",
+                     "pageCount":  3
+                 }
 }

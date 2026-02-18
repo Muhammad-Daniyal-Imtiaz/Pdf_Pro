@@ -386,11 +386,33 @@ class AIService {
     
     try {
       let jsonStr = result
-        .replace(/```json\s*/gi, '')
-        .replace(/```\s*$/gi, '')
-        .replace(/^[\s\S]*?(\[)/, '[')
-        .replace(/\][\s\S]*$/, ']')
-        .trim()
+        
+      // More robust JSON extraction
+      // 1. Remove any HTML/DOCTYPE prefixes
+      jsonStr = jsonStr.replace(/<!DOCTYPE[^>]*>/gi, '')
+      jsonStr = jsonStr.replace(/<[^>]*>/gi, '')
+      
+      // 2. Extract JSON array from response
+      const jsonMatch = jsonStr.match(/(\[[\s\S]*\])/)
+      if (jsonMatch) {
+        jsonStr = jsonMatch[1]
+      } else {
+        // Fallback: try to find JSON between markers
+        jsonStr = jsonStr
+          .replace(/```json\s*/gi, '')
+          .replace(/```\s*$/gi, '')
+          .replace(/^[\s\S]*?(\[)/, '[')
+          .replace(/\][\s\S]*$/, ']')
+          .trim()
+      }
+      
+      // 3. Fix common JSON issues
+      jsonStr = jsonStr
+        .replace(/,\s*]/g, ']')  // Remove trailing commas
+        .replace(/,\s*}/g, '}')  // Remove trailing commas in objects
+        .replace(/(['"])?([a-zA-Z_][a-zA-Z0-9_]*)\1\s*:/g, '"$2":')  // Quote unquoted property names
+      
+      console.log('Cleaned JSON string:', jsonStr.substring(0, 200) + '...')
       
       const parsed = JSON.parse(jsonStr)
       
@@ -401,13 +423,15 @@ class AIService {
       return parsed
     } catch (error) {
       console.error('Failed to parse template AI response:', error)
+      console.error('Raw AI response:', result.substring(0, 500) + '...')
       return this.getTemplateMockContent(templateId)
     }
   }
 
   private getTemplateMockContent(templateId: string): any[] {
     const mockContents = {
-      'cv-resume': [
+      // CV/Resume Templates
+      'cv-modern-blue': [
         {
           id: "mock-name",
           type: "heading",

@@ -1,562 +1,681 @@
-{
-  "id": "company-brochure-luxury",
-  "name": "Luxury Brand Brochure",
-  "description": "Elegant and sophisticated brochure for luxury brands",
-  "category": "marketing",
-  "preview": "/templates/previews/brochure-luxury.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "cover-bg-luxury",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#1a0f0c",
-            "backgroundImage": "linear-gradient(145deg, #1a0f0c 0%, #3d2b26 100%)",
-            "borderWidth": 0,
-            "borderRadius": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "gold-accent",
-          "type": "container",
-          "x": 60,
-          "y": 200,
-          "content": "",
-          "style": {
-            "width": 150,
-            "height": 2,
-            "backgroundColor": "#c6a43f",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "brand-name-luxury",
-          "type": "text",
-          "x": 60,
-          "y": 220,
-          "content": "LUXE",
-          "style": {
-            "width": 400,
-            "height": 80,
-            "fontSize": 72,
-            "fontWeight": 300,
-            "color": "#ffffff",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "letterSpacing": "0.15em",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "brand-sub-luxury",
-          "type": "text",
-          "x": 60,
-          "y": 300,
-          "content": "COLLECTION",
-          "style": {
-            "width": 400,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 300,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.4em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "hero-text-luxury",
-          "type": "text",
-          "x": 60,
-          "y": 450,
-          "content": "Timeless",
-          "style": {
-            "width": 674,
-            "height": 70,
-            "fontSize": 56,
-            "fontWeight": 200,
-            "color": "#ffffff",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "lineHeight": 1.2,
-            "opacity": 0.9
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "hero-text-2-luxury",
-          "type": "text",
-          "x": 60,
-          "y": 520,
-          "content": "Elegance",
-          "style": {
-            "width": 674,
-            "height": 70,
-            "fontSize": 64,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "lineHeight": 1.2,
-            "fontStyle": "italic"
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "desc-luxury",
-          "type": "paragraph",
-          "x": 60,
-          "y": 650,
-          "content": "Discover a world of refined sophistication and impeccable craftsmanship. Each piece is meticulously created for those who appreciate the finest things in life.",
-          "style": {
-            "width": 450,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#e5e7eb",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.8,
-            "opacity": 0.8
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "gold-circle",
-          "type": "container",
-          "x": 600,
-          "y": 800,
-          "content": "",
-          "style": {
-            "width": 120,
-            "height": 120,
-            "backgroundColor": "transparent",
-            "borderWidth": 1,
-            "borderColor": "#c6a43f",
-            "borderRadius": "50%",
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "est-text",
-          "type": "text",
-          "x": 635,
-          "y": 850,
-          "content": "EST\n2024",
-          "style": {
-            "width": 50,
-            "height": 50,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        }
-      ]
-    },
-    {
-      "id": "page-2",
-      "elements": [
-        {
-          "id": "page2-bg",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#faf7f2",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "collection-title",
-          "type": "text",
-          "x": 60,
-          "y": 80,
-          "content": "The Collection",
-          "style": {
-            "width": 400,
-            "height": 50,
-            "fontSize": 40,
-            "fontWeight": 300,
-            "color": "#1f2937",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "letterSpacing": "0.05em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "collection-line",
-          "type": "container",
-          "x": 60,
-          "y": 140,
-          "content": "",
-          "style": {
-            "width": 80,
-            "height": 1,
-            "backgroundColor": "#c6a43f",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-1",
-          "type": "container",
-          "x": 60,
-          "y": 180,
-          "content": "",
-          "style": {
-            "width": 320,
-            "height": 250,
-            "backgroundColor": "#e5e7eb",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-1-name",
-          "type": "text",
-          "x": 60,
-          "y": 450,
-          "content": "GOLD EDITION",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-1-desc",
-          "type": "text",
-          "x": 60,
-          "y": 480,
-          "content": "Limited Edition Timepiece",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#1f2937",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-2",
-          "type": "container",
-          "x": 414,
-          "y": 180,
-          "content": "",
-          "style": {
-            "width": 320,
-            "height": 250,
-            "backgroundColor": "#d1d5db",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-2-name",
-          "type": "text",
-          "x": 414,
-          "y": 450,
-          "content": "SILVER COLLECTION",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-2-desc",
-          "type": "text",
-          "x": 414,
-          "y": 480,
-          "content": "Classic Cufflinks Set",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#1f2937",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-3",
-          "type": "container",
-          "x": 60,
-          "y": 550,
-          "content": "",
-          "style": {
-            "width": 320,
-            "height": 250,
-            "backgroundColor": "#9ca3af",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-3-name",
-          "type": "text",
-          "x": 60,
-          "y": 820,
-          "content": "DIAMOND SERIES",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-3-desc",
-          "type": "text",
-          "x": 60,
-          "y": 850,
-          "content": "Luxury Fountain Pen",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#1f2937",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-4",
-          "type": "container",
-          "x": 414,
-          "y": 550,
-          "content": "",
-          "style": {
-            "width": 320,
-            "height": 250,
-            "backgroundColor": "#6b7280",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-4-name",
-          "type": "text",
-          "x": 414,
-          "y": 820,
-          "content": "HERITAGE LINE",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "product-4-desc",
-          "type": "text",
-          "x": 414,
-          "y": 850,
-          "content": "Leather Accessories",
-          "style": {
-            "width": 320,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#1f2937",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        }
-      ]
-    },
-    {
-      "id": "page-3",
-      "elements": [
-        {
-          "id": "page3-bg",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#1a0f0c",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-luxury",
-          "type": "container",
-          "x": 60,
-          "y": 200,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 500,
-            "backgroundColor": "transparent",
-            "borderWidth": 1,
-            "borderColor": "#c6a43f",
-            "borderRadius": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-title-luxury",
-          "type": "text",
-          "x": 120,
-          "y": 280,
-          "content": "INQUIRIES",
-          "style": {
-            "width": 554,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 300,
-            "color": "#ffffff",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "center",
-            "letterSpacing": "0.3em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-sub-luxury",
-          "type": "text",
-          "x": 120,
-          "y": 340,
-          "content": "BY APPOINTMENT ONLY",
-          "style": {
-            "width": 554,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-info-luxury",
-          "type": "paragraph",
-          "x": 120,
-          "y": 420,
-          "content": "BOUTIQUE@LUXECOLLECTION.COM\n+44 (0)20 7946 0138\n47 MAYFAIR, LONDON\nUNITED KINGDOM",
-          "style": {
-            "width": 554,
-            "height": 120,
-            "fontSize": 16,
-            "fontWeight": 300,
-            "color": "#e5e7eb",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "center",
-            "lineHeight": 2,
-            "textTransform": "uppercase"
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "signature-luxury",
-          "type": "text",
-          "x": 120,
-          "y": 600,
-          "content": "LUXE",
-          "style": {
-            "width": 554,
-            "height": 60,
-            "fontSize": 48,
-            "fontWeight": 300,
-            "color": "#c6a43f",
-            "fontFamily": "Cormorant Garamond, Georgia, serif",
-            "textAlign": "center",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.2,
-            "fontStyle": "italic"
-          },
-          "pageIndex": 2
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["brochure", "luxury", "elegant", "premium"],
-    "colorScheme": "luxury",
-    "layout": "multi-page",
-    "pageCount": 3
-  }
+﻿{
+    "id":  "company-brochure-luxury",
+    "name":  "Luxury Brand Brochure",
+    "description":  "Elegant and sophisticated brochure for luxury brands",
+    "category":  "marketing",
+    "preview":  "/templates/previews/brochure-luxury.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "cover-bg-luxury",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#1a0f0c",
+                                                         "backgroundImage":  "linear-gradient(145deg, #1a0f0c 0%, #3d2b26 100%)",
+                                                         "borderWidth":  0,
+                                                         "borderRadius":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "gold-accent",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  200,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  150,
+                                                         "height":  2,
+                                                         "backgroundColor":  "#c6a43f",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "brand-name-luxury",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  220,
+                                           "content":  "LUXE",
+                                           "style":  {
+                                                         "fontSize":  72,
+                                                         "fontWeight":  300,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.15em",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "brand-sub-luxury",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  300,
+                                           "content":  "COLLECTION",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  300,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.4em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "hero-text-luxury",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  450,
+                                           "content":  "Timeless",
+                                           "style":  {
+                                                         "fontSize":  56,
+                                                         "fontWeight":  200,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "opacity":  0.9,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "hero-text-2-luxury",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  520,
+                                           "content":  "Elegance",
+                                           "style":  {
+                                                         "fontSize":  64,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "fontStyle":  "italic",
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "desc-luxury",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  650,
+                                           "content":  "Discover a world of refined sophistication and impeccable craftsmanship. Each piece is meticulously created for those who appreciate the finest things in life.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#e5e7eb",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.8,
+                                                         "opacity":  0.8,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "gold-circle",
+                                           "type":  "container",
+                                           "x":  600,
+                                           "y":  800,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  120,
+                                                         "height":  120,
+                                                         "backgroundColor":  "transparent",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#c6a43f",
+                                                         "borderRadius":  "50%",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "est-text",
+                                           "type":  "text",
+                                           "x":  635,
+                                           "y":  850,
+                                           "content":  "EST\n2024",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-2",
+                      "elements":  [
+                                       {
+                                           "id":  "page2-bg",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#faf7f2",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "collection-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  80,
+                                           "content":  "The Collection",
+                                           "style":  {
+                                                         "fontSize":  40,
+                                                         "fontWeight":  300,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.05em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "collection-line",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  140,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  80,
+                                                         "height":  1,
+                                                         "backgroundColor":  "#c6a43f",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  180,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  320,
+                                                         "height":  250,
+                                                         "backgroundColor":  "#e5e7eb",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-1-name",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  450,
+                                           "content":  "GOLD EDITION",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-1-desc",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  480,
+                                           "content":  "Limited Edition Timepiece",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-2",
+                                           "type":  "container",
+                                           "x":  414,
+                                           "y":  180,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  320,
+                                                         "height":  250,
+                                                         "backgroundColor":  "#d1d5db",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-2-name",
+                                           "type":  "text",
+                                           "x":  414,
+                                           "y":  450,
+                                           "content":  "SILVER COLLECTION",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-2-desc",
+                                           "type":  "text",
+                                           "x":  414,
+                                           "y":  480,
+                                           "content":  "Classic Cufflinks Set",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-3",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  550,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  320,
+                                                         "height":  250,
+                                                         "backgroundColor":  "#9ca3af",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-3-name",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  820,
+                                           "content":  "DIAMOND SERIES",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-3-desc",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  850,
+                                           "content":  "Luxury Fountain Pen",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-4",
+                                           "type":  "container",
+                                           "x":  414,
+                                           "y":  550,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  320,
+                                                         "height":  250,
+                                                         "backgroundColor":  "#6b7280",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-4-name",
+                                           "type":  "text",
+                                           "x":  414,
+                                           "y":  820,
+                                           "content":  "HERITAGE LINE",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "product-4-desc",
+                                           "type":  "text",
+                                           "x":  414,
+                                           "y":  850,
+                                           "content":  "Leather Accessories",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-3",
+                      "elements":  [
+                                       {
+                                           "id":  "page3-bg",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#1a0f0c",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-luxury",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  200,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  500,
+                                                         "backgroundColor":  "transparent",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#c6a43f",
+                                                         "borderRadius":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-title-luxury",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  280,
+                                           "content":  "INQUIRIES",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  300,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "center",
+                                                         "letterSpacing":  "0.3em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-sub-luxury",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  340,
+                                           "content":  "BY APPOINTMENT ONLY",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-info-luxury",
+                                           "type":  "paragraph",
+                                           "x":  120,
+                                           "y":  420,
+                                           "content":  "BOUTIQUE@LUXECOLLECTION.COM\n+44 (0)20 7946 0138\n47 MAYFAIR, LONDON\nUNITED KINGDOM",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  300,
+                                                         "color":  "#e5e7eb",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  2,
+                                                         "textTransform":  "uppercase",
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "signature-luxury",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  600,
+                                           "content":  "LUXE",
+                                           "style":  {
+                                                         "fontSize":  48,
+                                                         "fontWeight":  300,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Cormorant Garamond, Georgia, serif",
+                                                         "textAlign":  "center",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.2,
+                                                         "fontStyle":  "italic",
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "brochure",
+                                  "luxury",
+                                  "elegant",
+                                  "premium"
+                              ],
+                     "colorScheme":  "luxury",
+                     "layout":  "multi-page",
+                     "pageCount":  3
+                 }
 }

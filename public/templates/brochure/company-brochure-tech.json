@@ -1,921 +1,1148 @@
-{
-  "id": "company-brochure-tech",
-  "name": "Technology Company Brochure",
-  "description": "Modern tech brochure with futuristic design elements",
-  "category": "marketing",
-  "preview": "/templates/previews/brochure-tech.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "cover-bg-tech",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#0b1120",
-            "backgroundImage": "radial-gradient(circle at 20% 30%, #1e2b4a 0%, #0b1120 70%)",
-            "borderWidth": 0,
-            "borderRadius": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "grid-lines",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundImage": "linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%), linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%)",
-            "backgroundSize": "50px 50px",
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "logo-tech",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "TECHNOVA",
-          "style": {
-            "width": 300,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 600,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "hero-tech",
-          "type": "text",
-          "x": 60,
-          "y": 300,
-          "content": "BUILD THE\nFUTURE",
-          "style": {
-            "width": 674,
-            "height": 150,
-            "fontSize": 64,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "letterSpacing": "-0.02em",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "hero-sub-tech",
-          "type": "text",
-          "x": 60,
-          "y": 470,
-          "content": "with next-generation technology",
-          "style": {
-            "width": 500,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "opacity": 0.8,
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "stats-tech",
-          "type": "container",
-          "x": 60,
-          "y": 600,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 150,
-            "backgroundColor": "rgba(0, 255, 255, 0.05)",
-            "borderWidth": 1,
-            "borderColor": "#00ffff",
-            "borderRadius": 8,
-            "backdropFilter": "blur(10px)",
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "stat-1-tech",
-          "type": "text",
-          "x": 120,
-          "y": 640,
-          "content": "10M+",
-          "style": {
-            "width": 150,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "stat-1-label-tech",
-          "type": "text",
-          "x": 120,
-          "y": 680,
-          "content": "Users",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "stat-2-tech",
-          "type": "text",
-          "x": 322,
-          "y": 640,
-          "content": "99.9%",
-          "style": {
-            "width": 150,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "stat-2-label-tech",
-          "type": "text",
-          "x": 322,
-          "y": 680,
-          "content": "Uptime",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "stat-3-tech",
-          "type": "text",
-          "x": 524,
-          "y": 640,
-          "content": "24/7",
-          "style": {
-            "width": 150,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "stat-3-label-tech",
-          "type": "text",
-          "x": 524,
-          "y": 680,
-          "content": "Support",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "cta-tech",
-          "type": "container",
-          "x": 60,
-          "y": 800,
-          "content": "",
-          "style": {
-            "width": 200,
-            "height": 50,
-            "backgroundColor": "transparent",
-            "borderWidth": 2,
-            "borderColor": "#00ffff",
-            "borderRadius": 25,
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "cta-text-tech",
-          "type": "text",
-          "x": 110,
-          "y": 815,
-          "content": "GET STARTED",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        }
-      ]
-    },
-    {
-      "id": "page-2",
-      "elements": [
-        {
-          "id": "page2-bg-tech",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#0f172a",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solutions-title",
-          "type": "text",
-          "x": 60,
-          "y": 80,
-          "content": "SOLUTIONS",
-          "style": {
-            "width": 300,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 600,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solutions-grid",
-          "type": "container",
-          "x": 60,
-          "y": 150,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 800,
-            "display": "grid",
-            "gridTemplateColumns": "1fr 1fr",
-            "gap": "20px",
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-1",
-          "type": "container",
-          "x": 60,
-          "y": 150,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 380,
-            "backgroundColor": "#1e293b",
-            "borderWidth": 1,
-            "borderColor": "#334155",
-            "borderRadius": 16,
-            "padding": 24,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-1-icon",
-          "type": "text",
-          "x": 100,
-          "y": 190,
-          "content": "⚡",
-          "style": {
-            "width": 50,
-            "height": 50,
-            "fontSize": 40,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-1-title",
-          "type": "text",
-          "x": 100,
-          "y": 250,
-          "content": "Cloud Infrastructure",
-          "style": {
-            "width": 250,
-            "height": 25,
-            "fontSize": 20,
-            "fontWeight": 600,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-1-desc",
-          "type": "paragraph",
-          "x": 100,
-          "y": 290,
-          "content": "Scalable, secure cloud solutions that grow with your business. 99.99% uptime SLA guaranteed.",
-          "style": {
-            "width": 250,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-1-metric",
-          "type": "text",
-          "x": 100,
-          "y": 400,
-          "content": "200+",
-          "style": {
-            "width": 100,
-            "height": 30,
-            "fontSize": 28,
-            "fontWeight": 700,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-1-metric-label",
-          "type": "text",
-          "x": 100,
-          "y": 430,
-          "content": "enterprise clients",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#64748b",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-2",
-          "type": "container",
-          "x": 407,
-          "y": 150,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 380,
-            "backgroundColor": "#1e293b",
-            "borderWidth": 1,
-            "borderColor": "#334155",
-            "borderRadius": 16,
-            "padding": 24,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-2-icon",
-          "type": "text",
-          "x": 447,
-          "y": 190,
-          "content": "🤖",
-          "style": {
-            "width": 50,
-            "height": 50,
-            "fontSize": 40,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-2-title",
-          "type": "text",
-          "x": 447,
-          "y": 250,
-          "content": "AI & Machine Learning",
-          "style": {
-            "width": 250,
-            "height": 25,
-            "fontSize": 20,
-            "fontWeight": 600,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-2-desc",
-          "type": "paragraph",
-          "x": 447,
-          "y": 290,
-          "content": "Custom AI solutions that automate processes and unlock insights from your data.",
-          "style": {
-            "width": 250,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-2-metric",
-          "type": "text",
-          "x": 447,
-          "y": 400,
-          "content": "1.5M+",
-          "style": {
-            "width": 100,
-            "height": 30,
-            "fontSize": 28,
-            "fontWeight": 700,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-2-metric-label",
-          "type": "text",
-          "x": 447,
-          "y": 430,
-          "content": "models deployed",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#64748b",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-3",
-          "type": "container",
-          "x": 60,
-          "y": 560,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 380,
-            "backgroundColor": "#1e293b",
-            "borderWidth": 1,
-            "borderColor": "#334155",
-            "borderRadius": 16,
-            "padding": 24,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-3-icon",
-          "type": "text",
-          "x": 100,
-          "y": 600,
-          "content": "🔒",
-          "style": {
-            "width": 50,
-            "height": 50,
-            "fontSize": 40,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-3-title",
-          "type": "text",
-          "x": 100,
-          "y": 660,
-          "content": "Cybersecurity",
-          "style": {
-            "width": 250,
-            "height": 25,
-            "fontSize": 20,
-            "fontWeight": 600,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-3-desc",
-          "type": "paragraph",
-          "x": 100,
-          "y": 700,
-          "content": "Enterprise-grade security solutions that protect your critical assets and data.",
-          "style": {
-            "width": 250,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-3-metric",
-          "type": "text",
-          "x": 100,
-          "y": 810,
-          "content": "100%",
-          "style": {
-            "width": 100,
-            "height": 30,
-            "fontSize": 28,
-            "fontWeight": 700,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-3-metric-label",
-          "type": "text",
-          "x": 100,
-          "y": 840,
-          "content": "threat prevention",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#64748b",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-4",
-          "type": "container",
-          "x": 407,
-          "y": 560,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 380,
-            "backgroundColor": "#1e293b",
-            "borderWidth": 1,
-            "borderColor": "#334155",
-            "borderRadius": 16,
-            "padding": 24,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-4-icon",
-          "type": "text",
-          "x": 447,
-          "y": 600,
-          "content": "📊",
-          "style": {
-            "width": 50,
-            "height": 50,
-            "fontSize": 40,
-            "fontWeight": 400,
-            "color": "#00ffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-4-title",
-          "type": "text",
-          "x": 447,
-          "y": 660,
-          "content": "Data Analytics",
-          "style": {
-            "width": 250,
-            "height": 25,
-            "fontSize": 20,
-            "fontWeight": 600,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-4-desc",
-          "type": "paragraph",
-          "x": 447,
-          "y": 700,
-          "content": "Real-time analytics and business intelligence to drive data-informed decisions.",
-          "style": {
-            "width": 250,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-4-metric",
-          "type": "text",
-          "x": 447,
-          "y": 810,
-          "content": "5PB+",
-          "style": {
-            "width": 100,
-            "height": 30,
-            "fontSize": 28,
-            "fontWeight": 700,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "solution-4-metric-label",
-          "type": "text",
-          "x": 447,
-          "y": 840,
-          "content": "data processed",
-          "style": {
-            "width": 150,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#64748b",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        }
-      ]
-    },
-    {
-      "id": "page-3",
-      "elements": [
-        {
-          "id": "page3-bg-tech",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#0b1120",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-tech",
-          "type": "container",
-          "x": 60,
-          "y": 200,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 600,
-            "backgroundColor": "#1e293b",
-            "borderWidth": 1,
-            "borderColor": "#00ffff",
-            "borderRadius": 24,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-title-tech",
-          "type": "text",
-          "x": 120,
-          "y": 280,
-          "content": "READY TO\nTRANSFORM?",
-          "style": {
-            "width": 554,
-            "height": 100,
-            "fontSize": 48,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "center",
-            "letterSpacing": "-0.02em",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-desc-tech",
-          "type": "paragraph",
-          "x": 120,
-          "y": 400,
-          "content": "Let's discuss how our technology solutions can accelerate your business growth and drive innovation.",
-          "style": {
-            "width": 554,
-            "height": 60,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-email-tech",
-          "type": "text",
-          "x": 120,
-          "y": 500,
-          "content": "hello@technova.com",
-          "style": {
-            "width": 554,
-            "height": 30,
-            "fontSize": 20,
-            "fontWeight": 500,
-            "color": "#00ffff",
-            "fontFamily": "Space Grotesk, monospace",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-phone-tech",
-          "type": "text",
-          "x": 120,
-          "y": 540,
-          "content": "+1 (888) 555-0123",
-          "style": {
-            "width": 554,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-address-tech",
-          "type": "text",
-          "x": 120,
-          "y": 580,
-          "content": "101 Tech Plaza, San Francisco, CA 94105",
-          "style": {
-            "width": 554,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#94a3b8",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "qr-code",
-          "type": "container",
-          "x": 357,
-          "y": 650,
-          "content": "",
-          "style": {
-            "width": 80,
-            "height": 80,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 0,
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "qr-text",
-          "type": "text",
-          "x": 347,
-          "y": 740,
-          "content": "SCAN TO CONNECT",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#64748b",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["brochure", "tech", "modern", "futuristic"],
-    "colorScheme": "tech",
-    "layout": "multi-page",
-    "pageCount": 3
-  }
+﻿{
+    "id":  "company-brochure-tech",
+    "name":  "Technology Company Brochure",
+    "description":  "Modern tech brochure with futuristic design elements",
+    "category":  "marketing",
+    "preview":  "/templates/previews/brochure-tech.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "cover-bg-tech",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#0b1120",
+                                                         "backgroundImage":  "radial-gradient(circle at 20% 30%, #1e2b4a 0%, #0b1120 70%)",
+                                                         "borderWidth":  0,
+                                                         "borderRadius":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "grid-lines",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundImage":  "linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%), linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%)",
+                                                         "backgroundSize":  "50px 50px",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "logo-tech",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "TECHNOVA",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  600,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "hero-tech",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  300,
+                                           "content":  "BUILD THE\nFUTURE",
+                                           "style":  {
+                                                         "fontSize":  64,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "-0.02em",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "hero-sub-tech",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  470,
+                                           "content":  "with next-generation technology",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "opacity":  0.8,
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "stats-tech",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  600,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  150,
+                                                         "backgroundColor":  "rgba(0, 255, 255, 0.05)",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#00ffff",
+                                                         "borderRadius":  8,
+                                                         "backdropFilter":  "blur(10px)",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "stat-1-tech",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  640,
+                                           "content":  "10M+",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "stat-1-label-tech",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  680,
+                                           "content":  "Users",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "stat-2-tech",
+                                           "type":  "text",
+                                           "x":  322,
+                                           "y":  640,
+                                           "content":  "99.9%",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "stat-2-label-tech",
+                                           "type":  "text",
+                                           "x":  322,
+                                           "y":  680,
+                                           "content":  "Uptime",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "stat-3-tech",
+                                           "type":  "text",
+                                           "x":  524,
+                                           "y":  640,
+                                           "content":  "24/7",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "stat-3-label-tech",
+                                           "type":  "text",
+                                           "x":  524,
+                                           "y":  680,
+                                           "content":  "Support",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "cta-tech",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  800,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  200,
+                                                         "height":  50,
+                                                         "backgroundColor":  "transparent",
+                                                         "borderWidth":  2,
+                                                         "borderColor":  "#00ffff",
+                                                         "borderRadius":  25,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "cta-text-tech",
+                                           "type":  "text",
+                                           "x":  110,
+                                           "y":  815,
+                                           "content":  "GET STARTED",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-2",
+                      "elements":  [
+                                       {
+                                           "id":  "page2-bg-tech",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#0f172a",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solutions-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  80,
+                                           "content":  "SOLUTIONS",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  600,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solutions-grid",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  150,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  800,
+                                                         "display":  "grid",
+                                                         "gridTemplateColumns":  "1fr 1fr",
+                                                         "gap":  "20px",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  150,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  380,
+                                                         "backgroundColor":  "#1e293b",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#334155",
+                                                         "borderRadius":  16,
+                                                         "padding":  24,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-1-icon",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  190,
+                                           "content":  "âš¡",
+                                           "style":  {
+                                                         "fontSize":  40,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-1-title",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  250,
+                                           "content":  "Cloud Infrastructure",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  600,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-1-desc",
+                                           "type":  "paragraph",
+                                           "x":  100,
+                                           "y":  290,
+                                           "content":  "Scalable, secure cloud solutions that grow with your business. 99.99% uptime SLA guaranteed.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-1-metric",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  400,
+                                           "content":  "200+",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  700,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-1-metric-label",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  430,
+                                           "content":  "enterprise clients",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#64748b",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-2",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  150,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  380,
+                                                         "backgroundColor":  "#1e293b",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#334155",
+                                                         "borderRadius":  16,
+                                                         "padding":  24,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-2-icon",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  190,
+                                           "content":  "ðŸ¤–",
+                                           "style":  {
+                                                         "fontSize":  40,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-2-title",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  250,
+                                           "content":  "AI \u0026 Machine Learning",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  600,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-2-desc",
+                                           "type":  "paragraph",
+                                           "x":  447,
+                                           "y":  290,
+                                           "content":  "Custom AI solutions that automate processes and unlock insights from your data.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-2-metric",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  400,
+                                           "content":  "1.5M+",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  700,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-2-metric-label",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  430,
+                                           "content":  "models deployed",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#64748b",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-3",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  560,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  380,
+                                                         "backgroundColor":  "#1e293b",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#334155",
+                                                         "borderRadius":  16,
+                                                         "padding":  24,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-3-icon",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  600,
+                                           "content":  "ðŸ”’",
+                                           "style":  {
+                                                         "fontSize":  40,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-3-title",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  660,
+                                           "content":  "Cybersecurity",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  600,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-3-desc",
+                                           "type":  "paragraph",
+                                           "x":  100,
+                                           "y":  700,
+                                           "content":  "Enterprise-grade security solutions that protect your critical assets and data.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-3-metric",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  810,
+                                           "content":  "100%",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  700,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-3-metric-label",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  840,
+                                           "content":  "threat prevention",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#64748b",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-4",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  560,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  380,
+                                                         "backgroundColor":  "#1e293b",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#334155",
+                                                         "borderRadius":  16,
+                                                         "padding":  24,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-4-icon",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  600,
+                                           "content":  "ðŸ“Š",
+                                           "style":  {
+                                                         "fontSize":  40,
+                                                         "fontWeight":  400,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-4-title",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  660,
+                                           "content":  "Data Analytics",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  600,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-4-desc",
+                                           "type":  "paragraph",
+                                           "x":  447,
+                                           "y":  700,
+                                           "content":  "Real-time analytics and business intelligence to drive data-informed decisions.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-4-metric",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  810,
+                                           "content":  "5PB+",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  700,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "solution-4-metric-label",
+                                           "type":  "text",
+                                           "x":  447,
+                                           "y":  840,
+                                           "content":  "data processed",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#64748b",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-3",
+                      "elements":  [
+                                       {
+                                           "id":  "page3-bg-tech",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#0b1120",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-tech",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  200,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  600,
+                                                         "backgroundColor":  "#1e293b",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#00ffff",
+                                                         "borderRadius":  24,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-title-tech",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  280,
+                                           "content":  "READY TO\nTRANSFORM?",
+                                           "style":  {
+                                                         "fontSize":  48,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "center",
+                                                         "letterSpacing":  "-0.02em",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-desc-tech",
+                                           "type":  "paragraph",
+                                           "x":  120,
+                                           "y":  400,
+                                           "content":  "Let\u0027s discuss how our technology solutions can accelerate your business growth and drive innovation.",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-email-tech",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  500,
+                                           "content":  "hello@technova.com",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  500,
+                                                         "color":  "#00ffff",
+                                                         "fontFamily":  "Space Grotesk, monospace",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-phone-tech",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  540,
+                                           "content":  "+1 (888) 555-0123",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-address-tech",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  580,
+                                           "content":  "101 Tech Plaza, San Francisco, CA 94105",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#94a3b8",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "qr-code",
+                                           "type":  "container",
+                                           "x":  357,
+                                           "y":  650,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  80,
+                                                         "height":  80,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "qr-text",
+                                           "type":  "text",
+                                           "x":  347,
+                                           "y":  740,
+                                           "content":  "SCAN TO CONNECT",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#64748b",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "brochure",
+                                  "tech",
+                                  "modern",
+                                  "futuristic"
+                              ],
+                     "colorScheme":  "tech",
+                     "layout":  "multi-page",
+                     "pageCount":  3
+                 }
 }

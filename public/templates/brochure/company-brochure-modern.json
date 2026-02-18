@@ -1,266 +1,318 @@
-{
-  "id": "company-brochure-modern",
-  "name": "Modern Company Brochure",
-  "description": "Contemporary brochure with clean lines and bold typography",
-  "category": "marketing",
-  "preview": "/templates/previews/brochure-modern.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "modern-cover",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-block",
-          "type": "container",
-          "x": 60,
-          "y": 200,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 300,
-            "backgroundColor": "#2563eb",
-            "borderRadius": 24,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-logo",
-          "type": "text",
-          "x": 100,
-          "y": 250,
-          "content": "MODERN",
-          "style": {
-            "width": 300,
-            "height": 60,
-            "fontSize": 56,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "-0.02em",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-tagline",
-          "type": "text",
-          "x": 100,
-          "y": 320,
-          "content": "Forward thinking. Clean design.",
-          "style": {
-            "width": 400,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 300,
-            "color": "#ffffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-year",
-          "type": "text",
-          "x": 500,
-          "y": 450,
-          "content": "2024",
-          "style": {
-            "width": 100,
-            "height": 50,
-            "fontSize": 42,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-circle",
-          "type": "container",
-          "x": 600,
-          "y": 80,
-          "content": "",
-          "style": {
-            "width": 150,
-            "height": 150,
-            "backgroundColor": "#fbbf24",
-            "borderRadius": "50%",
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        }
-      ]
-    },
-    {
-      "id": "page-2",
-      "elements": [
-        {
-          "id": "modern-services",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "Services",
-          "style": {
-            "width": 200,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 600,
-            "color": "#1f2937",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "modern-grid",
-          "type": "container",
-          "x": 60,
-          "y": 130,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 500,
-            "display": "grid",
-            "gridTemplateColumns": "1fr 1fr",
-            "gap": "20px",
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "service-modern-1",
-          "type": "container",
-          "x": 60,
-          "y": 130,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 240,
-            "backgroundColor": "#f9fafb",
-            "borderRadius": 16,
-            "padding": 25,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "service-modern-1-title",
-          "type": "text",
-          "x": 85,
-          "y": 170,
-          "content": "Web Development",
-          "style": {
-            "width": 280,
-            "height": 25,
-            "fontSize": 20,
-            "fontWeight": 600,
-            "color": "#2563eb",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "service-modern-1-desc",
-          "type": "paragraph",
-          "x": 85,
-          "y": 210,
-          "content": "Modern web applications built with React, Next.js, and Node.js. Fast, scalable, and user-friendly.",
-          "style": {
-            "width": 280,
-            "height": 70,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "service-modern-2",
-          "type": "container",
-          "x": 407,
-          "y": 130,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 240,
-            "backgroundColor": "#f9fafb",
-            "borderRadius": 16,
-            "padding": 25,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "service-modern-2-title",
-          "type": "text",
-          "x": 432,
-          "y": 170,
-          "content": "AI Integration",
-          "style": {
-            "width": 280,
-            "height": 25,
-            "fontSize": 20,
-            "fontWeight": 600,
-            "color": "#2563eb",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "service-modern-2-desc",
-          "type": "paragraph",
-          "x": 432,
-          "y": 210,
-          "content": "LLM-powered features that automate processes and provide intelligent insights to your users.",
-          "style": {
-            "width": 280,
-            "height": 70,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["brochure", "modern", "contemporary"],
-    "colorScheme": "blue",
-    "layout": "multi-page",
-    "pageCount": 2
-  }
+﻿{
+    "id":  "company-brochure-modern",
+    "name":  "Modern Company Brochure",
+    "description":  "Contemporary brochure with clean lines and bold typography",
+    "category":  "marketing",
+    "preview":  "/templates/previews/brochure-modern.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "modern-cover",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-block",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  200,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  300,
+                                                         "backgroundColor":  "#2563eb",
+                                                         "borderRadius":  24,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-logo",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  250,
+                                           "content":  "MODERN",
+                                           "style":  {
+                                                         "fontSize":  56,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "-0.02em",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-tagline",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  320,
+                                           "content":  "Forward thinking. Clean design.",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  300,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-year",
+                                           "type":  "text",
+                                           "x":  500,
+                                           "y":  450,
+                                           "content":  "2024",
+                                           "style":  {
+                                                         "fontSize":  42,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-circle",
+                                           "type":  "container",
+                                           "x":  600,
+                                           "y":  80,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  150,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#fbbf24",
+                                                         "borderRadius":  "50%",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-2",
+                      "elements":  [
+                                       {
+                                           "id":  "modern-services",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "Services",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1f2937",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "modern-grid",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  130,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  500,
+                                                         "display":  "grid",
+                                                         "gridTemplateColumns":  "1fr 1fr",
+                                                         "gap":  "20px",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "service-modern-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  130,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  240,
+                                                         "backgroundColor":  "#f9fafb",
+                                                         "borderRadius":  16,
+                                                         "padding":  25,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "service-modern-1-title",
+                                           "type":  "text",
+                                           "x":  85,
+                                           "y":  170,
+                                           "content":  "Web Development",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  600,
+                                                         "color":  "#2563eb",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "service-modern-1-desc",
+                                           "type":  "paragraph",
+                                           "x":  85,
+                                           "y":  210,
+                                           "content":  "Modern web applications built with React, Next.js, and Node.js. Fast, scalable, and user-friendly.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "service-modern-2",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  130,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  240,
+                                                         "backgroundColor":  "#f9fafb",
+                                                         "borderRadius":  16,
+                                                         "padding":  25,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "service-modern-2-title",
+                                           "type":  "text",
+                                           "x":  432,
+                                           "y":  170,
+                                           "content":  "AI Integration",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  600,
+                                                         "color":  "#2563eb",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "service-modern-2-desc",
+                                           "type":  "paragraph",
+                                           "x":  432,
+                                           "y":  210,
+                                           "content":  "LLM-powered features that automate processes and provide intelligent insights to your users.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "brochure",
+                                  "modern",
+                                  "contemporary"
+                              ],
+                     "colorScheme":  "blue",
+                     "layout":  "multi-page",
+                     "pageCount":  2
+                 }
 }

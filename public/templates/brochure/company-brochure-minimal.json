@@ -1,626 +1,781 @@
-{
-  "id": "company-brochure-minimal",
-  "name": "Minimalist Company Brochure",
-  "description": "Clean, minimalist brochure with elegant white space",
-  "category": "marketing",
-  "preview": "/templates/previews/brochure-minimal.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "cover-bg",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 0,
-            "borderRadius": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "minimal-line",
-          "type": "container",
-          "x": 60,
-          "y": 200,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 2,
-            "backgroundColor": "#000000",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "company-name-minimal",
-          "type": "text",
-          "x": 60,
-          "y": 220,
-          "content": "COMPANY",
-          "style": {
-            "width": 300,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 300,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "company-sub-minimal",
-          "type": "text",
-          "x": 60,
-          "y": 260,
-          "content": "EST. 2024",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "hero-text-minimal",
-          "type": "text",
-          "x": 60,
-          "y": 400,
-          "content": "Simplicity",
-          "style": {
-            "width": 674,
-            "height": 100,
-            "fontSize": 72,
-            "fontWeight": 200,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "hero-text-2-minimal",
-          "type": "text",
-          "x": 60,
-          "y": 500,
-          "content": "is the ultimate",
-          "style": {
-            "width": 674,
-            "height": 60,
-            "fontSize": 48,
-            "fontWeight": 200,
-            "color": "#9ca3af",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "hero-text-3-minimal",
-          "type": "text",
-          "x": 60,
-          "y": 560,
-          "content": "sophistication.",
-          "style": {
-            "width": 674,
-            "height": 60,
-            "fontSize": 48,
-            "fontWeight": 400,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "minimal-quote",
-          "type": "paragraph",
-          "x": 60,
-          "y": 700,
-          "content": "\"Less is more. We believe in the power of clean design, clear communication, and meaningful connections.\"",
-          "style": {
-            "width": 500,
-            "height": 80,
-            "fontSize": 16,
-            "fontWeight": 300,
-            "color": "#374151",
-            "fontFamily": "Georgia, serif",
-            "textAlign": "left",
-            "lineHeight": 1.7,
-            "fontStyle": "italic"
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "minimal-page-number",
-          "type": "text",
-          "x": 60,
-          "y": 1050,
-          "content": "01",
-          "style": {
-            "width": 50,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 300,
-            "color": "#d1d5db",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        }
-      ]
-    },
-    {
-      "id": "page-2",
-      "elements": [
-        {
-          "id": "page2-line",
-          "type": "container",
-          "x": 60,
-          "y": 60,
-          "content": "",
-          "style": {
-            "width": 50,
-            "height": 1,
-            "backgroundColor": "#000000",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "philosophy-title",
-          "type": "text",
-          "x": 60,
-          "y": 80,
-          "content": "Our Philosophy",
-          "style": {
-            "width": 300,
-            "height": 30,
-            "fontSize": 20,
-            "fontWeight": 400,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.05em",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "philosophy-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 130,
-          "content": "We strip away the unnecessary to reveal what truly matters. Our approach is intentional, every element serves a purpose, and every detail is considered.",
-          "style": {
-            "width": 500,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#4b5563",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "values-grid",
-          "type": "container",
-          "x": 60,
-          "y": 250,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 300,
-            "backgroundColor": "transparent",
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-1",
-          "type": "text",
-          "x": 60,
-          "y": 250,
-          "content": "01",
-          "style": {
-            "width": 50,
-            "height": 30,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#9ca3af",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-1-title",
-          "type": "text",
-          "x": 120,
-          "y": 250,
-          "content": "Clarity",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-1-desc",
-          "type": "paragraph",
-          "x": 120,
-          "y": 280,
-          "content": "Clear thinking leads to clear design. We communicate complex ideas with elegant simplicity.",
-          "style": {
-            "width": 300,
-            "height": 60,
-            "fontSize": 13,
-            "fontWeight": 300,
-            "color": "#6b7280",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-2",
-          "type": "text",
-          "x": 60,
-          "y": 360,
-          "content": "02",
-          "style": {
-            "width": 50,
-            "height": 30,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#9ca3af",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-2-title",
-          "type": "text",
-          "x": 120,
-          "y": 360,
-          "content": "Purpose",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-2-desc",
-          "type": "paragraph",
-          "x": 120,
-          "y": 390,
-          "content": "Every element must earn its place. We design with intention and purpose, never decoration for its own sake.",
-          "style": {
-            "width": 300,
-            "height": 60,
-            "fontSize": 13,
-            "fontWeight": 300,
-            "color": "#6b7280",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-3",
-          "type": "text",
-          "x": 60,
-          "y": 470,
-          "content": "03",
-          "style": {
-            "width": 50,
-            "height": 30,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#9ca3af",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-3-title",
-          "type": "text",
-          "x": 120,
-          "y": 470,
-          "content": "Authenticity",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "value-3-desc",
-          "type": "paragraph",
-          "x": 120,
-          "y": 500,
-          "content": "We believe in honest design that reflects your brand's true character and values.",
-          "style": {
-            "width": 300,
-            "height": 60,
-            "fontSize": 13,
-            "fontWeight": 300,
-            "color": "#6b7280",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "minimal-image",
-          "type": "container",
-          "x": 460,
-          "y": 250,
-          "content": "",
-          "style": {
-            "width": 274,
-            "height": 300,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "page2-number",
-          "type": "text",
-          "x": 60,
-          "y": 1050,
-          "content": "02",
-          "style": {
-            "width": 50,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 300,
-            "color": "#d1d5db",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        }
-      ]
-    },
-    {
-      "id": "page-3",
-      "elements": [
-        {
-          "id": "contact-minimal",
-          "type": "container",
-          "x": 60,
-          "y": 60,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 400,
-            "backgroundColor": "transparent",
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-line",
-          "type": "container",
-          "x": 60,
-          "y": 60,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 2,
-            "backgroundColor": "#000000",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-title-minimal",
-          "type": "text",
-          "x": 60,
-          "y": 80,
-          "content": "Get in touch",
-          "style": {
-            "width": 300,
-            "height": 40,
-            "fontSize": 28,
-            "fontWeight": 300,
-            "color": "#000000",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "contact-info-minimal",
-          "type": "paragraph",
-          "x": 60,
-          "y": 150,
-          "content": "hello@company.com\n+1 (555) 123-4567\n123 Business Street\nNew York, NY 10001",
-          "style": {
-            "width": 300,
-            "height": 120,
-            "fontSize": 14,
-            "fontWeight": 300,
-            "color": "#4b5563",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "social-minimal",
-          "type": "text",
-          "x": 60,
-          "y": 300,
-          "content": "Instagram / Twitter / LinkedIn",
-          "style": {
-            "width": 400,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 300,
-            "color": "#9ca3af",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "map-placeholder",
-          "type": "container",
-          "x": 400,
-          "y": 150,
-          "content": "",
-          "style": {
-            "width": 334,
-            "height": 200,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 1,
-            "borderColor": "#e5e7eb",
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "map-text",
-          "type": "text",
-          "x": 520,
-          "y": 240,
-          "content": "MAP",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 300,
-            "color": "#9ca3af",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "footer-minimal",
-          "type": "container",
-          "x": 60,
-          "y": 1000,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 1,
-            "backgroundColor": "#e5e7eb",
-            "borderWidth": 0,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "copyright",
-          "type": "text",
-          "x": 60,
-          "y": 1020,
-          "content": "© 2024 Company. All rights reserved.",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 300,
-            "color": "#9ca3af",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "page3-number",
-          "type": "text",
-          "x": 684,
-          "y": 1020,
-          "content": "03",
-          "style": {
-            "width": 50,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 300,
-            "color": "#d1d5db",
-            "fontFamily": "Helvetica, Arial, sans-serif",
-            "textAlign": "right",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["brochure", "minimalist", "clean", "modern"],
-    "colorScheme": "monochrome",
-    "layout": "multi-page",
-    "pageCount": 3
-  }
+﻿{
+    "id":  "company-brochure-minimal",
+    "name":  "Minimalist Company Brochure",
+    "description":  "Clean, minimalist brochure with elegant white space",
+    "category":  "marketing",
+    "preview":  "/templates/previews/brochure-minimal.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "cover-bg",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  0,
+                                                         "borderRadius":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "minimal-line",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  200,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  2,
+                                                         "backgroundColor":  "#000000",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "company-name-minimal",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  220,
+                                           "content":  "COMPANY",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  300,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "company-sub-minimal",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  260,
+                                           "content":  "EST. 2024",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "hero-text-minimal",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  400,
+                                           "content":  "Simplicity",
+                                           "style":  {
+                                                         "fontSize":  72,
+                                                         "fontWeight":  200,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "hero-text-2-minimal",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  500,
+                                           "content":  "is the ultimate",
+                                           "style":  {
+                                                         "fontSize":  48,
+                                                         "fontWeight":  200,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "hero-text-3-minimal",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  560,
+                                           "content":  "sophistication.",
+                                           "style":  {
+                                                         "fontSize":  48,
+                                                         "fontWeight":  400,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "minimal-quote",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  700,
+                                           "content":  "\"Less is more. We believe in the power of clean design, clear communication, and meaningful connections.\"",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  300,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Georgia, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "fontStyle":  "italic",
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "minimal-page-number",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  1050,
+                                           "content":  "01",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  300,
+                                                         "color":  "#d1d5db",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-2",
+                      "elements":  [
+                                       {
+                                           "id":  "page2-line",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  50,
+                                                         "height":  1,
+                                                         "backgroundColor":  "#000000",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "philosophy-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  80,
+                                           "content":  "Our Philosophy",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  400,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.05em",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "philosophy-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  130,
+                                           "content":  "We strip away the unnecessary to reveal what truly matters. Our approach is intentional, every element serves a purpose, and every detail is considered.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "values-grid",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  250,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  300,
+                                                         "backgroundColor":  "transparent",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-1",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  250,
+                                           "content":  "01",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-1-title",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  250,
+                                           "content":  "Clarity",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-1-desc",
+                                           "type":  "paragraph",
+                                           "x":  120,
+                                           "y":  280,
+                                           "content":  "Clear thinking leads to clear design. We communicate complex ideas with elegant simplicity.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  300,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-2",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  360,
+                                           "content":  "02",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-2-title",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  360,
+                                           "content":  "Purpose",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-2-desc",
+                                           "type":  "paragraph",
+                                           "x":  120,
+                                           "y":  390,
+                                           "content":  "Every element must earn its place. We design with intention and purpose, never decoration for its own sake.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  300,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-3",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  470,
+                                           "content":  "03",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-3-title",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  470,
+                                           "content":  "Authenticity",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "value-3-desc",
+                                           "type":  "paragraph",
+                                           "x":  120,
+                                           "y":  500,
+                                           "content":  "We believe in honest design that reflects your brand\u0027s true character and values.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  300,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "minimal-image",
+                                           "type":  "container",
+                                           "x":  460,
+                                           "y":  250,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  274,
+                                                         "height":  300,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "page2-number",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  1050,
+                                           "content":  "02",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  300,
+                                                         "color":  "#d1d5db",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-3",
+                      "elements":  [
+                                       {
+                                           "id":  "contact-minimal",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  400,
+                                                         "backgroundColor":  "transparent",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-line",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  2,
+                                                         "backgroundColor":  "#000000",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-title-minimal",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  80,
+                                           "content":  "Get in touch",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  300,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "contact-info-minimal",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  150,
+                                           "content":  "hello@company.com\n+1 (555) 123-4567\n123 Business Street\nNew York, NY 10001",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  300,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "social-minimal",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  300,
+                                           "content":  "Instagram / Twitter / LinkedIn",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  300,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "map-placeholder",
+                                           "type":  "container",
+                                           "x":  400,
+                                           "y":  150,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  334,
+                                                         "height":  200,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e5e7eb",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "map-text",
+                                           "type":  "text",
+                                           "x":  520,
+                                           "y":  240,
+                                           "content":  "MAP",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  300,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "footer-minimal",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  1000,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  1,
+                                                         "backgroundColor":  "#e5e7eb",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "copyright",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  1020,
+                                           "content":  "Â© 2024 Company. All rights reserved.",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  300,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "page3-number",
+                                           "type":  "text",
+                                           "x":  684,
+                                           "y":  1020,
+                                           "content":  "03",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  300,
+                                                         "color":  "#d1d5db",
+                                                         "fontFamily":  "Helvetica, Arial, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "brochure",
+                                  "minimalist",
+                                  "clean",
+                                  "modern"
+                              ],
+                     "colorScheme":  "monochrome",
+                     "layout":  "multi-page",
+                     "pageCount":  3
+                 }
 }

@@ -1,1027 +1,1278 @@
-{
-  "id": "business-proposal-partnership",
-  "name": "Strategic Partnership Proposal",
-  "description": "Proposal for forming strategic business partnerships and alliances",
-  "category": "business",
-  "preview": "/templates/previews/business-proposal-partnership.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "partnership-header",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 200,
-            "backgroundColor": "#4a2c2c",
-            "backgroundImage": "linear-gradient(145deg, #4a2c2c 0%, #6b4f4f 100%)",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-overlay",
-          "type": "container",
-          "x": 0,
-          "y": 150,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 50,
-            "backgroundColor": "#c6a43f",
-            "opacity": 0.9,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-logo",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "STRATEGIC ALLIANCE",
-          "style": {
-            "width": 400,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 600,
-            "color": "#ffffff",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.15em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-tagline",
-          "type": "text",
-          "x": 60,
-          "y": 100,
-          "content": "Building Success Together",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 300,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "fontStyle": "italic",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-title",
-          "type": "text",
-          "x": 60,
-          "y": 250,
-          "content": "PARTNERSHIP PROPOSAL",
-          "style": {
-            "width": 400,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.2em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-subject",
-          "type": "text",
-          "x": 60,
-          "y": 290,
-          "content": "Proposed Collaboration Between",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#2d2a2e",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-companies",
-          "type": "text",
-          "x": 60,
-          "y": 320,
-          "content": "Antigravity  &  [Partner Company]",
-          "style": {
-            "width": 600,
-            "height": 40,
-            "fontSize": 28,
-            "fontWeight": 600,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-date",
-          "type": "text",
-          "x": 500,
-          "y": 250,
-          "content": "January 15, 2024",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-version",
-          "type": "text",
-          "x": 500,
-          "y": 280,
-          "content": "Version 1.0 | Confidential",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-intro",
-          "type": "container",
-          "x": 60,
-          "y": 400,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 150,
-            "backgroundColor": "#f9f7f4",
-            "borderLeft": "5px solid #c6a43f",
-            "padding": 20,
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "partnership-intro-text",
-          "type": "paragraph",
-          "x": 85,
-          "y": 430,
-          "content": "On behalf of Antigravity, I am pleased to present this partnership proposal. We believe that a strategic alliance between our organizations would create significant mutual value, combining our technical expertise with [Partner Company]'s industry presence to deliver innovative solutions to the market.",
-          "style": {
-            "width": 624,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "presented-by",
-          "type": "text",
-          "x": 60,
-          "y": 590,
-          "content": "Presented by:",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 600,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "presenter-name",
-          "type": "text",
-          "x": 170,
-          "y": 590,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "presenter-title",
-          "type": "text",
-          "x": 170,
-          "y": 615,
-          "content": "Full Stack Developer, Antigravity",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "presenter-contact",
-          "type": "text",
-          "x": 500,
-          "y": 590,
-          "content": "muhammad.daniyal@antigravity.com",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        }
-      ]
-    },
-    {
-      "id": "page-2",
-      "elements": [
-        {
-          "id": "vision-title",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "SHARED VISION",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "vision-line",
-          "type": "container",
-          "x": 60,
-          "y": 95,
-          "content": "",
-          "style": {
-            "width": 80,
-            "height": 3,
-            "backgroundColor": "#c6a43f",
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "vision-statement",
-          "type": "paragraph",
-          "x": 60,
-          "y": 120,
-          "content": "We envision a partnership that combines Antigravity's technical excellence in web development and AI integration with [Partner Company]'s market reach and industry expertise. Together, we can create innovative solutions that neither organization could achieve alone.",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "mutual-benefits-title",
-          "type": "text",
-          "x": 60,
-          "y": 240,
-          "content": "MUTUAL BENEFITS",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 600,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefits-grid",
-          "type": "container",
-          "x": 60,
-          "y": 290,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 300,
-            "display": "grid",
-            "gridTemplateColumns": "1fr 1fr",
-            "gap": "20px",
-            "zIndex": 1
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-1",
-          "type": "container",
-          "x": 60,
-          "y": 290,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 130,
-            "backgroundColor": "#f9f7f4",
-            "borderRadius": 8,
-            "padding": 15,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-1-icon",
-          "type": "text",
-          "x": 80,
-          "y": 315,
-          "content": "🤝",
-          "style": {
-            "width": 30,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-1-title",
-          "type": "text",
-          "x": 120,
-          "y": 315,
-          "content": "Market Expansion",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 15,
-            "fontWeight": 500,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-1-desc",
-          "type": "paragraph",
-          "x": 80,
-          "y": 345,
-          "content": "Access to new markets and customer segments through combined reach and distribution channels.",
-          "style": {
-            "width": 280,
-            "height": 60,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-2",
-          "type": "container",
-          "x": 407,
-          "y": 290,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 130,
-            "backgroundColor": "#f9f7f4",
-            "borderRadius": 8,
-            "padding": 15,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-2-icon",
-          "type": "text",
-          "x": 427,
-          "y": 315,
-          "content": "💡",
-          "style": {
-            "width": 30,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-2-title",
-          "type": "text",
-          "x": 467,
-          "y": 315,
-          "content": "Innovation Acceleration",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 15,
-            "fontWeight": 500,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-2-desc",
-          "type": "paragraph",
-          "x": 427,
-          "y": 345,
-          "content": "Combined R&D capabilities to accelerate product development and time-to-market.",
-          "style": {
-            "width": 280,
-            "height": 60,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-3",
-          "type": "container",
-          "x": 60,
-          "y": 440,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 130,
-            "backgroundColor": "#f9f7f4",
-            "borderRadius": 8,
-            "padding": 15,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-3-icon",
-          "type": "text",
-          "x": 80,
-          "y": 465,
-          "content": "💰",
-          "style": {
-            "width": 30,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-3-title",
-          "type": "text",
-          "x": 120,
-          "y": 465,
-          "content": "Cost Optimization",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 15,
-            "fontWeight": 500,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-3-desc",
-          "type": "paragraph",
-          "x": 80,
-          "y": 495,
-          "content": "Shared resources and expertise reduce costs and increase operational efficiency.",
-          "style": {
-            "width": 280,
-            "height": 60,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-4",
-          "type": "container",
-          "x": 407,
-          "y": 440,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 130,
-            "backgroundColor": "#f9f7f4",
-            "borderRadius": 8,
-            "padding": 15,
-            "zIndex": 2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-4-icon",
-          "type": "text",
-          "x": 427,
-          "y": 465,
-          "content": "🎯",
-          "style": {
-            "width": 30,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-4-title",
-          "type": "text",
-          "x": 467,
-          "y": 465,
-          "content": "Competitive Advantage",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 15,
-            "fontWeight": 500,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 1
-        },
-        {
-          "id": "benefit-4-desc",
-          "type": "paragraph",
-          "x": 427,
-          "y": 495,
-          "content": "Stronger market position through combined capabilities and unique value proposition.",
-          "style": {
-            "width": 280,
-            "height": 60,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#6b7280",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 1
-        }
-      ]
-    },
-    {
-      "id": "page-3",
-      "elements": [
-        {
-          "id": "partnership-structure",
-          "type": "text",
-          "x": 60,
-          "y": 60,
-          "content": "PROPOSED PARTNERSHIP STRUCTURE",
-          "style": {
-            "width": 500,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 600,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "structure-line",
-          "type": "container",
-          "x": 60,
-          "y": 95,
-          "content": "",
-          "style": {
-            "width": 80,
-            "height": 2,
-            "backgroundColor": "#c6a43f",
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "structure-diagram",
-          "type": "container",
-          "x": 60,
-          "y": 130,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 200,
-            "backgroundColor": "#f9f7f4",
-            "borderRadius": 12,
-            "padding": 20,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "antigravity-box",
-          "type": "container",
-          "x": 100,
-          "y": 170,
-          "content": "",
-          "style": {
-            "width": 180,
-            "height": 100,
-            "backgroundColor": "#4a2c2c",
-            "borderRadius": 8,
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "antigravity-text",
-          "type": "text",
-          "x": 140,
-          "y": 200,
-          "content": "ANTIGRAVITY",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "antigravity-desc",
-          "type": "text",
-          "x": 130,
-          "y": 225,
-          "content": "Technical Excellence",
-          "style": {
-            "width": 120,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "plus-sign",
-          "type": "text",
-          "x": 300,
-          "y": 210,
-          "content": "+",
-          "style": {
-            "width": 30,
-            "height": 30,
-            "fontSize": 28,
-            "fontWeight": 600,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "partner-box",
-          "type": "container",
-          "x": 350,
-          "y": 170,
-          "content": "",
-          "style": {
-            "width": 180,
-            "height": 100,
-            "backgroundColor": "#6b4f4f",
-            "borderRadius": 8,
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "partner-text",
-          "type": "text",
-          "x": 390,
-          "y": 200,
-          "content": "PARTNER",
-          "style": {
-            "width": 100,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "partner-desc",
-          "type": "text",
-          "x": 380,
-          "y": 225,
-          "content": "Market Presence",
-          "style": {
-            "width": 120,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "equals-sign",
-          "type": "text",
-          "x": 550,
-          "y": 210,
-          "content": "=",
-          "style": {
-            "width": 30,
-            "height": 30,
-            "fontSize": 28,
-            "fontWeight": 600,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "success-box",
-          "type": "container",
-          "x": 600,
-          "y": 170,
-          "content": "",
-          "style": {
-            "width": 100,
-            "height": 100,
-            "backgroundColor": "#c6a43f",
-            "borderRadius": "50%",
-            "zIndex": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "success-text",
-          "type": "text",
-          "x": 625,
-          "y": 210,
-          "content": "SUCCESS",
-          "style": {
-            "width": 50,
-            "height": 30,
-            "fontSize": 10,
-            "fontWeight": 600,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "partnership-terms",
-          "type": "container",
-          "x": 60,
-          "y": 370,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 250,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e5e7eb",
-            "borderRadius": 8,
-            "padding": 20,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "terms-title",
-          "type": "text",
-          "x": 80,
-          "y": 400,
-          "content": "KEY PARTNERSHIP TERMS",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#4a2c2c",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "terms-list",
-          "type": "paragraph",
-          "x": 80,
-          "y": 440,
-          "content": "• Non-exclusive strategic partnership for 24 months, renewable by mutual agreement\n• Revenue sharing: 60/40 split in favor of partner for first 12 months\n• Joint marketing and co-branding opportunities\n• Shared IP rights for collaboratively developed products\n• Quarterly steering committee meetings\n• Dedicated partnership managers from both organizations",
-          "style": {
-            "width": 634,
-            "height": 150,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "next-steps-partnership",
-          "type": "container",
-          "x": 60,
-          "y": 650,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 150,
-            "backgroundColor": "#4a2c2c",
-            "borderRadius": 8,
-            "padding": 25,
-            "zIndex": 1
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "next-steps-title-partner",
-          "type": "text",
-          "x": 85,
-          "y": 685,
-          "content": "NEXT STEPS",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "0.1em",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "next-steps-list-partner",
-          "type": "paragraph",
-          "x": 85,
-          "y": 720,
-          "content": "1. Initial discussion to align on vision (by Jan 30)\n2. Due diligence and information exchange\n3. Draft and review partnership agreement\n4. Finalize terms and sign MOU\n5. Joint kick-off meeting",
-          "style": {
-            "width": 500,
-            "height": 100,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#ffffff",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 2
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "signature-partner",
-          "type": "text",
-          "x": 500,
-          "y": 720,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 2
-        },
-        {
-          "id": "signature-title-partner",
-          "type": "text",
-          "x": 500,
-          "y": 750,
-          "content": "Full Stack Developer, Antigravity",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 10,
-            "fontWeight": 400,
-            "color": "#c6a43f",
-            "fontFamily": "Montserrat, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4,
-            "opacity": 0.8
-          },
-          "pageIndex": 2
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["business", "proposal", "partnership", "alliance"],
-    "colorScheme": "burgundy",
-    "layout": "multi-page",
-    "pageCount": 3
-  }
+﻿{
+    "id":  "business-proposal-partnership",
+    "name":  "Strategic Partnership Proposal",
+    "description":  "Proposal for forming strategic business partnerships and alliances",
+    "category":  "business",
+    "preview":  "/templates/previews/business-proposal-partnership.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "partnership-header",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  200,
+                                                         "backgroundColor":  "#4a2c2c",
+                                                         "backgroundImage":  "linear-gradient(145deg, #4a2c2c 0%, #6b4f4f 100%)",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-overlay",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  150,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  50,
+                                                         "backgroundColor":  "#c6a43f",
+                                                         "opacity":  0.9,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-logo",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "STRATEGIC ALLIANCE",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  600,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.15em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-tagline",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  100,
+                                           "content":  "Building Success Together",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  300,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "fontStyle":  "italic",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  250,
+                                           "content":  "PARTNERSHIP PROPOSAL",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.2em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-subject",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  290,
+                                           "content":  "Proposed Collaboration Between",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#2d2a2e",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-companies",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  320,
+                                           "content":  "Antigravity  \u0026  [Partner Company]",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  600,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-date",
+                                           "type":  "text",
+                                           "x":  500,
+                                           "y":  250,
+                                           "content":  "January 15, 2024",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-version",
+                                           "type":  "text",
+                                           "x":  500,
+                                           "y":  280,
+                                           "content":  "Version 1.0 | Confidential",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-intro",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  400,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#f9f7f4",
+                                                         "borderLeft":  "5px solid #c6a43f",
+                                                         "padding":  20,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "partnership-intro-text",
+                                           "type":  "paragraph",
+                                           "x":  85,
+                                           "y":  430,
+                                           "content":  "On behalf of Antigravity, I am pleased to present this partnership proposal. We believe that a strategic alliance between our organizations would create significant mutual value, combining our technical expertise with [Partner Company]\u0027s industry presence to deliver innovative solutions to the market.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "presented-by",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  590,
+                                           "content":  "Presented by:",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  600,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "presenter-name",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  590,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "presenter-title",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  615,
+                                           "content":  "Full Stack Developer, Antigravity",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "presenter-contact",
+                                           "type":  "text",
+                                           "x":  500,
+                                           "y":  590,
+                                           "content":  "muhammad.daniyal@antigravity.com",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-2",
+                      "elements":  [
+                                       {
+                                           "id":  "vision-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "SHARED VISION",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "vision-line",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  95,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  80,
+                                                         "height":  3,
+                                                         "backgroundColor":  "#c6a43f",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "vision-statement",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  120,
+                                           "content":  "We envision a partnership that combines Antigravity\u0027s technical excellence in web development and AI integration with [Partner Company]\u0027s market reach and industry expertise. Together, we can create innovative solutions that neither organization could achieve alone.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "mutual-benefits-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  240,
+                                           "content":  "MUTUAL BENEFITS",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  600,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefits-grid",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  290,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  300,
+                                                         "display":  "grid",
+                                                         "gridTemplateColumns":  "1fr 1fr",
+                                                         "gap":  "20px",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  290,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  130,
+                                                         "backgroundColor":  "#f9f7f4",
+                                                         "borderRadius":  8,
+                                                         "padding":  15,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-1-icon",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  315,
+                                           "content":  "ðŸ¤",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-1-title",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  315,
+                                           "content":  "Market Expansion",
+                                           "style":  {
+                                                         "fontSize":  15,
+                                                         "fontWeight":  500,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-1-desc",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  345,
+                                           "content":  "Access to new markets and customer segments through combined reach and distribution channels.",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-2",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  290,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  130,
+                                                         "backgroundColor":  "#f9f7f4",
+                                                         "borderRadius":  8,
+                                                         "padding":  15,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-2-icon",
+                                           "type":  "text",
+                                           "x":  427,
+                                           "y":  315,
+                                           "content":  "ðŸ’¡",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-2-title",
+                                           "type":  "text",
+                                           "x":  467,
+                                           "y":  315,
+                                           "content":  "Innovation Acceleration",
+                                           "style":  {
+                                                         "fontSize":  15,
+                                                         "fontWeight":  500,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-2-desc",
+                                           "type":  "paragraph",
+                                           "x":  427,
+                                           "y":  345,
+                                           "content":  "Combined R\u0026D capabilities to accelerate product development and time-to-market.",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-3",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  440,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  130,
+                                                         "backgroundColor":  "#f9f7f4",
+                                                         "borderRadius":  8,
+                                                         "padding":  15,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-3-icon",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  465,
+                                           "content":  "ðŸ’°",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-3-title",
+                                           "type":  "text",
+                                           "x":  120,
+                                           "y":  465,
+                                           "content":  "Cost Optimization",
+                                           "style":  {
+                                                         "fontSize":  15,
+                                                         "fontWeight":  500,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-3-desc",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  495,
+                                           "content":  "Shared resources and expertise reduce costs and increase operational efficiency.",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-4",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  440,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  130,
+                                                         "backgroundColor":  "#f9f7f4",
+                                                         "borderRadius":  8,
+                                                         "padding":  15,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-4-icon",
+                                           "type":  "text",
+                                           "x":  427,
+                                           "y":  465,
+                                           "content":  "ðŸŽ¯",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-4-title",
+                                           "type":  "text",
+                                           "x":  467,
+                                           "y":  465,
+                                           "content":  "Competitive Advantage",
+                                           "style":  {
+                                                         "fontSize":  15,
+                                                         "fontWeight":  500,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       },
+                                       {
+                                           "id":  "benefit-4-desc",
+                                           "type":  "paragraph",
+                                           "x":  427,
+                                           "y":  495,
+                                           "content":  "Stronger market position through combined capabilities and unique value proposition.",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#6b7280",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  1
+                                       }
+                                   ]
+                  },
+                  {
+                      "id":  "page-3",
+                      "elements":  [
+                                       {
+                                           "id":  "partnership-structure",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "PROPOSED PARTNERSHIP STRUCTURE",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  600,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "structure-line",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  95,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  80,
+                                                         "height":  2,
+                                                         "backgroundColor":  "#c6a43f",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "structure-diagram",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  130,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  200,
+                                                         "backgroundColor":  "#f9f7f4",
+                                                         "borderRadius":  12,
+                                                         "padding":  20,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "antigravity-box",
+                                           "type":  "container",
+                                           "x":  100,
+                                           "y":  170,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  180,
+                                                         "height":  100,
+                                                         "backgroundColor":  "#4a2c2c",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "antigravity-text",
+                                           "type":  "text",
+                                           "x":  140,
+                                           "y":  200,
+                                           "content":  "ANTIGRAVITY",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "antigravity-desc",
+                                           "type":  "text",
+                                           "x":  130,
+                                           "y":  225,
+                                           "content":  "Technical Excellence",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "plus-sign",
+                                           "type":  "text",
+                                           "x":  300,
+                                           "y":  210,
+                                           "content":  "+",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  600,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "partner-box",
+                                           "type":  "container",
+                                           "x":  350,
+                                           "y":  170,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  180,
+                                                         "height":  100,
+                                                         "backgroundColor":  "#6b4f4f",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "partner-text",
+                                           "type":  "text",
+                                           "x":  390,
+                                           "y":  200,
+                                           "content":  "PARTNER",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "partner-desc",
+                                           "type":  "text",
+                                           "x":  380,
+                                           "y":  225,
+                                           "content":  "Market Presence",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "equals-sign",
+                                           "type":  "text",
+                                           "x":  550,
+                                           "y":  210,
+                                           "content":  "=",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  600,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "success-box",
+                                           "type":  "container",
+                                           "x":  600,
+                                           "y":  170,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  100,
+                                                         "height":  100,
+                                                         "backgroundColor":  "#c6a43f",
+                                                         "borderRadius":  "50%",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "success-text",
+                                           "type":  "text",
+                                           "x":  625,
+                                           "y":  210,
+                                           "content":  "SUCCESS",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  600,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "partnership-terms",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  370,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  250,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e5e7eb",
+                                                         "borderRadius":  8,
+                                                         "padding":  20,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "terms-title",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  400,
+                                           "content":  "KEY PARTNERSHIP TERMS",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#4a2c2c",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "terms-list",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  440,
+                                           "content":  "â€¢ Non-exclusive strategic partnership for 24 months, renewable by mutual agreement\nâ€¢ Revenue sharing: 60/40 split in favor of partner for first 12 months\nâ€¢ Joint marketing and co-branding opportunities\nâ€¢ Shared IP rights for collaboratively developed products\nâ€¢ Quarterly steering committee meetings\nâ€¢ Dedicated partnership managers from both organizations",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "next-steps-partnership",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  650,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#4a2c2c",
+                                                         "borderRadius":  8,
+                                                         "padding":  25,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "next-steps-title-partner",
+                                           "type":  "text",
+                                           "x":  85,
+                                           "y":  685,
+                                           "content":  "NEXT STEPS",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "0.1em",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "next-steps-list-partner",
+                                           "type":  "paragraph",
+                                           "x":  85,
+                                           "y":  720,
+                                           "content":  "1. Initial discussion to align on vision (by Jan 30)\n2. Due diligence and information exchange\n3. Draft and review partnership agreement\n4. Finalize terms and sign MOU\n5. Joint kick-off meeting",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "signature-partner",
+                                           "type":  "text",
+                                           "x":  500,
+                                           "y":  720,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       },
+                                       {
+                                           "id":  "signature-title-partner",
+                                           "type":  "text",
+                                           "x":  500,
+                                           "y":  750,
+                                           "content":  "Full Stack Developer, Antigravity",
+                                           "style":  {
+                                                         "fontSize":  10,
+                                                         "fontWeight":  400,
+                                                         "color":  "#c6a43f",
+                                                         "fontFamily":  "Montserrat, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "opacity":  0.8,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  2
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "business",
+                                  "proposal",
+                                  "partnership",
+                                  "alliance"
+                              ],
+                     "colorScheme":  "burgundy",
+                     "layout":  "multi-page",
+                     "pageCount":  3
+                 }
 }

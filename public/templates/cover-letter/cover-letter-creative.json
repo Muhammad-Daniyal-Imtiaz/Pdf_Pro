@@ -1,392 +1,493 @@
-{
-  "id": "cover-letter-creative",
-  "name": "Creative Cover Letter",
-  "description": "Modern, creative cover letter for design and creative roles",
-  "category": "career",
-  "preview": "/templates/previews/cover-letter-creative.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "creative-bg",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 1123,
-            "backgroundColor": "#faf3e0",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "creative-shape-1",
-          "type": "container",
-          "x": 600,
-          "y": 50,
-          "content": "",
-          "style": {
-            "width": 200,
-            "height": 200,
-            "backgroundColor": "#ff6b6b",
-            "opacity": 0.1,
-            "borderRadius": "50%",
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "creative-shape-2",
-          "type": "container",
-          "x": 50,
-          "y": 800,
-          "content": "",
-          "style": {
-            "width": 300,
-            "height": 300,
-            "backgroundColor": "#4ecdc4",
-            "opacity": 0.1,
-            "borderRadius": "50%",
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "creative-header",
-          "type": "container",
-          "x": 60,
-          "y": 60,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 120,
-            "backgroundColor": "transparent",
-            "borderBottom": "3px dashed #ff6b6b",
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-name-creative",
-          "type": "text",
-          "x": 80,
-          "y": 80,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 400,
-            "height": 40,
-            "fontSize": 36,
-            "fontWeight": 700,
-            "color": "#2d4059",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "-0.02em",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-title-creative",
-          "type": "text",
-          "x": 80,
-          "y": 125,
-          "content": "Full Stack Developer & Creative Technologist",
-          "style": {
-            "width": 500,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#ff6b6b",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-contact-creative",
-          "type": "text",
-          "x": 450,
-          "y": 95,
-          "content": "m.daniyal@creative.tech",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#4ecdc4",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-portfolio",
-          "type": "text",
-          "x": 450,
-          "y": 120,
-          "content": "portfolio: muhammad.design",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#2d4059",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "date-creative",
-          "type": "text",
-          "x": 450,
-          "y": 145,
-          "content": "01.15.2024",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#ff6b6b",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-creative",
-          "type": "text",
-          "x": 80,
-          "y": 220,
-          "content": "Alex Rivera",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 20,
-            "fontWeight": 500,
-            "color": "#2d4059",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-title-creative",
-          "type": "text",
-          "x": 80,
-          "y": 250,
-          "content": "Creative Director",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#4ecdc4",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-company-creative",
-          "type": "text",
-          "x": 80,
-          "y": 275,
-          "content": "Antigravity Studio",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#2d4059",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "salutation-creative",
-          "type": "text",
-          "x": 80,
-          "y": 330,
-          "content": "Hey Alex,",
-          "style": {
-            "width": 200,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 400,
-            "color": "#ff6b6b",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "opening-creative",
-          "type": "paragraph",
-          "x": 80,
-          "y": 380,
-          "content": "I've been following Antigravity's work for years, and when I saw the opening for a Full Stack Developer who could also bring creative energy to the team, I knew I had to apply. I'm not just a coder – I'm a creative problem-solver who loves building beautiful, functional web experiences that users actually enjoy.",
-          "style": {
-            "width": 634,
-            "height": 100,
-            "fontSize": 15,
-            "fontWeight": 400,
-            "color": "#2d4059",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "project-showcase",
-          "type": "container",
-          "x": 80,
-          "y": 500,
-          "content": "",
-          "style": {
-            "width": 634,
-            "height": 150,
-            "backgroundColor": "#ffffff",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "borderRadius": 16,
-            "padding": 20,
-            "boxShadow": "0 10px 25px rgba(0,0,0,0.05)",
-            "zIndex": 3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "project-title",
-          "type": "text",
-          "x": 100,
-          "y": 530,
-          "content": "✨ Featured Project: CaptionAI Pro",
-          "style": {
-            "width": 400,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#ff6b6b",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "project-desc",
-          "type": "paragraph",
-          "x": 100,
-          "y": 565,
-          "content": "Built an AI-powered caption generation tool using React, Next.js, and LLM integration. The app serves 10k+ monthly active users and has been featured on Product Hunt. This project combines my love for clean code with creating genuinely useful tools.",
-          "style": {
-            "width": 550,
-            "height": 70,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#4a5568",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "body-creative",
-          "type": "paragraph",
-          "x": 80,
-          "y": 670,
-          "content": "When I'm not coding, you'll find me sketching UI concepts, contributing to open-source design systems, or exploring new creative technologies. I believe the best products happen when technical excellence meets thoughtful design – and that's exactly the kind of work I want to create with the Antigravity team.",
-          "style": {
-            "width": 634,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#2d4059",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "closing-creative",
-          "type": "paragraph",
-          "x": 80,
-          "y": 790,
-          "content": "I'd love to chat about how I could bring my blend of technical skills and creative thinking to Antigravity. Let's grab coffee (virtually or IRL) and talk about building something amazing together.",
-          "style": {
-            "width": 634,
-            "height": 60,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#2d4059",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "signature-creative",
-          "type": "text",
-          "x": 80,
-          "y": 880,
-          "content": "Muhammad",
-          "style": {
-            "width": 200,
-            "height": 30,
-            "fontSize": 28,
-            "fontWeight": 500,
-            "color": "#ff6b6b",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "social-creative",
-          "type": "text",
-          "x": 80,
-          "y": 920,
-          "content": "github: @mdaniyal  |  twitter: @muhammad_codes  |  instagram: @muhammad.design",
-          "style": {
-            "width": 600,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4ecdc4",
-            "fontFamily": "Poppins, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["cover-letter", "creative", "modern", "design"],
-    "colorScheme": "colorful",
-    "layout": "single-page"
-  }
+﻿{
+    "id":  "cover-letter-creative",
+    "name":  "Creative Cover Letter",
+    "description":  "Modern, creative cover letter for design and creative roles",
+    "category":  "career",
+    "preview":  "/templates/previews/cover-letter-creative.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "creative-bg",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#faf3e0",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "creative-shape-1",
+                                           "type":  "container",
+                                           "x":  600,
+                                           "y":  50,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  200,
+                                                         "height":  200,
+                                                         "backgroundColor":  "#ff6b6b",
+                                                         "opacity":  0.1,
+                                                         "borderRadius":  "50%",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "creative-shape-2",
+                                           "type":  "container",
+                                           "x":  50,
+                                           "y":  800,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  300,
+                                                         "height":  300,
+                                                         "backgroundColor":  "#4ecdc4",
+                                                         "opacity":  0.1,
+                                                         "borderRadius":  "50%",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "creative-header",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  120,
+                                                         "backgroundColor":  "transparent",
+                                                         "borderBottom":  "3px dashed #ff6b6b",
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-name-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  80,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  36,
+                                                         "fontWeight":  700,
+                                                         "color":  "#2d4059",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "-0.02em",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-title-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  125,
+                                           "content":  "Full Stack Developer \u0026 Creative Technologist",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ff6b6b",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-contact-creative",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  95,
+                                           "content":  "m.daniyal@creative.tech",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4ecdc4",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-portfolio",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  120,
+                                           "content":  "portfolio: muhammad.design",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#2d4059",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "date-creative",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  145,
+                                           "content":  "01.15.2024",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ff6b6b",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  220,
+                                           "content":  "Alex Rivera",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  500,
+                                                         "color":  "#2d4059",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-title-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  250,
+                                           "content":  "Creative Director",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4ecdc4",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-company-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  275,
+                                           "content":  "Antigravity Studio",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#2d4059",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "salutation-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  330,
+                                           "content":  "Hey Alex,",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  400,
+                                                         "color":  "#ff6b6b",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "opening-creative",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  380,
+                                           "content":  "I\u0027ve been following Antigravity\u0027s work for years, and when I saw the opening for a Full Stack Developer who could also bring creative energy to the team, I knew I had to apply. I\u0027m not just a coder â€“ I\u0027m a creative problem-solver who loves building beautiful, functional web experiences that users actually enjoy.",
+                                           "style":  {
+                                                         "fontSize":  15,
+                                                         "fontWeight":  400,
+                                                         "color":  "#2d4059",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "project-showcase",
+                                           "type":  "container",
+                                           "x":  80,
+                                           "y":  500,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  634,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#ffffff",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "borderRadius":  16,
+                                                         "padding":  20,
+                                                         "boxShadow":  "0 10px 25px rgba(0,0,0,0.05)",
+                                                         "zIndex":  3
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "project-title",
+                                           "type":  "text",
+                                           "x":  100,
+                                           "y":  530,
+                                           "content":  "âœ¨ Featured Project: CaptionAI Pro",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#ff6b6b",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "project-desc",
+                                           "type":  "paragraph",
+                                           "x":  100,
+                                           "y":  565,
+                                           "content":  "Built an AI-powered caption generation tool using React, Next.js, and LLM integration. The app serves 10k+ monthly active users and has been featured on Product Hunt. This project combines my love for clean code with creating genuinely useful tools.",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4a5568",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "body-creative",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  670,
+                                           "content":  "When I\u0027m not coding, you\u0027ll find me sketching UI concepts, contributing to open-source design systems, or exploring new creative technologies. I believe the best products happen when technical excellence meets thoughtful design â€“ and that\u0027s exactly the kind of work I want to create with the Antigravity team.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#2d4059",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "closing-creative",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  790,
+                                           "content":  "I\u0027d love to chat about how I could bring my blend of technical skills and creative thinking to Antigravity. Let\u0027s grab coffee (virtually or IRL) and talk about building something amazing together.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#2d4059",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "signature-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  880,
+                                           "content":  "Muhammad",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  500,
+                                                         "color":  "#ff6b6b",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "social-creative",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  920,
+                                           "content":  "github: @mdaniyal  |  twitter: @muhammad_codes  |  instagram: @muhammad.design",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4ecdc4",
+                                                         "fontFamily":  "Poppins, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "cover-letter",
+                                  "creative",
+                                  "modern",
+                                  "design"
+                              ],
+                     "colorScheme":  "colorful",
+                     "layout":  "single-page"
+                 }
 }

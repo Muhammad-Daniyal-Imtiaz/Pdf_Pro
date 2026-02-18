@@ -1,272 +1,355 @@
 ﻿{
-  "id": "cv-clean-white",
-  "name": "Clean White Resume",
-  "description": "Crisp, minimalist white template.",
-  "category": "career",
-  "preview": "/templates/previews/cv-clean-white.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "header-name",
-          "type": "heading",
-          "x": 60,
-          "y": 60,
-          "content": "MUHAMMAD DANIYAL",
-          "style": {
-            "width": 674,
-            "height": 40,
-            "fontSize": 32,
-            "fontWeight": 800,
-            "color": "#000000",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "header-title",
-          "type": "text",
-          "x": 60,
-          "y": 100,
-          "content": "Full Stack Developer",
-          "style": {
-            "width": 400,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#555555",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "contact-info",
-          "type": "text",
-          "x": 60,
-          "y": 125,
-          "content": "muhammad.daniyal@email.com | +92 321 4567",
-          "style": {
-            "width": 674,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#666666",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "section-divider-1",
-          "type": "line",
-          "x": 60,
-          "y": 155,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 1,
-            "backgroundColor": "#000000",
-            "borderWidth": 0
-          },
-          "lineOrientation": "horizontal",
-          "lineStyle": "solid",
-          "pageIndex": 0
-        },
-        {
-          "id": "summary-title",
-          "type": "heading",
-          "x": 60,
-          "y": 175,
-          "content": "Professional Summary",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 700,
-            "color": "#000000",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "summary-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 210,
-          "content": "Expert Full Stack Developer with 5+ years of experience building scalable web applications. Proven track record of optimizing system performance.",
-          "style": {
-            "width": 674,
-            "height": 60,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#333333",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "experience-title",
-          "type": "heading",
-          "x": 60,
-          "y": 285,
-          "content": "Experience",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 700,
-            "color": "#000000",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "job-1-title",
-          "type": "text",
-          "x": 60,
-          "y": 320,
-          "content": "Senior Full Stack Developer",
-          "style": {
-            "width": 500,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#000000",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "job-1-company",
-          "type": "text",
-          "x": 60,
-          "y": 345,
-          "content": "Antigravity | Remote | 2022 - Present",
-          "style": {
-            "width": 500,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 500,
-            "color": "#555555",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "job-1-description",
-          "type": "paragraph",
-          "x": 60,
-          "y": 370,
-          "content": "• Led development of AI-powered captioning tools serving 10k+ users\n• Optimized React/Next.js performance reducing load times by 40%\n• Architected scalable microservices for high-traffic applications",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#333333",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.5
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "skills-title",
-          "type": "heading",
-          "x": 60,
-          "y": 465,
-          "content": "Skills",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 700,
-            "color": "#000000",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "skills-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 500,
-          "content": "Languages: JavaScript, TypeScript, Python\nFrameworks: React, Next.js, Tailwind CSS\nCloud: AWS, Vercel\nDatabases: PostgreSQL, MongoDB",
-          "style": {
-            "width": 674,
-            "height": 60,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#333333",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.5
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "education-title",
-          "type": "heading",
-          "x": 60,
-          "y": 575,
-          "content": "Education",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 700,
-            "color": "#000000",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "education-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 610,
-          "content": "Bachelor in Software Engineering\nNUST (2021 - 2025)",
-          "style": {
-            "width": 674,
-            "height": 45,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#333333",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.5
-          },
-          "pageIndex": 0
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["resume", "cv", "clean", "minimalist"],
-    "colorScheme": "minimal",
-    "layout": "single-column"
-  }
+    "id":  "cv-clean-white",
+    "name":  "Clean White Resume",
+    "description":  "Crisp, minimalist white template.",
+    "category":  "career",
+    "preview":  "/templates/previews/cv-clean-white.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "header-name",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "MUHAMMAD DANIYAL",
+                                           "style":  {
+                                                         "fontSize":  32,
+                                                         "fontWeight":  800,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "header-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  100,
+                                           "content":  "Full Stack Developer",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#555555",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "contact-info",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  125,
+                                           "content":  "muhammad.daniyal@email.com | +92 321 4567",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#666666",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "section-divider-1",
+                                           "type":  "line",
+                                           "x":  60,
+                                           "y":  155,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  1,
+                                                         "backgroundColor":  "#000000",
+                                                         "borderWidth":  0
+                                                     },
+                                           "lineOrientation":  "horizontal",
+                                           "lineStyle":  "solid",
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "summary-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  175,
+                                           "content":  "Professional Summary",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  700,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "summary-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  210,
+                                           "content":  "Expert Full Stack Developer with 5+ years of experience building scalable web applications. Proven track record of optimizing system performance.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#333333",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "experience-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  285,
+                                           "content":  "Experience",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  700,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "job-1-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  320,
+                                           "content":  "Senior Full Stack Developer",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "job-1-company",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  345,
+                                           "content":  "Antigravity | Remote | 2022 - Present",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  500,
+                                                         "color":  "#555555",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "job-1-description",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  370,
+                                           "content":  "• Led development of AI-powered captioning tools serving 10k+ users\n• Optimized React/Next.js performance reducing load times by 40%\n• Architected scalable microservices for high-traffic applications",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#333333",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.5,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "skills-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  465,
+                                           "content":  "Skills",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  700,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "skills-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  500,
+                                           "content":  "Languages: JavaScript, TypeScript, Python\nFrameworks: React, Next.js, Tailwind CSS\nCloud: AWS, Vercel\nDatabases: PostgreSQL, MongoDB",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#333333",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.5,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "education-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  575,
+                                           "content":  "Education",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  700,
+                                                         "color":  "#000000",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "education-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  610,
+                                           "content":  "Bachelor in Software Engineering\nNUST (2021 - 2025)",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#333333",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.5,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "resume",
+                                  "cv",
+                                  "clean",
+                                  "minimalist"
+                              ],
+                     "colorScheme":  "minimal",
+                     "layout":  "single-column"
+                 }
 }

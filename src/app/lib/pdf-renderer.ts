@@ -26,13 +26,21 @@ function getCharWidthFactor(fontWeight: number | string | undefined): number {
 function calculateTextHeight(
     content: string,
     style: any,
-    scale: number = 1
+    scale: number = 1,
+    actualWidth?: number
 ): number {
     const fontSize = (style.fontSize || 14) * scale
     const fontWeight = style.fontWeight || 400
     const lineHeight = style.lineHeight || 1.5
     const padding = (style.padding || 0) * 2 * scale
-    const width = (style.width || 200) * scale
+    
+    // Use provided actualWidth or calculate from style
+    let width = actualWidth || 200 * scale // Default width for auto-sizing
+    if (style.width && style.width !== "auto") {
+        width = Number(style.width) * scale
+    } else if (style.maxWidth) {
+        width = Number(style.maxWidth) * scale
+    }
     
     if (!content) return fontSize * lineHeight + padding
     
@@ -57,7 +65,10 @@ function shouldAutoHeight(el: EditorElement): boolean {
         return false
     }
     const resizeMode = el.style?.resizeMode
-    return resizeMode === 'auto-height' || resizeMode === 'auto-both' || el.isAIGenerated === true
+    const resize = (el.style as any)?.resize
+    return resizeMode === 'auto-height' || resizeMode === 'auto-both' || 
+           resize === 'both' || resize === 'auto' || 
+           el.isAIGenerated === true
 }
 
 const ICON_SVGS: Record<string, string> = {
@@ -89,19 +100,28 @@ export function generateElementHTML(
     const { scale = 1, isPDF = false } = context
     const style = el.style || {} as any
     
+    // Handle width for auto-sizing elements
+    let actualWidth = style.width
+    if (style.width === "auto" || !style.width) {
+        actualWidth = style.maxWidth || 674 // Use maxWidth for auto elements
+    }
+    if (typeof actualWidth === 'string') {
+        actualWidth = Number(actualWidth) || 674
+    }
+    
     // CRITICAL: For auto-height elements, calculate actual height based on content
     const isAutoHeight = shouldAutoHeight(el)
     const calculatedHeight = isAutoHeight 
-        ? calculateTextHeight(el.content || '', style, scale)
+        ? calculateTextHeight(el.content || '', style, scale, actualWidth)
         : (style.height || 40) * scale
     // Ensure height is always a valid number
     const actualHeight = Math.max(calculatedHeight, (style.fontSize || 14) * (style.lineHeight || 1.5) * scale)
-
+    
     const baseStyles: any = {
         position: 'absolute',
         left: `${el.x * scale}px`,
         top: `${el.y * scale}px`,
-        width: `${style.width * scale}px`,
+        width: `${actualWidth * scale}px`, // Use actual width
         height: `${actualHeight}px`, // Use calculated height for auto-height
         fontFamily: style.fontFamily || 'Inter, Arial, sans-serif',
         fontSize: `${(style.fontSize || 14) * scale}px`,
@@ -143,7 +163,9 @@ export function generateElementHTML(
         case 'container':
             // For auto-height elements, render content with line breaks and proper wrapping
             // Note: content is already escaped and newlines converted to <br> by escapeHtml
-            return `<div style="${styleString}">${content}</div>`
+            // Respect whiteSpace property from template
+            const whiteSpace = style.whiteSpace || 'normal'
+            return `<div style="${styleString}; white-space: ${whiteSpace}">${content}</div>`
 
         case 'image':
             return el.content

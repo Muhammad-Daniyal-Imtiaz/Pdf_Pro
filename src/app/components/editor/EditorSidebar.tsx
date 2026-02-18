@@ -235,8 +235,18 @@ export default function EditorSidebar() {
                                             <label className="text-[10px] text-gray-400 block mb-1 font-medium italic">Width (px)</label>
                                             <input
                                                 type="number"
-                                                value={Math.round(selectedElement.style?.width || (selectedElement as any).width || 0)}
-                                                onChange={(e) => updateElementStyle(selectedElement.id, { width: Number(e.target.value) })}
+                                                value={
+                                                    typeof selectedElement.style?.width === "string" && selectedElement.style?.width === "auto" || 
+                                                    typeof (selectedElement as any).width === "string" && (selectedElement as any).width === "auto" 
+                                                        ? "" 
+                                                        : Math.round(Number(selectedElement.style?.width || (selectedElement as any).width || 0))
+                                                }
+                                                onChange={(e) => updateElementStyle(selectedElement.id, { width: e.target.value ? Number(e.target.value) : "auto" as any })}
+                                                placeholder={
+                                                    typeof selectedElement.style?.width === "string" && selectedElement.style?.width === "auto" || 
+                                                    typeof (selectedElement as any).width === "string" && (selectedElement as any).width === "auto" 
+                                                        ? "Auto" : ""
+                                                }
                                                 className="w-full p-2 text-sm border rounded-lg bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             />
                                         </div>
@@ -244,10 +254,45 @@ export default function EditorSidebar() {
                                             <label className="text-[10px] text-gray-400 block mb-1 font-medium italic">Height (px)</label>
                                             <input
                                                 type="number"
-                                                value={Math.round(selectedElement.style?.height || (selectedElement as any).height || 0)}
-                                                onChange={(e) => updateElementStyle(selectedElement.id, { height: Number(e.target.value) })}
+                                                value={
+                                                    typeof selectedElement.style?.height === "string" && selectedElement.style?.height === "auto" || 
+                                                    typeof (selectedElement as any).height === "string" && (selectedElement as any).height === "auto" 
+                                                        ? "" 
+                                                        : Math.round(Number(selectedElement.style?.height || (selectedElement as any).height || 0))
+                                                }
+                                                onChange={(e) => updateElementStyle(selectedElement.id, { height: e.target.value ? Number(e.target.value) : "auto" as any })}
+                                                placeholder={
+                                                    typeof selectedElement.style?.height === "string" && selectedElement.style?.height === "auto" || 
+                                                    typeof (selectedElement as any).height === "string" && (selectedElement as any).height === "auto" 
+                                                        ? "Auto" : ""
+                                                }
                                                 className="w-full p-2 text-sm border rounded-lg bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             />
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between p-2 bg-blue-50 rounded-lg border border-blue-200">
+                                        <span className="text-xs font-medium text-blue-700">Resize Mode</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-blue-600 font-mono">
+                                                {typeof selectedElement.style?.width === "string" && selectedElement.style?.width === "auto" || 
+                                                 typeof (selectedElement as any).width === "string" && (selectedElement as any).width === "auto" 
+                                                    ? "Auto" : "Fixed"}
+                                            </span>
+                                            <button
+                                                onClick={() => {
+                                                    const isAuto = typeof selectedElement.style?.width === "string" && selectedElement.style?.width === "auto" || 
+                                                                 typeof (selectedElement as any).width === "string" && (selectedElement as any).width === "auto";
+                                                    updateElementStyle(selectedElement.id, { 
+                                                        width: isAuto ? 300 : "auto" as any, 
+                                                        height: isAuto ? 100 : "auto" as any 
+                                                    });
+                                                }}
+                                                className="text-xs px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                                            >
+                                                {typeof selectedElement.style?.width === "string" && selectedElement.style?.width === "auto" || 
+                                                 typeof (selectedElement as any).width === "string" && (selectedElement as any).width === "auto" 
+                                                    ? "Set Fixed" : "Set Auto"}
+                                            </button>
                                         </div>
                                     </div>
                                     <div className="flex justify-between items-center text-[10px] text-gray-400 font-mono bg-white/50 p-1.5 rounded-md border border-gray-100/50 mt-1">

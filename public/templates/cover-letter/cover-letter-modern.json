@@ -1,442 +1,555 @@
-{
-  "id": "cover-letter-modern",
-  "name": "Modern Cover Letter",
-  "description": "Contemporary cover letter with clean design and visual elements",
-  "category": "career",
-  "preview": "/templates/previews/cover-letter-modern.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "modern-sidebar",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 120,
-            "height": 1123,
-            "backgroundColor": "#0f172a",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-accent",
-          "type": "container",
-          "x": 120,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 10,
-            "height": 1123,
-            "backgroundColor": "#3b82f6",
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-name",
-          "type": "text",
-          "x": 170,
-          "y": 80,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 400,
-            "height": 40,
-            "fontSize": 36,
-            "fontWeight": 600,
-            "color": "#0f172a",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "letterSpacing": "-0.02em",
-            "lineHeight": 1.1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-title",
-          "type": "text",
-          "x": 170,
-          "y": 125,
-          "content": "Full Stack Developer",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 400,
-            "color": "#3b82f6",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-contact",
-          "type": "container",
-          "x": 170,
-          "y": 170,
-          "content": "",
-          "style": {
-            "width": 500,
-            "height": 60,
-            "backgroundColor": "#f8fafc",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "borderRadius": 8,
-            "padding": 10,
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-email",
-          "type": "text",
-          "x": 190,
-          "y": 185,
-          "content": "📧 muhammad.daniyal@email.com",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#334155",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-phone",
-          "type": "text",
-          "x": 450,
-          "y": 185,
-          "content": "📱 +1 (555) 123-4567",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#334155",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-location",
-          "type": "text",
-          "x": 190,
-          "y": 210,
-          "content": "📍 San Francisco, CA",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#334155",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-portfolio",
-          "type": "text",
-          "x": 450,
-          "y": 210,
-          "content": "🌐 muhammad.dev",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 13,
-            "fontWeight": 400,
-            "color": "#3b82f6",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-date",
-          "type": "text",
-          "x": 170,
-          "y": 260,
-          "content": "January 15, 2024",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#64748b",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-recipient",
-          "type": "text",
-          "x": 170,
-          "y": 300,
-          "content": "Hiring Manager",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#0f172a",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-company",
-          "type": "text",
-          "x": 170,
-          "y": 325,
-          "content": "Antigravity",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#3b82f6",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-company-address",
-          "type": "text",
-          "x": 170,
-          "y": 350,
-          "content": "456 Tech Plaza, San Francisco, CA 94043",
-          "style": {
-            "width": 400,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#64748b",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-salutation",
-          "type": "text",
-          "x": 170,
-          "y": 400,
-          "content": "Dear Hiring Manager,",
-          "style": {
-            "width": 300,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#0f172a",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-opening",
-          "type": "paragraph",
-          "x": 170,
-          "y": 440,
-          "content": "I'm excited to apply for the Full Stack Developer position at Antigravity. With 5+ years of experience building modern web applications and a passion for creating seamless user experiences, I'm confident I can make an immediate contribution to your team.",
-          "style": {
-            "width": 550,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#334155",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-highlight-1",
-          "type": "container",
-          "x": 170,
-          "y": 540,
-          "content": "",
-          "style": {
-            "width": 550,
-            "height": 70,
-            "backgroundColor": "#eff6ff",
-            "borderLeft": "4px solid #3b82f6",
-            "padding": 15,
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-highlight-1-text",
-          "type": "paragraph",
-          "x": 190,
-          "y": 560,
-          "content": "✓ Architected and built a microservices platform serving 1M+ users, improving performance by 40%",
-          "style": {
-            "width": 510,
-            "height": 40,
-            "fontSize": 14,
-            "fontWeight": 500,
-            "color": "#1e40af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-highlight-2",
-          "type": "container",
-          "x": 170,
-          "y": 630,
-          "content": "",
-          "style": {
-            "width": 550,
-            "height": 70,
-            "backgroundColor": "#eff6ff",
-            "borderLeft": "4px solid #3b82f6",
-            "padding": 15,
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-highlight-2-text",
-          "type": "paragraph",
-          "x": 190,
-          "y": 650,
-          "content": "✓ Led development of AI-powered features using LLM integration, resulting in 50% increase in user engagement",
-          "style": {
-            "width": 510,
-            "height": 40,
-            "fontSize": 14,
-            "fontWeight": 500,
-            "color": "#1e40af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-highlight-3",
-          "type": "container",
-          "x": 170,
-          "y": 720,
-          "content": "",
-          "style": {
-            "width": 550,
-            "height": 70,
-            "backgroundColor": "#eff6ff",
-            "borderLeft": "4px solid #3b82f6",
-            "padding": 15,
-            "zIndex": 2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-highlight-3-text",
-          "type": "paragraph",
-          "x": 190,
-          "y": 740,
-          "content": "✓ Implemented CI/CD pipelines reducing deployment time by 60% and improving code quality",
-          "style": {
-            "width": 510,
-            "height": 40,
-            "fontSize": 14,
-            "fontWeight": 500,
-            "color": "#1e40af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-body",
-          "type": "paragraph",
-          "x": 170,
-          "y": 820,
-          "content": "My technical expertise includes React, Next.js, TypeScript, Node.js, and cloud platforms like AWS and Vercel. I'm passionate about writing clean, maintainable code and staying current with emerging technologies. I believe in collaborative development and have experience mentoring junior developers.",
-          "style": {
-            "width": 550,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#334155",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-closing",
-          "type": "paragraph",
-          "x": 170,
-          "y": 940,
-          "content": "I'd welcome the opportunity to discuss how my skills and experience align with Antigravity's goals. Thank you for your consideration.",
-          "style": {
-            "width": 550,
-            "height": 50,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#334155",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "modern-signature",
-          "type": "text",
-          "x": 170,
-          "y": 1010,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#0f172a",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["cover-letter", "modern", "contemporary", "clean"],
-    "colorScheme": "blue",
-    "layout": "single-page"
-  }
+﻿{
+    "id":  "cover-letter-modern",
+    "name":  "Modern Cover Letter",
+    "description":  "Contemporary cover letter with clean design and visual elements",
+    "category":  "career",
+    "preview":  "/templates/previews/cover-letter-modern.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "modern-sidebar",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  120,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#0f172a",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-accent",
+                                           "type":  "container",
+                                           "x":  120,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  10,
+                                                         "height":  1123,
+                                                         "backgroundColor":  "#3b82f6",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-name",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  80,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  36,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0f172a",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "letterSpacing":  "-0.02em",
+                                                         "lineHeight":  1.1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-title",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  125,
+                                           "content":  "Full Stack Developer",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  400,
+                                                         "color":  "#3b82f6",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-contact",
+                                           "type":  "container",
+                                           "x":  170,
+                                           "y":  170,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  500,
+                                                         "height":  60,
+                                                         "backgroundColor":  "#f8fafc",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "borderRadius":  8,
+                                                         "padding":  10,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-email",
+                                           "type":  "text",
+                                           "x":  190,
+                                           "y":  185,
+                                           "content":  "ðŸ“§ muhammad.daniyal@email.com",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#334155",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-phone",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  185,
+                                           "content":  "ðŸ“± +1 (555) 123-4567",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#334155",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-location",
+                                           "type":  "text",
+                                           "x":  190,
+                                           "y":  210,
+                                           "content":  "ðŸ“ San Francisco, CA",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#334155",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-portfolio",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  210,
+                                           "content":  "ðŸŒ muhammad.dev",
+                                           "style":  {
+                                                         "fontSize":  13,
+                                                         "fontWeight":  400,
+                                                         "color":  "#3b82f6",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-date",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  260,
+                                           "content":  "January 15, 2024",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#64748b",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-recipient",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  300,
+                                           "content":  "Hiring Manager",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#0f172a",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-company",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  325,
+                                           "content":  "Antigravity",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#3b82f6",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-company-address",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  350,
+                                           "content":  "456 Tech Plaza, San Francisco, CA 94043",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#64748b",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-salutation",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  400,
+                                           "content":  "Dear Hiring Manager,",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#0f172a",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-opening",
+                                           "type":  "paragraph",
+                                           "x":  170,
+                                           "y":  440,
+                                           "content":  "I\u0027m excited to apply for the Full Stack Developer position at Antigravity. With 5+ years of experience building modern web applications and a passion for creating seamless user experiences, I\u0027m confident I can make an immediate contribution to your team.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#334155",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-highlight-1",
+                                           "type":  "container",
+                                           "x":  170,
+                                           "y":  540,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  550,
+                                                         "height":  70,
+                                                         "backgroundColor":  "#eff6ff",
+                                                         "borderLeft":  "4px solid #3b82f6",
+                                                         "padding":  15,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-highlight-1-text",
+                                           "type":  "paragraph",
+                                           "x":  190,
+                                           "y":  560,
+                                           "content":  "âœ“ Architected and built a microservices platform serving 1M+ users, improving performance by 40%",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  500,
+                                                         "color":  "#1e40af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-highlight-2",
+                                           "type":  "container",
+                                           "x":  170,
+                                           "y":  630,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  550,
+                                                         "height":  70,
+                                                         "backgroundColor":  "#eff6ff",
+                                                         "borderLeft":  "4px solid #3b82f6",
+                                                         "padding":  15,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-highlight-2-text",
+                                           "type":  "paragraph",
+                                           "x":  190,
+                                           "y":  650,
+                                           "content":  "âœ“ Led development of AI-powered features using LLM integration, resulting in 50% increase in user engagement",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  500,
+                                                         "color":  "#1e40af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-highlight-3",
+                                           "type":  "container",
+                                           "x":  170,
+                                           "y":  720,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  550,
+                                                         "height":  70,
+                                                         "backgroundColor":  "#eff6ff",
+                                                         "borderLeft":  "4px solid #3b82f6",
+                                                         "padding":  15,
+                                                         "zIndex":  2
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-highlight-3-text",
+                                           "type":  "paragraph",
+                                           "x":  190,
+                                           "y":  740,
+                                           "content":  "âœ“ Implemented CI/CD pipelines reducing deployment time by 60% and improving code quality",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  500,
+                                                         "color":  "#1e40af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-body",
+                                           "type":  "paragraph",
+                                           "x":  170,
+                                           "y":  820,
+                                           "content":  "My technical expertise includes React, Next.js, TypeScript, Node.js, and cloud platforms like AWS and Vercel. I\u0027m passionate about writing clean, maintainable code and staying current with emerging technologies. I believe in collaborative development and have experience mentoring junior developers.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#334155",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-closing",
+                                           "type":  "paragraph",
+                                           "x":  170,
+                                           "y":  940,
+                                           "content":  "I\u0027d welcome the opportunity to discuss how my skills and experience align with Antigravity\u0027s goals. Thank you for your consideration.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#334155",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "modern-signature",
+                                           "type":  "text",
+                                           "x":  170,
+                                           "y":  1010,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#0f172a",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "cover-letter",
+                                  "modern",
+                                  "contemporary",
+                                  "clean"
+                              ],
+                     "colorScheme":  "blue",
+                     "layout":  "single-page"
+                 }
 }

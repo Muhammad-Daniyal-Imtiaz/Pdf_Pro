@@ -46,8 +46,8 @@ function generatePageHTML(elements: any[], width: number, height: number): strin
 import { z } from 'zod'
 
 const ElementStyleSchema = z.object({
-  width: z.number().max(2000),
-  height: z.number().max(3000),
+  width: z.union([z.number(), z.string()]).optional(),
+  height: z.union([z.number(), z.string()]).optional(),
   fontSize: z.number().max(200).optional(),
   fontFamily: z.string().optional(),
   color: z.string().optional(),

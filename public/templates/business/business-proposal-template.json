@@ -1,324 +1,383 @@
-{
-  "id": "business-proposal-template",
-  "name": "Blank Business Proposal Template",
-  "description": "Customizable template with placeholder sections for any business proposal",
-  "category": "business",
-  "preview": "/templates/previews/business-proposal-template.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "template-header",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 150,
-            "backgroundColor": "#1f2937",
-            "borderWidth": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "template-title",
-          "type": "text",
-          "x": 60,
-          "y": 50,
-          "content": "[PROPOSAL TITLE]",
-          "style": {
-            "width": 674,
-            "height": 40,
-            "fontSize": 28,
-            "fontWeight": 600,
-            "color": "#ffffff",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "letterSpacing": "0.05em",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "template-subtitle",
-          "type": "text",
-          "x": 60,
-          "y": 100,
-          "content": "[Client Name] | [Date]",
-          "style": {
-            "width": 674,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#d1d5db",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-1",
-          "type": "container",
-          "x": 60,
-          "y": 200,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 100,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 2,
-            "borderColor": "#d1d5db",
-            "borderStyle": "dashed",
-            "borderRadius": 8,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-1-text",
-          "type": "text",
-          "x": 60,
-          "y": 240,
-          "content": "[EXECUTIVE SUMMARY]",
-          "style": {
-            "width": 674,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#9ca3af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-2",
-          "type": "container",
-          "x": 60,
-          "y": 330,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 150,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 2,
-            "borderColor": "#d1d5db",
-            "borderStyle": "dashed",
-            "borderRadius": 8,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-2-text",
-          "type": "text",
-          "x": 60,
-          "y": 395,
-          "content": "[SECTION 1]",
-          "style": {
-            "width": 327,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#9ca3af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-3",
-          "type": "container",
-          "x": 407,
-          "y": 330,
-          "content": "",
-          "style": {
-            "width": 327,
-            "height": 150,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 2,
-            "borderColor": "#d1d5db",
-            "borderStyle": "dashed",
-            "borderRadius": 8,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-3-text",
-          "type": "text",
-          "x": 407,
-          "y": 395,
-          "content": "[SECTION 2]",
-          "style": {
-            "width": 327,
-            "height": 25,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#9ca3af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-4",
-          "type": "container",
-          "x": 60,
-          "y": 510,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 100,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 2,
-            "borderColor": "#d1d5db",
-            "borderStyle": "dashed",
-            "borderRadius": 8,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-4-text",
-          "type": "text",
-          "x": 60,
-          "y": 550,
-          "content": "[PROJECT TIMELINE]",
-          "style": {
-            "width": 674,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#9ca3af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-5",
-          "type": "container",
-          "x": 60,
-          "y": 640,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 100,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 2,
-            "borderColor": "#d1d5db",
-            "borderStyle": "dashed",
-            "borderRadius": 8,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-5-text",
-          "type": "text",
-          "x": 60,
-          "y": 680,
-          "content": "[INVESTMENT SUMMARY]",
-          "style": {
-            "width": 674,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#9ca3af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-6",
-          "type": "container",
-          "x": 60,
-          "y": 770,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "backgroundColor": "#f3f4f6",
-            "borderWidth": 2,
-            "borderColor": "#d1d5db",
-            "borderStyle": "dashed",
-            "borderRadius": 8,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "placeholder-6-text",
-          "type": "text",
-          "x": 60,
-          "y": 800,
-          "content": "[NEXT STEPS]",
-          "style": {
-            "width": 674,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 400,
-            "color": "#9ca3af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "template-footer",
-          "type": "container",
-          "x": 60,
-          "y": 900,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 60,
-            "backgroundColor": "transparent",
-            "borderTop": "1px solid #e5e7eb",
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "footer-text",
-          "type": "text",
-          "x": 60,
-          "y": 925,
-          "content": "Prepared by: [Your Name] | [Your Company] | [Contact Information]",
-          "style": {
-            "width": 674,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#9ca3af",
-            "fontFamily": "Inter, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["business", "proposal", "template", "blank"],
-    "colorScheme": "gray",
-    "layout": "single-page",
-    "isTemplate": true
-  }
+﻿{
+    "id":  "business-proposal-template",
+    "name":  "Blank Business Proposal Template",
+    "description":  "Customizable template with placeholder sections for any business proposal",
+    "category":  "business",
+    "preview":  "/templates/previews/business-proposal-template.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "template-header",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#1f2937",
+                                                         "borderWidth":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "template-title",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  50,
+                                           "content":  "[PROPOSAL TITLE]",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  600,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "letterSpacing":  "0.05em",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "template-subtitle",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  100,
+                                           "content":  "[Client Name] | [Date]",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#d1d5db",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-1",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  200,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  100,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  2,
+                                                         "borderColor":  "#d1d5db",
+                                                         "borderStyle":  "dashed",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-1-text",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  240,
+                                           "content":  "[EXECUTIVE SUMMARY]",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-2",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  330,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  2,
+                                                         "borderColor":  "#d1d5db",
+                                                         "borderStyle":  "dashed",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-2-text",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  395,
+                                           "content":  "[SECTION 1]",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-3",
+                                           "type":  "container",
+                                           "x":  407,
+                                           "y":  330,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  327,
+                                                         "height":  150,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  2,
+                                                         "borderColor":  "#d1d5db",
+                                                         "borderStyle":  "dashed",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-3-text",
+                                           "type":  "text",
+                                           "x":  407,
+                                           "y":  395,
+                                           "content":  "[SECTION 2]",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-4",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  510,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  100,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  2,
+                                                         "borderColor":  "#d1d5db",
+                                                         "borderStyle":  "dashed",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-4-text",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  550,
+                                           "content":  "[PROJECT TIMELINE]",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-5",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  640,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  100,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  2,
+                                                         "borderColor":  "#d1d5db",
+                                                         "borderStyle":  "dashed",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-5-text",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  680,
+                                           "content":  "[INVESTMENT SUMMARY]",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-6",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  770,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  80,
+                                                         "backgroundColor":  "#f3f4f6",
+                                                         "borderWidth":  2,
+                                                         "borderColor":  "#d1d5db",
+                                                         "borderStyle":  "dashed",
+                                                         "borderRadius":  8,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "placeholder-6-text",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  800,
+                                           "content":  "[NEXT STEPS]",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  400,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "template-footer",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  900,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  60,
+                                                         "backgroundColor":  "transparent",
+                                                         "borderTop":  "1px solid #e5e7eb",
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "footer-text",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  925,
+                                           "content":  "Prepared by: [Your Name] | [Your Company] | [Contact Information]",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#9ca3af",
+                                                         "fontFamily":  "Inter, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "business",
+                                  "proposal",
+                                  "template",
+                                  "blank"
+                              ],
+                     "colorScheme":  "gray",
+                     "layout":  "single-page",
+                     "isTemplate":  true
+                 }
 }

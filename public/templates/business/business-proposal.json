@@ -1,382 +1,495 @@
-{
-  "id": "business-proposal",
-  "name": "Business Proposal",
-  "description": "Professional business proposal template with executive summary",
-  "category": "business",
-  "preview": "/templates/previews/business-proposal.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "header-bg",
-          "type": "container",
-          "x": 0,
-          "y": 0,
-          "content": "",
-          "style": {
-            "width": 794,
-            "height": 120,
-            "backgroundColor": "#1e40af",
-            "borderWidth": 0,
-            "borderRadius": 0,
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "proposal-title",
-          "type": "heading",
-          "x": 60,
-          "y": 35,
-          "content": "BUSINESS PROPOSAL",
-          "style": {
-            "width": 674,
-            "height": 40,
-            "fontSize": 28,
-            "fontWeight": 700,
-            "color": "#ffffff",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.2,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "proposal-subtitle",
-          "type": "text",
-          "x": 60,
-          "y": 75,
-          "content": "Strategic Partnership & Growth Initiative",
-          "style": {
-            "width": 674,
-            "height": 25,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#dbeafe",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "center",
-            "lineHeight": 1.4,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "client-info",
-          "type": "container",
-          "x": 60,
-          "y": 140,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "backgroundColor": "#f8fafc",
-            "borderWidth": 1,
-            "borderColor": "#e2e8f0",
-            "borderRadius": 8,
-            "padding": 20,
-            "zIndex": 1
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "prepared-for",
-          "type": "text",
-          "x": 80,
-          "y": 160,
-          "content": "Prepared for: [Client Name]",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "prepared-by",
-          "type": "text",
-          "x": 80,
-          "y": 185,
-          "content": "Prepared by: [Your Company Name]",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "date",
-          "type": "text",
-          "x": 450,
-          "y": 160,
-          "content": "Date: [Current Date]",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "proposal-number",
-          "type": "text",
-          "x": 450,
-          "y": 185,
-          "content": "Proposal #: PROJ-2024-001",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "executive-summary-title",
-          "type": "heading",
-          "x": 60,
-          "y": 240,
-          "content": "Executive Summary",
-          "style": {
-            "width": 674,
-            "height": 35,
-            "fontSize": 20,
-            "fontWeight": 700,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "executive-summary-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 280,
-          "content": "This proposal outlines a comprehensive strategic partnership designed to drive significant business growth and operational excellence. Our solution combines cutting-edge technology with industry expertise to deliver measurable results within first 90 days of implementation.",
-          "style": {
-            "width": 674,
-            "height": 60,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#475569",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "key-objectives-title",
-          "type": "heading",
-          "x": 60,
-          "y": 355,
-          "content": "Key Objectives",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "objectives-list",
-          "type": "paragraph",
-          "x": 60,
-          "y": 390,
-          "content": "• Increase operational efficiency by 35% within 6 months\n• Reduce operational costs by 25% through process optimization\n• Enhance customer satisfaction scores by 40% in first year\n• Implement scalable technology infrastructure for future growth\n• Establish measurable KPIs and performance metrics",
-          "style": {
-            "width": 674,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#475569",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "solution-overview-title",
-          "type": "heading",
-          "x": 60,
-          "y": 505,
-          "content": "Solution Overview",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "solution-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 540,
-          "content": "Our comprehensive solution addresses your core business challenges through a multi-phase approach. We begin with a thorough assessment of current operations, followed by strategic implementation of tailored solutions, and conclude with ongoing optimization and support.",
-          "style": {
-            "width": 674,
-            "height": 60,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#475569",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "timeline-title",
-          "type": "heading",
-          "x": 60,
-          "y": 615,
-          "content": "Implementation Timeline",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "timeline-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 650,
-          "content": "Phase 1 (Weeks 1-2): Assessment & Planning\nPhase 2 (Weeks 3-8): Core Implementation\nPhase 3 (Weeks 9-12): Testing & Optimization\nPhase 4 (Ongoing): Support & Continuous Improvement",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#475569",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "investment-title",
-          "type": "heading",
-          "x": 60,
-          "y": 745,
-          "content": "Investment Required",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "investment-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 780,
-          "content": "Total Investment: $150,000\nExpected ROI: 250% within 18 months\nPayment Terms: 50% upfront, 50% upon completion\nFinancing options available",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "next-steps-title",
-          "type": "heading",
-          "x": 60,
-          "y": 875,
-          "content": "Next Steps",
-          "style": {
-            "width": 674,
-            "height": 30,
-            "fontSize": 18,
-            "fontWeight": 600,
-            "color": "#1e293b",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.3
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "next-steps-content",
-          "type": "paragraph",
-          "x": 60,
-          "y": 910,
-          "content": "1. Review and discuss this proposal with your team\n2. Schedule a detailed discovery session\n3. Finalize scope and deliverables\n4. Sign agreement and begin implementation",
-          "style": {
-            "width": 674,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#475569",
-            "fontFamily": "Inter, system-ui, sans-serif",
-            "textAlign": "left",
-            "lineHeight": 1.6
-          },
-          "pageIndex": 0
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["business", "proposal", "corporate", "sales"],
-    "colorScheme": "corporate",
-    "layout": "professional"
-  }
+﻿{
+    "id":  "business-proposal",
+    "name":  "Business Proposal",
+    "description":  "Professional business proposal template with executive summary",
+    "category":  "business",
+    "preview":  "/templates/previews/business-proposal.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "header-bg",
+                                           "type":  "container",
+                                           "x":  0,
+                                           "y":  0,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  794,
+                                                         "height":  120,
+                                                         "backgroundColor":  "#1e40af",
+                                                         "borderWidth":  0,
+                                                         "borderRadius":  0,
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "proposal-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  35,
+                                           "content":  "BUSINESS PROPOSAL",
+                                           "style":  {
+                                                         "fontSize":  28,
+                                                         "fontWeight":  700,
+                                                         "color":  "#ffffff",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.2,
+                                                         "zIndex":  1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "proposal-subtitle",
+                                           "type":  "text",
+                                           "x":  60,
+                                           "y":  75,
+                                           "content":  "Strategic Partnership \u0026 Growth Initiative",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#dbeafe",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "center",
+                                                         "lineHeight":  1.4,
+                                                         "zIndex":  1,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "client-info",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  140,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  80,
+                                                         "backgroundColor":  "#f8fafc",
+                                                         "borderWidth":  1,
+                                                         "borderColor":  "#e2e8f0",
+                                                         "borderRadius":  8,
+                                                         "padding":  20,
+                                                         "zIndex":  1
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "prepared-for",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  160,
+                                           "content":  "Prepared for: [Client Name]",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "prepared-by",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  185,
+                                           "content":  "Prepared by: [Your Company Name]",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "date",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  160,
+                                           "content":  "Date: [Current Date]",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "proposal-number",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  185,
+                                           "content":  "Proposal #: PROJ-2024-001",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "executive-summary-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  240,
+                                           "content":  "Executive Summary",
+                                           "style":  {
+                                                         "fontSize":  20,
+                                                         "fontWeight":  700,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "executive-summary-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  280,
+                                           "content":  "This proposal outlines a comprehensive strategic partnership designed to drive significant business growth and operational excellence. Our solution combines cutting-edge technology with industry expertise to deliver measurable results within first 90 days of implementation.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#475569",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "key-objectives-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  355,
+                                           "content":  "Key Objectives",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "objectives-list",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  390,
+                                           "content":  "â€¢ Increase operational efficiency by 35% within 6 months\nâ€¢ Reduce operational costs by 25% through process optimization\nâ€¢ Enhance customer satisfaction scores by 40% in first year\nâ€¢ Implement scalable technology infrastructure for future growth\nâ€¢ Establish measurable KPIs and performance metrics",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#475569",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "solution-overview-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  505,
+                                           "content":  "Solution Overview",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "solution-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  540,
+                                           "content":  "Our comprehensive solution addresses your core business challenges through a multi-phase approach. We begin with a thorough assessment of current operations, followed by strategic implementation of tailored solutions, and conclude with ongoing optimization and support.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#475569",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "timeline-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  615,
+                                           "content":  "Implementation Timeline",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "timeline-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  650,
+                                           "content":  "Phase 1 (Weeks 1-2): Assessment \u0026 Planning\nPhase 2 (Weeks 3-8): Core Implementation\nPhase 3 (Weeks 9-12): Testing \u0026 Optimization\nPhase 4 (Ongoing): Support \u0026 Continuous Improvement",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#475569",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "investment-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  745,
+                                           "content":  "Investment Required",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "investment-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  780,
+                                           "content":  "Total Investment: $150,000\nExpected ROI: 250% within 18 months\nPayment Terms: 50% upfront, 50% upon completion\nFinancing options available",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "next-steps-title",
+                                           "type":  "heading",
+                                           "x":  60,
+                                           "y":  875,
+                                           "content":  "Next Steps",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  600,
+                                                         "color":  "#1e293b",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.3,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "next-steps-content",
+                                           "type":  "paragraph",
+                                           "x":  60,
+                                           "y":  910,
+                                           "content":  "1. Review and discuss this proposal with your team\n2. Schedule a detailed discovery session\n3. Finalize scope and deliverables\n4. Sign agreement and begin implementation",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#475569",
+                                                         "fontFamily":  "Inter, system-ui, sans-serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.6,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "business",
+                                  "proposal",
+                                  "corporate",
+                                  "sales"
+                              ],
+                     "colorScheme":  "corporate",
+                     "layout":  "professional"
+                 }
 }

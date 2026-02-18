@@ -1,397 +1,522 @@
-{
-  "id": "cover-letter-academic",
-  "name": "Academic Cover Letter",
-  "description": "Formal cover letter for academic and research positions",
-  "category": "career",
-  "preview": "/templates/previews/cover-letter-academic.png",
-  "pages": [
-    {
-      "id": "page-1",
-      "elements": [
-        {
-          "id": "academic-header",
-          "type": "container",
-          "x": 60,
-          "y": 60,
-          "content": "",
-          "style": {
-            "width": 674,
-            "height": 120,
-            "backgroundColor": "#f8fafc",
-            "borderBottom": "3px solid #8b4513",
-            "zIndex": 0
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-name-academic",
-          "type": "text",
-          "x": 80,
-          "y": 80,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 400,
-            "height": 30,
-            "fontSize": 24,
-            "fontWeight": 500,
-            "color": "#2c3e50",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.2
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-title-academic",
-          "type": "text",
-          "x": 80,
-          "y": 115,
-          "content": "Full Stack Developer | B.E. Software Engineering",
-          "style": {
-            "width": 500,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#8b4513",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-address-academic",
-          "type": "text",
-          "x": 80,
-          "y": 145,
-          "content": "Department of Computer Science",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-university",
-          "type": "text",
-          "x": 80,
-          "y": 165,
-          "content": "NUST, Islamabad, Pakistan",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-email-academic",
-          "type": "text",
-          "x": 450,
-          "y": 80,
-          "content": "muhammad.daniyal@nust.edu.pk",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "sender-phone-academic",
-          "type": "text",
-          "x": 450,
-          "y": 105,
-          "content": "+92 555 1234567",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "date-academic",
-          "type": "text",
-          "x": 450,
-          "y": 135,
-          "content": "January 15, 2024",
-          "style": {
-            "width": 250,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "right",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-name-academic",
-          "type": "text",
-          "x": 80,
-          "y": 220,
-          "content": "Dr. Elizabeth Chen",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#2c3e50",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-title-academic",
-          "type": "text",
-          "x": 80,
-          "y": 245,
-          "content": "Chair, Search Committee",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-department",
-          "type": "text",
-          "x": 80,
-          "y": 270,
-          "content": "Department of Computer Science",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#2c3e50",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-institution",
-          "type": "text",
-          "x": 80,
-          "y": 295,
-          "content": "Stanford University",
-          "style": {
-            "width": 300,
-            "height": 20,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#2c3e50",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "recipient-address-academic",
-          "type": "text",
-          "x": 80,
-          "y": 320,
-          "content": "353 Jane Stanford Way, Stanford, CA 94305",
-          "style": {
-            "width": 400,
-            "height": 20,
-            "fontSize": 12,
-            "fontWeight": 400,
-            "color": "#4b5563",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "salutation-academic",
-          "type": "text",
-          "x": 80,
-          "y": 380,
-          "content": "Dear Dr. Chen and Members of the Search Committee,",
-          "style": {
-            "width": 600,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#2c3e50",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "opening-academic",
-          "type": "paragraph",
-          "x": 80,
-          "y": 420,
-          "content": "I am writing to express my interest in the Full Stack Developer position at Stanford University's Department of Computer Science, as advertised on the university careers portal. With a Bachelor's degree in Software Engineering from NUST and five years of professional experience in web development, I am eager to contribute to your department's research and educational mission.",
-          "style": {
-            "width": 634,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "academic-body-1",
-          "type": "paragraph",
-          "x": 80,
-          "y": 540,
-          "content": "My academic background provided a strong foundation in computer science principles, including algorithms, data structures, and software architecture. During my time at NUST, I developed a particular interest in web technologies and human-computer interaction, which led me to pursue a career in full-stack development. I graduated with a 3.8 GPA and was named to the Dean's List for academic excellence.",
-          "style": {
-            "width": 634,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "academic-body-2",
-          "type": "paragraph",
-          "x": 80,
-          "y": 660,
-          "content": "In my professional career, I have applied this academic foundation to build scalable web applications using modern technologies including React, Next.js, Node.js, and Python. I have experience with research collaboration, having worked with academic partners to develop tools for data collection and analysis. My work has resulted in several publications in collaboration with research groups.",
-          "style": {
-            "width": 634,
-            "height": 100,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "academic-body-3",
-          "type": "paragraph",
-          "x": 80,
-          "y": 780,
-          "content": "I am particularly attracted to Stanford's interdisciplinary approach and the opportunity to work with leading researchers in computer science. I believe my combination of academic training and practical experience would allow me to make meaningful contributions to your department's projects and initiatives.",
-          "style": {
-            "width": 634,
-            "height": 80,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "closing-academic",
-          "type": "paragraph",
-          "x": 80,
-          "y": 880,
-          "content": "I have attached my curriculum vitae and would welcome the opportunity to discuss my qualifications further. Thank you for your time and consideration.",
-          "style": {
-            "width": 634,
-            "height": 50,
-            "fontSize": 14,
-            "fontWeight": 400,
-            "color": "#374151",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.7
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "closing-academic",
-          "type": "text",
-          "x": 80,
-          "y": 960,
-          "content": "Respectfully yours,",
-          "style": {
-            "width": 200,
-            "height": 20,
-            "fontSize": 16,
-            "fontWeight": 500,
-            "color": "#2c3e50",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        },
-        {
-          "id": "signature-academic",
-          "type": "text",
-          "x": 80,
-          "y": 990,
-          "content": "Muhammad Daniyal",
-          "style": {
-            "width": 200,
-            "height": 25,
-            "fontSize": 18,
-            "fontWeight": 500,
-            "color": "#2c3e50",
-            "fontFamily": "Times New Roman, serif",
-            "textAlign": "left",
-            "lineHeight": 1.4
-          },
-          "pageIndex": 0
-        }
-      ]
-    }
-  ],
-  "metadata": {
-    "created": "2024-01-01",
-    "version": "1.0",
-    "author": "PDF Pro Templates",
-    "tags": ["cover-letter", "academic", "research", "university"],
-    "colorScheme": "academic",
-    "layout": "single-page"
-  }
+﻿{
+    "id":  "cover-letter-academic",
+    "name":  "Academic Cover Letter",
+    "description":  "Formal cover letter for academic and research positions",
+    "category":  "career",
+    "preview":  "/templates/previews/cover-letter-academic.png",
+    "pages":  [
+                  {
+                      "id":  "page-1",
+                      "elements":  [
+                                       {
+                                           "id":  "academic-header",
+                                           "type":  "container",
+                                           "x":  60,
+                                           "y":  60,
+                                           "content":  "",
+                                           "style":  {
+                                                         "width":  674,
+                                                         "height":  120,
+                                                         "backgroundColor":  "#f8fafc",
+                                                         "borderBottom":  "3px solid #8b4513",
+                                                         "zIndex":  0
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-name-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  80,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  24,
+                                                         "fontWeight":  500,
+                                                         "color":  "#2c3e50",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.2,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-title-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  115,
+                                           "content":  "Full Stack Developer | B.E. Software Engineering",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#8b4513",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-address-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  145,
+                                           "content":  "Department of Computer Science",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-university",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  165,
+                                           "content":  "NUST, Islamabad, Pakistan",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-email-academic",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  80,
+                                           "content":  "muhammad.daniyal@nust.edu.pk",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "sender-phone-academic",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  105,
+                                           "content":  "+92 555 1234567",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "date-academic",
+                                           "type":  "text",
+                                           "x":  450,
+                                           "y":  135,
+                                           "content":  "January 15, 2024",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "right",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-name-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  220,
+                                           "content":  "Dr. Elizabeth Chen",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#2c3e50",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-title-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  245,
+                                           "content":  "Chair, Search Committee",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-department",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  270,
+                                           "content":  "Department of Computer Science",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#2c3e50",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-institution",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  295,
+                                           "content":  "Stanford University",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#2c3e50",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "recipient-address-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  320,
+                                           "content":  "353 Jane Stanford Way, Stanford, CA 94305",
+                                           "style":  {
+                                                         "fontSize":  12,
+                                                         "fontWeight":  400,
+                                                         "color":  "#4b5563",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "salutation-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  380,
+                                           "content":  "Dear Dr. Chen and Members of the Search Committee,",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#2c3e50",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "opening-academic",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  420,
+                                           "content":  "I am writing to express my interest in the Full Stack Developer position at Stanford University\u0027s Department of Computer Science, as advertised on the university careers portal. With a Bachelor\u0027s degree in Software Engineering from NUST and five years of professional experience in web development, I am eager to contribute to your department\u0027s research and educational mission.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "academic-body-1",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  540,
+                                           "content":  "My academic background provided a strong foundation in computer science principles, including algorithms, data structures, and software architecture. During my time at NUST, I developed a particular interest in web technologies and human-computer interaction, which led me to pursue a career in full-stack development. I graduated with a 3.8 GPA and was named to the Dean\u0027s List for academic excellence.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "academic-body-2",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  660,
+                                           "content":  "In my professional career, I have applied this academic foundation to build scalable web applications using modern technologies including React, Next.js, Node.js, and Python. I have experience with research collaboration, having worked with academic partners to develop tools for data collection and analysis. My work has resulted in several publications in collaboration with research groups.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "academic-body-3",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  780,
+                                           "content":  "I am particularly attracted to Stanford\u0027s interdisciplinary approach and the opportunity to work with leading researchers in computer science. I believe my combination of academic training and practical experience would allow me to make meaningful contributions to your department\u0027s projects and initiatives.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "closing-academic",
+                                           "type":  "paragraph",
+                                           "x":  80,
+                                           "y":  880,
+                                           "content":  "I have attached my curriculum vitae and would welcome the opportunity to discuss my qualifications further. Thank you for your time and consideration.",
+                                           "style":  {
+                                                         "fontSize":  14,
+                                                         "fontWeight":  400,
+                                                         "color":  "#374151",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.7,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "closing-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  960,
+                                           "content":  "Respectfully yours,",
+                                           "style":  {
+                                                         "fontSize":  16,
+                                                         "fontWeight":  500,
+                                                         "color":  "#2c3e50",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       },
+                                       {
+                                           "id":  "signature-academic",
+                                           "type":  "text",
+                                           "x":  80,
+                                           "y":  990,
+                                           "content":  "Muhammad Daniyal",
+                                           "style":  {
+                                                         "fontSize":  18,
+                                                         "fontWeight":  500,
+                                                         "color":  "#2c3e50",
+                                                         "fontFamily":  "Times New Roman, serif",
+                                                         "textAlign":  "left",
+                                                         "lineHeight":  1.4,
+                                                         "width":  "auto",
+                                                         "height":  "auto",
+                                                         "resize":  "both",
+                                                         "overflow":  "visible",
+                                                         "whiteSpace":  "nowrap",
+                                                         "minWidth":  150,
+                                                         "minHeight":  20,
+                                                         "maxWidth":  674
+                                                     },
+                                           "pageIndex":  0
+                                       }
+                                   ]
+                  }
+              ],
+    "metadata":  {
+                     "created":  "2024-01-01",
+                     "version":  "1.0",
+                     "author":  "PDF Pro Templates",
+                     "tags":  [
+                                  "cover-letter",
+                                  "academic",
+                                  "research",
+                                  "university"
+                              ],
+                     "colorScheme":  "academic",
+                     "layout":  "single-page"
+                 }
 }
