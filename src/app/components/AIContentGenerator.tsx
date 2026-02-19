@@ -129,22 +129,47 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
   const generateDirectPDF = async () => {
     setIsGenerating(true)
     try {
-      const response = await fetch('/api/generate-mcp-pdf', {
+      const response = await fetch('/api/generate-ai-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt || topic || role })
+        body: JSON.stringify({
+          prompt: prompt || topic || role,
+          documentType,
+          pageCount,
+        })
       })
 
-      const data = await response.json()
-      if (data.success && data.content) {
-        // Convert base64 to blob and download
-        const linkSource = `data:application/pdf;base64,${data.content}`
-        const downloadLink = document.createElement("a")
-        const fileName = `${(topic || prompt || 'generated').toLowerCase()}.pdf`
-        downloadLink.href = linkSource
-        downloadLink.download = fileName
-        downloadLink.click()
+      if (!response.ok) {
+        console.error('AI PDF API Error:', response.status)
+        return
       }
+
+      const layoutData = await response.json()
+
+      const pdfResponse = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pages: layoutData.pages,
+          title: (topic || prompt || 'generated').toString(),
+          width: layoutData.width,
+          height: layoutData.height,
+        }),
+      })
+
+      if (!pdfResponse.ok) {
+        console.error('PDF generation error:', pdfResponse.status)
+        return
+      }
+
+      const blob = await pdfResponse.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      const fileName = `${(topic || prompt || 'generated').toLowerCase()}.pdf`
+      a.href = url
+      a.download = fileName
+      a.click()
+      URL.revokeObjectURL(url)
     } catch (error) {
       console.error('MCP PDF Generation Error:', error)
     } finally {

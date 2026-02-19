@@ -458,6 +458,19 @@ class AIService {
     return this.generateContent(prompt)
   }
 
+  async generateFullDocumentLayout(documentType: string, userPrompt: string): Promise<any[]> {
+    const templateType = documentType
+    const entities = await this.extractEntities(userPrompt, templateType)
+    const prompt = AI_PROMPTS.fullDocumentGeneration(templateType, userPrompt, entities)
+    const result = await this.generateContent(prompt)
+    try {
+      return this.parseJSON(result)
+    } catch (error) {
+      console.error('Failed to parse full document layout:', error)
+      return this.getTemplateMockContent(templateType, entities)
+    }
+  }
+
   async generateLayoutUpdate(userPrompt: string, currentContext: string): Promise<any[]> {
     const prompt = AI_PROMPTS.layoutIntelligence(userPrompt, currentContext)
     const result = await this.generateContent(prompt)
