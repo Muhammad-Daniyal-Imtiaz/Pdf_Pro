@@ -23,128 +23,115 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
   const [generationStatus, setGenerationStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle')
   const [statusMessage, setStatusMessage] = useState('')
 
-  // ENHANCED: Production-grade Smart Layout Generation with comprehensive error handling
+  // ENHANCED: Ultra-Production Phased Layout Generation
   const generateSmartLayout = async () => {
-    if (!topic && !role) {
+    if (!topic && !role && !prompt) {
       setGenerationStatus('error')
-      setStatusMessage('Please provide either a topic or role information')
+      setStatusMessage('Please provide more information for the Architect')
       return
     }
-    
+
     setIsGenerating(true)
     setGenerationStatus('processing')
-    setStatusMessage('Initializing AI layout generation...')
-    
+    setStatusMessage('🧠 Phase 1/3: Analysis...')
+
     try {
       // Clear existing pages for fresh layout
       clearPages()
-      setStatusMessage('Generating professional layout structure...')
-      
-      const fullPrompt = documentType === 'cv' 
-        ? [
-            `Design a world-class CV/resume for a ${role} with ${experience} years of experience.`,
-            `Use a ${style} layout with a strong hero header, clear section headings,`,
-            `two-column information where appropriate, and perfectly aligned typography.`,
-            `Include sections for Professional Summary, Experience, Education, Skills, and optional Extras.`,
-            `Generate ${pageCount} full A4 page${pageCount > 1 ? 's' : ''} of content with 8–12 elements per page.`
-          ].join(' ')
-        : [
-            `Design a premium ${documentType} about "${topic}".`,
-            `Use a ${style} layout similar to a top-tier editorial or consulting report:`,
-            `hero title, subtitle, executive summary, multiple well-separated sections,`,
-            `and card-style containers for each key idea or chapter.`,
-            `Use clear hierarchy (hero, section headings, body text, callouts) and`,
-            `generate ${pageCount} A4 page${pageCount > 1 ? 's' : ''} with 8–12 high-quality elements per page.`
-          ].join(' ')
-      
-      setStatusMessage('Processing AI layout intelligence...')
-      
-      const response = await fetch('/api/ai-layout', {
+
+      // Artificial delay for "Production Grade" feel and to show phases
+      await new Promise(r => setTimeout(r, 800))
+      setStatusMessage('📐 Phase 2/3: Structural Design...')
+
+      const response = await fetch('/api/generate-ai-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          prompt: fullPrompt,
-          context: '[]',
-          pageCount: pageCount
+        body: JSON.stringify({
+          prompt: prompt || '',
+          documentType,
+          pageCount,
+          style,
+          role,
+          experience,
+          topic
         })
       })
 
       if (!response.ok) {
-        let errorMessage = `Layout API error: ${response.status}`
-        try {
-          const errorData = await response.json()
-          if (errorData?.error) {
-            errorMessage = errorData.error
-          }
-        } catch {
-        }
-
-        setGenerationStatus('error')
-        setStatusMessage(errorMessage)
-
-        setTimeout(() => {
-          setGenerationStatus('idle')
-          setStatusMessage('')
-        }, 5000)
-
-        return
+        const errorData = await response.json().catch(() => ({ error: 'Unknown API Error' }))
+        throw new Error(errorData.error || `HTTP ${response.status}`)
       }
 
       const data = await response.json()
-      
-      if (data.success && data.changes) {
-        setStatusMessage('Applying layout changes...')
-        applyLayoutChanges(data.changes)
-        
-        // Success feedback
-        const elementCount = data.meta?.elementCount || data.changes.length
-        setStatusMessage(`✅ Successfully generated ${elementCount} elements across ${pageCount} page${pageCount > 1 ? 's' : ''}`)
+
+      setStatusMessage('✨ Phase 3/3: Content Synthesis...')
+      await new Promise(r => setTimeout(r, 600))
+
+      if (data.success && data.pages) {
+        setStatusMessage('💎 Finalizing Masterpiece...')
+
+        // Convert pages to flat changes for store
+        const changes = data.pages.flatMap((page: any) =>
+          page.elements.map((el: any) => ({
+            ...el,
+            pageIndex: el.pageIndex ?? 0
+          }))
+        )
+
+        applyLayoutChanges(changes)
+
+        const elementCount = changes.length
+        setStatusMessage(`✅ Design Complete: ${elementCount} elements across ${data.pages.length} pages`)
         setGenerationStatus('success')
-        
-        console.log(`✅ Generated ${elementCount} elements across ${pageCount} page${pageCount > 1 ? 's' : ''}`)
-        
-        // Reset status after delay
+
         setTimeout(() => {
           setGenerationStatus('idle')
           setStatusMessage('')
-        }, 3000)
+        }, 4000)
       } else {
-        throw new Error(data.error || 'Failed to generate layout')
+        throw new Error(data.error || 'Architect failed to return layout')
       }
-    } catch (error) {
-      console.error('Layout generation error:', error)
+    } catch (error: any) {
+      console.error('❌ Architect Error:', error)
       setGenerationStatus('error')
-      setStatusMessage(error instanceof Error ? error.message : 'Failed to generate layout')
-      
-      // Reset error status after delay
+      setStatusMessage(error.message || 'Layout failure')
+
       setTimeout(() => {
         setGenerationStatus('idle')
         setStatusMessage('')
-      }, 5000)
+      }, 6000)
     } finally {
       setIsGenerating(false)
     }
   }
 
   const generateDirectPDF = async () => {
+    if (!prompt.trim() && !topic.trim()) {
+      setStatusMessage('⚠️ Please provide a prompt or topic')
+      setGenerationStatus('error')
+      return
+    }
     setIsGenerating(true)
+    setGenerationStatus('processing')
+    setStatusMessage('🚀 Launching PDF Architect Engine...')
+
     try {
       const response = await fetch('/api/generate-ai-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: prompt || topic || role,
+          prompt: prompt,
           documentType,
           pageCount,
+          style,
+          topic
         })
       })
 
-      if (!response.ok) {
-        console.error('AI PDF API Error:', response.status)
-        return
-      }
-
+      if (!response.ok) throw new Error('Architect failed to generate layout context')
       const layoutData = await response.json()
+
+      setStatusMessage('📄 Rendering Print-Ready PDF...')
 
       const pdfResponse = await fetch('/api/generate-pdf', {
         method: 'POST',
@@ -157,21 +144,28 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         }),
       })
 
-      if (!pdfResponse.ok) {
-        console.error('PDF generation error:', pdfResponse.status)
-        return
-      }
+      if (!pdfResponse.ok) throw new Error('PDF Engine failed to render')
 
       const blob = await pdfResponse.blob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      const fileName = `${(topic || prompt || 'generated').toLowerCase()}.pdf`
+      const fileName = `${(topic || prompt || 'generated').toLowerCase().substring(0, 20)}.pdf`
       a.href = url
       a.download = fileName
       a.click()
       URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('MCP PDF Generation Error:', error)
+
+      setGenerationStatus('success')
+      setStatusMessage('✅ PDF Downloaded Successfully!')
+
+      setTimeout(() => {
+        setGenerationStatus('idle')
+        setStatusMessage('')
+      }, 3000)
+    } catch (error: any) {
+      console.error('❌ PDF Engine error:', error)
+      setGenerationStatus('error')
+      setStatusMessage(error.message || 'Generation failed')
     } finally {
       setIsGenerating(false)
     }
@@ -239,7 +233,7 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
               Generate a complete professional document with AI. Creates multiple elements: headings, paragraphs, containers, icons, and lines - all perfectly positioned.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">Document Type</label>
@@ -325,13 +319,25 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
             <RecipeButton label="📈 Marketing Report" onClick={() => { setDocumentType('report'); setTopic('Q4 Marketing Performance Analysis'); }} />
           </div>
 
+          {statusMessage && (
+            <div className={`p-3 rounded-lg flex items-center gap-3 animate-in slide-in-from-top-1 ${generationStatus === 'error' ? 'bg-red-50 text-red-700 border border-red-100' :
+              generationStatus === 'success' ? 'bg-green-50 text-green-700 border border-green-100' :
+                'bg-blue-50 text-blue-700 border border-blue-100'
+              }`}>
+              {generationStatus === 'processing' && <Loader2 className="w-4 h-4 animate-spin" />}
+              {generationStatus === 'success' && <CheckCircle className="w-4 h-4" />}
+              {generationStatus === 'error' && <AlertCircle className="w-4 h-4" />}
+              <span className="text-xs font-bold uppercase tracking-wider">{statusMessage}</span>
+            </div>
+          )}
+
           <button
             onClick={generateSmartLayout}
-            disabled={isGenerating || (!topic && !role)}
+            disabled={isGenerating || (!topic && !role && !prompt)}
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-300 disabled:to-gray-300 text-white py-4 px-4 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-xl shadow-green-200"
           >
             {isGenerating ? (
-              <><div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>Creating {pageCount} Page{pageCount > 1 ? 's' : ''}...</>
+              <><Loader2 className="w-5 h-5 animate-spin" />Building Masterpiece...</>
             ) : (
               <><span>🎨</span>Generate {pageCount} Page{pageCount > 1 ? 's' : ''}</>
             )}
@@ -420,7 +426,7 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
             className="mt-4 w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-300 disabled:to-gray-300 text-white py-4 px-4 rounded-xl font-bold transition-all duration-200 flex items-center justify-center gap-2 shadow-xl shadow-purple-200"
           >
             {isGenerating ? (
-              <><div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>Creating Professional PDF...</>
+              <><Loader2 className="w-5 h-5 animate-spin" />Creating Professional PDF...</>
             ) : (
               <><span>✨</span>Generate & Download PDF</>
             )}

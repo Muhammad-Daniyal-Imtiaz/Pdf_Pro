@@ -1,161 +1,99 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { aiService } from '@/app/lib/ai-service'
-import { processAIGeneratedElements, findNextAvailableY, LayoutBounds } from '@/app/lib/server-text-measurement'
+import { generateSmartPDF } from '@/app/lib/ai-service-smart-pdf'
 import { A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
-import { NextRequest as NodeNextRequest } from 'next/server'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: NextRequest) {
+  const start = Date.now()
   try {
-    const { prompt, documentType = 'report', pageCount = 1 } = await req.json()
+    const body = await req.json()
+    const {
+      prompt,
+      documentType = 'report',
+      pageCount = 1,
+      style = 'modern professional',
+      role,
+      experience,
+      topic
+    } = body
 
-    if (!prompt) {
-      return NextResponse.json({ error: 'Prompt is required' }, { status: 400 })
+    if (!prompt && !topic && !role) {
+      return NextResponse.json(
+        { error: 'Insufficient information provided for AI generation' },
+        { status: 400 }
+      )
     }
 
-    const rawElements = await aiService.generateFullDocumentLayout(documentType, prompt)
+    console.log(`📡 API: Dispatching to Smart PDF Architect [${documentType}]...`)
 
-    if (!Array.isArray(rawElements) || rawElements.length === 0) {
-      return NextResponse.json({ error: 'No elements generated from AI' }, { status: 500 })
-    }
-
-    const measuredElements = processAIGeneratedElements(rawElements, A4_WIDTH, A4_HEIGHT)
-
-    const pages: any[] = []
-    const elementsPerPage = Math.max(1, Math.ceil(measuredElements.length / pageCount))
-
-    for (let pageIdx = 0; pageIdx < pageCount; pageIdx++) {
-      const startIndex = pageIdx * elementsPerPage
-      const endIndex = Math.min(startIndex + elementsPerPage, measuredElements.length)
-      const pageElements = measuredElements.slice(startIndex, endIndex)
-
-      const existing: LayoutBounds[] = []
-      const processedPageElements = pageElements.map((el) => {
-        const isTextElement = ['heading', 'paragraph', 'text', 'link'].includes(el.type)
-        const width = el.style?.width || (el.type === 'heading' ? 674 : 500)
-        const height = el.style?.height || (isTextElement ? 60 : 100)
-
-        const bounds: LayoutBounds = {
-          x: el.x || 60,
-          y: el.y || 80,
-          width,
-          height,
-        }
-
-        const adjustedY = findNextAvailableY(bounds, existing, bounds.y, 30)
-
-        existing.push({ ...bounds, y: adjustedY })
-
-        let style = { ...(el.style || {}) }
-
-        if (el.type === 'heading') {
-          style = {
-            ...style,
-            width: 674,
-            fontWeight: 700,
-            textAlign: style.textAlign || 'center',
-            resizeMode: 'auto-height',
-            color: style.color || '#1a1a1a',
-            fontSize: style.fontSize || 32,
-          }
-        }
-
-        if (el.type === 'paragraph') {
-          style = {
-            ...style,
-            width: style.width || 500,
-            resizeMode: 'auto-height',
-            fontSize: style.fontSize || 14,
-            fontWeight: 400,
-            lineHeight: 1.6,
-            color: style.color || '#374151',
-          }
-        }
-
-        if (el.type === 'text') {
-          style = {
-            ...style,
-            width: style.width || 300,
-            fontSize: style.fontSize || 12,
-            color: style.color || '#64748b',
-            resizeMode: style.resizeMode || 'auto-width',
-          }
-        }
-
-        if (el.type === 'container') {
-          style = {
-            ...style,
-            backgroundColor: style.backgroundColor || '#f8fafc',
-            borderRadius: style.borderRadius || 8,
-            borderWidth: style.borderWidth ?? 1,
-            borderColor: style.borderColor || '#e2e8f0',
-            padding: style.padding || 16,
-            resizeMode: 'auto-height',
-          }
-        }
-
-        if (el.type === 'line') {
-          style = {
-            ...style,
-            backgroundColor: style.backgroundColor || '#cbd5e1',
-            height: style.height || 2,
-          }
-        }
-
-        if (el.type === 'social-icon') {
-          style = {
-            ...style,
-            width: style.width || 24,
-            height: style.height || 24,
-            resizeMode: 'fixed',
-          }
-        }
-
-        if (el.type === 'image') {
-          style = {
-            ...style,
-            resizeMode: 'fixed',
-          }
-        }
-
-        if (el.type === 'link') {
-          style = {
-            ...style,
-            color: '#2563eb',
-            resizeMode: 'auto-width',
-          }
-        }
-
-        return {
-          ...el,
-          pageIndex: pageIdx,
-          y: adjustedY,
-          style,
-        }
+    try {
+      // Stage 1: Generate layout via Architect Engine
+      const layout = await generateSmartPDF({
+        prompt: (prompt || topic || '').toString(),
+        documentType: documentType as any,
+        pageCount: Number(pageCount),
+        style: style as any,
+        role,
+        experience,
+        topic
       })
 
-      pages.push({
-        id: `page-${pageIdx}`,
-        elements: processedPageElements,
+      if (!layout.pages || layout.pages.length === 0) {
+        throw new Error('Architect failed to generate any pages (Empty Result)')
+      }
+
+      // Stage 2: Post-Architect Validation & Enhancement
+      const processedPages = layout.pages.map((page, pIdx) => ({
+        ...page,
+        id: `page-${pIdx}`,
+        elements: page.elements.map(el => {
+          const isText = ['heading', 'paragraph', 'text', 'container'].includes(el.type)
+
+          return {
+            ...el,
+            id: el.id || `el-${pIdx}-${Math.random().toString(36).substr(2, 9)}`,
+            pageIndex: pIdx,
+            // CRITICAL: Ensure elements don't bleed off A4
+            x: Math.max(40, Math.min(el.x, 754 - (el.style?.width || 100))),
+            y: Math.max(40, Math.min(el.y, 1083 - (el.style?.height || 50))),
+            style: {
+              ...el.style,
+              resizeMode: isText ? 'auto-height' : 'fixed',
+              // Production Polish: Add subtle shadows for cards
+              boxShadow: el.type === 'container' ? '0 1px 3px rgba(0,0,0,0.05)' : undefined
+            }
+          }
+        })
+      }))
+
+      const durationMs = Date.now() - start
+      console.log(`✅ API: Layout generated successfully in ${durationMs}ms`)
+
+      return NextResponse.json({
+        success: true,
+        pages: processedPages,
+        width: A4_WIDTH,
+        height: A4_HEIGHT,
+        performance: { durationMs }
       })
+    } catch (serviceError: any) {
+      console.error('❌ Service Error (Architect):', serviceError)
+      throw serviceError // Re-throw to be caught by outer catch for standardized JSON response
     }
 
-    return NextResponse.json({
-      success: true,
-      pages,
-      width: A4_WIDTH,
-      height: A4_HEIGHT,
-    })
   } catch (error: any) {
-    console.error('Generate AI PDF error:', error)
+    console.error('❌ API Error [generate-ai-pdf]:', error)
     return NextResponse.json(
       {
-        error: error.message || 'Failed to generate AI layout',
+        success: false,
+        error: error.message || 'Architect failure',
+        details: error.toString(),
+        timestamp: new Date().toISOString()
       },
-      { status: 500 },
+      { status: 500 }
     )
   }
 }
