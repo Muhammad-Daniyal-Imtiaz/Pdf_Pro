@@ -219,7 +219,7 @@ export const AI_PROMPTS = {
   // MASTER ENTITY EXTRACTION PROMPT
   // =========================================================================
   entityExtraction: (userPrompt: string, templateType: string) => `
-You are an ELITE Entity Extraction AI. Your ONLY job is to extract REAL DATA from the user's input.
+You are an ELITE Entity Extraction AI. Your ONLY job is to extract REAL DATA from the user's input and categorize it for document generation.
 
 === USER INPUT ===
 "${userPrompt}"
@@ -227,128 +227,52 @@ You are an ELITE Entity Extraction AI. Your ONLY job is to extract REAL DATA fro
 === TEMPLATE TYPE ===
 ${templateType}
 
-=== YOUR MISSION ===
-Extract EVERY piece of factual information from the user's input. DO NOT invent, assume, or generate fake data.
-If information is missing, use null or appropriate placeholder like "[Your Name]".
+=== YOUR MISSION (NESTED REASONING) ===
+1. RESEARCH: Identify every proper noun, date, metric, and skill in the input.
+2. CATEGORIZE: Map these pieces to the standard document schema for ${templateType}.
+3. ENRICH: If the user provides raw experience, REASON about their achievements and format them as professional bullet points.
+4. SYNTHESIZE: Generate a high-impact summary that ties the extracted data together.
 
 === OUTPUT FORMAT (JSON ONLY) ===
-Return a JSON object with these categories based on template type:
+Return a JSON object with these nested categories:
 
-FOR CV/RESUME:
 {
   "personal": {
-    "full_name": "extracted name or null",
-    "email": "extracted email or null",
-    "phone": "extracted phone or null",
-    "location": "extracted location or null",
-    "linkedin": "extracted linkedin or null",
-    "github": "extracted github or null",
-    "website": "extracted website or null"
+    "full_name": "string or null",
+    "email": "string or null",
+    "phone": "string or null",
+    "location": "string or null",
+    "socials": { "linkedin": "string", "github": "string", "website": "string" }
   },
   "professional": {
-    "job_title": "extracted or desired job title",
-    "current_company": "extracted company or null",
-    "years_experience": "extracted years or null",
-    "industry": "inferred industry"
+    "job_title": "string or null",
+    "experience_summary": "1-sentence punchy summary",
+    "total_years": "string"
   },
-  "summary": {
-    "professional_summary": "GENERATE a compelling 2-3 sentence professional summary based on extracted data"
-  },
+  "summary": { "professional_summary": "2-3 sentence impactful summary" },
   "experience": [
     {
-      "position": "extracted position",
-      "company_name": "extracted company",
-      "duration": "extracted dates or duration",
-      "achievements": ["list of achievements/responsibilities"]
+      "position": "string",
+      "company": "string",
+      "duration": "string",
+      "highlights": ["achievement 1", "achievement 2"]
     }
   ],
   "education": [
-    {
-      "degree": "extracted degree",
-      "institution": "extracted school/university",
-      "year": "extracted graduation year",
-      "details": "GPA, honors, etc."
-    }
+    { "degree": "string", "institution": "string", "year": "string", "details": "string" }
   ],
   "skills": {
-    "technical": ["extracted technical skills"],
-    "soft": ["extracted soft skills"],
-    "languages": ["extracted languages"],
-    "tools": ["extracted tools/technologies"]
+    "technical": ["skill1", "skill2"],
+    "soft": ["skill1"],
+    "formatted": "A categorization of all skills for a resume"
   }
 }
 
-FOR BUSINESS PROPOSAL:
-{
-  "company": {
-    "name": "your company name",
-    "contact_person": "your name",
-    "position": "your position",
-    "email": "your email",
-    "phone": "your phone"
-  },
-  "client": {
-    "name": "client contact name",
-    "company": "client company name",
-    "address": "client address"
-  },
-  "proposal": {
-    "title": "proposal title",
-    "date": "current date formatted",
-    "reference": "proposal reference number",
-    "executive_summary": "GENERATE compelling executive summary",
-    "objectives": ["list of project objectives"],
-    "scope": "project scope description"
-  },
-  "services": [
-    {
-      "name": "service name",
-      "description": "service description",
-      "price": "price if mentioned"
-    }
-  ],
-  "timeline": [
-    {
-      "phase": "phase name",
-      "duration": "duration",
-      "description": "what happens in this phase"
-    }
-  ]
-}
-
-FOR COVER LETTER:
-{
-  "sender": {
-    "full_name": "your name",
-    "email": "your email",
-    "phone": "your phone",
-    "location": "your location",
-    "current_position": "current job title"
-  },
-  "recipient": {
-    "name": "hiring manager name or 'Hiring Manager'",
-    "company": "company applying to",
-    "job_title": "position applying for"
-  },
-  "content": {
-    "opening": "GENERATE compelling opening paragraph",
-    "body": "GENERATE 2-3 body paragraphs highlighting qualifications",
-    "closing": "GENERATE professional closing paragraph",
-    "key_points": ["key qualifications to highlight"]
-  }
-}
-
-=== CRITICAL RULES ===
-1. Extract REAL data from user input - do NOT invent names, companies, etc.
-2. For missing critical fields, use null or placeholder like "[Your Name]"
-3. GENERATE compelling content (summaries, descriptions) based on extracted data
-4. If user mentions experience "5 years in React", extract: years_experience: "5", skills.technical: ["React"]
-5. Parse natural language intelligently - "I work at Google as a PM" → company: "Google", position: "PM"
-6. Return ONLY valid JSON - no markdown, no explanation
+Return ONLY valid JSON.
 `,
 
   // =========================================================================
-  // TEMPLATE CONTENT GENERATION WITH EXTRACTED ENTITIES
+  // NESTED TEMPLATE CONTENT GENERATION PROMPT
   // =========================================================================
   templateContentGeneration: (
     templateId: string,
@@ -356,58 +280,44 @@ FOR COVER LETTER:
     extractedEntities: any,
     userPrompt: string
   ) => `
-You are a WORLD-CLASS Document Designer AI. Your job is to fill a template with REAL user data.
+You are the world's most sophisticated "AI Document Studio" engine. 
+You are filling a specialized template with IDs that follow a specific document logic.
 
-=== TEMPLATE ID ===
-${templateId}
+=== TEMPLATE CONTEXT ===
+ID: ${templateId}
+ELEMENTS: ${JSON.stringify(templateElements.map(el => ({
+    id: el.id,
+    type: el.type,
+    purpose: inferElementPurpose(el.id, el.type)
+  })), null, 2)}
 
-=== TEMPLATE STRUCTURE ===
-${JSON.stringify(templateElements.map(el => ({
-  id: el.id,
-  type: el.type,
-  content: el.content?.substring(0, 100) || '',
-  purpose: inferElementPurpose(el.id, el.type)
-})), null, 2)}
-
-=== EXTRACTED USER DATA ===
+=== USER DATA (EXTRACTED) ===
 ${JSON.stringify(extractedEntities, null, 2)}
 
-=== ORIGINAL USER REQUEST ===
+=== USER REQUEST ===
 "${userPrompt}"
 
-=== YOUR MISSION ===
-Return a JSON array of element updates. For EACH element in the template:
-1. If extracted data matches the element's purpose, use the REAL data
-2. If data is missing but content should be generated, CREATE professional content
-3. Keep layout positions (x, y) EXACTLY as in template
-4. Preserve all styling
-5. Only update the "content" field
+=== PRODUCTION-GRADE REASONING (DO THIS INTERNALLY) ===
+1. THEME ANALYSIS: Based on the template IDs (e.g., 'cv-modern-blue'), identify the expected tone and layout density.
+2. CONTENT MAPPING: Map the extracted user data to the element IDs. 
+   - 'header-name' -> personal.full_name
+   - 'job-1-description' -> experience[0].highlights
+3. INTELLIGENT FILL: If an element is a 'heading' used as a section title, keep it as it is in the template UNLESS the user explicitly asked to change it.
+4. OVERFLOW AWARENESS: Keep responses concise. Real estate in PDF templates is limited.
+5. NESTED SYNTHESIS: Ensure cross-element consistency (e.g., the name in the header matches the footer).
 
-=== OUTPUT FORMAT ===
-Return JSON array:
+=== YOUR MISSION ===
+Return a JSON array of element updates. Fill EVERY relevant element.
+If you have no data for an element, and it's a placeholder like "Company Name", replace it with "[Your Company]" or something clean. 
+NEVER leave template dummy data like "MUHAMMAD DANIYAL" if the user provided their own name.
+
+=== OUTPUT FORMAT (JSON ARRAY ONLY) ===
 [
-  {
-    "id": "element-id-from-template",
-    "content": "new content with real user data or generated professional content"
-  },
+  { "id": "element-id", "content": "filled content" },
   ...
 ]
 
-=== CONTENT GENERATION RULES ===
-1. Names: Use extracted name or "[Your Name]" if missing
-2. Contact: Use extracted contact or generate placeholder format
-3. Summaries: GENERATE compelling 2-3 sentence professional summaries
-4. Experience: Format with bullet points: "• Achievement 1\\n• Achievement 2"
-5. Skills: Format as: "Category: skill1, skill2, skill3"
-6. Dates: Format consistently: "Month Year - Present" or "Month Year"
-7. Make ALL content PROFESSIONAL, COMPELLING, and ACHIEVEMENT-FOCUSED
-
-=== EXAMPLE TRANSFORMATIONS ===
-- "header-name" + extracted name "John Doe" → {"id": "header-name", "content": "JOHN DOE"}
-- "summary-content" + job title "Software Engineer" → Generate: "Results-driven Software Engineer with..."
-- "job-1-description" + achievements → "• Led team of 5 engineers...\\n• Increased performance by 40%..."
-
-Return ONLY the JSON array. No markdown, no explanation.
+Return ONLY the JSON array. NO prose. NO explanation.
 `,
 
   // =========================================================================
@@ -477,13 +387,13 @@ Generate professional CV content for a ${role} with ${experience} years experien
 Include: Professional summary, key skills, work experience with achievements, education.
 Make it ATS-friendly and compelling.
 `,
-  
+
   documentContent: (topic: string, type: string) => `
 Create a comprehensive ${type} about "${topic}".
 Include: Executive summary, key points, detailed sections, conclusion.
 Use professional language and structure.
 `,
-  
+
   mcpMarkdown: (prompt: string) => `
 Act as a Professional Document Architect.
 Generate high-fidelity Markdown content for: "${prompt}"
@@ -603,34 +513,34 @@ Output ONLY Markdown.
 
 function inferElementPurpose(id: string, type: string): string {
   const idLower = id.toLowerCase()
-  
+
   // Name/Header patterns
   if (idLower.includes('name') || idLower.includes('header-name')) return 'PERSON_NAME'
   if (idLower.includes('title') && idLower.includes('job')) return 'JOB_TITLE'
   if (idLower.includes('header-title')) return 'JOB_TITLE'
-  
+
   // Contact patterns
   if (idLower.includes('contact') || idLower.includes('info')) return 'CONTACT_INFO'
   if (idLower.includes('email')) return 'EMAIL'
   if (idLower.includes('phone')) return 'PHONE'
   if (idLower.includes('location') || idLower.includes('address')) return 'LOCATION'
-  
+
   // Summary patterns
   if (idLower.includes('summary')) return 'PROFESSIONAL_SUMMARY'
   if (idLower.includes('objective')) return 'OBJECTIVE'
   if (idLower.includes('about')) return 'ABOUT'
-  
+
   // Experience patterns
   if (idLower.includes('experience') || idLower.includes('job')) return 'EXPERIENCE'
   if (idLower.includes('company')) return 'COMPANY'
   if (idLower.includes('description') || idLower.includes('achievement')) return 'ACHIEVEMENTS'
-  
+
   // Skills patterns
   if (idLower.includes('skill')) return 'SKILLS'
-  
+
   // Education patterns
   if (idLower.includes('education') || idLower.includes('degree')) return 'EDUCATION'
-  
+
   // Proposal patterns
   if (idLower.includes('proposal')) return 'PROPOSAL_TITLE'
   if (idLower.includes('executive')) return 'EXECUTIVE_SUMMARY'
@@ -639,10 +549,10 @@ function inferElementPurpose(id: string, type: string): string {
   if (idLower.includes('investment') || idLower.includes('cost')) return 'INVESTMENT'
   if (idLower.includes('prepared-by')) return 'PREPARED_BY'
   if (idLower.includes('prepared-for')) return 'PREPARED_FOR'
-  
+
   // Section titles
   if (type === 'heading') return 'SECTION_TITLE'
-  
+
   // Default
   return 'CONTENT'
 }
@@ -715,7 +625,7 @@ function getRequiredElementsForType(documentType: string): string {
 9. Call to action
 `,
   }
-  
+
   return requirements[documentType] || requirements['cv']
 }
 
@@ -724,7 +634,7 @@ function getRequiredElementsForType(documentType: string): string {
 // =============================================================================
 export function detectTemplateType(templateId: string): string {
   const idLower = templateId.toLowerCase()
-  
+
   if (idLower.includes('cv') || idLower.includes('resume')) return 'cv'
   if (idLower.includes('cover-letter')) return 'cover-letter'
   if (idLower.includes('proposal')) return 'business-proposal'
@@ -732,7 +642,7 @@ export function detectTemplateType(templateId: string): string {
   if (idLower.includes('brochure')) return 'brochure'
   if (idLower.includes('contract')) return 'contract'
   if (idLower.includes('report')) return 'report'
-  
+
   return 'generic'
 }
 
@@ -741,7 +651,7 @@ export function detectTemplateType(templateId: string): string {
 // =============================================================================
 export function validateExtractedEntities(entities: any, templateType: string): { valid: boolean; missing: string[] } {
   const missing: string[] = []
-  
+
   if (templateType === 'cv') {
     if (!entities.personal?.full_name) missing.push('full_name')
     if (!entities.professional?.job_title) missing.push('job_title')
@@ -752,7 +662,7 @@ export function validateExtractedEntities(entities: any, templateType: string): 
     if (!entities.sender?.full_name) missing.push('full_name')
     if (!entities.recipient?.company) missing.push('company_applying_to')
   }
-  
+
   return { valid: missing.length === 0, missing }
 }
 

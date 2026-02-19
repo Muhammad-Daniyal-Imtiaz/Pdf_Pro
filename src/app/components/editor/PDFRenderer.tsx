@@ -156,7 +156,7 @@ export default function PDFRenderer({
     const renderTextContent = (isInsideContainer: boolean = false) => {
       const textMeasurementService = getTextMeasurementService()
       const mode = elStyle.resizeMode || 'fixed'
-      
+
       // For AI-generated elements with auto-height, we need special handling
       const isAutoHeight = mode === 'auto-height' || mode === 'auto-both'
       const isAutoWidth = mode === 'auto-width' || mode === 'auto-both'
@@ -383,7 +383,7 @@ export default function PDFRenderer({
 
     return (
       <div
-        key={id}
+        key={id || `element-key-${Math.random()}`}
         style={{
           ...baseStyles,
           outline: isSelected ? '2px solid #3b82f6' : 'none',

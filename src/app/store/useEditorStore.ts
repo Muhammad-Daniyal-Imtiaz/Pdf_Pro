@@ -233,18 +233,18 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         const getSmartYPosition = (): number => {
             // If user specified position, use that
             if (itemOverrides.y !== undefined) return itemOverrides.y
-            
+
             // Get bounds of existing elements
             const existingElements = targetPage.elements
             if (existingElements.length === 0) {
                 // First element - start at 80px from top
                 return 80
             }
-            
+
             // Find bottommost element
             const bottoms = existingElements.map(el => (el.y || 0) + (el.style?.height || 40))
             const maxBottom = Math.max(...bottoms)
-            
+
             // Add 30px margin for clean spacing
             return maxBottom + 30
         }
@@ -607,7 +607,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
 
             // Group elements by pageIndex to handle multi-page layouts
             const elementsByPage: Record<number, any[]> = {}
-            
+
             changes.forEach(change => {
                 const pageIndex = change.pageIndex || 0
                 if (!elementsByPage[pageIndex]) {
@@ -619,7 +619,7 @@ export const useEditorStore = create<EditorState>((set, get) => ({
             // Process each page
             Object.entries(elementsByPage).forEach(([pageIndexStr, pageChanges]) => {
                 const pageIndex = parseInt(pageIndexStr)
-                
+
                 // Ensure we have enough pages
                 while (updatedPages.length <= pageIndex) {
                     updatedPages.push({
@@ -653,14 +653,24 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     // 2. If not found, add as new to the correct page
                     if (!found) {
                         const isTextElement = ['heading', 'paragraph', 'text', 'container'].includes(processedChange.type)
-                        
+
                         // For AI-generated text elements, use auto-height to prevent truncation
-                        const resizeMode = processedChange.style?.resizeMode || 
+                        const resizeMode = processedChange.style?.resizeMode ||
                             (isTextElement ? 'auto-height' : 'fixed')
-                        
+
+                        // CRITICAL: Ensure unique ID for new AI elements
+                        const generatedId = `ai-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                        let finalId = change.id || generatedId
+
+                        // Check if this ID exists already in any page
+                        const idExists = updatedPages.some(p => p.elements.some(el => el.id === finalId))
+                        if (idExists || !finalId) {
+                            finalId = `ai-new-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                        }
+
                         const newEl = {
                             ...processedChange,
-                            id: change.id || `ai-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                            id: finalId,
                             pageIndex: pageIndex,
                             isModified: true,
                             isAIGenerated: processedChange.isAIGenerated || true,
@@ -682,9 +692,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
         })
     },
 
-    clearPages: () => set({ 
-        pages: [{ id: `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, elements: [] }], 
-        selectedIds: [] 
+    clearPages: () => set({
+        pages: [{ id: `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, elements: [] }],
+        selectedIds: []
     }),
     setPages: (newPages) => set({ pages: newPages }),
 

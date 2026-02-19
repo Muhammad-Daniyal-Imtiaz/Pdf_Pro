@@ -90,10 +90,10 @@ export default function EditPage() {
       setIsProcessing(true)
       setError(null)
       clearPages()
-      
+
       const response = await fetch(`/templates/${template.file}`)
       const templateData = await response.json()
-      
+
       setPages(templateData.pages)
       setDocTitle(template.name)
       setShowTemplates(false)
@@ -111,11 +111,11 @@ export default function EditPage() {
       setIsProcessing(true)
       setError(null)
       clearPages()
-      
+
       // If templateData is provided (from new TemplateSelector), use it directly
       // Otherwise, load the template first
       let loadedTemplateData = templateData
-      
+
       if (!loadedTemplateData) {
         try {
           const templateResponse = await fetch(`/templates/${template.file}`)
@@ -126,7 +126,7 @@ export default function EditPage() {
           console.warn('Could not load template data, proceeding without it')
         }
       }
-      
+
       const response = await fetch('/api/generate-document', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -137,31 +137,45 @@ export default function EditPage() {
           locale: navigator.language || 'en-US'
         })
       })
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
         throw new Error(errorData.error || `HTTP ${response.status}`)
       }
-      
+
       const result = await response.json()
 
       if (result.success && result.template && Array.isArray(result.template.pages)) {
         const pagesFromApi = result.template.pages as any[]
+        const seenIds = new Set<string>();
         const mappedPages = pagesFromApi.map((p: any, index: number) => ({
           id: p.id || `page-${index}-${Date.now()}`,
-          elements: (p.elements || []).map((el: any) => ({
-            ...el,
-            pageIndex: typeof el.pageIndex === 'number' ? el.pageIndex : index,
-            isAIGenerated: true,
-            isModified: true,
-            style: {
-              ...(el.style || {}),
-              width: typeof el.style?.width === 'number' ? el.style.width : 674,
-              height: typeof el.style?.height === 'number' ? el.style.height : 40,
-              fontSize: el.style?.fontSize || 14,
-              resizeMode: el.style?.resizeMode || 'auto-height',
+          elements: (p.elements || []).map((el: any) => {
+            // CRITICAL: Ensure every element has a unique ID to prevent React duplicate key errors
+            const generatedId = `el-${index}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            let finalId = (el.id && el.id.trim() !== "") ? el.id : generatedId;
+
+            // Collision prevention: If ID already exists in this document, generate a fresh one
+            if (seenIds.has(finalId)) {
+              finalId = `el-new-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             }
-          }))
+            seenIds.add(finalId);
+
+            return {
+              ...el,
+              id: finalId,
+              pageIndex: typeof el.pageIndex === 'number' ? el.pageIndex : index,
+              isAIGenerated: true,
+              isModified: true,
+              style: {
+                ...(el.style || {}),
+                width: typeof el.style?.width === 'number' ? el.style.width : 674,
+                height: typeof el.style?.height === 'number' ? el.style.height : 40,
+                fontSize: el.style?.fontSize || 14,
+                resizeMode: el.style?.resizeMode || 'auto-height',
+              }
+            };
+          })
         }))
 
         if (mappedPages.length > 0) {
@@ -175,16 +189,16 @@ export default function EditPage() {
         setPages(loadedTemplateData.pages || [])
         setDocTitle(template.name)
       }
-      
+
       setShowTemplates(false)
       setOriginalPdfBase64(null)
-      
+
       console.log('✅ AI generation complete!')
-      
+
     } catch (err: any) {
       console.error('AI generation failed:', err)
       setError('AI generation failed: ' + err.message)
-      
+
       // Fallback: try to load just the template without AI
       try {
         await loadTemplate(template)
@@ -233,8 +247,8 @@ export default function EditPage() {
                 typeof el.content === 'string'
                   ? el.content
                   : el.content == null
-                  ? ''
-                  : String(el.content)
+                    ? ''
+                    : String(el.content)
 
               return {
                 id: String(el.id),
@@ -416,13 +430,13 @@ export default function EditPage() {
           <button onClick={addPage} className="flex items-center gap-2 px-3 py-1.5 bg-green-100 hover:bg-green-200 text-green-700 rounded text-sm font-medium transition-colors">
             <Plus size={16} /> Add Page
           </button>
-          <button 
+          <button
             onClick={() => setShowTextToPDF(!showTextToPDF)}
             className="flex items-center gap-2 px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded text-sm font-medium transition-colors"
           >
             <Sparkles size={16} /> AI Text to PDF
           </button>
-          <button 
+          <button
             onClick={() => setShowTemplates(!showTemplates)}
             className="flex items-center gap-2 px-3 py-1.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded text-sm font-medium transition-colors"
           >
@@ -454,7 +468,7 @@ export default function EditPage() {
               </div>
             </div>
             <div className="p-4">
-              <TemplateSelector 
+              <TemplateSelector
                 onTemplateSelect={loadTemplate}
                 onAIGenerate={generateWithAI}
               />
@@ -480,7 +494,7 @@ export default function EditPage() {
               </div>
             </div>
             <div className="p-4">
-              <TextToPDFGenerator 
+              <TextToPDFGenerator
                 onPDFGenerated={(pdfData) => {
                   console.log('PDF generated via Text to PDF')
                 }}

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateCvDocumentFromTemplate, analyzeTemplateContamination } from '@/app/lib/ai-service-document'
-import { mapCvDocumentToTemplate } from '@/app/lib/ai-config'
 import { sanitizeContent } from '@/app/lib/sanitize'
 
 export const runtime = 'nodejs'
@@ -9,24 +8,6 @@ export const dynamic = 'force-dynamic'
 
 const userHistory = new Map<string, { key: string; document: any; template: any; createdAt: number }[]>()
 const userRequests = new Map<string, { count: number; timestamp: number }>()
-
-function sanitizeTemplateStrings(value: any): any {
-  if (value == null) return value
-  if (typeof value === 'string') {
-    return sanitizeContent(value)
-  }
-  if (Array.isArray(value)) {
-    return value.map(v => sanitizeTemplateStrings(v))
-  }
-  if (typeof value === 'object') {
-    const result: any = {}
-    Object.entries(value).forEach(([k, v]) => {
-      result[k] = sanitizeTemplateStrings(v)
-    })
-    return result
-  }
-  return value
-}
 
 function recordHistory(userId: string, key: string, document: any, template: any) {
   const existing = userHistory.get(userId) || []
@@ -98,28 +79,47 @@ export async function POST(request: NextRequest) {
     userData.count++
     userRequests.set(ip, userData)
 
-    const { document, sanitizedTemplateSchema, originalTemplateStrings } =
-      await generateCvDocumentFromTemplate({
-        templateId,
-        templateSchema,
-        rawText: rawCvText,
-        locale,
-        idempotencyKey,
-        revision
-      })
+    // Stage 1: Generate Document using AI Document Studio
+    // The new logic is "template-aware" and fills elements directly based on the JSON schema
+    const result = await generateCvDocumentFromTemplate({
+      templateId,
+      templateSchema,
+      rawText: rawCvText,
+      locale,
+      idempotencyKey,
+      revision
+    })
 
-    const filledTemplate = mapCvDocumentToTemplate(templateId, sanitizedTemplateSchema, document)
-    const sanitizedTemplate = sanitizeTemplateStrings(filledTemplate)
+    if (!result.success) {
+      throw new Error('AI Document Studio failed to generate content')
+    }
 
-    const contamination = analyzeTemplateContamination(document, originalTemplateStrings)
+    // Stage 2: Post-generation hygiene and safety
+    const sanitizedTemplate = {
+      ...templateSchema,
+      pages: templateSchema.pages.map((page: any, pIdx: number) => ({
+        ...page,
+        elements: result.elements
+          .filter((el: any) => el.pageIndex === pIdx)
+          .map((el: any) => ({
+            ...el,
+            content: sanitizeContent(el.content || '')
+          }))
+      }))
+    }
 
-    recordHistory(ip, document.meta.idempotencyKey, document, sanitizedTemplate)
+    // Stage 3: Quality metrics (how much of original template remains?)
+    const originalElements = templateSchema.pages.flatMap((p: any) => p.elements || [])
+    const contamination = analyzeTemplateContamination(result.elements, originalElements)
+
+    // Stage 4: Record history for rollback protection
+    recordHistory(ip, result.document.meta.idempotencyKey, result.document, sanitizedTemplate)
 
     const durationMs = Date.now() - start
 
     return NextResponse.json({
       success: true,
-      document,
+      document: result.document,
       template: sanitizedTemplate,
       contamination,
       performance: {
