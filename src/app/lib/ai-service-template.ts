@@ -42,27 +42,51 @@ export async function generateTemplateContent(request: TemplateContentRequest): 
 
     console.log("🚀 AI Template Engine: Starting content replacement...");
 
-    try {
-        const model = genAI.getGenerativeModel({
-            model: "gemini-2.0-flash", // Use latest flash for speed + reasoning
-            generationConfig: {
-                temperature: 0.1, // Low temperature for factual precision
-                topP: 0.95,
+    const modelAttempts = [
+        "gemini-flash-latest",
+        "gemma-3-4b-it",
+        "gemini-2.0-flash-lite",
+        "gemini-pro-latest"
+    ];
+
+    let lastError: any = null;
+
+    for (const modelName of modelAttempts) {
+        try {
+            console.log(`🚀 Template Engine: Attempting with model ${modelName}...`);
+            const model = genAI.getGenerativeModel({
+                model: modelName,
+                generationConfig: {
+                    temperature: 0.1, // Low temperature for factual precision
+                    topP: 0.95,
+                }
+            });
+
+            const prompt = generateTemplatePrompt(request);
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+
+            // Advanced cleanup and parsing
+            const updatedTemplate = applyTemplateChanges(request.templateJson, text);
+            console.log(`✨ Template Engine: Success using ${modelName}`);
+            return updatedTemplate;
+        } catch (error: any) {
+            lastError = error;
+            const isQuotaError = error.message?.includes('429') || error.message?.includes('quota');
+            const isNotFoundError = error.message?.includes('404') || error.message?.includes('not found');
+
+            if (isQuotaError || isNotFoundError) {
+                console.warn(`⚠️ Template Engine: Issue with model ${modelName} (${isQuotaError ? 'Quota' : 'Not Found'}). Trying fallback...`);
+                continue;
+            } else {
+                console.error(`❌ Template Engine: Critical error with model ${modelName}:`, error);
+                break;
             }
-        });
-
-        const prompt = generateTemplatePrompt(request);
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-
-        // Advanced cleanup and parsing
-        return applyTemplateChanges(request.templateJson, text);
-    } catch (error: any) {
-        console.error('❌ AI Template Engine error:', error);
-        const errorMessage = error.message || 'Unknown error';
-        throw new Error(`Template Engine failed: ${errorMessage}`);
+        }
     }
+
+    throw new Error(`Template Engine failed after multiple attempts. Last error: ${lastError?.message || 'Unknown failure'}`);
 }
 
 function generateTemplatePrompt(request: TemplateContentRequest): string {

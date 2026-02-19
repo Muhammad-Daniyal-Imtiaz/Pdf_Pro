@@ -7,11 +7,10 @@ export const AI_CONFIG = {
 
   // Prioritized models - Flash models work best for free tier
   models: [
-    'gemini-2.0-flash',
     'gemini-flash-latest',
+    'gemma-3-4b-it',
     'gemini-2.0-flash-lite',
     'gemini-pro-latest',
-    'gemma-3-4b-it',
   ],
 
   // Rate limits per model

@@ -52,35 +52,58 @@ export async function generateSmartPDF(request: SmartPDFRequest): Promise<{
         throw new Error('Gemini API Key is missing. Please check NEXT_PUBLIC_GEMINI_API_KEY in your .env file.');
     }
 
-    try {
-        // Use Flash 2.0 for speed + reliability + safety filters
-        const model = genAI.getGenerativeModel({
-            model: "gemini-2.0-flash",
-            generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 8192,
+    // Priority models to try if one fails
+    const modelAttempts = [
+        "gemini-flash-latest",
+        "gemma-3-4b-it",
+        "gemini-2.0-flash-lite",
+        "gemini-pro-latest"
+    ];
+
+    let lastError: any = null;
+
+    for (const modelName of modelAttempts) {
+        try {
+            console.log(`🤖 Architect: Attempting with model ${modelName}...`);
+            const model = genAI.getGenerativeModel({
+                model: modelName,
+                generationConfig: {
+                    temperature: 0.7,
+                    maxOutputTokens: 8192,
+                }
+            });
+
+            const prompt = generateSmartPDFPrompt(request);
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+
+            // Complex parsing and organization
+            const elements = parseGeneratedLayout(text, request.pageCount);
+            const pages = organizeIntoPages(elements, request.pageCount);
+
+            console.log(`✨ Architect: Successfully generated layout using ${modelName}`);
+            return {
+                pages,
+                width: 794,
+                height: 1123
+            };
+        } catch (error: any) {
+            lastError = error;
+            const isQuotaError = error.message?.includes('429') || error.message?.includes('quota');
+            const isNotFoundError = error.message?.includes('404') || error.message?.includes('not found');
+
+            if (isQuotaError || isNotFoundError) {
+                console.warn(`⚠️ Architect: Issue with model ${modelName} (${isQuotaError ? 'Quota' : 'Not Found'}). Trying fallback...`);
+                continue; // Try next model
+            } else {
+                console.error(`❌ Architect: Critical error with model ${modelName}:`, error);
+                break; // Stop if it's not a common transient/availability issue
             }
-        });
-
-        const prompt = generateSmartPDFPrompt(request);
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text();
-
-        // Complex parsing and organization
-        const elements = parseGeneratedLayout(text, request.pageCount);
-        const pages = organizeIntoPages(elements, request.pageCount);
-
-        return {
-            pages,
-            width: 794,
-            height: 1123
-        };
-    } catch (error: any) {
-        console.error('❌ Smart PDF Architect error:', error);
-        const errorMessage = error.message || 'Unknown error';
-        throw new Error(`Document Architect failed: ${errorMessage}`);
+        }
     }
+
+    throw new Error(`Architect failed after multiple attempts. Last error: ${lastError?.message || 'Unknown failure'}`);
 }
 
 function generateSmartPDFPrompt(request: SmartPDFRequest): string {
