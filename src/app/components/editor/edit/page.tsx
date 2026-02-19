@@ -127,15 +127,14 @@ export default function EditPage() {
         }
       }
       
-      // Call AI API with full template data for intelligent content replacement
-      const response = await fetch('/api/generate-ai-content', {
+      const response = await fetch('/api/generate-document', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           templateId: template.id,
-          templateName: template.name,
-          templateData: loadedTemplateData, // Pass full template structure
-          prompt: prompt,
+          templateSchema: loadedTemplateData,
+          rawCvText: prompt,
+          locale: navigator.language || 'en-US'
         })
       })
       
@@ -145,30 +144,18 @@ export default function EditPage() {
       }
       
       const result = await response.json()
-      
-      // Handle the AI-generated content
-      if (result.type === 'template-elements' && result.content && Array.isArray(result.content)) {
-        // AI returned updated elements - apply them directly
-        const aiElements = result.content
-        
-        // Group elements by pageIndex
-        const elementsByPage: Record<number, any[]> = {}
-        aiElements.forEach((el: any) => {
-          const pageIdx = el.pageIndex || 0
-          if (!elementsByPage[pageIdx]) elementsByPage[pageIdx] = []
-          elementsByPage[pageIdx].push(el)
-        })
-        
-        // Build pages array
-        const newPages = Object.entries(elementsByPage).map(([pageIdx, elements]) => ({
-          id: `page-${pageIdx}-${Date.now()}`,
-          elements: elements.map((el: any) => ({
+
+      if (result.success && result.template && Array.isArray(result.template.pages)) {
+        const pagesFromApi = result.template.pages as any[]
+        const mappedPages = pagesFromApi.map((p: any, index: number) => ({
+          id: p.id || `page-${index}-${Date.now()}`,
+          elements: (p.elements || []).map((el: any) => ({
             ...el,
+            pageIndex: typeof el.pageIndex === 'number' ? el.pageIndex : index,
             isAIGenerated: true,
             isModified: true,
             style: {
-              ...el.style,
-              // Ensure numeric values
+              ...(el.style || {}),
               width: typeof el.style?.width === 'number' ? el.style.width : 674,
               height: typeof el.style?.height === 'number' ? el.style.height : 40,
               fontSize: el.style?.fontSize || 14,
@@ -176,19 +163,15 @@ export default function EditPage() {
             }
           }))
         }))
-        
-        // Set pages with AI-generated content
-        if (newPages.length > 0) {
-          setPages(newPages)
+
+        if (mappedPages.length > 0) {
+          setPages(mappedPages)
           setDocTitle(template.name)
-        } else {
-          // Fallback: load template and apply changes via applyLayoutChanges
-          await loadTemplate(template)
-          const { applyLayoutChanges } = useEditorStore.getState()
-          applyLayoutChanges(aiElements)
+        } else if (loadedTemplateData) {
+          setPages(loadedTemplateData.pages || [])
+          setDocTitle(template.name)
         }
-      } else if (result.success && loadedTemplateData) {
-        // Fallback: Just load the template if no AI elements returned
+      } else if (loadedTemplateData) {
         setPages(loadedTemplateData.pages || [])
         setDocTitle(template.name)
       }

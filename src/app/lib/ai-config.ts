@@ -67,6 +67,120 @@ export const ENTITY_SCHEMAS = {
   },
 }
 
+export interface CvMetric {
+  label: string
+  value?: string
+  keywords?: string[]
+}
+
+export interface CvSubAchievement {
+  text: string
+  metrics?: CvMetric[]
+  keywords?: string[]
+}
+
+export interface CvJobAchievement {
+  title: string
+  items: CvSubAchievement[]
+}
+
+export interface CvJob {
+  id: string
+  title: string
+  company: string
+  location?: string
+  startDate?: string
+  endDate?: string
+  achievements: CvJobAchievement[]
+}
+
+export interface CvEducation {
+  id: string
+  degree: string
+  institution: string
+  startDate?: string
+  endDate?: string
+  details?: string
+}
+
+export interface CvProject {
+  id: string
+  name: string
+  role?: string
+  description: string
+  metrics?: CvMetric[]
+  keywords?: string[]
+}
+
+export interface CvCertification {
+  id: string
+  name: string
+  issuer?: string
+  date?: string
+}
+
+export interface CvAward {
+  id: string
+  title: string
+  issuer?: string
+  date?: string
+  description?: string
+}
+
+export interface CvLanguageSkill {
+  name: string
+  proficiency: string
+}
+
+export interface CvReference {
+  name: string
+  role?: string
+  company?: string
+  contact?: string
+}
+
+export interface CvDocumentMeta {
+  templateId: string
+  locale: string
+  idempotencyKey: string
+  revision: number
+  model: string
+  generatedAt: string
+}
+
+export interface CvDocument {
+  meta: CvDocumentMeta
+  personal: {
+    fullName: string
+    email?: string
+    phone?: string
+    location?: string
+    socials?: {
+      linkedin?: string
+      github?: string
+      website?: string
+      twitter?: string
+      portfolio?: string
+    }
+  }
+  summary: string
+  jobs: CvJob[]
+  education: CvEducation[]
+  skills: {
+    categories: {
+      name: string
+      items: string[]
+    }[]
+  }
+  projects?: CvProject[]
+  certifications?: CvCertification[]
+  awards?: CvAward[]
+  languages?: CvLanguageSkill[]
+  hobbies?: string[]
+  references?: CvReference[]
+  rawText: string
+}
+
 // =============================================================================
 // TEMPLATE FIELD MAPPINGS - Map template element IDs to entity fields
 // =============================================================================
@@ -640,4 +754,110 @@ export function validateExtractedEntities(entities: any, templateType: string): 
   }
   
   return { valid: missing.length === 0, missing }
+}
+
+function getCvValueByPath(doc: CvDocument, path: string): any {
+  if (!path) return undefined
+  if (path === 'contact_info_formatted') {
+    const p = doc.personal
+    const parts = [p.fullName, p.email, p.phone, p.location].filter(Boolean)
+    return parts.join(' • ')
+  }
+  if (path === 'experience.0.company_formatted') {
+    const job = doc.jobs[0]
+    if (!job) return ''
+    const pieces = [job.company, job.location].filter(Boolean)
+    return pieces.join(' • ')
+  }
+  if (path === 'experience.0.achievements_formatted') {
+    const job = doc.jobs[0]
+    if (!job || !job.achievements?.length) return ''
+    const points: string[] = []
+    job.achievements.forEach(a => {
+      if (a.title) points.push(a.title)
+      a.items.forEach(sa => {
+        if (sa.text) points.push(sa.text)
+        sa.metrics?.forEach(m => {
+          if (m.label) points.push(m.label)
+        })
+      })
+    })
+    return points.length ? '• ' + points.join('\n• ') : ''
+  }
+  if (path === 'skills.formatted') {
+    const categories = doc.skills.categories || []
+    if (!categories.length) return ''
+    return categories
+      .map(cat => {
+        const items = (cat.items || []).join(', ')
+        return items ? `${cat.name}: ${items}` : cat.name
+      })
+      .filter(Boolean)
+      .join('\n')
+  }
+  if (path === 'education.formatted') {
+    if (!doc.education?.length) return ''
+    return doc.education
+      .map(e => {
+        const parts = [e.degree, e.institution].filter(Boolean)
+        const dates = [e.startDate, e.endDate].filter(Boolean).join(' – ')
+        const base = parts.join(' • ')
+        if (dates && base) return `${base} (${dates})`
+        if (dates) return dates
+        return base
+      })
+      .filter(Boolean)
+      .join('\n')
+  }
+  const segments = path.split('.')
+  let current: any = doc as any
+  for (const segment of segments) {
+    if (!current) return undefined
+    if (/^\d+$/.test(segment)) {
+      const idx = Number(segment)
+      if (!Array.isArray(current) || idx >= current.length) return undefined
+      current = current[idx]
+    } else {
+      const key = segment === 'full_name' ? 'fullName' : segment
+      current = current[key]
+    }
+  }
+  return current
+}
+
+export function mapCvDocumentToTemplate(templateId: string, templateSchema: any, cv: CvDocument): any {
+  const mapping = TEMPLATE_FIELD_MAPPINGS[templateId]
+  if (!mapping) return templateSchema
+  const applyToElements = (elements: any[]): any[] => {
+    return elements.map(el => {
+      const fieldPath = mapping[el.id]
+      if (!fieldPath) {
+        return {
+          ...el,
+          content: el.content ?? ''
+        }
+      }
+      const value = getCvValueByPath(cv, fieldPath)
+      return {
+        ...el,
+        content: value ?? ''
+      }
+    })
+  }
+  if (Array.isArray(templateSchema.pages)) {
+    return {
+      ...templateSchema,
+      pages: templateSchema.pages.map((page: any) => ({
+        ...page,
+        elements: page.elements ? applyToElements(page.elements) : []
+      }))
+    }
+  }
+  if (Array.isArray(templateSchema.elements)) {
+    return {
+      ...templateSchema,
+      elements: applyToElements(templateSchema.elements)
+    }
+  }
+  return templateSchema
 }
