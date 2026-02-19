@@ -64,13 +64,30 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           prompt: fullPrompt,
-          context: '[]', // Fresh canvas
-          pageCount: pageCount // Pass page count to API
+          context: '[]',
+          pageCount: pageCount
         })
       })
 
       if (!response.ok) {
-        throw new Error(`API Error: ${response.status}`)
+        let errorMessage = `Layout API error: ${response.status}`
+        try {
+          const errorData = await response.json()
+          if (errorData?.error) {
+            errorMessage = errorData.error
+          }
+        } catch {
+        }
+
+        setGenerationStatus('error')
+        setStatusMessage(errorMessage)
+
+        setTimeout(() => {
+          setGenerationStatus('idle')
+          setStatusMessage('')
+        }, 5000)
+
+        return
       }
 
       const data = await response.json()
