@@ -1,12 +1,15 @@
 // app/api/generate-ai-pdf/route.ts
 // ─────────────────────────────────────────────────────────────────────────────
-// WORLD-CLASS AI PDF GENERATION ENGINE v3
-// Features: Full A4 schema injection, design tokens, layout archetypes,
-//           retry with error feedback, JSON mode, collision pre-checks
+// WORLD-CLASS AI PDF GENERATION ENGINE v4
+// Key fix: AI is prompted with 794×1123 (96 DPI) — the REAL editor canvas size.
+// Output is run through enforceLayout() which fixes z-index, overflow,
+// collision, and icon sizing before elements reach the editor.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { enforceLayout } from '@/app/lib/layout-engine'
+import { CANVAS_WIDTH_PX, CANVAS_HEIGHT_PX } from '@/lib/constants'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -37,11 +40,12 @@ function checkRateLimit(ip: string): boolean {
 }
 
 // ─── Full A4 Element Schema (injected into every AI call) ────────────────────
+// NOTE: We prompt with 794×1123 (96 DPI) which is the ACTUAL editor canvas.
 const A4_ELEMENT_SCHEMA = `
-=== A4 CANVAS SPECIFICATION ===
-Canvas: 595px wide × 842px tall. Origin (0,0) = top-left corner.
-Safe zone: x: 20–575, y: 20–820. NEVER place elements outside this zone.
-Standard margins: left=40, right=555, top=40, bottom=802.
+=== CANVAS SPECIFICATION (A4 at 96 DPI — Screen Resolution) ===
+Canvas: 794px wide × 1123px tall. Origin (0,0) = top-left corner.
+Safe zone: x: 20–774, y: 20–1103. NEVER place elements outside this zone.
+Standard margins: left=40, right=754, top=40, bottom=1083.
 
 === ELEMENT TYPES (ONLY these are valid) ===
 
@@ -71,15 +75,15 @@ Standard margins: left=40, right=555, top=40, bottom=802.
    style: { width(20–60), height(20–60), zIndex }
 
 === ABSOLUTE RULES ===
-1. CANVAS BOUNDS: x + style.width ≤ 595; y + style.height ≤ 842.
+1. CANVAS BOUNDS: x + style.width ≤ 794; y + style.height ≤ 1123.
 2. HEADING PLACEMENT ON BANNERS (CRITICAL):
    - When you place a heading ON a banner/background shape, the heading must use:
      - type: "heading" (never "text" for a main title)
-     - zIndex: 5 (always above the banner which is at zIndex -1 or 0)
+     - zIndex: 6 (always above the banner which is at zIndex -1 or 0)
      - color: "#ffffff" if the banner is dark, or the primary token if on white
      - x and y must be WITHIN the banner's bounds (not outside)
-   - Example: Banner at {x:0, y:0, width:595, height:180, zIndex:-1}
-     Then heading at {type:"heading", x:40, y:55, style:{width:515, height:70, zIndex:5, color:"#fff", fontSize:44, fontWeight:800}}
+   - Example: Banner at {x:0, y:0, width:794, height:240, zIndex:0}
+     Then heading at {type:"heading", x:40, y:70, style:{width:714, height:90, zIndex:6, color:"#fff", fontSize:56, fontWeight:800}}
 3. HEIGHT CALCULATION (NON-NEGOTIABLE):
    - chars_per_line = (width - padding*2) / (fontSize * 0.52)
    - lines = ceil(content.length / chars_per_line)
@@ -95,8 +99,8 @@ Standard margins: left=40, right=555, top=40, bottom=802.
    - Width and height MUST be equal (square): use 22x22 for inline rows, 32x32 for standalone.
    - For a row of N icons, space them: x = startX + (i * (iconSize + gap))
    - Never place two icons in the same x/y position.
-7. BACKGROUND SHAPES must use: x:0, y:0, width:595, height:842, zIndex:-1.
-   BANNER SHAPES (partial) must use: x:0, y:0, width:595, height:130-200, zIndex:0.
+7. BACKGROUND SHAPES must use: x:0, y:0, width:794, height:1123, zIndex:-1.
+   BANNER SHAPES (partial) must use: x:0, y:0, width:794, height:170-250, zIndex:0.
 
 === Z-INDEX LAYER REFERENCE ===
    -1 → Full-page background fill
@@ -381,16 +385,22 @@ Output ONLY valid JSON. No markdown. No explanation. Just JSON.
         throw new Error(`Only ${totalElements} elements generated — need at least 5`)
       }
 
-      // Ensure pageIndex is set on all elements
-      parsed.pages = parsed.pages.map((page: any, pageIdx: number) => ({
-        ...page,
-        pageIndex: page.pageIndex ?? pageIdx,
-        elements: (page.elements || []).map((el: any, elIdx: number) => ({
+      // Ensure pageIndex is set, then run layout enforcement
+      parsed.pages = parsed.pages.map((page: any, pageIdx: number) => {
+        const rawElements = (page.elements || []).map((el: any, elIdx: number) => ({
           ...el,
           id: el.id || `el-${pageIdx}-${elIdx}-${Date.now()}`,
           pageIndex: el.pageIndex ?? pageIdx
         }))
-      }))
+        // enforceLayout fixes z-index, overflow, collision, icon sizing
+        // inputIs595:false because we now prompt the AI with 794px canvas
+        const fixedElements = enforceLayout(rawElements, { inputIs595: false })
+        return {
+          ...page,
+          pageIndex: page.pageIndex ?? pageIdx,
+          elements: fixedElements
+        }
+      })
 
       result = parsed
       break // Success!
@@ -416,8 +426,8 @@ Output ONLY valid JSON. No markdown. No explanation. Just JSON.
   return NextResponse.json({
     success: true,
     pages: result.pages,
-    width: 595,
-    height: 842,
+    width: CANVAS_WIDTH_PX,    // 794 — correct editor canvas width
+    height: CANVAS_HEIGHT_PX,  // 1123 — correct editor canvas height
     elementCount: result.pages.reduce((sum: number, p: any) => sum + (p.elements?.length || 0), 0),
     pageCount: result.pages.length
   })

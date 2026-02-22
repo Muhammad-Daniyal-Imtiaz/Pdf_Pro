@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import puppeteer from 'puppeteer-core'
 import { z } from 'zod'
+import { CANVAS_WIDTH_PX, CANVAS_HEIGHT_PX } from '@/lib/constants'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -109,6 +110,8 @@ function generateElementHTML(el: any): string {
         overflow-wrap: break-word;
         white-space: pre-wrap;
         overflow: visible;
+        min-height: ${h}px;
+        height: auto;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: geometricPrecision;">${htmlContent}</div>`
@@ -317,7 +320,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const { pages, imageDataUrl, title = 'document', width = 595, height = 842 } = parsed.data
+    const { pages, imageDataUrl, title = 'document', width = CANVAS_WIDTH_PX, height = CANVAS_HEIGHT_PX } = parsed.data
     const pageW = Math.ceil(width)
     const pageH = Math.ceil(height)
 

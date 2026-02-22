@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from 'react'
 import { Sparkles, Wand2, AlertCircle, CheckCircle, Loader2, ChevronDown, Zap, FileText, Layout, RefreshCw, X } from 'lucide-react'
 import { useEditorStore } from '@/app/store/useEditorStore'
+import { enforceLayout } from '@/app/lib/layout-engine'
 
 // ─── Design Token Palettes ────────────────────────────────────────────────────
 const DESIGN_TOKENS: Record<string, {
@@ -345,6 +346,8 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         throw new Error(data.error || 'No pages returned from AI')
       }
 
+      // The server has already run enforceLayout, but run it once more client-side
+      // with the correct page dimensions to catch any edge cases
       const rawElements = data.pages.flatMap((page: any) =>
         (page.elements || []).map((el: any) => ({
           ...el,
@@ -353,10 +356,11 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
       )
 
       updateProgress('⚡ Applying layout...', 90)
-      const { elements, fixed } = validateElements(rawElements)
-      applyLayoutChanges(elements)
+      // enforceLayout is already called server-side; this is a safety pass
+      const fixedElements = enforceLayout(rawElements, { inputIs595: false })
+      applyLayoutChanges(fixedElements as any)
 
-      updateProgress(`✅ Done! ${elements.length} elements${fixed > 0 ? ` (${fixed} auto-fixed)` : ''}`, 100)
+      updateProgress(`✅ Done! ${fixedElements.length} elements`, 100)
       setStatus('success')
 
       setTimeout(() => {
