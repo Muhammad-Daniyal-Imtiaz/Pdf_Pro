@@ -71,47 +71,56 @@ Standard margins: left=40, right=555, top=40, bottom=802.
    style: { width(20–60), height(20–60), zIndex }
 
 === ABSOLUTE RULES ===
-1. x + style.width MUST be ≤ 575; y + style.height MUST be ≤ 820.
-2. HEADING PROMINENCE & VISIBILITY:
-   - Headings MUST use color: "primary" token or absolute high contrast hex.
-   - Headings MUST have zIndex: 5 to ensure they are never covered.
-   - Headings MUST use fontWeight 700 or 800.
-   - If a heading is on a dark background, use #ffffff text color.
+1. CANVAS BOUNDS: x + style.width ≤ 595; y + style.height ≤ 842.
+2. HEADING PLACEMENT ON BANNERS (CRITICAL):
+   - When you place a heading ON a banner/background shape, the heading must use:
+     - type: "heading" (never "text" for a main title)
+     - zIndex: 5 (always above the banner which is at zIndex -1 or 0)
+     - color: "#ffffff" if the banner is dark, or the primary token if on white
+     - x and y must be WITHIN the banner's bounds (not outside)
+   - Example: Banner at {x:0, y:0, width:595, height:180, zIndex:-1}
+     Then heading at {type:"heading", x:40, y:55, style:{width:515, height:70, zIndex:5, color:"#fff", fontSize:44, fontWeight:800}}
 3. HEIGHT CALCULATION (NON-NEGOTIABLE):
    - chars_per_line = (width - padding*2) / (fontSize * 0.52)
    - lines = ceil(content.length / chars_per_line)
-   - height = (lines * fontSize * lineHeight) + (padding * 2) + 16
-   - NEVER use a height smaller than this. Buffer with +16px for safety.
-4. COLLISION PREVENTION: next_y = previous_bottom + gap (24-40px). 
-   - NEVER overlap elements horizontally if they also overlap vertically.
-5. Every id MUST be unique: "el-{pageIndex}-{index}".
-6. zIndex Order: 
-   - -1: Background Full-Page Accent
-   - 0: Surface/Card Backgrounds
-   - 1: Images/Photos
-   - 2: Lines/Dividers
-   - 3: Body Text/Paragraphs
-   - 4: Social Icons/Icons
-   - 5: HEADINGS
+   - height = (lines * fontSize * lineHeight) + (padding * 2) + 20    ← always add 20px buffer
+   - NEVER give a height smaller than this value.
+4. COLLISION PREVENTION for CONTENT elements:
+   - Sort all content elements by y ascending.
+   - For each element, next_y = previous_bottom + gap (minimum 8px, recommended 20px).
+   - EXCEPTION: Elements in different columns (x ranges don't overlap) do NOT need y gaps between them.
+   - DO NOT apply collision rules to background shapes (zIndex -1 or 0).
+5. Every id MUST be unique: use "el-{pageIndex}-{sequenceNumber}".
+6. SOCIAL ICONS:
+   - Width and height MUST be equal (square): use 22x22 for inline rows, 32x32 for standalone.
+   - For a row of N icons, space them: x = startX + (i * (iconSize + gap))
+   - Never place two icons in the same x/y position.
+7. BACKGROUND SHAPES must use: x:0, y:0, width:595, height:842, zIndex:-1.
+   BANNER SHAPES (partial) must use: x:0, y:0, width:595, height:130-200, zIndex:0.
+
+=== Z-INDEX LAYER REFERENCE ===
+   -1 → Full-page background fill
+    0 → Banner / section background shape  
+    1 → Images
+    2 → Lines / dividers
+    3 → Body text / paragraph
+    4 → Social icons
+    5 → HEADINGS (always render on top)
 
 === TYPOGRAPHY SCALE (PRODUCTION GRADE) ===
-- Main Titles (Page 1): fontSize 36–48, fontWeight 800
-- Section Headings: fontSize 18–22, fontWeight 700, primary color
-- Body Text: fontSize 9.5–10.5, fontWeight 400, lineHeight 1.6
-- Labels/Captions: fontSize 8, fontWeight 600, character-spacing
+- Main Page Title: type:"heading", fontSize 36-48, fontWeight 800, zIndex 5
+- Section Headings: type:"heading", fontSize 16-22, fontWeight 700, zIndex 5  
+- Sub-headings: type:"text", fontSize 12-14, fontWeight 600
+- Body Text: type:"text" or "paragraph", fontSize 9-11, fontWeight 400, lineHeight 1.5-1.6
+- Captions/Labels: type:"text", fontSize 7-9, fontWeight 600
 
-=== DESIGN STRATEGIES FOR "WOW" FACTOR ===
-- USE DEPTH: Wrap major sections in a "shape" element (type:shape) acting as a card with:
-  - backgroundColor: "surface" token
-  - borderRadius: 12
-  - boxShadow: "0 4px 20px rgba(0,0,0,0.06)"
-- HERO SECTION: Use a full-width shape (width:595, height:220, x:0, y:0, zIndex:-1) with "primary" color as a top banner.
-- GRID ALIGNMENT: 
-  - Standard Margin: x:40
-  - Narrow Column: 40-180
-  - Wide Column: 200-550
-- SPACING: Use 60px vertical gap between major sections (e.g. between Experience and Education).
-
+=== DESIGN WOW FACTORS ===
+- Use a full-width hero banner (zIndex:0 shape) at top of page 0 with primary token background
+- Always place main title heading directly INSIDE the banner (same y range), with zIndex:5
+- Use box-shadow on section cards: "0 4px 16px rgba(0,0,0,0.08)"
+- Use borderRadius 10-14px on section cards for modern look
+- Horizontal spacing: left margin x:40, right side at x:315 for 2-column
+- Vertical rhythm: 30-40px gap between major sections
 
 === OUTPUT FORMAT (strict JSON, NO markdown) ===
 {
@@ -160,8 +169,8 @@ Summary/Profile paragraph, Experience section with job entries, Skills section, 
 
 Header design:
 - Background shape: x:0, y:0, width:595, height:130, backgroundColor:"${tokens.primary}", zIndex:0
-- Full name: fontSize 38–44, fontWeight 800, color:"#ffffff", y around 45
-- Job title: fontSize 14, fontWeight 400, color:"rgba(255,255,255,0.85)", y around 95
+- Full name: type:"heading", fontSize 38–44, fontWeight 800, color:"#ffffff", y around 45, zIndex:5
+- Job title: type:"text", fontSize 14, fontWeight 400, color:"rgba(255,255,255,0.85)", y around 95, zIndex:4
 
 Contact row (below header around y:145):
 - Social icons for email, phone, linkedin, location — spaced evenly, size 20x20
@@ -182,8 +191,8 @@ Structure: Bold hero section (top 180px) → Executive summary box → 3 content
 
 Hero section:
 - Background: full-width shape, backgroundColor:"${tokens.primary}", height:180
-- Document title: fontSize 32–40, fontWeight 800, color:"#ffffff"
-- Subtitle/tagline: fontSize 13, color:"rgba(255,255,255,0.8)"
+- Document title: type:"heading", fontSize 32–40, fontWeight 800, color:"#ffffff", zIndex:5
+- Subtitle/tagline: type:"text", fontSize 13, color:"rgba(255,255,255,0.8)", zIndex:4
 - Prepared by text: fontSize 9, y near bottom of hero
 
 Content sections (use cards — rounded shapes with backgroundColor:"${tokens.surface}"):

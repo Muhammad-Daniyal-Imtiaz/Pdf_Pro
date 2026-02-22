@@ -201,20 +201,28 @@ function generateElementHTML(el: any): string {
 // ─── Generate full page HTML (mirrors editor canvas exactly) ─────────────────
 function generatePageHTML(elements: any[], width: number, height: number, pageIndex: number): string {
   // Sort by zIndex so rendering order matches browser (painter's algorithm)
-  const sorted = [...elements].sort((a, b) => ((a.style?.zIndex || 0) - (b.style?.zIndex || 0)))
+  const sorted = [...elements].sort((a, b) => ((a.style?.zIndex ?? 0) - (b.style?.zIndex ?? 0)))
 
   return `
-    <div class="page" style="
+    <div class="page-clip" style="
       position: relative;
       width: ${width}px;
       height: ${height}px;
       overflow: hidden;
-      background: white;
       page-break-after: always;
       page-break-inside: avoid;
       box-sizing: border-box;
     ">
-      ${sorted.map(el => generateElementHTML(el)).join('\n')}
+      <div class="page" style="
+        position: relative;
+        width: ${width}px;
+        height: ${height}px;
+        overflow: visible;
+        background: white;
+        box-sizing: border-box;
+      ">
+        ${sorted.map(el => generateElementHTML(el)).join('\n')}
+      </div>
     </div>
   `
 }
@@ -407,11 +415,16 @@ export async function POST(request: NextRequest) {
     }
 
     /* ── Page break control ── */
-    .page {
+    .page-clip {
       page-break-after: always;
       page-break-inside: avoid;
     }
-    .page:last-child { page-break-after: auto; }
+    .page-clip:last-child { page-break-after: auto; }
+
+    /* ── Inner page: overflow visible so z-indexed heading text is never clipped ── */
+    .page {
+      overflow: visible !important;
+    }
   </style>
 
   <!-- Load same fonts as editor (Inter) -->

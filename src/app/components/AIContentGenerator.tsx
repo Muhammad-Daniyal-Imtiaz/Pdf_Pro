@@ -135,107 +135,152 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
   // ── Validate and fix AI elements before applying ─────────────────────────────
   const validateElements = (rawElements: any[]): { elements: any[], fixed: number } => {
     let fixed = 0
-    const elements = rawElements
-      .filter(el => el && typeof el === 'object' && el.type)
-    // Help AI estimate height more realistically (chars_per_line based logic)
-    const estimateHeight = (el: any) => {
+    const PAGE_W = 595
+    const PAGE_H = 842
+
+    // ── Classify element type ──────────────────────────────────────────────────
+    const isBackground = (e: any) =>
+      (e.type === 'shape' || e.type === 'container') &&
+      Number(e.style?.width) >= 400 && Number(e.style?.height) >= 200
+
+    const isFullPageBg = (e: any) =>
+      Number(e.style?.width) >= 550 && Number(e.style?.height) >= 400
+
+    // ── Height estimator ──────────────────────────────────────────────────────
+    const estimateHeight = (el: any): number => {
       if (!['text', 'heading', 'paragraph'].includes(el.type)) return Number(el.style?.height) || 20
-      const width = Number(el.style?.width) || 200
+      const width = Math.max(50, Number(el.style?.width) || 200)
       const fontSize = Number(el.style?.fontSize) || 12
       const content = String(el.content || '')
-      const lineHeight = Number(el.style?.lineHeight) || 1.4
+      const lineHeight = Number(el.style?.lineHeight) || 1.5
       const padding = Number(el.style?.padding) || 0
-
-      const charsPerLine = Math.max(1, (width - (padding * 2)) / (fontSize * 0.55))
-      const lines = Math.ceil(content.length / charsPerLine)
-      const estimatedHeight = Math.ceil((lines * fontSize * lineHeight) + (padding * 2) + 12)
-
-      return Math.max(estimatedHeight, Number(el.style?.height) || 20)
+      const charsPerLine = Math.max(1, (width - padding * 2) / (fontSize * 0.52))
+      const lines = Math.max(1, Math.ceil(content.length / charsPerLine))
+      // Add generous 20px padding buffer so text never clips
+      return Math.ceil(lines * fontSize * lineHeight + padding * 2 + 20)
     }
 
-    const processedElements = elements
+    // ── Assign z-index hierarchy ───────────────────────────────────────────────
+    const Z_LEVELS: Record<string, number> = {
+      container: 0,
+      shape: 0,
+      image: 1,
+      line: 2,
+      text: 3,
+      paragraph: 3,
+      'social-icon': 4,
+      heading: 5,
+    }
+
+    // ── Process each element ───────────────────────────────────────────────────
+    const processed = rawElements
+      .filter(el => el && typeof el === 'object' && el.type)
       .map((el: any, idx: number) => {
         const e = { ...el, style: { ...(el.style || {}) } }
 
         // Ensure unique ID
         if (!e.id) { e.id = `ai-${Date.now()}-${idx}`; fixed++ }
 
-        // Clamp to A4 safe zone (595×842)
-        e.x = Math.max(20, Math.min(Number(e.x) || 20, 555))
-        e.y = Math.max(20, Math.min(Number(e.y) || 20, 800))
-        e.style.width = Math.min(Math.max(Number(e.style.width) || 100, 10), 555 - e.x + 20)
+        // Force numeric coords
+        e.x = Number(e.x) || 0
+        e.y = Number(e.y) || 0
+        e.style.width = Number(e.style.width) || 100
+        e.style.height = Number(e.style.height) || 40
 
-        // Use estimated height if visual content exceeds requested height
+        // ── Background / hero shape: allow x:0 y:0 edge-to-edge ──────────────
+        if (isBackground(e)) {
+          e.x = Math.max(0, Math.min(e.x, 100))          // allow near-zero x
+          e.y = Math.max(0, Math.min(e.y, 100))          // allow near-zero y
+          e.style.width = Math.min(e.style.width, PAGE_W)
+          e.style.height = Math.min(e.style.height, PAGE_H)
+          if (isFullPageBg(e)) {
+            e.style.zIndex = (e.style.zIndex == null || e.style.zIndex >= 0) ? -1 : e.style.zIndex
+          } else {
+            e.style.zIndex = 0
+          }
+          return e
+        }
+
+        // ── Content elements: clamp to safe zone ─────────────────────────────
+        e.x = Math.max(10, Math.min(e.x, PAGE_W - 40))
+        e.y = Math.max(10, Math.min(e.y, PAGE_H - 20))
+        e.style.width = Math.min(Math.max(e.style.width, 20), PAGE_W - e.x)
         const estH = estimateHeight(e)
-        e.style.height = Math.min(Math.max(Number(e.style.height) || 20, estH), 800 - e.y + 20)
+        e.style.height = Math.min(Math.max(e.style.height, estH), PAGE_H - e.y)
 
-        // Fix text-specific
+        // ── Text-specific defaults ────────────────────────────────────────────
         if (['text', 'heading', 'paragraph'].includes(e.type)) {
           e.style.fontSize = Math.max(7, Math.min(Number(e.style.fontSize) || 12, 72))
-          e.content = e.content || 'Text'
-          if (!e.style.color) e.style.color = '#1a1a1a'
-          if (!e.style.fontFamily) e.style.fontFamily = 'Inter, Arial, sans-serif'
-          if (!e.style.lineHeight) e.style.lineHeight = 1.4
+          e.content = e.content || (e.type === 'heading' ? 'Heading' : 'Text')
+          e.style.color = e.style.color || '#1a1a1a'
+          e.style.fontFamily = e.style.fontFamily || 'Inter, Arial, sans-serif'
+          e.style.lineHeight = e.style.lineHeight || 1.5
           e.style.resizeMode = 'auto-both'
+          // Ensure text is NEVER transparent
+          if (e.style.color === 'transparent' || e.style.color === 'rgba(0,0,0,0)') {
+            e.style.color = '#1a1a1a'; fixed++
+          }
         }
 
-        // Fix zIndex (FORCE hierarchy for production grade stacking)
-        const zLevels: Record<string, number> = {
-          container: 0,
-          shape: 0,
-          image: 1,
-          line: 2,
-          text: 3,
-          paragraph: 3,
-          'social-icon': 4,
-          heading: 5
+        // ── Social icon size constraints ──────────────────────────────────────
+        if (e.type === 'social-icon') {
+          e.style.width = Math.max(16, Math.min(e.style.width, 48))
+          e.style.height = Math.max(16, Math.min(e.style.height, 48))
         }
-        e.style.zIndex = zLevels[e.type] ?? (e.style.zIndex || 2)
 
-        // Ensure background is always at bottom if it's full-page
-        if (e.type === 'shape' && e.style.width > 500 && e.style.height > 700) {
-          e.style.zIndex = -1
+        // ── Assign z-index ────────────────────────────────────────────────────
+        const naturalZ = Z_LEVELS[e.type] ?? 2
+        // If AI already assigned a reasonable z, respect it; otherwise use our hierarchy
+        if (e.style.zIndex == null || e.style.zIndex === 0 && e.type !== 'shape') {
+          e.style.zIndex = naturalZ
+        } else {
+          // Headings must ALWAYS be at least z:5
+          if (e.type === 'heading') e.style.zIndex = Math.max(5, e.style.zIndex)
+          // Shapes that aren't backgrounds max at z:2
+          if (e.type === 'shape') e.style.zIndex = Math.min(e.style.zIndex, 2)
         }
 
         return e
       })
 
-    // SORT BY Y FOR SEQUENTIAL PUSH-DOWN LOGIC
-    const finalElements = [...processedElements].sort((a, b) => a.y - b.y)
+    // ── Sort content elements by Y for collision pass ──────────────────────────
+    const backgrounds = processed.filter(e => isBackground(e))
+    const contentEls = processed.filter(e => !isBackground(e)).sort((a, b) => a.y - b.y)
 
-    // STRICT COLLISION PREVENTION (Sequential Push-down)
-    for (let i = 0; i < finalElements.length; i++) {
-      const current = finalElements[i]
+    // ── Collision prevention (content elements only) ───────────────────────────
+    for (let i = 0; i < contentEls.length; i++) {
+      const cur = contentEls[i]
+      const curBottom = cur.y + (cur.style.height || 20)
+      const curRight = cur.x + (cur.style.width || 100)
 
-      // SKIP: Don't let backgrounds or very low z-index elements push others
-      if (current.style.zIndex < 0) continue
-      if (current.type === 'shape' && (current.style.width > 400 || current.style.height > 600)) continue
+      for (let j = i + 1; j < contentEls.length; j++) {
+        const nxt = contentEls[j]
 
-      const currentBottom = current.y + (current.style.height || 20)
+        // If nxt has higher z it is intentionally layered on top — skip
+        if (nxt.style.zIndex > cur.style.zIndex) continue
 
-      // Look at all elements after this one that might overlap horizontally
-      for (let j = i + 1; j < finalElements.length; j++) {
-        const next = finalElements[j]
+        const nxtRight = nxt.x + (nxt.style.width || 100)
 
-        // SKIP: Don't push backgrounds
-        if (next.style.zIndex < 0) continue
+        // Check real horizontal overlap
+        const overlapX = !(nxt.x >= curRight || nxtRight <= cur.x)
+        if (!overlapX) continue  // side-by-side columns — no clash
 
-        // Define bounding boxes
-        const curX2 = current.x + (current.style.width || 100)
-        const nxtX2 = next.x + (next.style.width || 100)
-
-        // Check for horizontal overlap
-        const hasHorizontalOverlap = !(next.x >= curX2 || nxtX2 <= current.x)
-
-        if (hasHorizontalOverlap && next.y < currentBottom + 12) {
-          // Push down next element
-          next.y = currentBottom + 12
+        // Check vertical clash
+        if (nxt.y < curBottom + 8) {
+          nxt.y = curBottom + 8
           fixed++
         }
       }
     }
 
-    return { elements: finalElements, fixed }
+    // ── Clamp all content elements to page height ──────────────────────────────
+    for (const e of contentEls) {
+      if (e.y + e.style.height > PAGE_H - 5) {
+        e.style.height = Math.max(20, PAGE_H - e.y - 5)
+      }
+    }
+
+    return { elements: [...backgrounds, ...contentEls], fixed }
   }
 
   // ── SMART LAYOUT GENERATION ──────────────────────────────────────────────────
