@@ -358,7 +358,7 @@ Each element MUST have:
     "color": "#hex",
     "textAlign": "left|center|right",
     "lineHeight": 1.5|1.6,
-    "resizeMode": "auto-height",
+    "resizeMode": "auto-both",
     "backgroundColor": "#hex" (for containers),
     "borderRadius": number (for containers),
     "padding": number
@@ -444,24 +444,24 @@ ELEMENT SCHEMA (STRICT):
       "textAlign": "left" | "center" | "right",
       "lineHeight": 1.5 | 1.6,
       "padding": number,
-      "resizeMode": "auto-height" | "auto-width" | "auto-both" | "fixed",
+      "resizeMode": "auto-both" | "auto-width" | "auto-height" | "fixed",
       "opacity": number
     }
   }
 ]
 
-LAYOUT QUALITY RULES:
-1) GLOBAL GRID AND RHYTHM
-- Use a consistent left margin (x ≈ 80) for main text columns.
-- Align headings, paragraphs, and containers to the same column grid.
-- Maintain 32–40px vertical spacing between sections.
-- Avoid placing content closer than 40px to page edges.
-
-2) TYPOGRAPHY AND HIERARCHY
-- Use large, bold headings for main titles (fontSize 28–36, fontWeight 700).
-- Use section headings at 20–24px, bold, with clear separation.
-- Use body text at 13–15px, lineHeight 1.5–1.6, color around #374151.
-- Use subtle muted text (#64748b) for metadata, small labels, and captions.
+3) PRODUCTION-GRADE LAYOUT RULES
+- VERTICAL RHYTHM: Use a strict "Stack" approach. next_y = prev_y + prev_height + gap (24-40px).
+- COLLISION PREVENTION: NEVER overlap elements. Horizontal overlaps are fine if vertical gap is at least 32px.
+- HEIGHT CALCULATION: 
+  * chars_per_line = (width - padding*2) / (fontSize * 0.55)
+  * lines = ceil(content.length / chars_per_line)
+  * height = (lines * fontSize * lineHeight) + (padding * 2) + 12
+- SAFE ZONE: Keep all elements within x:60-730 and y:60-1060.
+- TYPOGRAPHY: 
+  * Main Title: 32-42px, weight 800
+  * Section Titles: 18-22px, weight 700, margin-bottom 12px
+  * Body: 11-13px, weight 400, line-height 1.6
 
 3) PROFESSIONAL REPORT / ARTICLE STYLE (when the prompt mentions "report", "analysis", "insights", etc.)
 - Create a hero header at the top of page 0:

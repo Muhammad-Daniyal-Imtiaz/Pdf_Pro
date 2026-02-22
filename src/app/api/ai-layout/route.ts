@@ -1,220 +1,136 @@
+// app/api/ai-layout/route.ts
+// ─────────────────────────────────────────────────────────────────────────────
+// AI LAYOUT INTELLIGENCE ENGINE v3
+// Modifies existing canvas layouts based on natural language instructions
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextRequest, NextResponse } from 'next/server'
-import { aiService } from '@/app/lib/ai-service'
-import { processAIGeneratedElements, findNextAvailableY, LayoutBounds } from '@/app/lib/server-text-measurement'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
-/**
- * PRODUCTION-GRADE AI Layout API
- * Processes AI-generated layouts with full component support and pixel-perfect precision
- */
-export async function POST(req: NextRequest) {
-    const startTime = Date.now()
-    
+export const runtime = 'nodejs'
+export const maxDuration = 30
+export const dynamic = 'force-dynamic'
+
+const genAI = new GoogleGenerativeAI(
+    process.env.GEMINI_API_KEY ||
+    process.env.GOOGLE_API_KEY ||
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
+    ''
+)
+
+const LAYOUT_SYSTEM_PROMPT = `You are an expert PDF layout editor AI. You receive the CURRENT state of a PDF canvas and user instructions to modify it.
+
+=== CANVAS ===
+A4: 595px wide × 842px tall. Origin top-left. Safe zone: x:20-575, y:20-820.
+
+=== YOUR TASK ===
+Analyze the current elements and the user's instruction.
+Return ONLY the elements that need to be MODIFIED or ADDED.
+- To MODIFY an existing element: include its exact id with updated properties
+- To ADD a new element: give it a NEW unique id starting with "new-"
+- To DELETE an element: include { id: "...", _delete: true }
+- If an element doesn't need changes, DO NOT include it in the response
+
+=== ELEMENT SCHEMA ===
+{ id, type("text"|"shape"|"line"|"image"|"social-icon"), x, y,
+  content(for text), iconType(for social-icon), lineOrientation(for line),
+  style: { width, height, fontSize, fontWeight, color, fontFamily,
+           textAlign, backgroundColor, padding, lineHeight, zIndex, 
+           borderRadius, opacity, letterSpacing } }
+
+=== RULES ===
+- NEVER move elements outside x:20-575 or y:20-820
+- Preserve element IDs exactly as given (for modifications)
+- Only return elements that actually changed
+- For text elements, preserve existing content unless asked to change it
+- When moving groups, maintain relative spacing between group members
+- zIndex: shape=0, line=2, text=3, social-icon=3
+
+=== RESPONSE FORMAT (strict JSON, NO markdown) ===
+{ "changes": [ ...modified/new/deleted elements ], "summary": "brief description of what was changed" }
+`
+
+export async function POST(request: NextRequest) {
+    let body: any
     try {
-        const { prompt, context, pageCount = 1 } = await req.json()
+        body = await request.json()
+    } catch {
+        return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    }
 
-        if (!prompt) {
-            return NextResponse.json({ 
-                success: false,
-                error: 'Prompt is required',
-                details: 'Please provide a prompt for AI layout generation'
-            }, { status: 400 })
+    const prompt = String(body.prompt || '').slice(0, 1000)
+    const context = body.context
+
+    if (!prompt) {
+        return NextResponse.json({ error: 'Prompt is required' }, { status: 400 })
+    }
+
+    if (!context || !context.pages) {
+        return NextResponse.json({ error: 'Canvas context is required' }, { status: 400 })
+    }
+
+    // Build context description — compact but complete
+    const contextDescription = `CURRENT CANVAS STATE:
+Pages: ${context.pageCount || context.pages?.length || 1}
+${(context.pages || []).map((page: any, pi: number) => `
+Page ${pi + 1} (${page.elements?.length || 0} elements):
+${(page.elements || []).map((el: any) => `  [${el.id}] ${el.type} at (${el.x},${el.y}) size ${el.style?.width}×${el.style?.height}${el.content ? ` content: "${String(el.content).slice(0, 60)}${el.content.length > 60 ? '...' : ''}"` : ''}${el.style?.fontSize ? ` fontSize:${el.style.fontSize}` : ''}${el.style?.color ? ` color:${el.style.color}` : ''}${el.style?.backgroundColor ? ` bg:${el.style.backgroundColor}` : ''}${el.style?.fontWeight ? ` weight:${el.style.fontWeight}` : ''}${el.style?.zIndex !== undefined ? ` z:${el.style.zIndex}` : ''}`).join('\n')}`).join('\n')
         }
 
-        console.log(`🧠 Processing Layout Intelligence for: "${prompt.substring(0, 50)}..." (${pageCount} page${pageCount > 1 ? 's' : ''})`)
+USER INSTRUCTION: "${prompt}"
 
-        // Generate layout from AI with enhanced error handling
-        let layoutChanges
+Analyze the current state and return the minimal set of changes needed.`
+
+    const model = genAI.getGenerativeModel({
+        model: 'gemini-flash-latest',
+        systemInstruction: LAYOUT_SYSTEM_PROMPT,
+        generationConfig: {
+            temperature: 0.4, // Lower temp for precise, predictable layout changes
+            maxOutputTokens: 8192,
+            responseMimeType: 'application/json',
+        }
+    })
+
+    try {
+        const response = await model.generateContent(contextDescription)
+        const text = response.response.text()
+
+        let result: any
         try {
-            layoutChanges = await aiService.generateLayoutUpdate(prompt, context || '[]')
-        } catch (aiError) {
-            console.error('AI Service Error:', aiError)
-            return NextResponse.json({
-                success: false,
-                error: 'AI generation failed',
-                details: aiError instanceof Error ? aiError.message : 'Unknown AI error'
-            }, { status: 500 })
+            result = JSON.parse(text)
+        } catch {
+            const cleaned = text.replace(/^```(?: json) ?\n ? /m, '').replace(/\n ? ```$/m, '').trim()
+            result = JSON.parse(cleaned)
         }
 
-        if (!layoutChanges || !Array.isArray(layoutChanges) || layoutChanges.length === 0) {
-            return NextResponse.json({
-                success: false,
-                error: 'No layout elements generated',
-                details: 'AI failed to generate any layout elements'
-            }, { status: 500 })
+        if (!result.changes || !Array.isArray(result.changes)) {
+            throw new Error('Response missing changes array')
         }
 
-        // Process and enhance AI-generated elements
-        console.log(`📏 Processing ${layoutChanges.length} elements for production...`)
-        
-        // First pass: ensure all elements have proper dimensions
-        let processedChanges
-        try {
-            processedChanges = processAIGeneratedElements(layoutChanges)
-        } catch (processingError) {
-            console.error('Element Processing Error:', processingError)
-            return NextResponse.json({
-                success: false,
-                error: 'Element processing failed',
-                details: processingError instanceof Error ? processingError.message : 'Processing error'
-            }, { status: 500 })
-        }
-        
-        // Distribute elements across pages with intelligent layout
-        const pages: any[] = []
-        const elementsPerPage = Math.max(1, Math.ceil(processedChanges.length / pageCount))
-        
-        for (let pageIdx = 0; pageIdx < pageCount; pageIdx++) {
-            const startIndex = pageIdx * elementsPerPage
-            const endIndex = Math.min(startIndex + elementsPerPage, processedChanges.length)
-            const pageElements = processedChanges.slice(startIndex, endIndex)
-            
-            const existingElements: LayoutBounds[] = []
-            const processedPageElements = pageElements.map((change, index) => {
-                const isTextElement = ['heading', 'paragraph', 'text', 'link'].includes(change.type)
-                const isContainer = change.type === 'container'
-                const isLine = change.type === 'line'
-                const isIcon = change.type === 'social-icon'
-                const isImage = change.type === 'image'
-                
-                // Calculate proper dimensions with production-grade precision
-                const width = change.style?.width || (change.type === 'heading' ? 674 : 500)
-                const height = change.style?.height || (isTextElement ? 60 : 100)
-                
-                const newElement: LayoutBounds = {
-                    x: change.x || 60,
-                    y: change.y || 80,
-                    width,
-                    height
-                }
-                
-                // Smart collision prevention
-                const adjustedY = findNextAvailableY(newElement, existingElements, newElement.y, 30)
-                
-                // Add to existing elements for next iteration
-                existingElements.push({
-                    ...newElement,
-                    y: adjustedY
-                })
-                
-                // Professional styling based on element type
-                let enhancedStyle = { ...change.style }
-                
-                // HEADING: Bold, centered, full width
-                if (change.type === 'heading') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        width: 674,
-                        fontWeight: 700, // BOLD heading
-                        textAlign: enhancedStyle.textAlign || 'center',
-                        resizeMode: 'auto-height',
-                        color: enhancedStyle.color || '#1a1a1a',
-                        fontSize: enhancedStyle.fontSize || 32,
-                    }
-                }
-                
-                // PARAGRAPH: Body text with proper line height
-                if (change.type === 'paragraph') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        width: enhancedStyle.width || 500,
-                        resizeMode: 'auto-height',
-                        fontSize: enhancedStyle.fontSize || 14,
-                        fontWeight: 400,
-                        lineHeight: 1.6,
-                        color: enhancedStyle.color || '#374151',
-                    }
-                }
-                
-                // TEXT: Small labels/metadata
-                if (change.type === 'text') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        width: enhancedStyle.width || 300,
-                        fontSize: enhancedStyle.fontSize || 12,
-                        color: enhancedStyle.color || '#64748b',
-                        resizeMode: enhancedStyle.resizeMode || 'auto-width',
-                    }
-                }
-                
-                // CONTAINER: Cards with subtle styling
-                if (change.type === 'container') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        backgroundColor: enhancedStyle.backgroundColor || '#f8fafc',
-                        borderRadius: enhancedStyle.borderRadius || 8,
-                        borderWidth: enhancedStyle.borderWidth ?? 1,
-                        borderColor: enhancedStyle.borderColor || '#e2e8f0',
-                        padding: enhancedStyle.padding || 16,
-                        resizeMode: 'auto-height',
-                    }
-                }
-                
-                // LINE: Dividers
-                if (change.type === 'line') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        backgroundColor: enhancedStyle.backgroundColor || '#cbd5e1',
-                        height: enhancedStyle.height || 2,
-                    }
-                }
-                
-                // SOCIAL-ICON: Fixed size
-                if (change.type === 'social-icon') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        width: enhancedStyle.width || 24,
-                        height: enhancedStyle.height || 24,
-                        resizeMode: 'fixed',
-                    }
-                }
-                
-                // IMAGE: Fixed size
-                if (change.type === 'image') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        resizeMode: 'fixed',
-                    }
-                }
-                
-                // LINK: Colored text
-                if (change.type === 'link') {
-                    enhancedStyle = {
-                        ...enhancedStyle,
-                        color: '#2563eb',
-                        resizeMode: 'auto-width',
-                    }
-                }
-                
-                return {
-                    ...change,
-                    pageIndex: pageIdx,
-                    y: adjustedY,
-                    style: enhancedStyle
-                }
-            })
-            
-            pages.push(...processedPageElements)
-        }
-        
-        console.log(`✅ Processed ${processedChanges.length} elements across ${pageCount} page${pageCount > 1 ? 's' : ''} with professional styling`)
+        // Clamp all returned elements to safe zone
+        const safeChanges = result.changes.map((el: any) => {
+            if (el._delete) return el
+            const e = { ...el, style: { ...(el.style || {}) } }
+            e.x = Math.max(20, Math.min(Number(e.x) || 20, 575))
+            e.y = Math.max(20, Math.min(Number(e.y) || 20, 820))
+            if (e.style.width) e.style.width = Math.min(Number(e.style.width), 575 - e.x + 20)
+            if (e.style.height) e.style.height = Math.min(Number(e.style.height), 820 - e.y + 20)
+            if (e.style.fontSize) e.style.fontSize = Math.max(7, Math.min(Number(e.style.fontSize), 72))
+            return e
+        })
 
         return NextResponse.json({
             success: true,
-            changes: pages.flat(),
-            meta: {
-                elementCount: processedChanges.length,
-                pageCount: pageCount,
-                types: processedChanges.reduce((acc, el) => {
-                    acc[el.type] = (acc[el.type] || 0) + 1
-                    return acc
-                }, {} as Record<string, number>)
-            }
+            changes: safeChanges,
+            summary: result.summary || 'Layout updated',
+            changesCount: safeChanges.length
         })
 
-    } catch (error: any) {
-        console.error('❌ AI Layout Intelligence Error:', error)
-        return NextResponse.json({
-            error: error.message || 'Failed to generate layout updates'
-        }, { status: 500 })
+    } catch (err: any) {
+        console.error('[ai-layout] Error:', err)
+        return NextResponse.json(
+            { error: err.message || 'Layout AI failed', success: false },
+            { status: 500 }
+        )
     }
 }

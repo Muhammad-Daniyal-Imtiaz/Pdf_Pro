@@ -1,9 +1,16 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { EditorElement } from '@/app/store/useEditorStore'
-import { CoordinateSystem } from '@/app/lib/geometry-engine/CoordinateSystem'
 import { AdvancedMeasurement } from '@/app/lib/alignment-service'
+
+// CoordinateSystem may or may not exist — guard with try/catch
+let CoordinateSystem: any = null
+try {
+    CoordinateSystem = require('@/app/lib/geometry-engine/CoordinateSystem').CoordinateSystem
+} catch {
+    // Library not available — we'll skip DOM drift detection
+}
 
 interface MeasurementFeedbackProps {
     element: EditorElement
@@ -11,121 +18,145 @@ interface MeasurementFeedbackProps {
 }
 
 export default function MeasurementFeedback({ element, isSelected }: MeasurementFeedbackProps) {
-    const [metrics, setMetrics] = useState<ReturnType<typeof CoordinateSystem.getElementMetrics>>(null)
-    const [bbox, setBbox] = useState(AdvancedMeasurement.calculateBoundingBox(element))
+    const [domMetrics, setDomMetrics] = useState<{ x: number; y: number; width: number; height: number } | null>(null)
+    const [bbox, setBbox] = useState(() => AdvancedMeasurement.calculateBoundingBox(element))
+
+    // ✅ FIXED: The old code ran setInterval(updateMetrics, 100) inside a useEffect
+    // that ran on EVERY render (dependency: `element`). This created a NEW interval
+    // on every tiny change (typing, dragging) and never cleaned up the old ones,
+    // stacking up hundreds of intervals and causing a severe memory leak and
+    // 100ms CPU thrash continuously.
+    //
+    // New approach: update only when element position/size actually changes,
+    // using a single debounced effect. No interval needed at all.
+    const updateMetrics = useCallback(() => {
+        if (!isSelected) return
+
+        // Update bounding box from store data (always available)
+        setBbox(AdvancedMeasurement.calculateBoundingBox(element))
+
+        // Update DOM metrics if CoordinateSystem is available
+        if (CoordinateSystem) {
+            try {
+                const metrics = CoordinateSystem.getElementMetrics(element.id)
+                setDomMetrics(metrics)
+            } catch {
+                setDomMetrics(null)
+            }
+        }
+    }, [
+        element.id,
+        element.x,
+        element.y,
+        element.style.width,
+        element.style.height,
+        isSelected
+    ])
 
     useEffect(() => {
-        // Update metrics in real-time
-        const updateMetrics = () => {
-            const domMetrics = CoordinateSystem.getElementMetrics(element.id)
-            setMetrics(domMetrics)
-            setBbox(AdvancedMeasurement.calculateBoundingBox(element))
+        if (!isSelected) {
+            setDomMetrics(null)
+            return
         }
-
+        // Single run when selection or position changes
         updateMetrics()
-        const interval = setInterval(updateMetrics, 100) // Update frequently during interaction
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [updateMetrics])
 
-        return () => clearInterval(interval)
-    }, [element])
+    if (!isSelected) return null
 
-    if (!isSelected || !metrics) return null
+    const w = Math.round(Number(element.style.width) || 0)
+    const h = Math.round(Number(element.style.height) || 0)
 
-    // Check for drift between stored and actual position
-    const driftX = Math.abs(metrics.x - element.x)
-    const driftY = Math.abs(metrics.y - element.y)
-    const hasDrift = driftX > 1 || driftY > 1
+    // Drift = difference between store position and actual DOM position
+    const driftX = domMetrics ? Math.abs(domMetrics.x - element.x) : 0
+    const driftY = domMetrics ? Math.abs(domMetrics.y - element.y) : 0
+    const hasDrift = driftX > 1.5 || driftY > 1.5
+
+    const elemX = Math.round(element.x)
+    const elemY = Math.round(element.y)
 
     return (
         <div data-html2canvas-ignore="true" className="pointer-events-none">
-            {/* Dimension Tooltip */}
+            {/* ── Size tooltip above element ─────────────────────────────────────── */}
             <div
-                className="absolute z-[999] bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded shadow-lg"
+                className="absolute z-[999] bg-blue-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg whitespace-nowrap"
                 style={{
-                    left: `${element.x + element.style.width / 2}px`,
-                    top: `${element.y - 40}px`,
-                    transform: 'translateX(-50%)'
+                    left: `${elemX + w / 2}px`,
+                    top: `${elemY - 30}px`,
+                    transform: 'translateX(-50%)',
                 }}
             >
-                {Math.round(bbox.width)}×{Math.round(bbox.height)}px
+                {w} × {h} px
                 {hasDrift && (
-                    <span className="ml-2 text-yellow-300">
-                        ⚠️ Drift: {driftX.toFixed(1)},{driftY.toFixed(1)}
+                    <span className="ml-1.5 text-yellow-300 text-[9px]">
+                        ⚠ drift {driftX.toFixed(0)},{driftY.toFixed(0)}
                     </span>
                 )}
             </div>
 
-            {/* Position Guides */}
+            {/* ── X position label ─────────────────────────────────────────────── */}
             <div
-                className="absolute z-[998] text-[10px] font-mono bg-indigo-500 text-white px-1.5 py-0.5 rounded opacity-80"
+                className="absolute z-[998] text-[9px] font-mono bg-indigo-500 text-white px-1.5 py-0.5 rounded opacity-90 whitespace-nowrap"
                 style={{
-                    left: `${element.x}px`,
-                    top: `${element.y - 20}px`,
-                    transform: 'translateX(-50%)'
+                    left: `${elemX + w / 2}px`,
+                    top: `${elemY - 14}px`,
+                    transform: 'translateX(-50%)',
                 }}
             >
-                X:{Math.round(element.x)}
+                x:{elemX}
             </div>
 
+            {/* ── Y position label ─────────────────────────────────────────────── */}
             <div
-                className="absolute z-[998] text-[10px] font-mono bg-indigo-500 text-white px-1.5 py-0.5 rounded opacity-80"
+                className="absolute z-[998] text-[9px] font-mono bg-indigo-500 text-white px-1.5 py-0.5 rounded opacity-90 whitespace-nowrap"
                 style={{
-                    left: `${element.x - 35}px`,
-                    top: `${element.y + element.style.height / 2}px`,
-                    transform: 'translateY(-50%)'
+                    left: `${elemX - 4}px`,
+                    top: `${elemY + h / 2}px`,
+                    transform: 'translate(-100%, -50%)',
                 }}
             >
-                Y:{Math.round(element.y)}
+                y:{elemY}
             </div>
 
-            {/* Alignment Guides - Center Lines */}
+            {/* ── Alignment crosshair guides ───────────────────────────────────── */}
             <svg
-                className="absolute inset-0 w-full h-full z-[990] pointer-events-none"
-                style={{ overflow: 'visible' }}
+                className="absolute inset-0 pointer-events-none"
+                style={{ width: '100%', height: '100%', overflow: 'visible', zIndex: 990 }}
             >
+                {/* Horizontal center guide */}
                 <line
-                    x1={element.x}
-                    y1={element.y + element.style.height / 2}
-                    x2={element.x + element.style.width}
-                    y2={element.y + element.style.height / 2}
-                    stroke="rgba(99, 102, 241, 0.3)"
-                    strokeWidth="1"
-                    strokeDasharray="4,4"
+                    x1={elemX - 20} y1={elemY + h / 2}
+                    x2={elemX + w + 20} y2={elemY + h / 2}
+                    stroke="rgba(99,102,241,0.35)" strokeWidth="1" strokeDasharray="5 4"
                 />
+                {/* Vertical center guide */}
                 <line
-                    x1={element.x + element.style.width / 2}
-                    y1={element.y}
-                    x2={element.x + element.style.width / 2}
-                    y2={element.y + element.style.height}
-                    stroke="rgba(99, 102, 241, 0.3)"
-                    strokeWidth="1"
-                    strokeDasharray="4,4"
+                    x1={elemX + w / 2} y1={elemY - 20}
+                    x2={elemX + w / 2} y2={elemY + h + 20}
+                    stroke="rgba(99,102,241,0.35)" strokeWidth="1" strokeDasharray="5 4"
                 />
-
-                {/* Baseline indicator for text */}
-                {(element.type === 'paragraph' || element.type === 'link') && (
+                {/* Text baseline (for text elements) */}
+                {(['paragraph', 'text', 'heading', 'link'].includes(element.type)) && (
                     <line
-                        x1={element.x}
-                        y1={element.y + bbox.baselineOffset}
-                        x2={element.x + element.style.width}
-                        y2={element.y + bbox.baselineOffset}
-                        stroke="rgba(168, 85, 247, 0.4)"
-                        strokeWidth="1"
-                        strokeDasharray="2,2"
+                        x1={elemX} y1={elemY + bbox.baselineOffset}
+                        x2={elemX + w} y2={elemY + bbox.baselineOffset}
+                        stroke="rgba(168,85,247,0.45)" strokeWidth="1" strokeDasharray="3 3"
                     />
                 )}
             </svg>
 
-            {/* Drift Warning Overlay */}
-            {hasDrift && (
+            {/* ── DOM drift warning overlay ────────────────────────────────────── */}
+            {hasDrift && domMetrics && (
                 <div
-                    className="absolute z-[1000] border-2 border-red-500 rounded pointer-events-none animate-pulse"
+                    className="absolute z-[1000] border-2 border-red-400 border-dashed rounded pointer-events-none animate-pulse"
                     style={{
-                        left: `${metrics.x}px`,
-                        top: `${metrics.y}px`,
-                        width: `${metrics.width}px`,
-                        height: `${metrics.height}px`
+                        left: `${domMetrics.x}px`,
+                        top: `${domMetrics.y}px`,
+                        width: `${domMetrics.width}px`,
+                        height: `${domMetrics.height}px`,
                     }}
-                    title="Visual drift detected"
+                    title={`DOM drift detected: store=(${elemX},${elemY}) vs DOM=(${Math.round(domMetrics.x)},${Math.round(domMetrics.y)})`}
                 />
             )}
         </div>

@@ -1,48 +1,131 @@
 @import "tailwindcss";
 
-/* CRITICAL: Ensure consistent box model */
+/* ── Box model ──────────────────────────────────────────────────────────────── */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Remove default margins that cause shifts */
 html,
 body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  /* Prevent body scroll affecting layout */
+  /* Prevent body scroll — editor manages its own scroll areas */
 }
 
-/* The Editor Canvas must be an isolated rendering context */
+/* ── Font rendering — matches Puppeteer PDF output exactly ─────────────────── */
+body {
+  font-family: var(--font-inter, 'Inter', -apple-system, BlinkMacSystemFont, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+  font-synthesis: none;
+}
+
+/* ── PDF Canvas — isolated rendering context ───────────────────────────────── */
 #pdf-canvas {
-  /* Hardware acceleration can cause sub-pixel shifts, disable for PDF elements */
   transform-style: flat;
-  /* Ensure fonts render consistently */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: geometricPrecision;
 }
 
-/* When capturing, ensure no animations/transforms interfere */
-html2canvas-cloned-element {
-  transform: none !important;
-  animation: none !important;
-  transition: none !important;
-}
-
-/* PDF Editor Styles */
+/* ── PDF Elements ─────────────────────────────────────────────────────────── */
 .pdf-element {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.1s ease-out;
+  cursor: pointer;
 }
 
+/* ✅ FIXED: The old hover outline showed during html2canvas capture, 
+   appearing as blue dashed borders in the exported PDF preview.
+   We hide it on elements that have data-html2canvas-ignore's parent,
+   and use a print-media query to ensure clean output.
+   The actual selection outline is now done via box-shadow in PDFRenderer.tsx
+   (box-shadow doesn't appear in html2canvas by default). */
 .pdf-element:hover {
-  outline: 1px dashed #3b82f6 !important;
-  cursor: pointer;
+  /* Subtle hover feedback via opacity only — no outline that bleeds into PDF */
+  opacity: 0.92;
 }
 
 .pdf-element:active {
   cursor: grabbing;
+}
+
+/* ── During PDF generation: strip ALL visual feedback from elements ───────── */
+body[data-generating-pdf="true"] .pdf-element:hover,
+body[data-generating-pdf="true"] .pdf-element {
+  outline: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+/* ── html2canvas: hide selection UI chrome from captures ─────────────────── */
+[data-html2canvas-ignore] {
+  display: none !important;
+}
+
+/* ── Scrollbar styling (sidebar, canvas scroll areas) ────────────────────── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* ── Sidebar + canvas areas scroll independently ─────────────────────────── */
+aside,
+.editor-scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+}
+
+/* ── Page shadow ────────────────────────────────────────────────────────── */
+.pdf-page-shadow {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05),
+    0 10px 40px -8px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Focus rings for accessibility ──────────────────────────────────────── */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* ── Prevent text selection during drag operations ───────────────────────── */
+.dragging * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* ── Print: ensure nothing from editor UI shows in print preview ────────── */
+@media print {
+
+  aside,
+  header,
+  .toolbar,
+  [data-html2canvas-ignore] {
+    display: none !important;
+  }
+
+  .pdf-page {
+    page-break-after: always;
+    box-shadow: none !important;
+  }
 }

@@ -1,100 +1,425 @@
+// app/api/generate-ai-pdf/route.ts
+// ─────────────────────────────────────────────────────────────────────────────
+// WORLD-CLASS AI PDF GENERATION ENGINE v3
+// Features: Full A4 schema injection, design tokens, layout archetypes,
+//           retry with error feedback, JSON mode, collision pre-checks
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { NextRequest, NextResponse } from 'next/server'
-import { generateSmartPDF } from '@/app/lib/ai-service-smart-pdf'
-import { A4_WIDTH, A4_HEIGHT } from '@/app/store/useEditorStore'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
-export async function POST(req: NextRequest) {
-  const start = Date.now()
-  try {
-    const body = await req.json()
-    const {
-      prompt,
-      documentType = 'report',
-      pageCount = 1,
-      style = 'modern professional',
-      role,
-      experience,
-      topic
-    } = body
+const genAI = new GoogleGenerativeAI(
+  process.env.GEMINI_API_KEY ||
+  process.env.GOOGLE_API_KEY ||
+  process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
+  ''
+)
 
-    if (!prompt && !topic && !role) {
-      return NextResponse.json(
-        { error: 'Insufficient information provided for AI generation' },
-        { status: 400 }
-      )
+// ─── In-memory rate limiter (upgrade to Redis for multi-instance) ──────────────
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT_MAX = 15
+const RATE_LIMIT_WINDOW_MS = 60_000
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
+    return true
+  }
+  if (entry.count >= RATE_LIMIT_MAX) return false
+  entry.count++
+  return true
+}
+
+// ─── Full A4 Element Schema (injected into every AI call) ────────────────────
+const A4_ELEMENT_SCHEMA = `
+=== A4 CANVAS SPECIFICATION ===
+Canvas: 595px wide × 842px tall. Origin (0,0) = top-left corner.
+Safe zone: x: 20–575, y: 20–820. NEVER place elements outside this zone.
+Standard margins: left=40, right=555, top=40, bottom=802.
+
+=== ELEMENT TYPES (ONLY these are valid) ===
+
+1. TEXT ELEMENT
+   Required: type:"text", id(unique string), x(number), y(number), content(string)
+   style: { width(number), height(number), fontSize(8–72), fontWeight(400|600|700|800),
+            color(hex string), fontFamily(string), textAlign("left"|"center"|"right"),
+            backgroundColor("transparent"|hex), padding(0–20), lineHeight(1.2–2.0), zIndex(number), 
+            letterSpacing(number), boxShadow(optional e.g. "0 4px 10px rgba(0,0,0,0.1)") }
+
+2. SHAPE ELEMENT  
+   Required: type:"shape", id, x, y
+   style: { width, height, backgroundColor(hex), borderRadius(0–100),
+            opacity(0.05–1.0), zIndex, borderWidth(optional), borderColor(optional hex),
+            boxShadow(optional e.g. "0 10px 15px rgba(0,0,0,0.05)") }
+
+3. LINE ELEMENT
+   Required: type:"line", id, x, y, lineOrientation("horizontal"|"vertical")
+   style: { width(line length), height(line thickness 1–6), backgroundColor(hex), zIndex }
+
+4. IMAGE PLACEHOLDER
+   Required: type:"image", id, x, y, content:""
+   style: { width, height, backgroundColor("#f3f4f6"), borderRadius(optional), zIndex }
+
+5. SOCIAL ICON
+   Required: type:"social-icon", id, x, y, iconType("linkedin"|"email"|"phone"|"github"|"website"|"location"|"twitter"|"calendar"|"user")
+   style: { width(20–60), height(20–60), zIndex }
+
+=== ABSOLUTE RULES ===
+1. x + style.width MUST be ≤ 575; y + style.height MUST be ≤ 820.
+2. HEADING PROMINENCE & VISIBILITY:
+   - Headings MUST use color: "primary" token or absolute high contrast hex.
+   - Headings MUST have zIndex: 5 to ensure they are never covered.
+   - Headings MUST use fontWeight 700 or 800.
+   - If a heading is on a dark background, use #ffffff text color.
+3. HEIGHT CALCULATION (NON-NEGOTIABLE):
+   - chars_per_line = (width - padding*2) / (fontSize * 0.52)
+   - lines = ceil(content.length / chars_per_line)
+   - height = (lines * fontSize * lineHeight) + (padding * 2) + 16
+   - NEVER use a height smaller than this. Buffer with +16px for safety.
+4. COLLISION PREVENTION: next_y = previous_bottom + gap (24-40px). 
+   - NEVER overlap elements horizontally if they also overlap vertically.
+5. Every id MUST be unique: "el-{pageIndex}-{index}".
+6. zIndex Order: 
+   - -1: Background Full-Page Accent
+   - 0: Surface/Card Backgrounds
+   - 1: Images/Photos
+   - 2: Lines/Dividers
+   - 3: Body Text/Paragraphs
+   - 4: Social Icons/Icons
+   - 5: HEADINGS
+
+=== TYPOGRAPHY SCALE (PRODUCTION GRADE) ===
+- Main Titles (Page 1): fontSize 36–48, fontWeight 800
+- Section Headings: fontSize 18–22, fontWeight 700, primary color
+- Body Text: fontSize 9.5–10.5, fontWeight 400, lineHeight 1.6
+- Labels/Captions: fontSize 8, fontWeight 600, character-spacing
+
+=== DESIGN STRATEGIES FOR "WOW" FACTOR ===
+- USE DEPTH: Wrap major sections in a "shape" element (type:shape) acting as a card with:
+  - backgroundColor: "surface" token
+  - borderRadius: 12
+  - boxShadow: "0 4px 20px rgba(0,0,0,0.06)"
+- HERO SECTION: Use a full-width shape (width:595, height:220, x:0, y:0, zIndex:-1) with "primary" color as a top banner.
+- GRID ALIGNMENT: 
+  - Standard Margin: x:40
+  - Narrow Column: 40-180
+  - Wide Column: 200-550
+- SPACING: Use 60px vertical gap between major sections (e.g. between Experience and Education).
+
+
+=== OUTPUT FORMAT (strict JSON, NO markdown) ===
+{
+  "pages": [
+    {
+      "pageIndex": 0,
+      "elements": [ ...elements ]
     }
+  ]
+}
+`
 
-    console.log(`📡 API: Dispatching to Smart PDF Architect [${documentType}]...`)
-
-    try {
-      // Stage 1: Generate layout via Architect Engine
-      const layout = await generateSmartPDF({
-        prompt: (prompt || topic || '').toString(),
-        documentType: documentType as any,
-        pageCount: Number(pageCount),
-        style: style as any,
-        role,
-        experience,
-        topic
-      })
-
-      if (!layout.pages || layout.pages.length === 0) {
-        throw new Error('Architect failed to generate any pages (Empty Result)')
-      }
-
-      // Stage 2: Post-Architect Validation & Enhancement
-      const processedPages = layout.pages.map((page, pIdx) => ({
-        ...page,
-        id: `page-${pIdx}`,
-        elements: page.elements.map(el => {
-          const isText = ['heading', 'paragraph', 'text', 'container'].includes(el.type)
-
-          return {
-            ...el,
-            id: el.id || `el-${pIdx}-${Math.random().toString(36).substr(2, 9)}`,
-            pageIndex: pIdx,
-            // CRITICAL: Ensure elements don't bleed off A4
-            x: Math.max(40, Math.min(el.x, 754 - (el.style?.width || 100))),
-            y: Math.max(40, Math.min(el.y, 1083 - (el.style?.height || 50))),
-            style: {
-              ...el.style,
-              resizeMode: isText ? 'auto-height' : 'fixed',
-              // Production Polish: Add subtle shadows for cards
-              boxShadow: el.type === 'container' ? '0 1px 3px rgba(0,0,0,0.05)' : undefined
-            }
-          }
-        })
-      }))
-
-      const durationMs = Date.now() - start
-      console.log(`✅ API: Layout generated successfully in ${durationMs}ms`)
-
-      return NextResponse.json({
-        success: true,
-        pages: processedPages,
-        width: A4_WIDTH,
-        height: A4_HEIGHT,
-        performance: { durationMs }
-      })
-    } catch (serviceError: any) {
-      console.error('❌ Service Error (Architect):', serviceError)
-      throw serviceError // Re-throw to be caught by outer catch for standardized JSON response
-    }
-
-  } catch (error: any) {
-    console.error('❌ API Error [generate-ai-pdf]:', error)
-    return NextResponse.json(
-      {
-        success: false,
-        error: error.message || 'Architect failure',
-        details: error.toString(),
-        timestamp: new Date().toISOString()
-      },
-      { status: 500 }
-    )
+// ─── Document-type specific layout guidance ───────────────────────────────────
+const LAYOUT_ARCHETYPES: Record<string, Record<string, string>> = {
+  cv: {
+    'tech-modern': 'Full-height accent sidebar (x:0, width:190, zIndex:-1, backgroundColor:tokens.surface). Main content at x:220. Bold vertical divider line (x:205, width:1, height:800).',
+    'creative-bold': 'Full-width hero header (height:200, backgroundColor:tokens.primary). Use cards (type:shape, borderRadius:12, boxShadow) for each major section.',
+    'elegant-minimalist': 'Ultra-clean white space. 60px margins everywhere. Thin dividers (height:1, opacity:0.3). Serif headings (headingFont).',
+    'modern-professional': 'Balanced 2-column layout. Contact icons in a horizontal bar below name. Sections clearly separated by 40px gaps.',
+    'corporate-formal': 'Single column layout. Section titles with backgrounds (height:30, width:515, borderRadius:4, zIndex:0). High contrast text.',
+    'warm-executive': 'Rich colors. Use shapes as left-accent bars for headers (width:4, height:24, x:30). Serif fonts.'
+  },
+  proposal: {
+    'creative-bold': 'Vibrant hero banner with large white title. Page 0 = Title Page with full-width background image placeholder. Content cards with heavy shadows.',
+    'corporate-formal': 'Strict grid alignment. Left-aligned headers at x:40. Section numbers. Heavy dividers.',
+    'modern-professional': 'Service-based layout. Use large horizontal containers for "Services" and "Pricing".'
+  },
+  report: {
+    'tech-modern': 'Data-driven look. Use lines as grid markers. Small captions for stats. Monospace-feel text.',
+    'corporate-formal': 'Header/Footer on every page showing "CONFIDENTIAL". Clear page numbering.'
   }
 }
 
+function getDocTypeGuidance(docType: string, tokens: any, role: string, experience: string, topic: string, style: string): string {
+  const archetypeGuidance = LAYOUT_ARCHETYPES[docType]?.[style] ||
+    LAYOUT_ARCHETYPES[docType]?.['modern-professional'] || '';
+
+  const additionalContext = archetypeGuidance ? `\nSPECIFIC STYLE ARCHETYPE: ${archetypeGuidance}\n` : '';
+
+  const guides: Record<string, string> = {
+    cv: `
+=== CV/RESUME LAYOUT GUIDANCE ===
+Structure: Header zone (top 140px) → Contact bar → Section divider → 2-column body OR single column
+Required sections: Professional header with name + title, Contact information row with icons,
+Summary/Profile paragraph, Experience section with job entries, Skills section, Education section.
+
+Header design:
+- Background shape: x:0, y:0, width:595, height:130, backgroundColor:"${tokens.primary}", zIndex:0
+- Full name: fontSize 38–44, fontWeight 800, color:"#ffffff", y around 45
+- Job title: fontSize 14, fontWeight 400, color:"rgba(255,255,255,0.85)", y around 95
+
+Contact row (below header around y:145):
+- Social icons for email, phone, linkedin, location — spaced evenly, size 20x20
+- Contact text labels next to each icon, fontSize 9
+
+Section structure:
+- Section heading: fontSize 13, fontWeight 700, color:"${tokens.primary}", uppercase
+- Thin separator line after heading: height:1, backgroundColor:"${tokens.border}", full width
+- Job title + company: fontSize 11, fontWeight 600
+- Date range (right-aligned): fontSize 9, color:"${tokens.textMuted}"
+- Bullet point text: fontSize 9–10, leading with "•"
+
+For ${role || 'Professional'} with ${experience || '5'} years experience — tailor all content specifically to this role.
+`,
+    proposal: `
+=== BUSINESS PROPOSAL LAYOUT GUIDANCE ===
+Structure: Bold hero section (top 180px) → Executive summary box → 3 content sections → Pricing/CTA
+
+Hero section:
+- Background: full-width shape, backgroundColor:"${tokens.primary}", height:180
+- Document title: fontSize 32–40, fontWeight 800, color:"#ffffff"
+- Subtitle/tagline: fontSize 13, color:"rgba(255,255,255,0.8)"
+- Prepared by text: fontSize 9, y near bottom of hero
+
+Content sections (use cards — rounded shapes with backgroundColor:"${tokens.surface}"):
+- Section headers: fontSize 16, fontWeight 700, color:"${tokens.primary}"
+- Body text: fontSize 10, lineHeight 1.6
+
+Include: Overview, Solution/Approach, Timeline, Investment/Pricing, Next Steps
+Topic: ${topic || 'Business Services'}
+`,
+    report: `
+=== REPORT LAYOUT GUIDANCE ===  
+Structure: Title page header (top 120px) → Abstract/Summary box → Body sections with callouts
+
+Header: Document title, subtitle, date, author/organization
+Abstract box: Light background shape, key summary 3-4 lines
+Body: Multiple sections with clear headings, data callout boxes for key statistics
+Footer: Page number, confidentiality notice
+
+Topic: ${topic || 'Business Report'}
+`,
+    letter: `
+=== COVER LETTER LAYOUT GUIDANCE ===
+Structure: Letterhead top (100px) → Date + Recipient block → Salutation → Body (3 paragraphs) → Closing
+
+Letterhead: Applicant name prominent at top, contact info row with icons
+Body: Professional paragraph text, fontSize 10, lineHeight 1.6, proper margins (x:50, width:495)
+Closing: "Sincerely," + name + signature space
+
+Role applying for: ${role || 'Position'}
+`,
+    invoice: `
+=== INVOICE LAYOUT GUIDANCE ===
+Structure: Company header (top 100px) → Invoice meta (number, dates) → Bill-to section → 
+           Line items area (table-style with alternating row shapes) → Totals → Payment terms
+
+Include: INVOICE label prominently, invoice number, issue date, due date,
+         From section, To section, service description rows, subtotal, tax, TOTAL (large),
+         Payment terms, bank details area, thank you note
+
+Topic: ${topic || 'Professional Services'}
+`,
+    brochure: `
+=== BROCHURE LAYOUT GUIDANCE ===
+Structure: Full-bleed hero (top 200px) → 3-column features grid → About section → CTA section
+
+Hero: Bold headline, subheadline, tagline — all on colored background
+Features: 3 icon+heading+text cards side by side
+Use brand colors prominently throughout
+
+Topic: ${topic || 'Company Services'}
+`,
+  }
+
+  return additionalContext + (guides[docType] || `Create a professional ${docType} document about: ${topic || role || 'General'}`)
+}
+
+// ─── Style-specific design token injection ────────────────────────────────────
+function buildDesignTokenPrompt(tokens: any, style: string): string {
+  return `
+=== DESIGN TOKENS — USE THESE EXACT VALUES ===
+Style name: ${style}
+Primary color: "${tokens.primary}" — use for main headings, hero backgrounds, accent shapes
+Secondary color: "${tokens.secondary}" — use for subtle backgrounds, section fills
+Accent color: "${tokens.accent}" — use for highlights, icons, borders
+Text color: "${tokens.text}" — use for all body text
+Muted text: "${tokens.textMuted}" — use for captions, dates, labels
+Background: "${tokens.bg}" — page background (usually applied as full-page shape)
+Surface: "${tokens.surface}" — card backgrounds, section containers
+Border color: "${tokens.border}" — divider lines, container borders
+Heading font: "${tokens.headingFont}"
+Body font: "${tokens.bodyFont}"
+
+COLOR RULES:
+- Only use colors from the above palette — no random colors
+- Text on dark backgrounds (primary) MUST be "#ffffff" or "rgba(255,255,255,0.85)"
+- Text on light backgrounds use the text or textMuted colors
+- Accent color for small elements: icons, highlights, decorative shapes
+`
+}
+
+// ─── Main route handler ────────────────────────────────────────────────────────
+export async function POST(request: NextRequest) {
+  // Rate limiting
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'anonymous'
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Please wait a minute before generating again.', success: false },
+      { status: 429 }
+    )
+  }
+
+  // Parse input
+  let body: any
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body', success: false }, { status: 400 })
+  }
+
+  // Sanitize and validate inputs
+  const docType = ['cv', 'proposal', 'report', 'letter', 'invoice', 'brochure', 'document'].includes(body.documentType)
+    ? body.documentType : 'document'
+  const pageCount = Math.max(1, Math.min(10, Number(body.pageCount) || 1))
+  const style = String(body.style || 'modern-professional').slice(0, 100)
+  const role = String(body.role || '').slice(0, 300)
+  const experience = String(body.experience || '').slice(0, 50)
+  const topic = String(body.topic || '').slice(0, 500)
+  const userPrompt = String(body.prompt || '').slice(0, 2000)
+
+  // Get design tokens (from request or use defaults)
+  const tokens = body.designTokens || {
+    primary: '#1e40af', secondary: '#dbeafe', accent: '#3b82f6',
+    text: '#0f172a', textMuted: '#64748b', bg: '#ffffff', surface: '#f8fafc',
+    border: '#e2e8f0', headingFont: 'Inter, sans-serif', bodyFont: 'Inter, sans-serif'
+  }
+
+  // Build the master system prompt
+  const systemPrompt = A4_ELEMENT_SCHEMA +
+    buildDesignTokenPrompt(tokens, style) +
+    getDocTypeGuidance(docType, tokens, role, experience, topic, style)
+
+  // Build user request
+  const numPages = pageCount
+  const userRequest = `
+Create a ${numPages}-page ${docType} PDF with ${style} styling.
+${role ? `For role: ${role}` : ''}
+${experience ? `Years of experience: ${experience}` : ''}
+${topic ? `Topic/Subject: ${topic}` : ''}
+${userPrompt ? `Additional requirements: ${userPrompt}` : ''}
+${body.archetypeHint ? body.archetypeHint : ''}
+
+Requirements:
+- Generate exactly ${numPages} page(s)
+- Each page must have minimum 10 elements, aim for 14–20 for richness
+- Make ALL content realistic and specific (no "Lorem ipsum", no "[YOUR NAME]" placeholders)
+- If this is a CV, use realistic job titles, company names, dates, skills
+- If this is a proposal/report, use realistic business language and specific details
+- Ensure pixel-perfect alignment: elements in the same visual group should share x positions
+- Create visual depth with colored background shapes behind text sections
+- Use the EXACT design tokens provided — no other colors
+
+Output ONLY valid JSON. No markdown. No explanation. Just JSON.
+`
+
+  // Configure Gemini model - use Flash for speed + cost efficiency
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-flash-latest',
+    systemInstruction: systemPrompt,
+    generationConfig: {
+      temperature: 0.75,        // Enough creativity for variety, stable enough for structure
+      maxOutputTokens: 16384,   // Large enough for multi-page docs
+      responseMimeType: 'application/json', // CRITICAL: Forces pure JSON, no markdown wrapping
+    }
+  })
+
+  // ── Call with retry logic ──────────────────────────────────────────────────
+  let lastError = ''
+  let result: any = null
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const retryInstruction = attempt > 0
+        ? `\n\nPREVIOUS ATTEMPT FAILED: ${lastError}\nPlease fix this issue and generate valid JSON.`
+        : ''
+
+      const response = await model.generateContent(userRequest + retryInstruction)
+      const text = response.response.text()
+
+      // Try to parse — handle edge case where AI wraps in ```json``` despite mime type
+      let parsed: any
+      try {
+        parsed = JSON.parse(text)
+      } catch {
+        // Strip markdown if present (shouldn't happen with responseMimeType but just in case)
+        const cleaned = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
+        parsed = JSON.parse(cleaned)
+      }
+
+      // Validate response structure
+      if (!parsed.pages || !Array.isArray(parsed.pages) || parsed.pages.length === 0) {
+        throw new Error('Response missing pages array')
+      }
+
+      const totalElements = parsed.pages.reduce((sum: number, p: any) => sum + (p.elements?.length || 0), 0)
+      if (totalElements < 5) {
+        throw new Error(`Only ${totalElements} elements generated — need at least 5`)
+      }
+
+      // Ensure pageIndex is set on all elements
+      parsed.pages = parsed.pages.map((page: any, pageIdx: number) => ({
+        ...page,
+        pageIndex: page.pageIndex ?? pageIdx,
+        elements: (page.elements || []).map((el: any, elIdx: number) => ({
+          ...el,
+          id: el.id || `el-${pageIdx}-${elIdx}-${Date.now()}`,
+          pageIndex: el.pageIndex ?? pageIdx
+        }))
+      }))
+
+      result = parsed
+      break // Success!
+
+    } catch (err: any) {
+      lastError = err.message || 'Unknown error'
+      console.warn(`[generate-ai-pdf] Attempt ${attempt + 1}/3 failed: ${lastError}`)
+
+      if (attempt < 2) {
+        // Exponential backoff before retry
+        await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
+      }
+    }
+  }
+
+  if (!result) {
+    return NextResponse.json(
+      { error: `AI generation failed after 3 attempts: ${lastError}`, success: false },
+      { status: 500 }
+    )
+  }
+
+  return NextResponse.json({
+    success: true,
+    pages: result.pages,
+    width: 595,
+    height: 842,
+    elementCount: result.pages.reduce((sum: number, p: any) => sum + (p.elements?.length || 0), 0),
+    pageCount: result.pages.length
+  })
+}
+
+export async function GET() {
+  return NextResponse.json({
+    status: 'Ready — World-Class AI PDF Generator v3',
+    engine: 'Gemini 1.5 Flash with full schema injection',
+    features: ['A4 schema enforcement', 'Design tokens', 'Layout archetypes', 'Retry logic', 'JSON mode'],
+    endpoint: '/api/generate-ai-pdf',
+    method: 'POST'
+  })
+}

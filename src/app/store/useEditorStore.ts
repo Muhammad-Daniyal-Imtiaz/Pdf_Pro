@@ -27,6 +27,7 @@ export interface ElementStyle {
     rotation?: number
     opacity?: number
     fontStyle?: 'normal' | 'italic'
+    letterSpacing?: number
     // NEW: Resize mode for text elements
     resizeMode?: TextResizeMode
     // NEW: Min/max constraints
@@ -34,6 +35,7 @@ export interface ElementStyle {
     maxWidth?: number
     minHeight?: number
     maxHeight?: number
+    boxShadow?: string
 }
 
 export interface EditorElement {
@@ -654,9 +656,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
                     if (!found) {
                         const isTextElement = ['heading', 'paragraph', 'text', 'container'].includes(processedChange.type)
 
-                        // For AI-generated text elements, use auto-height to prevent truncation
+                        // For AI-generated text elements, use auto-both to prevent truncation and allow flexible width
                         const resizeMode = processedChange.style?.resizeMode ||
-                            (isTextElement ? 'auto-height' : 'fixed')
+                            (isTextElement ? 'auto-both' : 'fixed')
 
                         // CRITICAL: Ensure unique ID for new AI elements
                         const generatedId = `ai-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
