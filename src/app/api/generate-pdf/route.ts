@@ -92,6 +92,8 @@ function generateElementHTML(el: any): string {
       const bgColor = s.backgroundColor && s.backgroundColor !== 'transparent' ? s.backgroundColor : 'transparent'
       const fontStyle = s.fontStyle || 'normal'
       const letterSpacing = s.letterSpacing ? `${s.letterSpacing}px` : 'normal'
+      const textShadow = s.textShadow || 'none'
+
       // Encode newlines as <br>
       const htmlContent = escapeHtml(el.content || '').replace(/\n/g, '<br>')
 
@@ -106,12 +108,16 @@ function generateElementHTML(el: any): string {
         background-color: ${bgColor};
         font-style: ${fontStyle};
         letter-spacing: ${letterSpacing};
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        
+        /* --- CRITICAL MATCHES LAYOUT ENGINE --- */
+        height: auto; 
+        min-height: ${h}px; /* Use calculated min-height */
+        overflow: visible !important;
         white-space: pre-wrap;
-        overflow: visible;
-        min-height: ${h}px;
-        height: auto;
+        word-wrap: break-word;
+        text-shadow: ${textShadow};
+        /* -------------------------------------- */
+        
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: geometricPrecision;">${htmlContent}</div>`

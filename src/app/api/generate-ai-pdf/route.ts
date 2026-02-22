@@ -39,105 +39,87 @@ function checkRateLimit(ip: string): boolean {
   return true
 }
 
-// ─── Full A4 Element Schema (injected into every AI call) ────────────────────
-// NOTE: We prompt with 794×1123 (96 DPI) which is the ACTUAL editor canvas.
+// ─── A4 Canvas Schema — AI must use 794×1123 (96 DPI, same as editor) ─────────
 const A4_ELEMENT_SCHEMA = `
-=== CANVAS SPECIFICATION (A4 at 96 DPI — Screen Resolution) ===
-Canvas: 794px wide × 1123px tall. Origin (0,0) = top-left corner.
-Safe zone: x: 20–774, y: 20–1103. NEVER place elements outside this zone.
-Standard margins: left=40, right=754, top=40, bottom=1083.
+=== CANVAS SPECIFICATION (A4 at 96 DPI) ===
+Canvas: 794px wide × 1123px tall. (NEVER use 595px — that is wrong!)
+Origin: Top-Left (0,0).
+Safe Zone: x: 40–754, y: 40–1083.
+2-Column layout: Left column x:40–374, Right column x:414–754.
 
-=== ELEMENT TYPES (ONLY these are valid) ===
-
-1. TEXT ELEMENT
-   Required: type:"text", id(unique string), x(number), y(number), content(string)
-   style: { width(number), height(number), fontSize(8–72), fontWeight(400|600|700|800),
-            color(hex string), fontFamily(string), textAlign("left"|"center"|"right"),
-            backgroundColor("transparent"|hex), padding(0–20), lineHeight(1.2–2.0), zIndex(number), 
-            letterSpacing(number), boxShadow(optional e.g. "0 4px 10px rgba(0,0,0,0.1)") }
-
-2. SHAPE ELEMENT  
-   Required: type:"shape", id, x, y
-   style: { width, height, backgroundColor(hex), borderRadius(0–100),
-            opacity(0.05–1.0), zIndex, borderWidth(optional), borderColor(optional hex),
-            boxShadow(optional e.g. "0 10px 15px rgba(0,0,0,0.05)") }
-
-3. LINE ELEMENT
-   Required: type:"line", id, x, y, lineOrientation("horizontal"|"vertical")
-   style: { width(line length), height(line thickness 1–6), backgroundColor(hex), zIndex }
-
-4. IMAGE PLACEHOLDER
-   Required: type:"image", id, x, y, content:""
-   style: { width, height, backgroundColor("#f3f4f6"), borderRadius(optional), zIndex }
-
-5. SOCIAL ICON
-   Required: type:"social-icon", id, x, y, iconType("linkedin"|"email"|"phone"|"github"|"website"|"location"|"twitter"|"calendar"|"user")
-   style: { width(20–60), height(20–60), zIndex }
-
-=== ABSOLUTE RULES ===
-1. CANVAS BOUNDS: x + style.width ≤ 794; y + style.height ≤ 1123.
-2. HEADING PLACEMENT ON BANNERS (CRITICAL):
-   - When you place a heading ON a banner/background shape, the heading must use:
-     - type: "heading" (never "text" for a main title)
-     - zIndex: 6 (always above the banner which is at zIndex -1 or 0)
-     - color: "#ffffff" if the banner is dark, or the primary token if on white
-     - x and y must be WITHIN the banner's bounds (not outside)
-   - Example: Banner at {x:0, y:0, width:794, height:240, zIndex:0}
-     Then heading at {type:"heading", x:40, y:70, style:{width:714, height:90, zIndex:6, color:"#fff", fontSize:56, fontWeight:800}}
-3. HEIGHT CALCULATION (NON-NEGOTIABLE):
-   - chars_per_line = (width - padding*2) / (fontSize * 0.52)
-   - lines = ceil(content.length / chars_per_line)
-   - height = (lines * fontSize * lineHeight) + (padding * 2) + 20    ← always add 20px buffer
-   - NEVER give a height smaller than this value.
-4. COLLISION PREVENTION for CONTENT elements:
-   - Sort all content elements by y ascending.
-   - For each element, next_y = previous_bottom + gap (minimum 8px, recommended 20px).
-   - EXCEPTION: Elements in different columns (x ranges don't overlap) do NOT need y gaps between them.
-   - DO NOT apply collision rules to background shapes (zIndex -1 or 0).
-5. Every id MUST be unique: use "el-{pageIndex}-{sequenceNumber}".
-6. SOCIAL ICONS:
-   - Width and height MUST be equal (square): use 22x22 for inline rows, 32x32 for standalone.
-   - For a row of N icons, space them: x = startX + (i * (iconSize + gap))
-   - Never place two icons in the same x/y position.
-7. BACKGROUND SHAPES must use: x:0, y:0, width:794, height:1123, zIndex:-1.
-   BANNER SHAPES (partial) must use: x:0, y:0, width:794, height:170-250, zIndex:0.
-
-=== Z-INDEX LAYER REFERENCE ===
-   -1 → Full-page background fill
-    0 → Banner / section background shape  
-    1 → Images
-    2 → Lines / dividers
-    3 → Body text / paragraph
-    4 → Social icons
-    5 → HEADINGS (always render on top)
-
-=== TYPOGRAPHY SCALE (PRODUCTION GRADE) ===
-- Main Page Title: type:"heading", fontSize 36-48, fontWeight 800, zIndex 5
-- Section Headings: type:"heading", fontSize 16-22, fontWeight 700, zIndex 5  
-- Sub-headings: type:"text", fontSize 12-14, fontWeight 600
-- Body Text: type:"text" or "paragraph", fontSize 9-11, fontWeight 400, lineHeight 1.5-1.6
-- Captions/Labels: type:"text", fontSize 7-9, fontWeight 600
-
-=== DESIGN WOW FACTORS ===
-- Use a full-width hero banner (zIndex:0 shape) at top of page 0 with primary token background
-- Always place main title heading directly INSIDE the banner (same y range), with zIndex:5
-- Use box-shadow on section cards: "0 4px 16px rgba(0,0,0,0.08)"
-- Use borderRadius 10-14px on section cards for modern look
-- Horizontal spacing: left margin x:40, right side at x:315 for 2-column
-- Vertical rhythm: 30-40px gap between major sections
-
-=== OUTPUT FORMAT (strict JSON, NO markdown) ===
+=== OUTPUT FORMAT (strict JSON, NO markdown wrapping) ===
 {
-  "pages": [
-    {
-      "pageIndex": 0,
-      "elements": [ ...elements ]
-    }
-  ]
+  "pages": [ { "pageIndex": 0, "elements": [ ...elements ] } ]
 }
+
+=== ELEMENT RULES ===
+
+1. TEXT / HEADING (type: "text" | "heading" | "paragraph")
+   Required: id, x, y, content(string)
+   style: { width, fontSize(8–96), fontWeight(400|600|700|800), color(hex),
+            fontFamily, textAlign("left"|"center"|"right"), lineHeight(1.2–2.0),
+            backgroundColor("transparent"|hex), padding(0–20), letterSpacing }
+   CRITICAL: Do NOT set height. Height is AUTOMATIC. The engine calculates it.
+   zIndex: 5 for headings, 4 for body text, 4 for paragraphs.
+
+2. SHAPE (type: "shape")
+   style: { width, height, backgroundColor(hex), borderRadius(0–50),
+            opacity(0.1–1.0), zIndex, boxShadow(optional), borderWidth, borderColor }
+   Use for: backgrounds, card containers, banners, accent bars.
+   zIndex: -1 for full-page backgrounds, 0 for banners, 1 for cards.
+
+3. LINE (type: "line")
+   Required: lineOrientation("horizontal"|"vertical")
+   style: { width, height(1–4 for thickness), backgroundColor(hex), zIndex: 3 }
+
+4. IMAGE (type: "image")
+   Required: content: ""
+   style: { width, height, backgroundColor("#f3f4f6"), borderRadius, zIndex: 2 }
+
+5. SOCIAL ICON (type: "social-icon")
+   Required: iconType("linkedin"|"email"|"phone"|"github"|"website"|"location"|"twitter"|"calendar"|"user")
+   style: { width(24), height(24), zIndex: 6 }
+   For a row of icons: x = startX + (i × 34). Never overlap icons.
+
+=== POSITIONING RULES (CRITICAL — Read carefully) ===
+1. Start y at 40. Each element placed below the previous: y = prev_y + prev_estimated_height + gap.
+2. Minimum vertical gap between elements in the same column: 16px.
+3. BANNER HEADING PATTERN (use for every document):
+   Step A: Shape banner — {x:0, y:0, width:794, height:220, backgroundColor:"<primary>", zIndex:0}
+   Step B: Heading ON banner — {type:"heading", x:40, y:70, style:{width:714, fontSize:52, fontWeight:800, color:"#fff", zIndex:5}}
+   Step C: Subtitle ON banner — {type:"text", x:40, y:145, style:{width:714, fontSize:16, color:"rgba(255,255,255,0.85)", zIndex:5}}
+   Step D: First content element — y: 240 + gap (i.e., y:270)
+4. Two elements in DIFFERENT x-columns (no x-overlap) do NOT need y-gaps between them.
+5. NEVER place two elements with overlapping x AND y ranges (unless intentionally layered with different zIndex).
+
+=== Z-INDEX REFERENCE ===
+  -1 → Full-page background
+   0 → Header/footer banner shape
+   1 → Card / section background shape
+   2 → Images
+   3 → Lines / dividers
+   4 → Body text / paragraph
+   5 → Headings (always above shapes)
+   6 → Social icons / inline icons
+
+=== TYPOGRAPHY SCALE ===
+- Page Title (on banner):  fontSize 48–60, fontWeight 800, color "#fff", zIndex 5
+- Section Heading:          fontSize 18–24, fontWeight 700, color <primary>, zIndex 5
+- Sub-heading:              fontSize 13–15, fontWeight 600
+- Body text:                fontSize 10–12, fontWeight 400, lineHeight 1.6
+- Label / caption:          fontSize 8–10,  fontWeight 600
+
+=== DESIGN RULES ===
+- Always start PAGE 0 with a hero banner (shape + heading + subtitle as described above).
+- Use card shapes (borderRadius:10, boxShadow:"0 4px 16px rgba(0,0,0,0.08)") for sections.
+- Use the exact design token colors provided. Do not invent new colors.
+- White text (#fff) on dark backgrounds. Dark text on light backgrounds.
+- Minimum 14 elements per page for visual richness.
+- ALL content must be realistic and specific — NO Lorem ipsum, NO [PLACEHOLDER] text.
 `
 
 // ─── Document-type specific layout guidance ───────────────────────────────────
+
 const LAYOUT_ARCHETYPES: Record<string, Record<string, string>> = {
   cv: {
     'tech-modern': 'Full-height accent sidebar (x:0, width:190, zIndex:-1, backgroundColor:tokens.surface). Main content at x:220. Bold vertical divider line (x:205, width:1, height:800).',
@@ -162,108 +144,108 @@ function getDocTypeGuidance(docType: string, tokens: any, role: string, experien
   const archetypeGuidance = LAYOUT_ARCHETYPES[docType]?.[style] ||
     LAYOUT_ARCHETYPES[docType]?.['modern-professional'] || '';
 
-  const additionalContext = archetypeGuidance ? `\nSPECIFIC STYLE ARCHETYPE: ${archetypeGuidance}\n` : '';
+  const additionalContext = archetypeGuidance ? `\nSPECIFIC STYLE ARCHETYPE: ${archetypeGuidance} \n` : '';
 
   const guides: Record<string, string> = {
     cv: `
-=== CV/RESUME LAYOUT GUIDANCE ===
-Structure: Header zone (top 140px) → Contact bar → Section divider → 2-column body OR single column
+  === CV / RESUME LAYOUT GUIDANCE ===
+    Structure: Header zone(top 140px) → Contact bar → Section divider → 2 - column body OR single column
 Required sections: Professional header with name + title, Contact information row with icons,
-Summary/Profile paragraph, Experience section with job entries, Skills section, Education section.
+Summary / Profile paragraph, Experience section with job entries, Skills section, Education section.
 
 Header design:
-- Background shape: x:0, y:0, width:595, height:130, backgroundColor:"${tokens.primary}", zIndex:0
-- Full name: type:"heading", fontSize 38–44, fontWeight 800, color:"#ffffff", y around 45, zIndex:5
-- Job title: type:"text", fontSize 14, fontWeight 400, color:"rgba(255,255,255,0.85)", y around 95, zIndex:4
+- Background shape: x: 0, y: 0, width: 595, height: 130, backgroundColor: "${tokens.primary}", zIndex: 0
+  - Full name: type: "heading", fontSize 38–44, fontWeight 800, color: "#ffffff", y around 45, zIndex: 5
+    - Job title: type: "text", fontSize 14, fontWeight 400, color: "rgba(255,255,255,0.85)", y around 95, zIndex: 4
 
-Contact row (below header around y:145):
+Contact row(below header around y: 145):
 - Social icons for email, phone, linkedin, location — spaced evenly, size 20x20
-- Contact text labels next to each icon, fontSize 9
+  - Contact text labels next to each icon, fontSize 9
 
 Section structure:
-- Section heading: fontSize 13, fontWeight 700, color:"${tokens.primary}", uppercase
-- Thin separator line after heading: height:1, backgroundColor:"${tokens.border}", full width
-- Job title + company: fontSize 11, fontWeight 600
-- Date range (right-aligned): fontSize 9, color:"${tokens.textMuted}"
-- Bullet point text: fontSize 9–10, leading with "•"
+- Section heading: fontSize 13, fontWeight 700, color: "${tokens.primary}", uppercase
+  - Thin separator line after heading: height: 1, backgroundColor: "${tokens.border}", full width
+    - Job title + company: fontSize 11, fontWeight 600
+      - Date range(right - aligned): fontSize 9, color: "${tokens.textMuted}"
+        - Bullet point text: fontSize 9–10, leading with "•"
 
 For ${role || 'Professional'} with ${experience || '5'} years experience — tailor all content specifically to this role.
 `,
     proposal: `
-=== BUSINESS PROPOSAL LAYOUT GUIDANCE ===
-Structure: Bold hero section (top 180px) → Executive summary box → 3 content sections → Pricing/CTA
+  === BUSINESS PROPOSAL LAYOUT GUIDANCE ===
+    Structure: Bold hero section(top 180px) → Executive summary box → 3 content sections → Pricing / CTA
 
 Hero section:
-- Background: full-width shape, backgroundColor:"${tokens.primary}", height:180
-- Document title: type:"heading", fontSize 32–40, fontWeight 800, color:"#ffffff", zIndex:5
-- Subtitle/tagline: type:"text", fontSize 13, color:"rgba(255,255,255,0.8)", zIndex:4
-- Prepared by text: fontSize 9, y near bottom of hero
+- Background: full - width shape, backgroundColor: "${tokens.primary}", height: 180
+  - Document title: type: "heading", fontSize 32–40, fontWeight 800, color: "#ffffff", zIndex: 5
+    - Subtitle / tagline: type: "text", fontSize 13, color: "rgba(255,255,255,0.8)", zIndex: 4
+      - Prepared by text: fontSize 9, y near bottom of hero
 
-Content sections (use cards — rounded shapes with backgroundColor:"${tokens.surface}"):
-- Section headers: fontSize 16, fontWeight 700, color:"${tokens.primary}"
-- Body text: fontSize 10, lineHeight 1.6
+Content sections(use cards — rounded shapes with backgroundColor: "${tokens.surface}"):
+- Section headers: fontSize 16, fontWeight 700, color: "${tokens.primary}"
+  - Body text: fontSize 10, lineHeight 1.6
 
-Include: Overview, Solution/Approach, Timeline, Investment/Pricing, Next Steps
+Include: Overview, Solution / Approach, Timeline, Investment / Pricing, Next Steps
 Topic: ${topic || 'Business Services'}
 `,
     report: `
-=== REPORT LAYOUT GUIDANCE ===  
-Structure: Title page header (top 120px) → Abstract/Summary box → Body sections with callouts
+  === REPORT LAYOUT GUIDANCE ===
+    Structure: Title page header(top 120px) → Abstract / Summary box → Body sections with callouts
 
-Header: Document title, subtitle, date, author/organization
-Abstract box: Light background shape, key summary 3-4 lines
+Header: Document title, subtitle, date, author / organization
+Abstract box: Light background shape, key summary 3 - 4 lines
 Body: Multiple sections with clear headings, data callout boxes for key statistics
 Footer: Page number, confidentiality notice
 
 Topic: ${topic || 'Business Report'}
 `,
     letter: `
-=== COVER LETTER LAYOUT GUIDANCE ===
-Structure: Letterhead top (100px) → Date + Recipient block → Salutation → Body (3 paragraphs) → Closing
+  === COVER LETTER LAYOUT GUIDANCE ===
+    Structure: Letterhead top(100px) → Date + Recipient block → Salutation → Body(3 paragraphs) → Closing
 
 Letterhead: Applicant name prominent at top, contact info row with icons
-Body: Professional paragraph text, fontSize 10, lineHeight 1.6, proper margins (x:50, width:495)
+Body: Professional paragraph text, fontSize 10, lineHeight 1.6, proper margins(x: 50, width: 495)
 Closing: "Sincerely," + name + signature space
 
 Role applying for: ${role || 'Position'}
 `,
     invoice: `
-=== INVOICE LAYOUT GUIDANCE ===
-Structure: Company header (top 100px) → Invoice meta (number, dates) → Bill-to section → 
-           Line items area (table-style with alternating row shapes) → Totals → Payment terms
+  === INVOICE LAYOUT GUIDANCE ===
+    Structure: Company header(top 100px) → Invoice meta(number, dates) → Bill - to section → 
+           Line items area(table - style with alternating row shapes) → Totals → Payment terms
 
 Include: INVOICE label prominently, invoice number, issue date, due date,
-         From section, To section, service description rows, subtotal, tax, TOTAL (large),
-         Payment terms, bank details area, thank you note
+  From section, To section, service description rows, subtotal, tax, TOTAL(large),
+    Payment terms, bank details area, thank you note
 
 Topic: ${topic || 'Professional Services'}
 `,
     brochure: `
-=== BROCHURE LAYOUT GUIDANCE ===
-Structure: Full-bleed hero (top 200px) → 3-column features grid → About section → CTA section
+  === BROCHURE LAYOUT GUIDANCE ===
+    Structure: Full - bleed hero(top 200px) → 3 - column features grid → About section → CTA section
 
 Hero: Bold headline, subheadline, tagline — all on colored background
-Features: 3 icon+heading+text cards side by side
+Features: 3 icon + heading + text cards side by side
 Use brand colors prominently throughout
 
 Topic: ${topic || 'Company Services'}
 `,
   }
 
-  return additionalContext + (guides[docType] || `Create a professional ${docType} document about: ${topic || role || 'General'}`)
+  return additionalContext + (guides[docType] || `Create a professional ${docType} document about: ${topic || role || 'General'} `)
 }
 
 // ─── Style-specific design token injection ────────────────────────────────────
 function buildDesignTokenPrompt(tokens: any, style: string): string {
   return `
-=== DESIGN TOKENS — USE THESE EXACT VALUES ===
-Style name: ${style}
+  === DESIGN TOKENS — USE THESE EXACT VALUES ===
+    Style name: ${style}
 Primary color: "${tokens.primary}" — use for main headings, hero backgrounds, accent shapes
 Secondary color: "${tokens.secondary}" — use for subtle backgrounds, section fills
 Accent color: "${tokens.accent}" — use for highlights, icons, borders
 Text color: "${tokens.text}" — use for all body text
 Muted text: "${tokens.textMuted}" — use for captions, dates, labels
-Background: "${tokens.bg}" — page background (usually applied as full-page shape)
+Background: "${tokens.bg}" — page background(usually applied as full - page shape)
 Surface: "${tokens.surface}" — card backgrounds, section containers
 Border color: "${tokens.border}" — divider lines, container borders
 Heading font: "${tokens.headingFont}"
@@ -271,10 +253,10 @@ Body font: "${tokens.bodyFont}"
 
 COLOR RULES:
 - Only use colors from the above palette — no random colors
-- Text on dark backgrounds (primary) MUST be "#ffffff" or "rgba(255,255,255,0.85)"
-- Text on light backgrounds use the text or textMuted colors
-- Accent color for small elements: icons, highlights, decorative shapes
-`
+  - Text on dark backgrounds(primary) MUST be "#ffffff" or "rgba(255,255,255,0.85)"
+    - Text on light backgrounds use the text or textMuted colors
+      - Accent color for small elements: icons, highlights, decorative shapes
+        `
 }
 
 // ─── Main route handler ────────────────────────────────────────────────────────
@@ -321,8 +303,8 @@ export async function POST(request: NextRequest) {
   // Build user request
   const numPages = pageCount
   const userRequest = `
-Create a ${numPages}-page ${docType} PDF with ${style} styling.
-${role ? `For role: ${role}` : ''}
+Create a ${numPages} -page ${docType} PDF with ${style} styling.
+  ${role ? `For role: ${role}` : ''}
 ${experience ? `Years of experience: ${experience}` : ''}
 ${topic ? `Topic/Subject: ${topic}` : ''}
 ${userPrompt ? `Additional requirements: ${userPrompt}` : ''}
@@ -330,15 +312,15 @@ ${body.archetypeHint ? body.archetypeHint : ''}
 
 Requirements:
 - Generate exactly ${numPages} page(s)
-- Each page must have minimum 10 elements, aim for 14–20 for richness
-- Make ALL content realistic and specific (no "Lorem ipsum", no "[YOUR NAME]" placeholders)
-- If this is a CV, use realistic job titles, company names, dates, skills
-- If this is a proposal/report, use realistic business language and specific details
-- Ensure pixel-perfect alignment: elements in the same visual group should share x positions
-- Create visual depth with colored background shapes behind text sections
-- Use the EXACT design tokens provided — no other colors
+  - Each page must have minimum 10 elements, aim for 14–20 for richness
+    - Make ALL content realistic and specific(no "Lorem ipsum", no "[YOUR NAME]" placeholders)
+      - If this is a CV, use realistic job titles, company names, dates, skills
+        - If this is a proposal / report, use realistic business language and specific details
+          - Ensure pixel - perfect alignment: elements in the same visual group should share x positions
+            - Create visual depth with colored background shapes behind text sections
+              - Use the EXACT design tokens provided — no other colors
 
-Output ONLY valid JSON. No markdown. No explanation. Just JSON.
+Output ONLY valid JSON.No markdown.No explanation.Just JSON.
 `
 
   // Configure Gemini model - use Flash for speed + cost efficiency
@@ -359,7 +341,7 @@ Output ONLY valid JSON. No markdown. No explanation. Just JSON.
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const retryInstruction = attempt > 0
-        ? `\n\nPREVIOUS ATTEMPT FAILED: ${lastError}\nPlease fix this issue and generate valid JSON.`
+        ? `\n\nPREVIOUS ATTEMPT FAILED: ${lastError} \nPlease fix this issue and generate valid JSON.`
         : ''
 
       const response = await model.generateContent(userRequest + retryInstruction)
@@ -371,7 +353,7 @@ Output ONLY valid JSON. No markdown. No explanation. Just JSON.
         parsed = JSON.parse(text)
       } catch {
         // Strip markdown if present (shouldn't happen with responseMimeType but just in case)
-        const cleaned = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
+        const cleaned = text.replace(/^```(?: json) ?\n ? /m, '').replace(/\n ? ```$/m, '').trim()
         parsed = JSON.parse(cleaned)
       }
 
@@ -389,7 +371,7 @@ Output ONLY valid JSON. No markdown. No explanation. Just JSON.
       parsed.pages = parsed.pages.map((page: any, pageIdx: number) => {
         const rawElements = (page.elements || []).map((el: any, elIdx: number) => ({
           ...el,
-          id: el.id || `el-${pageIdx}-${elIdx}-${Date.now()}`,
+          id: el.id || `el - ${pageIdx} -${elIdx} -${Date.now()} `,
           pageIndex: el.pageIndex ?? pageIdx
         }))
         // enforceLayout fixes z-index, overflow, collision, icon sizing
@@ -407,7 +389,7 @@ Output ONLY valid JSON. No markdown. No explanation. Just JSON.
 
     } catch (err: any) {
       lastError = err.message || 'Unknown error'
-      console.warn(`[generate-ai-pdf] Attempt ${attempt + 1}/3 failed: ${lastError}`)
+      console.warn(`[generate - ai - pdf] Attempt ${attempt + 1}/3 failed: ${lastError}`)
 
       if (attempt < 2) {
         // Exponential backoff before retry
