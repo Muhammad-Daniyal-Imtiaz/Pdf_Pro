@@ -15,7 +15,8 @@ export async function POST(req: NextRequest) {
         // Step 1: Generate Premium Markdown from Canvas JSON using Gemini
         let markdown: string
         try {
-            markdown = await aiService.generateMarkdownFromCanvas(context)
+            const contextStr = typeof context === 'string' ? context : JSON.stringify(context)
+            markdown = await aiService.generateMarkdownFromCanvas(contextStr)
             console.log('✅ AI transformed canvas to high-fidelity Markdown')
         } catch (aiError: any) {
             console.error('⚠️ AI Canvas transformation failed:', aiError.message)

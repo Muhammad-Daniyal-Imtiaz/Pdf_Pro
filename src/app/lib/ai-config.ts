@@ -3,7 +3,7 @@
 
 export const AI_CONFIG = {
   // API key from environment
-  apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
+  apiKey: process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY || '',
 
   // Prioritized models - Flash models work best for free tier
   models: [

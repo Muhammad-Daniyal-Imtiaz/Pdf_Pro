@@ -34,26 +34,24 @@ export default function EditorSidebar() {
         setExportError(null)
 
         try {
-            const rawContext = getLayoutContext()
+            const rawContextStr = getLayoutContext()
+            const contextPages = JSON.parse(rawContextStr || '[]')
 
             // Trim context before sending — remove base64 images to avoid huge payloads
+            // Note: getLayoutContext() already returns a simplified shape (width/height at top-level)
             const trimmedContext = {
-                pageCount: rawContext.pages?.length || 1,
-                pages: rawContext.pages?.map((page: any) => ({
-                    pageIndex: page.pageIndex,
-                    elements: page.elements?.map((el: any) => ({
+                pageCount: Array.isArray(contextPages) ? (contextPages.length || 1) : 1,
+                pages: (Array.isArray(contextPages) ? contextPages : []).map((page: any, idx: number) => ({
+                    pageIndex: idx,
+                    elements: (page.elements || []).map((el: any) => ({
                         id: el.id,
                         type: el.type,
                         x: Math.round(el.x),
                         y: Math.round(el.y),
-                        content: el.type === 'image' ? '[IMAGE]' : (el.content || '').substring(0, 200),
+                        content: el.type === 'image' ? '[IMAGE]' : String(el.content || '').substring(0, 200),
                         style: {
-                            width: Math.round(el.style?.width || 0),
-                            height: Math.round(el.style?.height || 0),
-                            fontSize: el.style?.fontSize,
-                            color: el.style?.color,
-                            backgroundColor: el.type !== 'image' ? el.style?.backgroundColor : undefined,
-                            zIndex: el.style?.zIndex,
+                            width: Math.round(el.width || 0),
+                            height: Math.round(el.height || 0),
                         }
                     }))
                 }))

@@ -54,17 +54,60 @@ class MCPService {
                 }
             });
 
-            // Assuming the tool returns a URL or base64
-            // The Gen-PDF MCP server usually returns a base64 or a success message with the file
-            // Let's check the result structure
-            if (result && result.content && Array.isArray(result.content)) {
-                const textContent = result.content.find(c => c.type === 'text');
-                if (textContent && 'text' in textContent) {
-                    return textContent.text;
+            if (!result || !('content' in result) || !Array.isArray((result as any).content)) {
+                throw new Error('Invalid response from MCP tool');
+            }
+
+            const textContent = (result as any).content.find((c: any) => c && c.type === 'text' && typeof c.text === 'string');
+            const rawText: string | null = textContent?.text || null;
+            if (!rawText) throw new Error('MCP tool returned no text payload');
+
+            // Common formats:
+            // - base64 string
+            // - data URL: data:application/pdf;base64,....
+            // - URL to a pdf
+            // - JSON string that includes url/base64
+            const trimmed = rawText.trim();
+
+            // 1) data:...;base64,...
+            const dataUrlMatch = trimmed.match(/^data:application\/pdf;base64,(.+)$/i);
+            if (dataUrlMatch?.[1]) return dataUrlMatch[1];
+
+            // 2) Looks like a URL
+            if (/^https?:\/\//i.test(trimmed)) {
+                const res = await fetch(trimmed);
+                if (!res.ok) throw new Error(`Failed to fetch MCP PDF URL (HTTP ${res.status})`);
+                const buf = Buffer.from(await res.arrayBuffer());
+                return buf.toString('base64');
+            }
+
+            // 3) Try parse as JSON with common fields
+            if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+                try {
+                    const parsed = JSON.parse(trimmed);
+                    const base64 = parsed?.base64 || parsed?.pdfBase64 || parsed?.content;
+                    const url = parsed?.url || parsed?.pdfUrl;
+                    if (typeof base64 === 'string' && base64.length > 100) {
+                        const m = base64.match(/^data:application\/pdf;base64,(.+)$/i);
+                        return m?.[1] || base64;
+                    }
+                    if (typeof url === 'string' && /^https?:\/\//i.test(url)) {
+                        const res = await fetch(url);
+                        if (!res.ok) throw new Error(`Failed to fetch MCP PDF URL (HTTP ${res.status})`);
+                        const buf = Buffer.from(await res.arrayBuffer());
+                        return buf.toString('base64');
+                    }
+                } catch {
+                    // ignore
                 }
             }
-            
-            throw new Error('Invalid response from MCP tool');
+
+            // 4) Heuristic: if it’s long and base64-ish, accept it
+            if (/^[A-Za-z0-9+/=\s]+$/.test(trimmed) && trimmed.replace(/\s+/g, '').length > 500) {
+                return trimmed.replace(/\s+/g, '');
+            }
+
+            throw new Error('Unrecognized MCP PDF payload format');
         } catch (error) {
             console.error('❌ MCP Tool call failed:', error);
             throw error;
