@@ -1,0 +1,733 @@
+{
+    "id": "sales-proposal-6pages",
+    "name": "Sales Proposal - 6 Pages",
+    "description": "Six-page comprehensive sales proposal with all sections",
+    "category": "proposal",
+    "preview": "/templates/previews/sales-proposal-6pages.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "header",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 100,
+              "backgroundColor": "#1e3a8a",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "proposal-title",
+            "type": "heading",
+            "x": 60,
+            "y": 25,
+            "content": "SALES PROPOSAL",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "to",
+            "type": "text",
+            "x": 60,
+            "y": 130,
+            "content": "TO: [Client Name]",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "from",
+            "type": "text",
+            "x": 60,
+            "y": 160,
+            "content": "FROM: Muhammad Daniyal, Antigravity",
+            "style": {
+              "width": 400,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#4b5563",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "date",
+            "type": "text",
+            "x": 500,
+            "y": 130,
+            "content": "Date: January 15, 2024",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#4b5563",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "executive-summary",
+            "type": "paragraph",
+            "x": 60,
+            "y": 230,
+            "content": "This proposal outlines our solution to help [Client Company] achieve [key outcome]. With our expertise in [your domain], we guarantee [value proposition].",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          }
+        ]
+      },
+      {
+        "id": "page-2",
+        "elements": [
+          {
+            "id": "offer-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Our Offer",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "offer-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 130,
+            "content": "• Service/Product A: Detailed description and key benefits\n• Service/Product B: Detailed description and key benefits\n• Service/Product C: Detailed description and key benefits\n• Service/Product D: Detailed description and key benefits\n• Service/Product E: Detailed description and key benefits\n• Service/Product F: Detailed description and key benefits",
+            "style": {
+              "width": 674,
+              "height": 210,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          }
+        ]
+      },
+      {
+        "id": "page-3",
+        "elements": [
+          {
+            "id": "deliverables-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Deliverables",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "deliverables-list",
+            "type": "paragraph",
+            "x": 60,
+            "y": 130,
+            "content": "• Comprehensive project report\n• Strategy presentation deck\n• Implementation roadmap\n• Training materials and documentation\n• 12 months ongoing support\n• Quarterly review meetings\n• Access to proprietary tools\n• Custom integrations",
+            "style": {
+              "width": 674,
+              "height": 200,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.8,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          }
+        ]
+      },
+      {
+        "id": "page-4",
+        "elements": [
+          {
+            "id": "pricing-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Investment",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "pricing-table",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 350,
+              "backgroundColor": "#f9fafb",
+              "borderRadius": 8,
+              "padding": 15,
+              "zIndex": 1
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "item-1",
+            "type": "text",
+            "x": 80,
+            "y": 155,
+            "content": "Service A: $X,XXX",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "item-2",
+            "type": "text",
+            "x": 80,
+            "y": 185,
+            "content": "Service B: $X,XXX",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "item-3",
+            "type": "text",
+            "x": 80,
+            "y": 215,
+            "content": "Service C: $X,XXX",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "item-4",
+            "type": "text",
+            "x": 80,
+            "y": 245,
+            "content": "Service D: $X,XXX",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "item-5",
+            "type": "text",
+            "x": 80,
+            "y": 275,
+            "content": "Service E: $X,XXX",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "item-6",
+            "type": "text",
+            "x": 80,
+            "y": 305,
+            "content": "Service F: $X,XXX",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "item-7",
+            "type": "text",
+            "x": 80,
+            "y": 335,
+            "content": "Service G: $X,XXX",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "total",
+            "type": "text",
+            "x": 400,
+            "y": 335,
+            "content": "Total: $XX,XXX",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          }
+        ]
+      },
+      {
+        "id": "page-5",
+        "elements": [
+          {
+            "id": "terms-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Terms & Conditions",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "terms",
+            "type": "paragraph",
+            "x": 60,
+            "y": 130,
+            "content": "• Payment terms: 50% deposit, 50% on completion\n• Valid for 30 days\n• Includes 12 months support\n• Additional services billed separately\n• NDA available upon request\n• Intellectual property rights transfer upon final payment\n• Cancellation policy: 30 days notice\n• Liability limited to contract value",
+            "style": {
+              "width": 674,
+              "height": 200,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.8,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "next-steps-title",
+            "type": "heading",
+            "x": 60,
+            "y": 370,
+            "content": "Next Steps",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "steps",
+            "type": "paragraph",
+            "x": 60,
+            "y": 420,
+            "content": "1. Review proposal with your team\n2. Schedule a follow-up call\n3. Finalize scope and deliverables\n4. Sign agreement and process initial payment\n5. Kick-off meeting\n6. Project initiation\n7. Regular progress updates",
+            "style": {
+              "width": 674,
+              "height": 160,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.8,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 4
+          }
+        ]
+      },
+      {
+        "id": "page-6",
+        "elements": [
+          {
+            "id": "company-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "About Antigravity",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "company-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 130,
+            "content": "Antigravity is a leading technology solutions provider specializing in web development, AI integration, and digital transformation. Our team of experts has delivered 50+ successful projects for clients ranging from startups to Fortune 500 companies.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "references-title",
+            "type": "heading",
+            "x": 60,
+            "y": 250,
+            "content": "Client References",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-1",
+            "type": "container",
+            "x": 60,
+            "y": 300,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 100,
+              "backgroundColor": "#f9fafb",
+              "borderRadius": 8,
+              "padding": 10,
+              "zIndex": 1
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-1-name",
+            "type": "text",
+            "x": 80,
+            "y": 320,
+            "content": "Company A",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-1-contact",
+            "type": "text",
+            "x": 80,
+            "y": 345,
+            "content": "Contact: John Doe, CEO",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-1-phone",
+            "type": "text",
+            "x": 80,
+            "y": 365,
+            "content": "+1 (555) 987-6543",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-2",
+            "type": "container",
+            "x": 407,
+            "y": 300,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 100,
+              "backgroundColor": "#f9fafb",
+              "borderRadius": 8,
+              "padding": 10,
+              "zIndex": 1
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-2-name",
+            "type": "text",
+            "x": 427,
+            "y": 320,
+            "content": "Company B",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-2-contact",
+            "type": "text",
+            "x": 427,
+            "y": 345,
+            "content": "Contact: Jane Smith, CTO",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "ref-2-phone",
+            "type": "text",
+            "x": 427,
+            "y": 365,
+            "content": "+1 (555) 456-7890",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "signature",
+            "type": "container",
+            "x": 60,
+            "y": 450,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "backgroundColor": "transparent",
+              "borderTop": "1px solid #e5e7eb",
+              "zIndex": 1
+            },
+            "pageIndex": 5
+          },
+          {
+            "id": "signature-name",
+            "type": "text",
+            "x": 60,
+            "y": 490,
+            "content": "Muhammad Daniyal",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 5
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["sales", "proposal", "business"],
+      "colorScheme": "blue",
+      "layout": "multi-page",
+      "pageCount": 6
+    }
+  }

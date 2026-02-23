@@ -1,0 +1,309 @@
+{
+    "id": "startup-pitch-3pages",
+    "name": "Startup Pitch - 3 Pages",
+    "description": "Three-page startup pitch deck with problem, solution, and market",
+    "category": "pitch",
+    "preview": "/templates/previews/startup-pitch-3pages.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "cover-bg",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 1123,
+              "backgroundColor": "#0f172a",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "logo",
+            "type": "text",
+            "x": 60,
+            "y": 60,
+            "content": "STARTUP NAME",
+            "style": {
+              "width": 300,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "tagline",
+            "type": "text",
+            "x": 60,
+            "y": 110,
+            "content": "Revolutionizing the future",
+            "style": {
+              "width": 400,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 300,
+              "color": "#e2e8f0",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "headline",
+            "type": "heading",
+            "x": 60,
+            "y": 250,
+            "content": "We solve [problem] with [solution]",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 48,
+              "fontWeight": 800,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "subheadline",
+            "type": "paragraph",
+            "x": 60,
+            "y": 360,
+            "content": "Our platform helps [target audience] achieve [outcome] through [key feature].",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#cbd5e1",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          }
+        ]
+      },
+      {
+        "id": "page-2",
+        "elements": [
+          {
+            "id": "problem-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "The Problem",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "problem-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 140,
+            "content": "Describe the problem your target audience faces. Use statistics and pain points.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "solution-title",
+            "type": "heading",
+            "x": 60,
+            "y": 280,
+            "content": "Our Solution",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "solution-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 340,
+            "content": "Explain how your product solves the problem. Highlight key features and benefits.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          }
+        ]
+      },
+      {
+        "id": "page-3",
+        "elements": [
+          {
+            "id": "market-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Market Opportunity",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "market-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 140,
+            "content": "Describe the market size, growth trends, and target segments.",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "market-chart",
+            "type": "container",
+            "x": 60,
+            "y": 250,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 200,
+              "backgroundColor": "#e2e8f0",
+              "borderRadius": 12,
+              "zIndex": 1
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "chart-label",
+            "type": "text",
+            "x": 347,
+            "y": 340,
+            "content": "[Market Growth Chart]",
+            "style": {
+              "width": 150,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#64748b",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "competition-title",
+            "type": "heading",
+            "x": 60,
+            "y": 500,
+            "content": "Competitive Landscape",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 24,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "competition-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 550,
+            "content": "Brief overview of competitors and your competitive advantage.",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["startup", "pitch", "investor"],
+      "colorScheme": "dark",
+      "layout": "multi-page",
+      "pageCount": 3
+    }
+  }

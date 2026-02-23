@@ -1,0 +1,593 @@
+{
+    "id": "startup-pitch-5pages",
+    "name": "Startup Pitch - 5 Pages",
+    "description": "Five-page startup pitch deck with problem, solution, market, traction, and team",
+    "category": "pitch",
+    "preview": "/templates/previews/startup-pitch-5pages.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "cover-bg",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 1123,
+              "backgroundColor": "#0f172a",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "logo",
+            "type": "text",
+            "x": 60,
+            "y": 60,
+            "content": "STARTUP NAME",
+            "style": {
+              "width": 300,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "tagline",
+            "type": "text",
+            "x": 60,
+            "y": 110,
+            "content": "Revolutionizing the future",
+            "style": {
+              "width": 400,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 300,
+              "color": "#e2e8f0",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "headline",
+            "type": "heading",
+            "x": 60,
+            "y": 250,
+            "content": "We solve [problem] with [solution]",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 48,
+              "fontWeight": 800,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "subheadline",
+            "type": "paragraph",
+            "x": 60,
+            "y": 360,
+            "content": "Our platform helps [target audience] achieve [outcome] through [key feature].",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#cbd5e1",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          }
+        ]
+      },
+      {
+        "id": "page-2",
+        "elements": [
+          {
+            "id": "problem-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "The Problem",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "problem-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 140,
+            "content": "Describe the problem your target audience faces. Use statistics and pain points.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "solution-title",
+            "type": "heading",
+            "x": 60,
+            "y": 280,
+            "content": "Our Solution",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "solution-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 340,
+            "content": "Explain how your product solves the problem. Highlight key features and benefits.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          }
+        ]
+      },
+      {
+        "id": "page-3",
+        "elements": [
+          {
+            "id": "market-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Market Opportunity",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "market-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 140,
+            "content": "Describe the market size, growth trends, and target segments.",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "market-chart",
+            "type": "container",
+            "x": 60,
+            "y": 250,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 200,
+              "backgroundColor": "#e2e8f0",
+              "borderRadius": 12,
+              "zIndex": 1
+            },
+            "pageIndex": 2
+          }
+        ]
+      },
+      {
+        "id": "page-4",
+        "elements": [
+          {
+            "id": "traction-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Traction & Milestones",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "traction-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 140,
+            "content": "Showcase your achievements: users, revenue, partnerships, press mentions.",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "traction-stats",
+            "type": "container",
+            "x": 60,
+            "y": 250,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 120,
+              "backgroundColor": "#f1f5f9",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 1
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "stat-1",
+            "type": "text",
+            "x": 120,
+            "y": 280,
+            "content": "10,000+",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 20,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "stat-1-label",
+            "type": "text",
+            "x": 120,
+            "y": 310,
+            "content": "Active Users",
+            "style": {
+              "width": 150,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#475569",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "stat-2",
+            "type": "text",
+            "x": 322,
+            "y": 280,
+            "content": "$1.2M",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 20,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "stat-2-label",
+            "type": "text",
+            "x": 322,
+            "y": 310,
+            "content": "ARR",
+            "style": {
+              "width": 150,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#475569",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "stat-3",
+            "type": "text",
+            "x": 524,
+            "y": 280,
+            "content": "3x",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 20,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "stat-3-label",
+            "type": "text",
+            "x": 524,
+            "y": 310,
+            "content": "YoY Growth",
+            "style": {
+              "width": 150,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#475569",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          }
+        ]
+      },
+      {
+        "id": "page-5",
+        "elements": [
+          {
+            "id": "team-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Our Team",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "team-desc",
+            "type": "paragraph",
+            "x": 60,
+            "y": 140,
+            "content": "Meet the founders and key team members. Highlight relevant experience and expertise.",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "team-grid",
+            "type": "container",
+            "x": 60,
+            "y": 250,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 300,
+              "backgroundColor": "transparent",
+              "display": "grid",
+              "gridTemplateColumns": "1fr 1fr",
+              "gap": "20px",
+              "zIndex": 1
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "member-1",
+            "type": "container",
+            "x": 60,
+            "y": 250,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f9fafb",
+              "borderRadius": 12,
+              "padding": 15,
+              "zIndex": 2
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "member-1-name",
+            "type": "text",
+            "x": 80,
+            "y": 270,
+            "content": "Jane Doe",
+            "style": {
+              "width": 287,
+              "height": 25,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "member-1-role",
+            "type": "text",
+            "x": 80,
+            "y": 300,
+            "content": "CEO, Ex-Google",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#475569",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "member-2",
+            "type": "container",
+            "x": 407,
+            "y": 250,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f9fafb",
+              "borderRadius": 12,
+              "padding": 15,
+              "zIndex": 2
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "member-2-name",
+            "type": "text",
+            "x": 427,
+            "y": 270,
+            "content": "John Smith",
+            "style": {
+              "width": 287,
+              "height": 25,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "member-2-role",
+            "type": "text",
+            "x": 427,
+            "y": 300,
+            "content": "CTO, Ex-Meta",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#475569",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["startup", "pitch", "investor"],
+      "colorScheme": "dark",
+      "layout": "multi-page",
+      "pageCount": 5
+    }
+  }

@@ -1,0 +1,296 @@
+{
+    "id": "annual-report-1page",
+    "name": "Annual Report - 1 Page",
+    "description": "Single-page annual report summary template",
+    "category": "report",
+    "preview": "/templates/previews/annual-report-1page.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "header",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 120,
+              "backgroundColor": "#2c3e50",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "report-title",
+            "type": "heading",
+            "x": 60,
+            "y": 30,
+            "content": "ANNUAL REPORT 2024",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "company-name",
+            "type": "text",
+            "x": 60,
+            "y": 80,
+            "content": "[Company Name]",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#ecf0f1",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "letter-title",
+            "type": "heading",
+            "x": 60,
+            "y": 160,
+            "content": "Letter from the CEO",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "letter-text",
+            "type": "paragraph",
+            "x": 60,
+            "y": 200,
+            "content": "This year has been transformative for [Company Name]. We achieved record growth, expanded our team, and delivered exceptional value to our clients. Our revenue increased by 40%, and we successfully launched three new products. I want to thank our employees, partners, and customers for making this possible.",
+            "style": {
+              "width": 674,
+              "height": 100,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "highlights-title",
+            "type": "heading",
+            "x": 60,
+            "y": 330,
+            "content": "2024 Highlights",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "stats",
+            "type": "container",
+            "x": 60,
+            "y": 380,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 120,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 8,
+              "padding": 20,
+              "zIndex": 1
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "stat-1",
+            "type": "text",
+            "x": 120,
+            "y": 410,
+            "content": "40%",
+            "style": {
+              "width": 100,
+              "height": 30,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "stat-1-label",
+            "type": "text",
+            "x": 120,
+            "y": 445,
+            "content": "Revenue Growth",
+            "style": {
+              "width": 100,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "stat-2",
+            "type": "text",
+            "x": 347,
+            "y": 410,
+            "content": "50+",
+            "style": {
+              "width": 100,
+              "height": 30,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "stat-2-label",
+            "type": "text",
+            "x": 347,
+            "y": 445,
+            "content": "New Clients",
+            "style": {
+              "width": 100,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "stat-3",
+            "type": "text",
+            "x": 574,
+            "y": 410,
+            "content": "3",
+            "style": {
+              "width": 100,
+              "height": 30,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "stat-3-label",
+            "type": "text",
+            "x": 574,
+            "y": 445,
+            "content": "New Products",
+            "style": {
+              "width": 100,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "footer",
+            "type": "container",
+            "x": 60,
+            "y": 550,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "backgroundColor": "transparent",
+              "borderTop": "1px solid #e5e7eb",
+              "zIndex": 1
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "footer-text",
+            "type": "text",
+            "x": 60,
+            "y": 580,
+            "content": "© 2024 [Company Name]. All rights reserved.",
+            "style": {
+              "width": 300,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#9ca3af",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["annual", "report", "financial"],
+      "colorScheme": "dark",
+      "layout": "single-page",
+      "pageCount": 1
+    }
+  }

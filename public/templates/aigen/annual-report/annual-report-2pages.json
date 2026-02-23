@@ -1,0 +1,358 @@
+{
+    "id": "annual-report-2pages",
+    "name": "Annual Report - 2 Pages",
+    "description": "Two-page annual report with CEO letter and financial highlights",
+    "category": "report",
+    "preview": "/templates/previews/annual-report-2pages.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "header",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 120,
+              "backgroundColor": "#2c3e50",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "report-title",
+            "type": "heading",
+            "x": 60,
+            "y": 30,
+            "content": "ANNUAL REPORT 2024",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "company-name",
+            "type": "text",
+            "x": 60,
+            "y": 80,
+            "content": "[Company Name]",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#ecf0f1",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "letter-title",
+            "type": "heading",
+            "x": 60,
+            "y": 160,
+            "content": "Letter from the CEO",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "letter-text",
+            "type": "paragraph",
+            "x": 60,
+            "y": 200,
+            "content": "This year has been transformative for [Company Name]. We achieved record growth, expanded our team, and delivered exceptional value to our clients. Our revenue increased by 40%, and we successfully launched three new products. I want to thank our employees, partners, and customers for making this possible.",
+            "style": {
+              "width": 674,
+              "height": 100,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "highlights-title",
+            "type": "heading",
+            "x": 60,
+            "y": 330,
+            "content": "2024 Highlights",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "highlights-list",
+            "type": "paragraph",
+            "x": 60,
+            "y": 380,
+            "content": "• Revenue increased 40% to $XXM\n• Expanded to 3 new markets\n• Launched 3 innovative products\n• Grew team by 25%\n• Achieved 95% customer satisfaction",
+            "style": {
+              "width": 674,
+              "height": 120,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.8,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          }
+        ]
+      },
+      {
+        "id": "page-2",
+        "elements": [
+          {
+            "id": "financial-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Financial Overview",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "financial-table",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 200,
+              "backgroundColor": "#f9fafb",
+              "borderRadius": 8,
+              "padding": 15,
+              "zIndex": 1
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "row-1",
+            "type": "text",
+            "x": 80,
+            "y": 160,
+            "content": "Revenue: $XXM",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "row-2",
+            "type": "text",
+            "x": 80,
+            "y": 195,
+            "content": "Gross Profit: $XM",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "row-3",
+            "type": "text",
+            "x": 80,
+            "y": 230,
+            "content": "Operating Income: $XM",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "row-4",
+            "type": "text",
+            "x": 80,
+            "y": 265,
+            "content": "Net Income: $XM",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "row-5",
+            "type": "text",
+            "x": 400,
+            "y": 160,
+            "content": "vs 2023: +40%",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#27ae60",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "outlook-title",
+            "type": "heading",
+            "x": 60,
+            "y": 380,
+            "content": "2025 Outlook",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#2c3e50",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "outlook-text",
+            "type": "paragraph",
+            "x": 60,
+            "y": 430,
+            "content": "We plan to expand into Asian markets, launch two additional products, and increase R&D investment by 30%. Our goal is to achieve 50% revenue growth while maintaining profitability.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "footer",
+            "type": "container",
+            "x": 60,
+            "y": 560,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "backgroundColor": "transparent",
+              "borderTop": "1px solid #e5e7eb",
+              "zIndex": 1
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "footer-text",
+            "type": "text",
+            "x": 60,
+            "y": 590,
+            "content": "© 2024 [Company Name]. All rights reserved.",
+            "style": {
+              "width": 300,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#9ca3af",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["annual", "report", "financial"],
+      "colorScheme": "dark",
+      "layout": "multi-page",
+      "pageCount": 2
+    }
+  }

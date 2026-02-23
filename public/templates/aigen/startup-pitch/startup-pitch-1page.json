@@ -1,0 +1,277 @@
+{
+    "id": "startup-pitch-1page",
+    "name": "Startup Pitch - 1 Page",
+    "description": "Single-page startup pitch deck template",
+    "category": "pitch",
+    "preview": "/templates/previews/startup-pitch-1page.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "cover-bg",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 1123,
+              "backgroundColor": "#0f172a",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "logo",
+            "type": "text",
+            "x": 60,
+            "y": 60,
+            "content": "STARTUP NAME",
+            "style": {
+              "width": 300,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 700,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "tagline",
+            "type": "text",
+            "x": 60,
+            "y": 110,
+            "content": "Revolutionizing the future",
+            "style": {
+              "width": 400,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 300,
+              "color": "#e2e8f0",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "headline",
+            "type": "heading",
+            "x": 60,
+            "y": 250,
+            "content": "We solve [problem] with [solution]",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 48,
+              "fontWeight": 800,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "subheadline",
+            "type": "paragraph",
+            "x": 60,
+            "y": 360,
+            "content": "Our platform helps [target audience] achieve [outcome] through [key feature]. Join us in transforming the industry.",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#cbd5e1",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cta-button",
+            "type": "container",
+            "x": 297,
+            "y": 500,
+            "content": "",
+            "style": {
+              "width": 200,
+              "height": 50,
+              "backgroundColor": "#fbbf24",
+              "borderRadius": 25,
+              "zIndex": 2
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cta-text",
+            "type": "text",
+            "x": 347,
+            "y": 515,
+            "content": "GET INVESTED",
+            "style": {
+              "width": 100,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "metrics",
+            "type": "container",
+            "x": 60,
+            "y": 650,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 100,
+              "backgroundColor": "#1e293b",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 1
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "metric-1",
+            "type": "text",
+            "x": 120,
+            "y": 680,
+            "content": "10M+",
+            "style": {
+              "width": 120,
+              "height": 30,
+              "fontSize": 24,
+              "fontWeight": 700,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "metric-1-label",
+            "type": "text",
+            "x": 120,
+            "y": 715,
+            "content": "Users",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#94a3b8",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "metric-2",
+            "type": "text",
+            "x": 347,
+            "y": 680,
+            "content": "$5M",
+            "style": {
+              "width": 120,
+              "height": 30,
+              "fontSize": 24,
+              "fontWeight": 700,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "metric-2-label",
+            "type": "text",
+            "x": 347,
+            "y": 715,
+            "content": "Revenue",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#94a3b8",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "metric-3",
+            "type": "text",
+            "x": 574,
+            "y": 680,
+            "content": "200%",
+            "style": {
+              "width": 120,
+              "height": 30,
+              "fontSize": 24,
+              "fontWeight": 700,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "metric-3-label",
+            "type": "text",
+            "x": 574,
+            "y": 715,
+            "content": "Growth",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#94a3b8",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["startup", "pitch", "investor"],
+      "colorScheme": "dark",
+      "layout": "single-page",
+      "pageCount": 1
+    }
+  }

@@ -1,0 +1,862 @@
+{
+    "id": "annual-report-3pages",
+    "name": "Annual Report - 3 Pages",
+    "description": "Three-page annual report with CEO letter, financial highlights, and operational review",
+    "category": "report",
+    "preview": "/templates/previews/annual-report-3pages.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "header",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 150,
+              "backgroundColor": "#1e3a8a",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "report-title",
+            "type": "heading",
+            "x": 60,
+            "y": 40,
+            "content": "ANNUAL REPORT 2024",
+            "style": {
+              "width": 674,
+              "height": 50,
+              "fontSize": 36,
+              "fontWeight": 700,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "company-name",
+            "type": "text",
+            "x": 60,
+            "y": 100,
+            "content": "[Company Name]",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 400,
+              "color": "#e0e7ff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "letter-title",
+            "type": "heading",
+            "x": 60,
+            "y": 190,
+            "content": "Letter from the CEO",
+            "style": {
+              "width": 674,
+              "height": 35,
+              "fontSize": 24,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "letter-text",
+            "type": "paragraph",
+            "x": 60,
+            "y": 240,
+            "content": "Dear Shareholders, Partners, and Employees,\n\n2024 was a landmark year for [Company Name]. We achieved record revenue of $XX million, representing 40% growth over the previous year. Our team expanded to XX employees, and we successfully launched three new products that have been well-received by the market.\n\nI am incredibly proud of what we have accomplished together. Our commitment to innovation and customer success has never been stronger. As we look to 2025, we are well-positioned for continued growth and expansion into new markets.",
+            "style": {
+              "width": 674,
+              "height": 200,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "signature",
+            "type": "text",
+            "x": 60,
+            "y": 460,
+            "content": "Sincerely,\n[CEO Name]\nChief Executive Officer",
+            "style": {
+              "width": 300,
+              "height": 70,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          }
+        ]
+      },
+      {
+        "id": "page-2",
+        "elements": [
+          {
+            "id": "financial-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Financial Highlights",
+            "style": {
+              "width": 674,
+              "height": 35,
+              "fontSize": 24,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "financial-table",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 250,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 1
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-1",
+            "type": "text",
+            "x": 100,
+            "y": 165,
+            "content": "Revenue",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-1-value",
+            "type": "text",
+            "x": 450,
+            "y": 165,
+            "content": "$XX million",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-1-growth",
+            "type": "text",
+            "x": 550,
+            "y": 165,
+            "content": "+40%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-2",
+            "type": "text",
+            "x": 100,
+            "y": 205,
+            "content": "Gross Profit",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-2-value",
+            "type": "text",
+            "x": 450,
+            "y": 205,
+            "content": "$XX million",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-2-growth",
+            "type": "text",
+            "x": 550,
+            "y": 205,
+            "content": "+35%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-3",
+            "type": "text",
+            "x": 100,
+            "y": 245,
+            "content": "Operating Income",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-3-value",
+            "type": "text",
+            "x": 450,
+            "y": 245,
+            "content": "$X million",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-3-growth",
+            "type": "text",
+            "x": 550,
+            "y": 245,
+            "content": "+45%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-4",
+            "type": "text",
+            "x": 100,
+            "y": 285,
+            "content": "Net Income",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-4-value",
+            "type": "text",
+            "x": 450,
+            "y": 285,
+            "content": "$X million",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-4-growth",
+            "type": "text",
+            "x": 550,
+            "y": 285,
+            "content": "+50%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-5",
+            "type": "text",
+            "x": 100,
+            "y": 325,
+            "content": "Cash Flow",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-5-value",
+            "type": "text",
+            "x": 450,
+            "y": 325,
+            "content": "$X million",
+            "style": {
+              "width": 150,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "metric-5-growth",
+            "type": "text",
+            "x": 550,
+            "y": 325,
+            "content": "+30%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "chart-placeholder",
+            "type": "container",
+            "x": 100,
+            "y": 380,
+            "content": "",
+            "style": {
+              "width": 300,
+              "height": 150,
+              "backgroundColor": "#e2e8f0",
+              "borderRadius": 8,
+              "zIndex": 2
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "chart-label",
+            "type": "text",
+            "x": 200,
+            "y": 445,
+            "content": "Revenue Growth Chart",
+            "style": {
+              "width": 150,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#64748b",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          }
+        ]
+      },
+      {
+        "id": "page-3",
+        "elements": [
+          {
+            "id": "operations-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Operational Review",
+            "style": {
+              "width": 674,
+              "height": 35,
+              "fontSize": 24,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "metrics-grid",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 200,
+              "backgroundColor": "transparent",
+              "display": "grid",
+              "gridTemplateColumns": "1fr 1fr",
+              "gap": "20px",
+              "zIndex": 1
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "metric-card-1",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 150,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 15,
+              "zIndex": 2
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-1-title",
+            "type": "text",
+            "x": 80,
+            "y": 155,
+            "content": "New Customers",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-1-value",
+            "type": "text",
+            "x": 80,
+            "y": 180,
+            "content": "500+",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-1-growth",
+            "type": "text",
+            "x": 80,
+            "y": 225,
+            "content": "↑ 25% vs 2023",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "metric-card-2",
+            "type": "container",
+            "x": 407,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 150,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 15,
+              "zIndex": 2
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-2-title",
+            "type": "text",
+            "x": 427,
+            "y": 155,
+            "content": "Employee Count",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-2-value",
+            "type": "text",
+            "x": 427,
+            "y": 180,
+            "content": "150",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-2-growth",
+            "type": "text",
+            "x": 427,
+            "y": 225,
+            "content": "↑ 30% vs 2023",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "metric-card-3",
+            "type": "container",
+            "x": 60,
+            "y": 300,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 150,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 15,
+              "zIndex": 2
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-3-title",
+            "type": "text",
+            "x": 80,
+            "y": 325,
+            "content": "Products Launched",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-3-value",
+            "type": "text",
+            "x": 80,
+            "y": 350,
+            "content": "3",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-3-growth",
+            "type": "text",
+            "x": 80,
+            "y": 395,
+            "content": "↑ 2 new in 2024",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "metric-card-4",
+            "type": "container",
+            "x": 407,
+            "y": 300,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 150,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 15,
+              "zIndex": 2
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-4-title",
+            "type": "text",
+            "x": 427,
+            "y": 325,
+            "content": "Market Expansion",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-4-value",
+            "type": "text",
+            "x": 427,
+            "y": 350,
+            "content": "3",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 32,
+              "fontWeight": 700,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "card-4-growth",
+            "type": "text",
+            "x": 427,
+            "y": 395,
+            "content": "New countries",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "outlook-title",
+            "type": "heading",
+            "x": 60,
+            "y": 500,
+            "content": "2025 Outlook",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 20,
+              "fontWeight": 600,
+              "color": "#1e3a8a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "outlook-text",
+            "type": "paragraph",
+            "x": 60,
+            "y": 550,
+            "content": "We plan to expand into Asian markets, launch two additional products, and increase R&D investment by 30%. Our goal is to achieve 50% revenue growth while maintaining profitability and investing in our people.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["annual", "report", "financial", "comprehensive"],
+      "colorScheme": "blue",
+      "layout": "multi-page",
+      "pageCount": 3
+    }
+  }

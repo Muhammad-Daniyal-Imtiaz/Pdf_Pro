@@ -1,0 +1,1993 @@
+{
+    "id": "annual-report-5pages",
+    "name": "Annual Report - 5 Pages",
+    "description": "Five-page comprehensive annual report with cover, CEO letter, financials, operations, future outlook, and leadership team",
+    "category": "report",
+    "preview": "/templates/previews/annual-report-5pages.png",
+    "pages": [
+      {
+        "id": "page-1",
+        "elements": [
+          {
+            "id": "cover",
+            "type": "container",
+            "x": 0,
+            "y": 0,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 1123,
+              "backgroundColor": "#0a1929",
+              "zIndex": 0
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cover-accent",
+            "type": "container",
+            "x": 0,
+            "y": 300,
+            "content": "",
+            "style": {
+              "width": 794,
+              "height": 10,
+              "backgroundColor": "#fbbf24",
+              "zIndex": 1
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cover-logo",
+            "type": "text",
+            "x": 347,
+            "y": 200,
+            "content": "[LOGO]",
+            "style": {
+              "width": 100,
+              "height": 100,
+              "fontSize": 24,
+              "fontWeight": 700,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 4,
+              "resizeMode": "auto-width",
+              "backgroundColor": "#1e3a8a",
+              "borderRadius": 50,
+              "borderWidth": 2,
+              "borderColor": "#fbbf24"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cover-title",
+            "type": "heading",
+            "x": 60,
+            "y": 400,
+            "content": "ANNUAL REPORT",
+            "style": {
+              "width": 674,
+              "height": 60,
+              "fontSize": 48,
+              "fontWeight": 700,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cover-year",
+            "type": "heading",
+            "x": 60,
+            "y": 480,
+            "content": "2024",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 72,
+              "fontWeight": 800,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cover-company",
+            "type": "text",
+            "x": 60,
+            "y": 600,
+            "content": "[Company Name]",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 24,
+              "fontWeight": 400,
+              "color": "#e2e8f0",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cover-tagline",
+            "type": "text",
+            "x": 60,
+            "y": 650,
+            "content": "Innovation • Growth • Excellence",
+            "style": {
+              "width": 674,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 300,
+              "color": "#94a3b8",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          },
+          {
+            "id": "cover-date",
+            "type": "text",
+            "x": 60,
+            "y": 1000,
+            "content": "February 2025",
+            "style": {
+              "width": 674,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#64748b",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 0
+          }
+        ]
+      },
+      {
+        "id": "page-2",
+        "elements": [
+          {
+            "id": "letter-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Letter from the CEO",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "letter-line",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 100,
+              "height": 3,
+              "backgroundColor": "#fbbf24",
+              "zIndex": 1
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "letter-greeting",
+            "type": "text",
+            "x": 60,
+            "y": 160,
+            "content": "Dear Shareholders, Employees, and Partners,",
+            "style": {
+              "width": 500,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "letter-text-1",
+            "type": "paragraph",
+            "x": 60,
+            "y": 200,
+            "content": "2024 was a landmark year for [Company Name]. We achieved record financial results, expanded our global footprint, and made significant investments in innovation and our people. I am pleased to report that our revenue grew by 40% to $XX million, and we achieved profitability for the first time in our history.",
+            "style": {
+              "width": 674,
+              "height": 100,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "letter-text-2",
+            "type": "paragraph",
+            "x": 60,
+            "y": 320,
+            "content": "Our success this year would not have been possible without the dedication of our employees, the trust of our customers, and the support of our partners. We added 50 new team members, entered three new international markets, and launched three innovative products that have been met with enthusiastic market response.",
+            "style": {
+              "width": 674,
+              "height": 100,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "letter-text-3",
+            "type": "paragraph",
+            "x": 60,
+            "y": 440,
+            "content": "As we look to 2025, we are focused on accelerating our growth, deepening our customer relationships, and continuing to innovate. We have ambitious plans to expand into Asia, launch additional products, and invest in AI capabilities that will differentiate us in the market.",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "letter-closing",
+            "type": "text",
+            "x": 60,
+            "y": 560,
+            "content": "Thank you for your continued trust and support.",
+            "style": {
+              "width": 400,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "signature-name",
+            "type": "text",
+            "x": 60,
+            "y": 610,
+            "content": "[CEO Name]",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "signature-title",
+            "type": "text",
+            "x": 60,
+            "y": 640,
+            "content": "Chief Executive Officer",
+            "style": {
+              "width": 200,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "signature-photo",
+            "type": "container",
+            "x": 500,
+            "y": 560,
+            "content": "",
+            "style": {
+              "width": 80,
+              "height": 80,
+              "backgroundColor": "#e2e8f0",
+              "borderRadius": "50%",
+              "zIndex": 2
+            },
+            "pageIndex": 1
+          },
+          {
+            "id": "signature-photo-text",
+            "type": "text",
+            "x": 520,
+            "y": 590,
+            "content": "[PHOTO]",
+            "style": {
+              "width": 40,
+              "height": 20,
+              "fontSize": 10,
+              "fontWeight": 400,
+              "color": "#64748b",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 1
+          }
+        ]
+      },
+      {
+        "id": "page-3",
+        "elements": [
+          {
+            "id": "financial-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Financial Performance",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "financial-line",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 100,
+              "height": 3,
+              "backgroundColor": "#fbbf24",
+              "zIndex": 1
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "financial-summary",
+            "type": "container",
+            "x": 60,
+            "y": 160,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 120,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 1
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "summary-text",
+            "type": "paragraph",
+            "x": 80,
+            "y": 185,
+            "content": "2024 was our strongest financial year to date. We achieved record revenue of $XX million, representing 40% year-over-year growth. Gross margin improved to 68%, and we delivered positive net income of $X million.",
+            "style": {
+              "width": 634,
+              "height": 70,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.6,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "financial-table",
+            "type": "container",
+            "x": 60,
+            "y": 310,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 250,
+              "backgroundColor": "#ffffff",
+              "borderWidth": 1,
+              "borderColor": "#e2e8f0",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 1
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "table-header-1",
+            "type": "text",
+            "x": 80,
+            "y": 345,
+            "content": "Income Statement ($M)",
+            "style": {
+              "width": 300,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "table-header-2",
+            "type": "text",
+            "x": 400,
+            "y": 345,
+            "content": "2024",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "table-header-3",
+            "type": "text",
+            "x": 500,
+            "y": 345,
+            "content": "2023",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "table-header-4",
+            "type": "text",
+            "x": 600,
+            "y": 345,
+            "content": "% Change",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "table-divider",
+            "type": "container",
+            "x": 80,
+            "y": 380,
+            "content": "",
+            "style": {
+              "width": 620,
+              "height": 1,
+              "backgroundColor": "#e2e8f0",
+              "zIndex": 2
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-1",
+            "type": "text",
+            "x": 80,
+            "y": 400,
+            "content": "Revenue",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-1-2024",
+            "type": "text",
+            "x": 400,
+            "y": 400,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-1-2023",
+            "type": "text",
+            "x": 500,
+            "y": 400,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-1-change",
+            "type": "text",
+            "x": 600,
+            "y": 400,
+            "content": "+40%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-2",
+            "type": "text",
+            "x": 80,
+            "y": 435,
+            "content": "Cost of Revenue",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-2-2024",
+            "type": "text",
+            "x": 400,
+            "y": 435,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-2-2023",
+            "type": "text",
+            "x": 500,
+            "y": 435,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-2-change",
+            "type": "text",
+            "x": 600,
+            "y": 435,
+            "content": "+25%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#dc2626",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-3",
+            "type": "text",
+            "x": 80,
+            "y": 470,
+            "content": "Gross Profit",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-3-2024",
+            "type": "text",
+            "x": 400,
+            "y": 470,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-3-2023",
+            "type": "text",
+            "x": 500,
+            "y": 470,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-3-change",
+            "type": "text",
+            "x": 600,
+            "y": 470,
+            "content": "+35%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-4",
+            "type": "text",
+            "x": 80,
+            "y": 505,
+            "content": "Operating Expenses",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#374151",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-4-2024",
+            "type": "text",
+            "x": 400,
+            "y": 505,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-4-2023",
+            "type": "text",
+            "x": 500,
+            "y": 505,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-4-change",
+            "type": "text",
+            "x": 600,
+            "y": 505,
+            "content": "+30%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#dc2626",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-5",
+            "type": "text",
+            "x": 80,
+            "y": 540,
+            "content": "Net Income",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 600,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-5-2024",
+            "type": "text",
+            "x": 400,
+            "y": 540,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 700,
+              "color": "#0f172a",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-5-2023",
+            "type": "text",
+            "x": 500,
+            "y": 540,
+            "content": "XX.X",
+            "style": {
+              "width": 80,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          },
+          {
+            "id": "row-5-change",
+            "type": "text",
+            "x": 600,
+            "y": 540,
+            "content": "+50%",
+            "style": {
+              "width": 100,
+              "height": 25,
+              "fontSize": 14,
+              "fontWeight": 700,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "right",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 2
+          }
+        ]
+      },
+      {
+        "id": "page-4",
+        "elements": [
+          {
+            "id": "operations-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Operational Highlights",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "operations-line",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 100,
+              "height": 3,
+              "backgroundColor": "#fbbf24",
+              "zIndex": 1
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "metrics-grid",
+            "type": "container",
+            "x": 60,
+            "y": 160,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 300,
+              "display": "grid",
+              "gridTemplateColumns": "1fr 1fr",
+              "gap": "20px",
+              "zIndex": 1
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "metric-card-1",
+            "type": "container",
+            "x": 60,
+            "y": 160,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "boxShadow": "0 4px 6px rgba(0,0,0,0.05)",
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-1-title",
+            "type": "text",
+            "x": 80,
+            "y": 190,
+            "content": "New Customers",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-1-value",
+            "type": "text",
+            "x": 80,
+            "y": 215,
+            "content": "1,250",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 36,
+              "fontWeight": 700,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-1-growth",
+            "type": "text",
+            "x": 80,
+            "y": 260,
+            "content": "↑ 25% vs 2023",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "metric-card-2",
+            "type": "container",
+            "x": 407,
+            "y": 160,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "boxShadow": "0 4px 6px rgba(0,0,0,0.05)",
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-2-title",
+            "type": "text",
+            "x": 427,
+            "y": 190,
+            "content": "Employees",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-2-value",
+            "type": "text",
+            "x": 427,
+            "y": 215,
+            "content": "180",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 36,
+              "fontWeight": 700,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-2-growth",
+            "type": "text",
+            "x": 427,
+            "y": 260,
+            "content": "↑ 30% vs 2023",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#059669",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "metric-card-3",
+            "type": "container",
+            "x": 60,
+            "y": 320,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "boxShadow": "0 4px 6px rgba(0,0,0,0.05)",
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-3-title",
+            "type": "text",
+            "x": 80,
+            "y": 350,
+            "content": "Products Launched",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-3-value",
+            "type": "text",
+            "x": 80,
+            "y": 375,
+            "content": "3",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 36,
+              "fontWeight": 700,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-3-desc",
+            "type": "text",
+            "x": 80,
+            "y": 420,
+            "content": "AI Platform, Analytics, Mobile",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "metric-card-4",
+            "type": "container",
+            "x": 407,
+            "y": 320,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "boxShadow": "0 4px 6px rgba(0,0,0,0.05)",
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-4-title",
+            "type": "text",
+            "x": 427,
+            "y": 350,
+            "content": "Markets Entered",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 14,
+              "fontWeight": 500,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-4-value",
+            "type": "text",
+            "x": 427,
+            "y": 375,
+            "content": "3",
+            "style": {
+              "width": 287,
+              "height": 40,
+              "fontSize": 36,
+              "fontWeight": 700,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "card-4-desc",
+            "type": "text",
+            "x": 427,
+            "y": 420,
+            "content": "UK, Germany, Japan",
+            "style": {
+              "width": 287,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestones-title",
+            "type": "heading",
+            "x": 60,
+            "y": 500,
+            "content": "Key Milestones",
+            "style": {
+              "width": 674,
+              "height": 30,
+              "fontSize": 20,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "timeline",
+            "type": "container",
+            "x": 60,
+            "y": 550,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 120,
+              "backgroundColor": "transparent",
+              "zIndex": 1
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-1",
+            "type": "container",
+            "x": 60,
+            "y": 550,
+            "content": "",
+            "style": {
+              "width": 150,
+              "height": 80,
+              "backgroundColor": "#f8fafc",
+              "borderLeft": "4px solid #fbbf24",
+              "padding": 10,
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-1-q",
+            "type": "text",
+            "x": 75,
+            "y": 565,
+            "content": "Q1 2024",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 600,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-1-desc",
+            "type": "text",
+            "x": 75,
+            "y": 590,
+            "content": "Series B Funding",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-2",
+            "type": "container",
+            "x": 230,
+            "y": 550,
+            "content": "",
+            "style": {
+              "width": 150,
+              "height": 80,
+              "backgroundColor": "#f8fafc",
+              "borderLeft": "4px solid #fbbf24",
+              "padding": 10,
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-2-q",
+            "type": "text",
+            "x": 245,
+            "y": 565,
+            "content": "Q2 2024",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 600,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-2-desc",
+            "type": "text",
+            "x": 245,
+            "y": 590,
+            "content": "UK Office Opening",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-3",
+            "type": "container",
+            "x": 400,
+            "y": 550,
+            "content": "",
+            "style": {
+              "width": 150,
+              "height": 80,
+              "backgroundColor": "#f8fafc",
+              "borderLeft": "4px solid #fbbf24",
+              "padding": 10,
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-3-q",
+            "type": "text",
+            "x": 415,
+            "y": 565,
+            "content": "Q3 2024",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 600,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-3-desc",
+            "type": "text",
+            "x": 415,
+            "y": 590,
+            "content": "Product Launch",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-4",
+            "type": "container",
+            "x": 570,
+            "y": 550,
+            "content": "",
+            "style": {
+              "width": 150,
+              "height": 80,
+              "backgroundColor": "#f8fafc",
+              "borderLeft": "4px solid #fbbf24",
+              "padding": 10,
+              "zIndex": 2
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-4-q",
+            "type": "text",
+            "x": 585,
+            "y": 565,
+            "content": "Q4 2024",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 600,
+              "color": "#fbbf24",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          },
+          {
+            "id": "milestone-4-desc",
+            "type": "text",
+            "x": 585,
+            "y": 590,
+            "content": "1,000 Customers",
+            "style": {
+              "width": 120,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 500,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 3
+          }
+        ]
+      },
+      {
+        "id": "page-5",
+        "elements": [
+          {
+            "id": "leadership-title",
+            "type": "heading",
+            "x": 60,
+            "y": 80,
+            "content": "Leadership Team",
+            "style": {
+              "width": 674,
+              "height": 40,
+              "fontSize": 28,
+              "fontWeight": 600,
+              "color": "#0a1929",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.2,
+              "resizeMode": "auto-height"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leadership-line",
+            "type": "container",
+            "x": 60,
+            "y": 130,
+            "content": "",
+            "style": {
+              "width": 100,
+              "height": 3,
+              "backgroundColor": "#fbbf24",
+              "zIndex": 1
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "team-grid",
+            "type": "container",
+            "x": 60,
+            "y": 160,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 500,
+              "display": "grid",
+              "gridTemplateColumns": "1fr 1fr",
+              "gap": "20px",
+              "zIndex": 1
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-1",
+            "type": "container",
+            "x": 60,
+            "y": 160,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 2
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-1-avatar",
+            "type": "container",
+            "x": 80,
+            "y": 180,
+            "content": "",
+            "style": {
+              "width": 60,
+              "height": 60,
+              "backgroundColor": "#1e3a8a",
+              "borderRadius": "50%",
+              "zIndex": 3
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-1-initials",
+            "type": "text",
+            "x": 100,
+            "y": 195,
+            "content": "JD",
+            "style": {
+              "width": 20,
+              "height": 25,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-1-name",
+            "type": "text",
+            "x": 160,
+            "y": 185,
+            "content": "John Doe",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-1-role",
+            "type": "text",
+            "x": 160,
+            "y": 210,
+            "content": "Chief Executive Officer",
+            "style": {
+              "width": 200,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-2",
+            "type": "container",
+            "x": 407,
+            "y": 160,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 2
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-2-avatar",
+            "type": "container",
+            "x": 427,
+            "y": 180,
+            "content": "",
+            "style": {
+              "width": 60,
+              "height": 60,
+              "backgroundColor": "#1e3a8a",
+              "borderRadius": "50%",
+              "zIndex": 3
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-2-initials",
+            "type": "text",
+            "x": 447,
+            "y": 195,
+            "content": "JS",
+            "style": {
+              "width": 20,
+              "height": 25,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-2-name",
+            "type": "text",
+            "x": 507,
+            "y": 185,
+            "content": "Jane Smith",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-2-role",
+            "type": "text",
+            "x": 507,
+            "y": 210,
+            "content": "Chief Technology Officer",
+            "style": {
+              "width": 200,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-3",
+            "type": "container",
+            "x": 60,
+            "y": 320,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 2
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-3-avatar",
+            "type": "container",
+            "x": 80,
+            "y": 340,
+            "content": "",
+            "style": {
+              "width": 60,
+              "height": 60,
+              "backgroundColor": "#1e3a8a",
+              "borderRadius": "50%",
+              "zIndex": 3
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-3-initials",
+            "type": "text",
+            "x": 100,
+            "y": 355,
+            "content": "MJ",
+            "style": {
+              "width": 20,
+              "height": 25,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-3-name",
+            "type": "text",
+            "x": 160,
+            "y": 345,
+            "content": "Michael Johnson",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-3-role",
+            "type": "text",
+            "x": 160,
+            "y": 370,
+            "content": "Chief Financial Officer",
+            "style": {
+              "width": 200,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-4",
+            "type": "container",
+            "x": 407,
+            "y": 320,
+            "content": "",
+            "style": {
+              "width": 327,
+              "height": 140,
+              "backgroundColor": "#f8fafc",
+              "borderRadius": 12,
+              "padding": 20,
+              "zIndex": 2
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-4-avatar",
+            "type": "container",
+            "x": 427,
+            "y": 340,
+            "content": "",
+            "style": {
+              "width": 60,
+              "height": 60,
+              "backgroundColor": "#1e3a8a",
+              "borderRadius": "50%",
+              "zIndex": 3
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-4-initials",
+            "type": "text",
+            "x": 447,
+            "y": 355,
+            "content": "SW",
+            "style": {
+              "width": 20,
+              "height": 25,
+              "fontSize": 18,
+              "fontWeight": 600,
+              "color": "#ffffff",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "center",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-4-name",
+            "type": "text",
+            "x": 507,
+            "y": 345,
+            "content": "Sarah Wilson",
+            "style": {
+              "width": 200,
+              "height": 25,
+              "fontSize": 16,
+              "fontWeight": 600,
+              "color": "#1f2937",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "leader-4-role",
+            "type": "text",
+            "x": 507,
+            "y": 370,
+            "content": "Chief Marketing Officer",
+            "style": {
+              "width": 200,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#6b7280",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "footer",
+            "type": "container",
+            "x": 60,
+            "y": 520,
+            "content": "",
+            "style": {
+              "width": 674,
+              "height": 80,
+              "backgroundColor": "transparent",
+              "borderTop": "1px solid #e5e7eb",
+              "zIndex": 1
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "footer-text",
+            "type": "text",
+            "x": 60,
+            "y": 560,
+            "content": "© 2024 [Company Name]. All rights reserved. | Annual Report 2024",
+            "style": {
+              "width": 500,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#9ca3af",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          },
+          {
+            "id": "footer-contact",
+            "type": "text",
+            "x": 60,
+            "y": 590,
+            "content": "contact@company.com | www.company.com",
+            "style": {
+              "width": 300,
+              "height": 20,
+              "fontSize": 12,
+              "fontWeight": 400,
+              "color": "#9ca3af",
+              "fontFamily": "Inter, sans-serif",
+              "textAlign": "left",
+              "lineHeight": 1.4,
+              "resizeMode": "auto-width"
+            },
+            "pageIndex": 4
+          }
+        ]
+      }
+    ],
+    "metadata": {
+      "created": "2024-01-01",
+      "version": "1.0",
+      "author": "PDF Pro Templates",
+      "tags": ["annual", "report", "financial", "comprehensive", "leadership"],
+      "colorScheme": "navy",
+      "layout": "multi-page",
+      "pageCount": 5
+    }
+  }
