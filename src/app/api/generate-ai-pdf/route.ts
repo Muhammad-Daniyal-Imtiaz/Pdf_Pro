@@ -1,425 +1,316 @@
-// app/api/generate-ai-pdf/route.ts
-// ─────────────────────────────────────────────────────────────────────────────
-// WORLD-CLASS AI PDF GENERATION ENGINE v4
-// Key fix: AI is prompted with 794×1123 (96 DPI) — the REAL editor canvas size.
-// Output is run through enforceLayout() which fixes z-index, overflow,
-// collision, and icon sizing before elements reach the editor.
-// ─────────────────────────────────────────────────────────────────────────────
-
+// app/api/generate-ai-pdf/route.ts - SIMPLE, CLEAN, PROFESSIONAL PDF GENERATOR
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
-import { enforceLayout } from '@/app/lib/layout-engine'
-import { CANVAS_WIDTH_PX, CANVAS_HEIGHT_PX } from '@/lib/constants'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
-export const dynamic = 'force-dynamic'
 
 const genAI = new GoogleGenerativeAI(
-  process.env.GEMINI_API_KEY ||
-  process.env.GOOGLE_API_KEY ||
-  process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
+  process.env.GEMINI_API_KEY || 
+  process.env.NEXT_PUBLIC_GEMINI_API_KEY || 
   ''
 )
 
-// ─── In-memory rate limiter (upgrade to Redis for multi-instance) ──────────────
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
-const RATE_LIMIT_MAX = 15
-const RATE_LIMIT_WINDOW_MS = 60_000
+// SIMPLE PROMPT - Generates clean, collision-free layouts
+function generatePrompt(request: any): string {
+  const { prompt, documentType, pageCount = 1, role, experience, topic } = request
+  
+  const userContent = prompt || topic || role || 'Professional document'
+  
+  return `You are a PROFESSIONAL DOCUMENT DESIGNER. Create a SIMPLE, CLEAN, BLACK-AND-WHITE ${documentType}.
 
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now()
-  const entry = rateLimitMap.get(ip)
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS })
-    return true
-  }
-  if (entry.count >= RATE_LIMIT_MAX) return false
-  entry.count++
-  return true
-}
+USER REQUEST: ${userContent}
+${role ? `\nRole: ${role}` : ''}
+${experience ? `\nExperience: ${experience} years` : ''}
 
-// ─── A4 Canvas Schema — AI must use 794×1123 (96 DPI, same as editor) ─────────
-const A4_ELEMENT_SCHEMA = `
-=== CANVAS SPECIFICATION (A4 at 96 DPI) ===
-Canvas: 794px wide × 1123px tall. (NEVER use 595px — that is wrong!)
-Origin: Top-Left (0,0).
-Safe Zone: x: 40–754, y: 40–1083.
-2-Column layout: Left column x:40–374, Right column x:414–754.
+CRITICAL RULES:
+1. BLACK TEXT ONLY: All text must be #000000 on white background
+2. NO COLORS: No colored backgrounds, no decorative elements
+3. CLEAN SPACING: 30px minimum between elements
+4. NO OVERLAPS: Each element BELOW the previous one
+5. SIMPLE LAYOUT: Left-aligned, single column, professional
 
-=== OUTPUT FORMAT (strict JSON, NO markdown wrapping) ===
+CANVAS SIZE: 794px wide × 1123px tall
+SAFE AREA: X between 60-700, Y starts at 80
+
+POSITIONING FORMULA (MANDATORY):
+- Start at Y = 80
+- For each new element: Y = previous_Y + previous_height + 30
+- All elements at X = 60 (left-aligned)
+- Width = 674 (full content width)
+
+ELEMENT TYPES:
 {
-  "pages": [ { "pageIndex": 0, "elements": [ ...elements ] } ]
-}
-
-=== ELEMENT RULES ===
-
-1. TEXT / HEADING (type: "text" | "heading" | "paragraph")
-   Required: id, x, y, content(string)
-   style: { width, fontSize(8–96), fontWeight(400|600|700|800), color(hex),
-            fontFamily, textAlign("left"|"center"|"right"), lineHeight(1.2–2.0),
-            backgroundColor("transparent"|hex), padding(0–20), letterSpacing }
-   CRITICAL: Do NOT set height. Height is AUTOMATIC. The engine calculates it.
-   zIndex: 5 for headings, 4 for body text, 4 for paragraphs.
-
-2. SHAPE (type: "shape")
-   style: { width, height, backgroundColor(hex), borderRadius(0–50),
-            opacity(0.1–1.0), zIndex, boxShadow(optional), borderWidth, borderColor }
-   Use for: backgrounds, card containers, banners, accent bars.
-   zIndex: -1 for full-page backgrounds, 0 for banners, 1 for cards.
-
-3. LINE (type: "line")
-   Required: lineOrientation("horizontal"|"vertical")
-   style: { width, height(1–4 for thickness), backgroundColor(hex), zIndex: 3 }
-
-4. IMAGE (type: "image")
-   Required: content: ""
-   style: { width, height, backgroundColor("#f3f4f6"), borderRadius, zIndex: 2 }
-
-5. SOCIAL ICON (type: "social-icon")
-   Required: iconType("linkedin"|"email"|"phone"|"github"|"website"|"location"|"twitter"|"calendar"|"user")
-   style: { width(24), height(24), zIndex: 6 }
-   For a row of icons: x = startX + (i × 34). Never overlap icons.
-
-=== POSITIONING RULES (CRITICAL — Read carefully) ===
-1. Start y at 40. Each element placed below the previous: y = prev_y + prev_estimated_height + gap.
-2. Minimum vertical gap between elements in the same column: 16px.
-3. BANNER HEADING PATTERN (use for every document):
-   Step A: Shape banner — {x:0, y:0, width:794, height:220, backgroundColor:"<primary>", zIndex:0}
-   Step B: Heading ON banner — {type:"heading", x:40, y:70, style:{width:714, fontSize:52, fontWeight:800, color:"#fff", zIndex:5}}
-   Step C: Subtitle ON banner — {type:"text", x:40, y:145, style:{width:714, fontSize:16, color:"rgba(255,255,255,0.85)", zIndex:5}}
-   Step D: First content element — y: 240 + gap (i.e., y:270)
-4. Two elements in DIFFERENT x-columns (no x-overlap) do NOT need y-gaps between them.
-5. NEVER place two elements with overlapping x AND y ranges (unless intentionally layered with different zIndex).
-
-=== Z-INDEX REFERENCE ===
-  -1 → Full-page background
-   0 → Header/footer banner shape
-   1 → Card / section background shape
-   2 → Images
-   3 → Lines / dividers
-   4 → Body text / paragraph
-   5 → Headings (always above shapes)
-   6 → Social icons / inline icons
-
-=== TYPOGRAPHY SCALE ===
-- Page Title (on banner):  fontSize 48–60, fontWeight 800, color "#fff", zIndex 5
-- Section Heading:          fontSize 18–24, fontWeight 700, color <primary>, zIndex 5
-- Sub-heading:              fontSize 13–15, fontWeight 600
-- Body text:                fontSize 10–12, fontWeight 400, lineHeight 1.6
-- Label / caption:          fontSize 8–10,  fontWeight 600
-
-=== DESIGN RULES ===
-- Always start PAGE 0 with a hero banner (shape + heading + subtitle as described above).
-- Use card shapes (borderRadius:10, boxShadow:"0 4px 16px rgba(0,0,0,0.08)") for sections.
-- Use the exact design token colors provided. Do not invent new colors.
-- White text (#fff) on dark backgrounds. Dark text on light backgrounds.
-- Minimum 14 elements per page for visual richness.
-- ALL content must be realistic and specific — NO Lorem ipsum, NO [PLACEHOLDER] text.
-`
-
-// ─── Document-type specific layout guidance ───────────────────────────────────
-
-const LAYOUT_ARCHETYPES: Record<string, Record<string, string>> = {
-  cv: {
-    'tech-modern': 'Full-height accent sidebar (x:0, width:190, zIndex:-1, backgroundColor:tokens.surface). Main content at x:220. Bold vertical divider line (x:205, width:1, height:800).',
-    'creative-bold': 'Full-width hero header (height:200, backgroundColor:tokens.primary). Use cards (type:shape, borderRadius:12, boxShadow) for each major section.',
-    'elegant-minimalist': 'Ultra-clean white space. 60px margins everywhere. Thin dividers (height:1, opacity:0.3). Serif headings (headingFont).',
-    'modern-professional': 'Balanced 2-column layout. Contact icons in a horizontal bar below name. Sections clearly separated by 40px gaps.',
-    'corporate-formal': 'Single column layout. Section titles with backgrounds (height:30, width:515, borderRadius:4, zIndex:0). High contrast text.',
-    'warm-executive': 'Rich colors. Use shapes as left-accent bars for headers (width:4, height:24, x:30). Serif fonts.'
-  },
-  proposal: {
-    'creative-bold': 'Vibrant hero banner with large white title. Page 0 = Title Page with full-width background image placeholder. Content cards with heavy shadows.',
-    'corporate-formal': 'Strict grid alignment. Left-aligned headers at x:40. Section numbers. Heavy dividers.',
-    'modern-professional': 'Service-based layout. Use large horizontal containers for "Services" and "Pricing".'
-  },
-  report: {
-    'tech-modern': 'Data-driven look. Use lines as grid markers. Small captions for stats. Monospace-feel text.',
-    'corporate-formal': 'Header/Footer on every page showing "CONFIDENTIAL". Clear page numbering.'
+  "id": "unique-id",
+  "type": "heading" | "paragraph" | "line",
+  "x": 60,
+  "y": calculated_position,
+  "content": "actual text",
+  "pageIndex": 0,
+  "style": {
+    "width": 674,
+    "height": calculated,
+    "fontSize": 12-32,
+    "fontWeight": 400 | 700,
+    "color": "#000000",
+    "backgroundColor": "transparent",
+    "textAlign": "left",
+    "lineHeight": 1.5,
+    "padding": 0
   }
 }
 
-function getDocTypeGuidance(docType: string, tokens: any, role: string, experience: string, topic: string, style: string): string {
-  const archetypeGuidance = LAYOUT_ARCHETYPES[docType]?.[style] ||
-    LAYOUT_ARCHETYPES[docType]?.['modern-professional'] || '';
+HEIGHT CALCULATION:
+- heading: 40-50px
+- paragraph: (content.length / 80) * 20 + 20
+- line: 2px
 
-  const additionalContext = archetypeGuidance ? `\nSPECIFIC STYLE ARCHETYPE: ${archetypeGuidance} \n` : '';
+DOCUMENT STRUCTURE FOR ${documentType}:
+${getDocumentStructure(documentType, userContent, role, experience)}
 
-  const guides: Record<string, string> = {
+RETURN ONLY JSON ARRAY - NO MARKDOWN:
+[
+  { element1 },
+  { element2 },
+  ...
+]`
+}
+
+function getDocumentStructure(docType: string, content: string, role: string, exp: string): string {
+  const structures: Record<string, string> = {
     cv: `
-  === CV / RESUME LAYOUT GUIDANCE ===
-    Structure: Header zone(top 140px) → Contact bar → Section divider → 2 - column body OR single column
-Required sections: Professional header with name + title, Contact information row with icons,
-Summary / Profile paragraph, Experience section with job entries, Skills section, Education section.
+1. Name (heading, fontSize 32, fontWeight 700, y=80, height=50)
+2. Job Title (paragraph, fontSize 16, y=150, height=30)
+3. Divider Line (y=200, height=2)
+4. "Professional Summary" (heading, fontSize 18, y=230, height=35)
+5. Summary text (paragraph, fontSize 13, y=280, height=80)
+6. "Experience" (heading, fontSize 18, y=390, height=35)
+7. Job 1 Title + Company (paragraph, fontSize 14, y=440, height=25)
+8. Job 1 Description (paragraph, fontSize 12, y=480, height=60)
+9. Job 2 Title + Company (paragraph, fontSize 14, y=560, height=25)
+10. Job 2 Description (paragraph, fontSize 12, y=600, height=60)
+11. "Education" (heading, fontSize 18, y=690, height=35)
+12. Degree + School (paragraph, fontSize 13, y=740, height=40)
+13. "Skills" (heading, fontSize 18, y=810, height=35)
+14. Skills list (paragraph, fontSize 12, y=860, height=60)
 
-Header design:
-- Background shape: x: 0, y: 0, width: 595, height: 130, backgroundColor: "${tokens.primary}", zIndex: 0
-  - Full name: type: "heading", fontSize 38–44, fontWeight 800, color: "#ffffff", y around 45, zIndex: 5
-    - Job title: type: "text", fontSize 14, fontWeight 400, color: "rgba(255,255,255,0.85)", y around 95, zIndex: 4
-
-Contact row(below header around y: 145):
-- Social icons for email, phone, linkedin, location — spaced evenly, size 20x20
-  - Contact text labels next to each icon, fontSize 9
-
-Section structure:
-- Section heading: fontSize 13, fontWeight 700, color: "${tokens.primary}", uppercase
-  - Thin separator line after heading: height: 1, backgroundColor: "${tokens.border}", full width
-    - Job title + company: fontSize 11, fontWeight 600
-      - Date range(right - aligned): fontSize 9, color: "${tokens.textMuted}"
-        - Bullet point text: fontSize 9–10, leading with "•"
-
-For ${role || 'Professional'} with ${experience || '5'} years experience — tailor all content specifically to this role.
-`,
+Use realistic content for ${role || 'Professional'} with ${exp || '5'} years experience.`,
+    
     proposal: `
-  === BUSINESS PROPOSAL LAYOUT GUIDANCE ===
-    Structure: Bold hero section(top 180px) → Executive summary box → 3 content sections → Pricing / CTA
+1. Title (heading, fontSize 28, fontWeight 700, y=80, height=45)
+2. Subtitle (paragraph, fontSize 14, y=145, height=25)
+3. Divider (y=190, height=2)
+4. "Executive Summary" (heading, fontSize 18, y=220, height=35)
+5. Summary text (paragraph, fontSize 12, y=270, height=100)
+6. "Project Objectives" (heading, fontSize 18, y=400, height=35)
+7. Objectives text (paragraph, fontSize 12, y=450, height=80)
+8. "Proposed Solution" (heading, fontSize 18, y=560, height=35)
+9. Solution text (paragraph, fontSize 12, y=610, height=100)
+10. "Timeline" (heading, fontSize 18, y=740, height=35)
+11. Timeline text (paragraph, fontSize 12, y=790, height=60)
+12. "Investment" (heading, fontSize 18, y=880, height=35)
+13. Pricing text (paragraph, fontSize 12, y=930, height=60)
 
-Hero section:
-- Background: full - width shape, backgroundColor: "${tokens.primary}", height: 180
-  - Document title: type: "heading", fontSize 32–40, fontWeight 800, color: "#ffffff", zIndex: 5
-    - Subtitle / tagline: type: "text", fontSize 13, color: "rgba(255,255,255,0.8)", zIndex: 4
-      - Prepared by text: fontSize 9, y near bottom of hero
-
-Content sections(use cards — rounded shapes with backgroundColor: "${tokens.surface}"):
-- Section headers: fontSize 16, fontWeight 700, color: "${tokens.primary}"
-  - Body text: fontSize 10, lineHeight 1.6
-
-Include: Overview, Solution / Approach, Timeline, Investment / Pricing, Next Steps
-Topic: ${topic || 'Business Services'}
-`,
+Topic: ${content}`,
+    
     report: `
-  === REPORT LAYOUT GUIDANCE ===
-    Structure: Title page header(top 120px) → Abstract / Summary box → Body sections with callouts
+1. Title (heading, fontSize 28, y=80, height=45)
+2. Date (paragraph, fontSize 12, y=145, height=20)
+3. Divider (y=185, height=2)
+4. "Abstract" (heading, fontSize 18, y=215, height=35)
+5. Abstract text (paragraph, fontSize 12, y=265, height=80)
+6. "Introduction" (heading, fontSize 18, y=375, height=35)
+7. Introduction text (paragraph, fontSize 12, y=425, height=100)
+8. "Findings" (heading, fontSize 18, y=555, height=35)
+9. Findings text (paragraph, fontSize 12, y=605, height=120)
+10. "Conclusion" (heading, fontSize 18, y=755, height=35)
+11. Conclusion text (paragraph, fontSize 12, y=805, height=80)
 
-Header: Document title, subtitle, date, author / organization
-Abstract box: Light background shape, key summary 3 - 4 lines
-Body: Multiple sections with clear headings, data callout boxes for key statistics
-Footer: Page number, confidentiality notice
-
-Topic: ${topic || 'Business Report'}
-`,
+Topic: ${content}`,
+    
     letter: `
-  === COVER LETTER LAYOUT GUIDANCE ===
-    Structure: Letterhead top(100px) → Date + Recipient block → Salutation → Body(3 paragraphs) → Closing
+1. Your Name (heading, fontSize 20, y=80, height=35)
+2. Your Address (paragraph, fontSize 11, y=130, height=40)
+3. Date (paragraph, fontSize 11, y=190, height=20)
+4. Recipient Name (paragraph, fontSize 11, y=230, height=20)
+5. Company (paragraph, fontSize 11, y=265, height=20)
+6. Salutation (paragraph, fontSize 12, y=305, height=25)
+7. Opening paragraph (paragraph, fontSize 12, y=350, height=60)
+8. Body paragraph 1 (paragraph, fontSize 12, y=430, height=80)
+9. Body paragraph 2 (paragraph, fontSize 12, y=530, height=80)
+10. Closing paragraph (paragraph, fontSize 12, y=630, height=60)
+11. Sign-off (paragraph, fontSize 12, y=710, height=25)
+12. Your Name (paragraph, fontSize 12, y=755, height=25)
 
-Letterhead: Applicant name prominent at top, contact info row with icons
-Body: Professional paragraph text, fontSize 10, lineHeight 1.6, proper margins(x: 50, width: 495)
-Closing: "Sincerely," + name + signature space
-
-Role applying for: ${role || 'Position'}
-`,
+For ${role || 'Position'}`,
+    
     invoice: `
-  === INVOICE LAYOUT GUIDANCE ===
-    Structure: Company header(top 100px) → Invoice meta(number, dates) → Bill - to section → 
-           Line items area(table - style with alternating row shapes) → Totals → Payment terms
+1. "INVOICE" (heading, fontSize 32, y=80, height=50)
+2. Invoice Number (paragraph, fontSize 12, y=150, height=20)
+3. Date (paragraph, fontSize 12, y=185, height=20)
+4. Divider (y=225, height=2)
+5. "From:" (heading, fontSize 14, y=255, height=25)
+6. Your company details (paragraph, fontSize 11, y=295, height=60)
+7. "To:" (heading, fontSize 14, y=385, height=25)
+8. Client details (paragraph, fontSize 11, y=425, height=60)
+9. Divider (y=505, height=2)
+10. "Description" header (heading, fontSize 14, y=535, height=25)
+11. Service 1 (paragraph, fontSize 12, y=575, height=25)
+12. Service 2 (paragraph, fontSize 12, y=615, height=25)
+13. Divider (y=660, height=2)
+14. "Total:" (heading, fontSize 16, y=690, height=30)
+15. Amount (paragraph, fontSize 16, y=735, height=30)
 
-Include: INVOICE label prominently, invoice number, issue date, due date,
-  From section, To section, service description rows, subtotal, tax, TOTAL(large),
-    Payment terms, bank details area, thank you note
-
-Topic: ${topic || 'Professional Services'}
-`,
+Topic: ${content}`,
+    
     brochure: `
-  === BROCHURE LAYOUT GUIDANCE ===
-    Structure: Full - bleed hero(top 200px) → 3 - column features grid → About section → CTA section
+1. Company Name (heading, fontSize 32, y=80, height=50)
+2. Tagline (paragraph, fontSize 14, y=150, height=25)
+3. Divider (y=195, height=2)
+4. "About Us" (heading, fontSize 18, y=225, height=35)
+5. About text (paragraph, fontSize 12, y=275, height=80)
+6. "Our Services" (heading, fontSize 18, y=385, height=35)
+7. Service 1 (paragraph, fontSize 13, y=435, height=50)
+8. Service 2 (paragraph, fontSize 13, y=505, height=50)
+9. Service 3 (paragraph, fontSize 13, y=575, height=50)
+10. "Contact Us" (heading, fontSize 18, y=655, height=35)
+11. Contact details (paragraph, fontSize 12, y=705, height=60)
 
-Hero: Bold headline, subheadline, tagline — all on colored background
-Features: 3 icon + heading + text cards side by side
-Use brand colors prominently throughout
-
-Topic: ${topic || 'Company Services'}
-`,
+Topic: ${content}`
   }
-
-  return additionalContext + (guides[docType] || `Create a professional ${docType} document about: ${topic || role || 'General'} `)
+  
+  return structures[docType] || structures.report
 }
 
-// ─── Style-specific design token injection ────────────────────────────────────
-function buildDesignTokenPrompt(tokens: any, style: string): string {
-  return `
-  === DESIGN TOKENS — USE THESE EXACT VALUES ===
-    Style name: ${style}
-Primary color: "${tokens.primary}" — use for main headings, hero backgrounds, accent shapes
-Secondary color: "${tokens.secondary}" — use for subtle backgrounds, section fills
-Accent color: "${tokens.accent}" — use for highlights, icons, borders
-Text color: "${tokens.text}" — use for all body text
-Muted text: "${tokens.textMuted}" — use for captions, dates, labels
-Background: "${tokens.bg}" — page background(usually applied as full - page shape)
-Surface: "${tokens.surface}" — card backgrounds, section containers
-Border color: "${tokens.border}" — divider lines, container borders
-Heading font: "${tokens.headingFont}"
-Body font: "${tokens.bodyFont}"
-
-COLOR RULES:
-- Only use colors from the above palette — no random colors
-  - Text on dark backgrounds(primary) MUST be "#ffffff" or "rgba(255,255,255,0.85)"
-    - Text on light backgrounds use the text or textMuted colors
-      - Accent color for small elements: icons, highlights, decorative shapes
-        `
+// Validate and fix layout to prevent collisions
+function validateLayout(elements: any[]): any[] {
+  const fixed: any[] = []
+  let currentY = 80
+  
+  for (const el of elements) {
+    if (!el.type || !el.style) continue
+    
+    // Fix coordinates
+    const x = 60
+    let y = Math.max(currentY, Number(el.y) || currentY)
+    
+    // Calculate proper height
+    let height = Number(el.style.height) || 40
+    if (['heading', 'paragraph', 'text'].includes(el.type)) {
+      const content = String(el.content || '')
+      const fontSize = Number(el.style.fontSize) || 13
+      const width = 674
+      const charsPerLine = Math.max(1, width / (fontSize * 0.5))
+      const lines = Math.max(1, Math.ceil(content.length / charsPerLine))
+      height = Math.ceil(lines * fontSize * 1.5 + 20)
+    }
+    
+    // Ensure within page bounds
+    if (y + height > 1050) {
+      height = Math.max(20, 1050 - y)
+    }
+    
+    fixed.push({
+      ...el,
+      id: el.id || `el-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      x,
+      y,
+      pageIndex: 0,
+      style: {
+        width: 674,
+        height,
+        fontSize: el.style.fontSize || 13,
+        fontWeight: el.style.fontWeight || 400,
+        color: '#000000',
+        backgroundColor: 'transparent',
+        textAlign: 'left',
+        lineHeight: 1.5,
+        padding: 0,
+        resizeMode: 'auto-height'
+      }
+    })
+    
+    currentY = y + height + 30
+  }
+  
+  return fixed
 }
 
-// ─── Main route handler ────────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
-  // Rate limiting
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'anonymous'
-  if (!checkRateLimit(ip)) {
-    return NextResponse.json(
-      { error: 'Rate limit exceeded. Please wait a minute before generating again.', success: false },
-      { status: 429 }
-    )
-  }
-
-  // Parse input
-  let body: any
   try {
-    body = await request.json()
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON body', success: false }, { status: 400 })
-  }
-
-  // Sanitize and validate inputs
-  const docType = ['cv', 'proposal', 'report', 'letter', 'invoice', 'brochure', 'document'].includes(body.documentType)
-    ? body.documentType : 'document'
-  const pageCount = Math.max(1, Math.min(10, Number(body.pageCount) || 1))
-  const style = String(body.style || 'modern-professional').slice(0, 100)
-  const role = String(body.role || '').slice(0, 300)
-  const experience = String(body.experience || '').slice(0, 50)
-  const topic = String(body.topic || '').slice(0, 500)
-  const userPrompt = String(body.prompt || '').slice(0, 2000)
-
-  // Get design tokens (from request or use defaults)
-  const tokens = body.designTokens || {
-    primary: '#1e40af', secondary: '#dbeafe', accent: '#3b82f6',
-    text: '#0f172a', textMuted: '#64748b', bg: '#ffffff', surface: '#f8fafc',
-    border: '#e2e8f0', headingFont: 'Inter, sans-serif', bodyFont: 'Inter, sans-serif'
-  }
-
-  // Build the master system prompt
-  const systemPrompt = A4_ELEMENT_SCHEMA +
-    buildDesignTokenPrompt(tokens, style) +
-    getDocTypeGuidance(docType, tokens, role, experience, topic, style)
-
-  // Build user request
-  const numPages = pageCount
-  const userRequest = `
-Create a ${numPages} -page ${docType} PDF with ${style} styling.
-  ${role ? `For role: ${role}` : ''}
-${experience ? `Years of experience: ${experience}` : ''}
-${topic ? `Topic/Subject: ${topic}` : ''}
-${userPrompt ? `Additional requirements: ${userPrompt}` : ''}
-${body.archetypeHint ? body.archetypeHint : ''}
-
-Requirements:
-- Generate exactly ${numPages} page(s)
-  - Each page must have minimum 10 elements, aim for 14–20 for richness
-    - Make ALL content realistic and specific(no "Lorem ipsum", no "[YOUR NAME]" placeholders)
-      - If this is a CV, use realistic job titles, company names, dates, skills
-        - If this is a proposal / report, use realistic business language and specific details
-          - Ensure pixel - perfect alignment: elements in the same visual group should share x positions
-            - Create visual depth with colored background shapes behind text sections
-              - Use the EXACT design tokens provided — no other colors
-
-Output ONLY valid JSON.No markdown.No explanation.Just JSON.
-`
-
-  // Configure Gemini model - use Flash for speed + cost efficiency
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-flash-latest',
-    systemInstruction: systemPrompt,
-    generationConfig: {
-      temperature: 0.75,        // Enough creativity for variety, stable enough for structure
-      maxOutputTokens: 16384,   // Large enough for multi-page docs
-      responseMimeType: 'application/json', // CRITICAL: Forces pure JSON, no markdown wrapping
+    const body = await request.json()
+    
+    if (!process.env.GEMINI_API_KEY && !process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
+      throw new Error('API key not configured')
     }
-  })
 
-  // ── Call with retry logic ──────────────────────────────────────────────────
-  let lastError = ''
-  let result: any = null
-
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      const retryInstruction = attempt > 0
-        ? `\n\nPREVIOUS ATTEMPT FAILED: ${lastError} \nPlease fix this issue and generate valid JSON.`
-        : ''
-
-      const response = await model.generateContent(userRequest + retryInstruction)
-      const text = response.response.text()
-
-      // Try to parse — handle edge case where AI wraps in ```json``` despite mime type
-      let parsed: any
+    const prompt = generatePrompt(body)
+    
+    // Try models in order
+    const models = ['gemini-2.0-flash-exp', 'gemini-flash-latest', 'gemini-pro-latest']
+    
+    for (const modelName of models) {
       try {
-        parsed = JSON.parse(text)
-      } catch {
-        // Strip markdown if present (shouldn't happen with responseMimeType but just in case)
-        const cleaned = text.replace(/^```(?: json) ?\n ? /m, '').replace(/\n ? ```$/m, '').trim()
-        parsed = JSON.parse(cleaned)
-      }
+        console.log(`🤖 Trying ${modelName}...`)
+        
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          generationConfig: {
+            temperature: 0.4,
+            maxOutputTokens: 8192,
+          }
+        })
 
-      // Validate response structure
-      if (!parsed.pages || !Array.isArray(parsed.pages) || parsed.pages.length === 0) {
-        throw new Error('Response missing pages array')
-      }
-
-      const totalElements = parsed.pages.reduce((sum: number, p: any) => sum + (p.elements?.length || 0), 0)
-      if (totalElements < 5) {
-        throw new Error(`Only ${totalElements} elements generated — need at least 5`)
-      }
-
-      // Ensure pageIndex is set, then run layout enforcement
-      parsed.pages = parsed.pages.map((page: any, pageIdx: number) => {
-        const rawElements = (page.elements || []).map((el: any, elIdx: number) => ({
-          ...el,
-          id: el.id || `el - ${pageIdx} -${elIdx} -${Date.now()} `,
-          pageIndex: el.pageIndex ?? pageIdx
-        }))
-        // enforceLayout fixes z-index, overflow, collision, icon sizing
-        // inputIs595:false because we now prompt the AI with 794px canvas
-        const fixedElements = enforceLayout(rawElements, { inputIs595: false })
-        return {
-          ...page,
-          pageIndex: page.pageIndex ?? pageIdx,
-          elements: fixedElements
+        const result = await model.generateContent(prompt)
+        const text = result.response.text()
+        
+        // Parse JSON
+        let cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim()
+        const jsonMatch = cleaned.match(/\[[\s\S]*\]/)
+        if (jsonMatch) cleaned = jsonMatch[0]
+        
+        const elements = JSON.parse(cleaned)
+        
+        if (!Array.isArray(elements) || elements.length === 0) {
+          throw new Error('Invalid response')
         }
-      })
-
-      result = parsed
-      break // Success!
-
-    } catch (err: any) {
-      lastError = err.message || 'Unknown error'
-      console.warn(`[generate - ai - pdf] Attempt ${attempt + 1}/3 failed: ${lastError}`)
-
-      if (attempt < 2) {
-        // Exponential backoff before retry
-        await new Promise(r => setTimeout(r, 1000 * (attempt + 1)))
+        
+        // Validate and fix
+        const validated = validateLayout(elements)
+        
+        console.log(`✅ Generated ${validated.length} elements`)
+        
+        return NextResponse.json({
+          success: true,
+          pages: [{
+            id: 'page-0',
+            pageIndex: 0,
+            elements: validated
+          }],
+          width: 794,
+          height: 1123
+        })
+        
+      } catch (err: any) {
+        console.warn(`⚠️ ${modelName} failed:`, err.message)
+        continue
       }
     }
-  }
-
-  if (!result) {
+    
+    throw new Error('All models failed')
+    
+  } catch (error: any) {
+    console.error('❌ Error:', error)
     return NextResponse.json(
-      { error: `AI generation failed after 3 attempts: ${lastError}`, success: false },
+      { success: false, error: error.message },
       { status: 500 }
     )
   }
-
-  return NextResponse.json({
-    success: true,
-    pages: result.pages,
-    width: CANVAS_WIDTH_PX,    // 794 — correct editor canvas width
-    height: CANVAS_HEIGHT_PX,  // 1123 — correct editor canvas height
-    elementCount: result.pages.reduce((sum: number, p: any) => sum + (p.elements?.length || 0), 0),
-    pageCount: result.pages.length
-  })
 }
 
 export async function GET() {
   return NextResponse.json({
-    status: 'Ready — World-Class AI PDF Generator v3',
-    engine: 'Gemini 1.5 Flash with full schema injection',
-    features: ['A4 schema enforcement', 'Design tokens', 'Layout archetypes', 'Retry logic', 'JSON mode'],
+    status: 'Ready - Simple Professional PDF Generator',
     endpoint: '/api/generate-ai-pdf',
     method: 'POST'
   })
