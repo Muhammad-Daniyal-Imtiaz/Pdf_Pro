@@ -211,8 +211,7 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         throw new Error(data.error || 'No pages returned from AI')
       }
 
-      // The server has already run enforceLayout, but run it once more client-side
-      // with the correct page dimensions to catch any edge cases
+      // Collect all elements from all pages
       const rawElements = data.pages.flatMap((page: any) =>
         (page.elements || []).map((el: any) => ({
           ...el,
@@ -220,9 +219,11 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         }))
       )
 
+      // Run through the Smart Reflow engine to prevent overlaps
+      const enforcedElements = enforceLayout(rawElements as any)
+
       updateProgress('⚡ Applying layout...', 90)
-      // Apply elements directly - server already validated them
-      applyLayoutChanges(rawElements as any)
+      applyLayoutChanges(enforcedElements as any)
 
       updateProgress(`✅ Done! ${rawElements.length} elements`, 100)
       setStatus('success')
@@ -347,10 +348,11 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
       if (!layoutResponse.ok) throw new Error('Layout generation failed')
       const layoutData = await layoutResponse.json()
 
-      // CRITICAL: Validate and fix layout before rendering
+      // CRITICAL: Validate and fix layout before rendering (and prevent overlaps)
       const validatedPages = layoutData.pages.map((page: any) => {
         const { elements } = validateElements(page.elements || [])
-        return { ...page, elements }
+        const enforced = enforceLayout(elements as any)
+        return { ...page, elements: enforced }
       })
 
       const pdfResponse = await fetch('/api/generate-pdf', {
@@ -360,8 +362,9 @@ export default function AIContentGenerator({ onContentGenerated, type, defaultPr
         body: JSON.stringify({
           pages: validatedPages,
           title: topic || prompt.substring(0, 40) || 'document',
-          width: 595,
-          height: 842
+          // Match the architect's A4 canvas size so nothing is cropped
+          width: 794,
+          height: 1123
         })
       })
 

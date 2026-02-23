@@ -11,11 +11,27 @@ export interface SmartPDFRequest {
     role?: string;
     experience?: string;
     topic?: string;
+    // Optional design token palette from the client (for consistent theming)
+    designTokens?: {
+        primary?: string;
+        secondary?: string;
+        accent?: string;
+        text?: string;
+        textMuted?: string;
+        bg?: string;
+        surface?: string;
+        border?: string;
+        headingFont?: string;
+        bodyFont?: string;
+        [key: string]: any;
+    };
+    // Optional layout archetype description (e.g. two-column CV, tri-fold brochure)
+    archetypeHint?: string;
 }
 
 export interface GeneratedElement {
     id: string;
-    type: 'heading' | 'paragraph' | 'container' | 'line' | 'text' | 'social-icon' | 'image' | 'link';
+    type: 'heading' | 'paragraph' | 'container' | 'line' | 'text' | 'image' | 'link';
     x: number;
     y: number;
     content: string;
@@ -105,7 +121,39 @@ export async function generateSmartPDF(request: SmartPDFRequest): Promise<{
 }
 
 function generateGodModePrompt(request: SmartPDFRequest): string {
-    const { documentType, pageCount, role, topic, prompt, style = 'modern professional' } = request;
+    const {
+        documentType,
+        pageCount,
+        role,
+        topic,
+        prompt,
+        style = 'modern professional',
+        designTokens,
+        archetypeHint
+    } = request;
+
+    const paletteSection = designTokens
+        ? `
+=== DESIGN TOKENS (CANONICAL PALETTE) ===
+Primary: ${designTokens.primary || '#0F172A'}
+Secondary: ${designTokens.secondary || '#F9FAFB'}
+Accent: ${designTokens.accent || '#3B82F6'}
+Text: ${designTokens.text || '#111827'}
+Text Muted: ${designTokens.textMuted || '#6B7280'}
+Background: ${designTokens.bg || '#FFFFFF'}
+Surface: ${designTokens.surface || '#F3F4F6'}
+Border: ${designTokens.border || '#E5E7EB'}
+Heading Font: ${designTokens.headingFont || 'Inter, system-ui, sans-serif'}
+Body Font: ${designTokens.bodyFont || 'Inter, system-ui, sans-serif'}
+`
+        : '';
+
+    const archetypeSection = archetypeHint
+        ? `
+=== LAYOUT ARCHETYPE HINT ===
+${archetypeHint}
+`
+        : '';
 
     return `ACT AS AN ULTRA-HIGH-END BRAND AGENCY ART DIRECTOR & SENIOR ENGINEER.
 Your goal is to design a ${documentType} that looks like it cost $50,000 to design. 
@@ -113,6 +161,9 @@ Your goal is to design a ${documentType} that looks like it cost $50,000 to desi
 === THE MISSION ===
 Design a perfectly composed, production-grade ${documentType} in "${style}" style.
 Subject: ${topic || role || prompt}
+
+${paletteSection}
+${archetypeSection}
 
 === DESIGN PRINCIPLES (1000x BETTER) ===
 1. **DEEP NESTING & GROUPING**: 
@@ -130,7 +181,6 @@ Subject: ${topic || role || prompt}
 
 4. **PRODUCTION SEMANTICS**:
    - Use 'line' for elegant dividers (thin 1px, subtle opacity 0.5).
-   - Use 'social-icon' (email, phone, linkedin, location) next to labels.
 
 === ARCHITECTURAL ARCHETYPES ===
 Choose the best fit for "${style}":
@@ -146,7 +196,7 @@ Choose the best fit for "${style}":
 === STAGE 2: OUTPUT JSON ARRAY ONLY ===
 {
   "id": "unique-id",
-  "type": "heading"|"paragraph"|"container"|"line"|"text"|"social-icon",
+  "type": "heading"|"paragraph"|"container"|"line"|"text",
   "x": number, "y": number,
   "content": "Professional, descriptive content related to ${topic || prompt}",
   "pageIndex": number,
@@ -171,9 +221,13 @@ function parseGeneratedLayout(text: string, pageCount: number): GeneratedElement
         const jsonMatch = text.match(/\[[\s\S]*\]/);
         if (!jsonMatch) throw new Error("Manifest not found in response.");
 
-        const elements = JSON.parse(jsonMatch[0]);
+        const raw = JSON.parse(jsonMatch[0]);
+        const elements = Array.isArray(raw) ? raw : [];
 
-        return elements.map((el: any, index: number) => ({
+        // Remove any social-icon elements – we don't want icons in AI-generated layouts
+        const filtered = elements.filter((el: any) => el && el.type !== 'social-icon');
+
+        return filtered.map((el: any, index: number) => ({
             ...el,
             id: el.id || `el-${index}-${Math.random().toString(36).substr(2, 5)}`,
             x: Math.max(60, Math.min(734 - (el.style?.width || 0), el.x || 60)),
